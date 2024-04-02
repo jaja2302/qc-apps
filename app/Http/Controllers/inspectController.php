@@ -2885,7 +2885,7 @@ class inspectController extends Controller
         $optionREg = json_decode($optionREg, true);
         //  dd($optionREg);
         // dd($dataSkor_ancak, $dataSkor_trans, $dataSkor_ancak);
-        return view('dashboard_inspeksi', [
+        return view('Qcinspeksi.index', [
             'arrHeader' => $arrHeader,
             'arrHeaderSc' => $arrHeaderSc,
             'arrHeaderTrd' => $arrHeaderTrd,
