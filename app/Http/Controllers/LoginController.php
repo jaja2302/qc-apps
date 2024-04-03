@@ -34,10 +34,21 @@ class LoginController extends Controller
             return back()->with('error', 'Email atau Password Salah');
         }
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+        if ($request->password != $user->password) {
+=======
+>>>>>>> Stashed changes
         // Attempt to log in the user
         if ($request->password === $user->password) {
             // Password matches
             Auth::login($user);
+<<<<<<< Updated upstream
+=======
+
+            dd(Auth::login($user));
+>>>>>>> Stashed changes
             session([
                 'user_id' => $user->user_id,
                 'user_name' => $user->nama_lengkap,
@@ -51,6 +62,10 @@ class LoginController extends Controller
         } else {
 
             // Password does not match
+<<<<<<< Updated upstream
+=======
+>>>>>>> 751a38ddec6b5a91e263bd36796041ad08a54a95
+>>>>>>> Stashed changes
             return back()->with('error', 'Email atau Password Salah');
         }
     }
