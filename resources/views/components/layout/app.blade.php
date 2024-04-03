@@ -62,6 +62,7 @@
     <link rel="stylesheet" href="{{ asset('leaflet/leaflet.css') }}">
     <link rel="stylesheet" href="{{asset('Datatables/datatables.css')}}">
     <script src="{{asset('DataTables/datatables.js')}}"></script>
+
 </head>
 
 
@@ -249,7 +250,7 @@
         <script src="{{ asset('js/js_tabel/jquery-3.5.1.js') }}"></script>
         <script src="{{ asset('js/js_tabel/jquery.dataTables.min.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 var currentUrl = window.location.href;

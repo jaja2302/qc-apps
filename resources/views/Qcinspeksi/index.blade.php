@@ -1,4 +1,5 @@
 <x-layout.app>
+
     <div class="container-fluid">
         <div class="card table_wrapper">
             <nav>
@@ -1475,8 +1476,8 @@
 
 
                     function resetClassList(element) {
-                        element.classList.remove("col-lg-4");
-                        element.classList.add("col-md-4");
+                        // element.classList.remove("col-lg-4");
+                        // element.classList.add("col-md-4");
                     }
 
 
@@ -1484,7 +1485,7 @@
                     nons.style.display = "";
                     nonx.style.display = "";
                     llon.style.display = "";
-                    non.style.display = "none";
+                    // non.style.display = "none";
                     resetClassList(non);
 
                     nons.classList.add("col-lg-4");
@@ -1495,7 +1496,7 @@
                     tahun1.style.display = "";
                     tahun2.style.display = "";
                     tahun3.style.display = "";
-                    tahun4.style.display = "none";
+                    // tahun4.style.display = "none";
                     resetClassList(tahun4);
 
                     tahun1.classList.add("col-lg-4");
@@ -1574,8 +1575,8 @@
 
 
                     function resetClassList(element) {
-                        element.classList.remove("col-lg-4");
-                        element.classList.add("col-md-4");
+                        // element.classList.remove("col-lg-4");
+                        // element.classList.add("col-md-4");
                     }
 
 
@@ -1583,7 +1584,7 @@
                     nons.style.display = "";
                     nonx.style.display = "";
                     llon.style.display = "none";
-                    non.style.display = "none";
+                    // non.style.display = "none";
                     resetClassList(llon);
                     resetClassList(non);
 
@@ -1595,7 +1596,7 @@
                     tahun1.style.display = "";
                     tahun2.style.display = "";
                     tahun3.style.display = "none";
-                    tahun4.style.display = "none";
+                    // tahun4.style.display = "none";
                     resetClassList(tahun3);
                     resetClassList(tahun4);
 
@@ -1623,21 +1624,21 @@
 
 
                     function resetClassList(element) {
-                        element.classList.remove("col-lg-4");
-                        element.classList.add("col-md-4");
+                        // element.classList.remove("col-lg-4");
+                        // element.classList.add("col-md-4");
                     }
 
 
 
                     llon.style.display = "none";
-                    non.style.display = "none";
+                    // non.style.display = "none";
                     resetClassList(llon);
                     resetClassList(non);
                     nons.classList.add("col-lg-6");
                     nonx.classList.add("col-lg-6");
 
                     tahun3.style.display = "none";
-                    tahun4.style.display = "none";
+                    // tahun4.style.display = "none";
                     resetClassList(tahun3);
                     resetClassList(tahun4);
                     tahun1.classList.add("col-lg-6");
@@ -1675,8 +1676,8 @@
 
 
                     function resetClassList(element) {
-                        element.classList.remove("col-lg-4");
-                        element.classList.add("col-md-4");
+                        // element.classList.remove("col-lg-4");
+                        // element.classList.add("col-md-4");
                     }
 
 
@@ -1684,7 +1685,7 @@
                     nons.style.display = "";
                     nonx.style.display = "";
                     llon.style.display = "";
-                    non.style.display = "none";
+                    // non.style.display = "none";
                     resetClassList(non);
 
                     nons.classList.add("col-lg-4");
@@ -1695,7 +1696,7 @@
                     tahun1.style.display = "";
                     tahun2.style.display = "";
                     tahun3.style.display = "";
-                    tahun4.style.display = "none";
+                    // tahun4.style.display = "none";
                     resetClassList(tahun4);
 
                     tahun1.classList.add("col-lg-4");

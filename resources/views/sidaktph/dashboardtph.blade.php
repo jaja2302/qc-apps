@@ -1,4 +1,4 @@
-<x-layout-app>
+<x-layout.app>
   <style>
     table.dataTable thead tr th {
       border: 1px solid black
@@ -5853,4 +5853,4 @@
       window.open(url, '_blank');
     });
   </script>
-</x-layout-app>
+</x-layout.app>

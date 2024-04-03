@@ -1240,7 +1240,7 @@ class pdfgenerateController extends Controller
         $arrView['tanggal'] =  $date;
         $arrView['ancak_trans'] =  $newVariable;
 
-        $pdf = PDF::loadView('pdfBA', ['data' => $arrView]);
+        $pdf = PDF::loadView('Qcinspeksi.pdfBA', ['data' => $arrView]);
 
         $customPaper = array(360, 360, 360, 360);
         $pdf->set_paper('A2', 'landscape');

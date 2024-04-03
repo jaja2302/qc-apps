@@ -9800,7 +9800,7 @@ class inspectController extends Controller
         $arrView['reg'] =  $reg;
 
         // dd($ancak);
-        return view('inpeksiBA_excel')->with('data', $arrView);
+        return view('Qcinspeksi.inpeksiBA_excel')->with('data', $arrView);
     }
 
     public function getDataDay(Request $request)

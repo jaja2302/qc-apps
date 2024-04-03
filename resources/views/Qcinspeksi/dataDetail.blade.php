@@ -139,22 +139,6 @@
             align-items: center;
         }
 
-        /* The Modal (background) */
-        /* Add Bootstrap-like styling for the modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.5s;
-        }
-
-
 
 
         /* Add Bootstrap-like button styling */
@@ -338,6 +322,7 @@
 
 
     <div class="content-wrapper">
+        <!-- Button trigger modal -->
 
         <div class="card table_wrapper">
             <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark ">
@@ -1504,9 +1489,9 @@
 
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
     <script type="text/javascript">
+        // var $j = jQuery.noConflict();
         document.addEventListener("DOMContentLoaded", function() {
             const inputDate = document.getElementById("inputDate");
 
