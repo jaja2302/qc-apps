@@ -6,5 +6,4 @@ import 'sweetalert2/src/sweetalert2.scss'
 import 'laravel-datatables-vite';
 import 'leaflet-arrowheads';
 import 'leaflet-polylinedecorator';
-import 'leaflet-polylinedecorator';
 import 'leaflet-rotatedmarker';

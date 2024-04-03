@@ -6421,7 +6421,7 @@ class SidaktphController extends Controller
 
         // return view('BaSidakTPH', $arrView);
 
-        return view('BaSidakTPH', ['est' => $est, 'afd' => $afd, 'data' => $datas, 'img' => $imgNew, 'blok' => $queryBlok], $arrView);
+        return view('sidaktph.BaSidakTPH', ['est' => $est, 'afd' => $afd, 'data' => $datas, 'img' => $imgNew, 'blok' => $queryBlok], $arrView);
     }
 
 
@@ -7058,7 +7058,7 @@ class SidaktphController extends Controller
         $arrView['awal'] =  $tanggal;
         // $arrView['akhir'] =  $formattedEndDate;
 
-        $pdf = PDF::loadView('Pdfsidaktphba', ['data' => $arrView]);
+        $pdf = PDF::loadView('sidaktph.Pdfsidaktphba', ['data' => $arrView]);
 
         $customPaper = array(360, 360, 360, 360);
         $pdf->set_paper('A2', 'landscape');

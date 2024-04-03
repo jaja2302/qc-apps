@@ -1,156 +1,5 @@
 <x-layout.app>
-  <style>
-    table.dataTable thead tr th {
-      border: 1px solid black
-    }
-
-    .dataTables_scrollBody thead tr[role="row"] {
-      visibility: collapse !important;
-    }
-
-    .dataTables_scrollHeaderInner table {
-      margin-bottom: 0px !important;
-    }
-
-    .detailBa {
-      color: black;
-    }
-
-    .detailBa:hover {
-      color: rgb(0, 255, 0);
-    }
-
-    .tbl-fixed {
-      overflow-y: scroll;
-      height: fit-content;
-      max-height: 70vh;
-      border: 1px solid #777777;
-    }
-
-    .tbl-fixed table {
-      border-spacing: 0;
-      font-size: 15px;
-    }
-
-    .tbl-fixed th {
-      border: 1px solid #bbbbbb;
-    }
-
-    .tbl-fixed thead {
-      position: sticky;
-      top: 0px;
-      z-index: 2;
-    }
-
-    .tbl-fixed td {
-      border: 1px solid #bbbbbb;
-      padding: 5px;
-    }
-
-    .tbl-fixed td:nth-child(1) {
-      position: sticky;
-      left: -0.1%;
-    }
-
-    .tbl-fixed td:nth-child(2) {
-      position: sticky;
-      left: 2%;
-      width: 50px;
-      min-width: 50px;
-    }
-
-    .tbl-fixed td:nth-child(1),
-    .tbl-fixed td:nth-child(2) {
-      background: #cfcfcf;
-    }
-
-    @media (max-width: 360px) {
-      .table-sticky-header {
-        width: 100%;
-        margin: auto;
-      }
-
-      .table-responsive {
-        overflow-x: auto;
-        margin: auto;
-        position: relative;
-      }
-
-      .table-responsive::-webkit-scrollbar {
-        height: 6px;
-      }
-
-      .table-responsive::-webkit-scrollbar-thumb {
-        background-color: rgba(0, 0, 0, 0.2);
-      }
-
-      .table-responsive .first-col {
-        position: sticky;
-        left: 0;
-        background-color: #f8f9fa;
-        z-index: 1;
-      }
-
-      .second-col {
-        position: sticky;
-        left: 50px;
-        /* Adjust this value based on the width of your first column */
-        background-color: #cfcfcf;
-        z-index: 1;
-      }
-    }
-
-    .filter-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .date-filter,
-    .regional-filter,
-    .show-button {
-      margin-left: 5px;
-      margin-right: 18px;
-    }
-
-    .show-button {
-      margin-bottom: 2px;
-    }
-
-    @media (max-width: 767px) {
-
-      .date-filter,
-      .regional-filter {
-        margin-right: 30px;
-      }
-
-      .show-button {
-        flex-basis: 100%;
-        max-width: 100%;
-        margin-bottom: 0px;
-        margin-left: 10px;
-      }
-    }
-
-    @keyframes fadeInOut {
-      0% {
-        opacity: 0;
-      }
-
-      50% {
-        opacity: 1;
-      }
-
-      100% {
-        opacity: 0;
-      }
-    }
-
-    .loading-text {
-      animation: fadeInOut 2s ease-in-out infinite;
-    }
-  </style>
-  <div class="content-wrapper">
+  <div class="container-fluid">
     <section class="content"><br>
       <div class="container-fluid">
         <div class="card table_wrapper">
@@ -735,7 +584,7 @@
                   <!-- mingg pertama  -->
                   <div class="tab-pane fade show active" id="week1" role="tabpanel" aria-labelledby="week1-tab">
                     <div class="row text-center tbl-fixed">
-                      <table style="width: 100%;" id="newweek1">
+                      <table class="table-responsive" style="width: 100%;" id="newweek1">
                         <thead>
                           <tr>
                             <th rowspan="3">EST</th>
@@ -864,7 +713,7 @@
                   <!-- minggu ke dua  -->
                   <div class="tab-pane fade" id="week2" role="tabpanel" aria-labelledby="week2-tab">
                     <div class="row text-center tbl-fixed">
-                      <table style="width: 100%;" id="newweek2">
+                      <table class="table-responsive" style="width: 100%;" id="newweek2">
                         <thead>
                           <tr>
                             <th rowspan="3">EST</th>
@@ -993,7 +842,7 @@
                   <!-- minggu ke 3  -->
                   <div class="tab-pane fade" id="week3" role="tabpanel" aria-labelledby="week3-tab">
                     <div class="row text-center tbl-fixed">
-                      <table style="width: 100%;" id="newweek3">
+                      <table class="table-responsive" style="width: 100%;" id="newweek3">
                         <thead>
                           <tr>
                             <th rowspan="3">EST</th>
@@ -1123,7 +972,7 @@
                   <!-- minggu ke 4  -->
                   <div class="tab-pane fade" id="week4" role="tabpanel" aria-labelledby="week4-tab">
                     <div class="row text-center tbl-fixed">
-                      <table style="width: 100%;" id="newweek4">
+                      <table class="table-responsive" style="width: 100%;" id="newweek4">
                         <thead>
                           <tr>
                             <th rowspan="3">EST</th>
@@ -1253,7 +1102,7 @@
                   <!-- bulan  -->
                   <div class="tab-pane fade" id="month" role="tabpanel" aria-labelledby="month-tab">
                     <div class="row text-center tbl-fixed">
-                      <table style="width: 100%;" id="newweek5">
+                      <table class="table-responsive" style="width: 100%;" id="newweek5">
                         <thead>
                           <tr>
                             <th rowspan="3">EST</th>
@@ -1617,18 +1466,6 @@
     </div>
     @endif
   </div>
-  <div id="lottie-container" style="display: none; width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: 9999; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center;">
-    <div id="lottie-animation" style="width: 200px; height: 200px;"></div>
-  </div>
-
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.14/lottie.min.js"></script>
-  <link href="https://cdn.datatables.net/v/dt/dt-2.0.3/datatables.min.css" rel="stylesheet">
-
-  <script src="https://cdn.datatables.net/v/dt/dt-2.0.3/datatables.min.js"></script>
   <script>
     let checkdata = @json($check);
     let recordsdupt = @json($idduplicate);

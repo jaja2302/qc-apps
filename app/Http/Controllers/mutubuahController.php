@@ -123,7 +123,7 @@ class mutubuahController extends Controller
         }
 
         // $arrView['list_bulan'] =  $bulan;
-        return view('dashboard_mutubuah', [
+        return view('sidakmutubuah.dashboard_mutubuah', [
             'arrHeader' => $arrHeader,
             'arrHeaderSc' => $arrHeaderSc,
             'arrHeaderTrd' => $arrHeaderTrd,
