@@ -38,6 +38,8 @@ class LoginController extends Controller
         if ($request->password === $user->password) {
             // Password matches
             Auth::login($user);
+
+            dd(Auth::login($user));
             session([
                 'user_id' => $user->user_id,
                 'user_name' => $user->nama_lengkap,
