@@ -299,7 +299,7 @@ class unitController extends Controller
         $arrResult['arrMonth'] = $bulan;
         echo json_encode($arrResult);
     }
-    
+
     public function dashboard_sidak_tph()
     {
         $query = DB::connection('mysql2')->table('sidak_tph')
@@ -309,7 +309,7 @@ class unitController extends Controller
         return view('dashboard_sidak_tph');
     }
 
-  public function getDataByYear(Request $request)
+    public function getDataByYear(Request $request)
     {
         $year = $request->get('year');
         $regional = $request->get('regional');
@@ -322,7 +322,7 @@ class unitController extends Controller
             ->where('wil.regional', $regional)
             ->where('estate.nama', '!=', 'PLASMA')
             // ->where('wil.nama', '!=', 'Plasma')
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE', 'NBM', 'REG-1', 'SLM', 'SR', 'TC', 'SRS', 'SGM', 'SYM', 'SKM','KTM'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE', 'NBM', 'REG-1', 'SLM', 'SR', 'TC', 'SRS', 'SGM', 'SYM', 'SKM', 'KTM'])
             ->get();
 
         $queryEstate = json_decode($queryEstate, true);
@@ -700,8 +700,8 @@ class unitController extends Controller
         exit();
     }
 
-    
-    
+
+
     public function dashboard_gudang()
     {
         $bulan = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -713,7 +713,7 @@ class unitController extends Controller
             ->get();
 
         $queryEstate = json_decode($queryEstate, true);
-        
+
         $currentYear = date('Y');
         $years_list = range(2022, $currentYear);
 
@@ -943,7 +943,7 @@ class unitController extends Controller
         // dd($dataResult);
         $bulanJson = json_encode($bulan);
 
-        return view('dashboard', ['curr_year' => $currentYear, 'years_list' => $years_list,'dataResult' => $dataResult, 'resultCount' => $resultCount, 'bulanJson' => $bulanJson, 'bulan' => $bulan, 'total_column_bulan' => $total_column_bulan, 'resultCountJson' => $resultCountJson]);
+        return view('Gudang.dashboard', ['curr_year' => $currentYear, 'years_list' => $years_list, 'dataResult' => $dataResult, 'resultCount' => $resultCount, 'bulanJson' => $bulanJson, 'bulan' => $bulan, 'total_column_bulan' => $total_column_bulan, 'resultCountJson' => $resultCountJson]);
     }
     public function tambah()
     {
@@ -1190,7 +1190,7 @@ class unitController extends Controller
         // dd($resultCountMax['November']);
 
     }
-         public function detailInspeksi($id)
+    public function detailInspeksi($id)
     {
 
         // $estateQuery = DB::table('estate')
@@ -1357,10 +1357,10 @@ class unitController extends Controller
         }
 
         // dd($query);
-        return view('detail', ['data' => $query]);
+        return view('Gudang.detail', ['data' => $query]);
     }
 
-     public function cetakpdf($id)
+    public function cetakpdf($id)
     {
 
 
@@ -1524,7 +1524,7 @@ class unitController extends Controller
         }
         // dd($query);
 
-        $pdf = PDF::loadView('cetak', ['data' => $query]);
+        $pdf = PDF::loadView('Gudang.cetak', ['data' => $query]);
         // $pdf = pdf::loadview('cetak', ['data' => $query]);
         // $customPaper = array(360, 360, 360, 360);
         // $pdf->set_paper('A2', 'potrait');
@@ -1535,7 +1535,7 @@ class unitController extends Controller
         // return $pdf->stream($filename);
         return $pdf->download($filename);
     }
-      public function hapusRecord($id)
+    public function hapusRecord($id)
     {
         $Qc = DB::connection('mysql2')->table('qc_gudang')
             ->where('id', $id)
@@ -1681,7 +1681,7 @@ class unitController extends Controller
         DB::connection('mysql2')->table('qc_gudang')->where('id', $id)->delete();
         return redirect()->route('dashboard_gudang');
     }
-    
+
     public function listktu(Request $request)
     {
         $query = DB::connection('mysql2')->table('pekerja')
@@ -1703,12 +1703,12 @@ class unitController extends Controller
         }
         // dd($ktu, $query);
 
-         $queryReg = DB::connection('mysql2')->table('reg')->pluck('nama', 'id');
+        $queryReg = DB::connection('mysql2')->table('reg')->pluck('nama', 'id');
 
         return view('listktu', ['pekerja' => $ktu, 'estate' => $queryEst, 'afdeling' => $queryAfd, 'regional' => $queryReg]);
     }
-    
-     public function getEstateListKtu(Request $request)
+
+    public function getEstateListKtu(Request $request)
     {
 
         $regional =  $request->get('regional');
@@ -1739,7 +1739,7 @@ class unitController extends Controller
         $Reg = $request->input('est');
 
         // $queryEst = DB::connection('mysql2')->table('estate')->whereIn('wil', [1, 2, 3])->get();
-$queryEst = DB::connection('mysql2')->table('estate')
+        $queryEst = DB::connection('mysql2')->table('estate')
             ->where(function ($query) use ($Reg) {
                 $query->when($Reg == 1, function ($query) {
                     return $query->whereIn('wil', [1, 2, 3]);

@@ -6185,7 +6185,7 @@ class mutubuahController extends Controller
 
         json_encode($arrView);
 
-        return view('detailtmutubuah', $arrView);
+        return view('sidakmutubuah.detailtmutubuah', $arrView);
     }
 
     public function filterdetialMutubuah(Request $request)

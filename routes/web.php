@@ -70,7 +70,8 @@ Route::get('detailInspeksi/{id}', [unitController::class, 'detailInspeksi'])->na
 Route::get('detailSidakTph/{est}/{afd}/{start}/{last}', [SidaktphController::class, 'detailSidakTph'])->name('detailSidakTph');
 Route::get('getPlotLine', [SidaktphController::class, 'getPlotLine'])->name('getPlotLine');
 Route::get('/qc', [unitController::class, 'load_qc_gudang'])->name('qc');
-Route::get('/cetakpdf/{id}', [unitController::class, 'cetakpdf']);
+Route::get('/cetakpdf/{id}', [unitController::class, 'cetakpdf'])->name('cetakpdf');
+
 Route::get('/hapusRecord/{id}', [unitController::class, 'hapusRecord'])->name('hapusRecord');
 Route::get('/getDataByYear', [unitController::class, 'getDataByYear'])->name('getDataByYear');
 
@@ -214,3 +215,10 @@ Route::get('/pdfsidaktphdata/{reg}/{est}', [SidaktphController::class, 'pdfsidak
 Route::get('/excelqcinspeksi/{reg}/{est}', [inspectController::class, 'excelqcinspeksi'])->name('excelqcinspeksi');
 Route::get('/getmonthrh', [RekapController::class, 'getmonthrh'])->name('getmonthrh');
 // });
+
+Route::get('/user_qc/{lokasi_kerja}', [UserQCController::class, 'index'])->name('user_qc');
+Route::get('/create', [UserQCController::class, 'create'])->name('create');
+Route::post('/store/{lokasi_kerja}', [UserQCController::class, 'store'])->name('store');
+Route::get('/edit/{id}', [UserQCController::class, 'edit'])->name('edit');
+Route::post('/update/{id}/{lokasi_kerja}', [UserQCController::class, 'update'])->name('update');
+Route::post('/delete/{id}', [UserQCController::class, 'destroy'])->name('delete');
