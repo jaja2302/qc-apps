@@ -67,7 +67,7 @@
 
 
                     <div class="row justify-content-center">
-                        <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="Tab1">
+                        <div class="col-12 col-md-4 " data-regional="1" id="Tab1">
                             <div class="table-responsive">
                                 <table class="table table-bordered" style="font-size: 13px;background-color:white" id="tabblan1">
                                     <thead>
@@ -93,7 +93,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="Tab2">
+                        <div class="col-12 col-md-4" data-regional="1" id="Tab2">
                             <div class="table-responsive">
                                 <table class="table table-bordered" style="font-size: 13px;background-color:white" id="tabblan2">
                                     <thead>
@@ -119,7 +119,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="Tab3">
+                        <div class="col-12 col-md-4 " data-regional="1" id="Tab3">
                             <div class="table-responsive">
                                 <table class="table table-bordered" style="font-size: 13px;background-color:white" id="tabblan3">
                                     <thead>
@@ -140,31 +140,6 @@
                                         </tr>
                                     </thead>
                                     <tbody id="tbody3">
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="Tab4" style="display: none;">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" style="font-size: 13px;background-color:white">
-                                    <thead>
-                                        <tr bgcolor="#fffc04">
-                                            <th colspan="5" id="thead3x" style="text-align:center">
-                                                Plasma</th>
-                                        </tr>
-                                        <tr bgcolor="#2044a4" style="color: white">
-                                            <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
-                                            <th rowspan="2" style="vertical-align: middle;">AFD</th>
-                                            <th rowspan="2" style="text-align:center; vertical-align: middle;">Nama
-                                            </th>
-                                            <th colspan="2" class="text-center">Todate</th>
-                                        </tr>
-                                        <tr bgcolor="#2044a4" style="color: white">
-                                            <th>Score</th>
-                                            <th>Rank</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="plbody">
                                     </tbody>
                                 </table>
                             </div>
@@ -463,7 +438,7 @@
                             <div class="tabContainer">
                                 <div class="ml-3 mr-3">
                                     <div class="row justify-content-center">
-                                        <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="Tabs1">
+                                        <div class="col-12 col-md-4" data-regional="1" id="Tabs1">
                                             <div class="table-responsive">
                                                 <table class="table table-bordered" style="font-size: 13px;background-color:white" id="tableminggu1">
                                                     <thead>
@@ -488,7 +463,7 @@
                                                 </table>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="Tabs2">
+                                        <div class="col-12 col-md-4" data-regional="1" id="Tabs2">
                                             <div class="table-responsive">
                                                 <table class="table table-bordered" style="font-size: 13px;background-color:white" id="tableminggu2">
                                                     <thead>
@@ -514,7 +489,7 @@
                                                 </table>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="Tabs3">
+                                        <div class="col-12 col-md-4" data-regional="1" id="Tabs3">
                                             <div class="table-responsive">
                                                 <table class="table table-bordered" style="font-size: 13px;background-color:white" id="tableminggu3">
                                                     <thead>
@@ -535,31 +510,6 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tbodys3">
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="Tabs4" style="display: none;">
-                                            <div class="table-responsive">
-                                                <table class="table table-bordered" style="font-size: 13px;background-color:white" id="tableminggu4">
-                                                    <thead>
-                                                        <tr bgcolor="#fffc04">
-                                                            <th colspan="5" id="theads3x" style="text-align:center">
-                                                                PLASMA</th>
-                                                        </tr>
-                                                        <tr bgcolor="#2044a4" style="color: white">
-                                                            <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
-                                                            <th rowspan="2" style="vertical-align: middle;">AFD</th>
-                                                            <th rowspan="2" style="text-align:center; vertical-align: middle;">
-                                                                Nama</th>
-                                                            <th colspan="2" class="text-center">Todate</th>
-                                                        </tr>
-                                                        <tr bgcolor="#2044a4" style="color: white">
-                                                            <th>Score</th>
-                                                            <th>Rank</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="plbodys">
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -1525,7 +1475,7 @@
 
 
                     function resetClassList(element) {
-                        element.classList.remove("col-md-6", "col-lg-3", "col-lg-4", "col-lg-6");
+                        element.classList.remove("col-lg-4");
                         element.classList.add("col-md-4");
                     }
 
@@ -1563,16 +1513,16 @@
                     thElement1.textContent = 'WILAYAH IV';
                     thElement2.textContent = 'WILAYAH V';
                     thElement3.textContent = 'WILAYAH VI';
-                    thElement4.textContent = 'PLASMA II';
+                    // thElement4.textContent = 'PLASMA II';
                     thElement1x.textContent = 'WILAYAH IV';
                     thElement2x.textContent = 'WILAYAH V';
                     thElement3x.textContent = 'WILAYAH VI';
-                    thElement4x.textContent = 'PLASMA II';
+                    // thElement4x.textContent = 'PLASMA II';
 
                     thElement1.classList.add("text-center");
                     thElement2.classList.add("text-center");
                     thElement3.classList.add("text-center");
-                    thElement4.classList.add("text-center");
+                    // thElement4.classList.add("text-center");
                     thElement1x.classList.add("text-center");
                     thElement2x.classList.add("text-center");
                     thElement3x.classList.add("text-center");
@@ -1601,12 +1551,12 @@
                     thElement1x.textContent = 'WILAYAH VII';
                     thElement2x.textContent = 'WILAYAH VIII';
                     thElement3x.textContent = 'WILAYAH VIII';
-                    thElement4x.textContent = 'PLASMA III';
+                    // thElement4x.textContent = 'PLASMA III';
 
                     thElement1.classList.add("text-center");
                     thElement2.classList.add("text-center");
                     thElement3.classList.add("text-center");
-                    thElement4.classList.add("text-center");
+                    // thElement4.classList.add("text-center");
                     thElement1x.classList.add("text-center");
                     thElement2x.classList.add("text-center");
                     thElement3x.classList.add("text-center");
@@ -1624,7 +1574,7 @@
 
 
                     function resetClassList(element) {
-                        element.classList.remove("col-md-6", "col-lg-3", "col-lg-4", "col-lg-6");
+                        element.classList.remove("col-lg-4");
                         element.classList.add("col-md-4");
                     }
 
@@ -1673,7 +1623,7 @@
 
 
                     function resetClassList(element) {
-                        element.classList.remove("col-md-6", "col-lg-3", "col-lg-4", "col-lg-6");
+                        element.classList.remove("col-lg-4");
                         element.classList.add("col-md-4");
                     }
 
@@ -1725,7 +1675,7 @@
 
 
                     function resetClassList(element) {
-                        element.classList.remove("col-md-6", "col-lg-3", "col-lg-4", "col-lg-6");
+                        element.classList.remove("col-lg-4");
                         element.classList.add("col-md-4");
                     }
 
@@ -1775,6 +1725,8 @@
 
 
 
+            var googleSat; // Define googleSat variable
+
             function initializeMap() {
                 var map = L.map('map', {
                     preferCanvas: true, // Set preferCanvas to true
@@ -1784,12 +1736,12 @@
                     maxZoom: 20,
                     subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
                 }).addTo(map);
-                map.addControl(new L.Control.Fullscreen());
 
-
+                // map.addControl(new L.Control.Fullscreen());
 
                 return map;
             }
+
 
             $("#showDataIns").click(function() {
                 Swal.fire({
@@ -2196,12 +2148,14 @@
             var removeMarkers = function() {
                 map.eachLayer(function(layer) {
                     if (layer.myTag && layer.myTag === "EstateMarker") {
-                        map.removeLayer(layer)
+                        map.removeLayer(layer);
                     }
                     if (layer.myTag && layer.myTag === "BlokMarker") {
-                        map.removeLayer(layer)
+                        map.removeLayer(layer);
                     }
                 });
+
+                var i; // Declare i here
 
                 for (i = 0; i < titleBlok.length; i++) {
                     map.removeLayer(titleBlok[i]);
@@ -2210,6 +2164,7 @@
                     map.removeLayer(titleEstate[i]);
                 }
             }
+
 
 
             let waktuini = @json($datenow);
@@ -2371,7 +2326,7 @@
 
                         arrTbody1.forEach(element => {
 
-                            tr = document.createElement('tr')
+                            var tr = document.createElement('tr')
                             let item1 = element['est']
                             let item2 = element['tot']
                             let item3 = element['tuntan']
@@ -2448,8 +2403,8 @@
             const thElement4 = document.getElementById('thead3x');
 
             function resetClassList(element) {
-                element.classList.remove("col-md-6", "col-lg-3", "col-lg-4", "col-lg-6");
-                element.classList.add("col-md-4");
+                // element.classList.remove("col-lg-4");
+                // element.classList.add("col-md-4");
             }
 
             c.addEventListener('click', function() {
@@ -2458,7 +2413,7 @@
                     s.style.display = "";
                     m.style.display = "";
                     l.style.display = "";
-                    n.style.display = "none";
+                    // n.style.display = "none";
 
                     resetClassList(n);
 
@@ -2466,11 +2421,11 @@
 
                     thElement1.textContent = 'WILAYAH I';
                     thElement2.textContent = 'WILAYAH II';
-                    thElement4.textContent = 'WILAYAH III';
+                    // thElement4.textContent = 'WILAYAH III';
 
                     thElement1.classList.add("text-center");
                     thElement2.classList.add("text-center");
-                    thElement4.classList.add("text-center");
+                    // thElement4.classList.add("text-center");
 
                     s.classList.add("col-lg-4");
                     m.classList.add("col-lg-4");
@@ -2481,7 +2436,7 @@
                     s.style.display = "";
                     m.style.display = "";
                     l.style.display = "";
-                    n.style.display = "none";
+                    // n.style.display = "none";
 
                     resetClassList(n);
 
@@ -2491,12 +2446,12 @@
                     thElement1.textContent = 'WILAYAH IV';
                     thElement2.textContent = 'WILAYAH V';
                     thElement3.textContent = 'WILAYAH VI';
-                    thElement4.textContent = 'PLASMA II';
+                    // thElement4.textContent = 'PLASMA II';
 
 
                     thElement1.classList.add("text-center");
                     thElement2.classList.add("text-center");
-                    thElement4.classList.add("text-center");
+                    // thElement4.classList.add("text-center");
 
                     s.classList.add("col-lg-4");
                     m.classList.add("col-lg-4");
@@ -2506,18 +2461,17 @@
                     s.style.display = "";
                     m.style.display = "";
                     l.style.display = "none";
-                    n.style.display = "none";
 
                     resetClassList(l);
                     resetClassList(n);
 
                     thElement1.textContent = 'WILAYAH VII';
                     thElement2.textContent = 'WILAYAH VIII';
-                    thElement4.textContent = 'PLASMA III';
+                    // thElement4.textContent = 'PLASMA III';
 
                     thElement1.classList.add("text-center");
                     thElement2.classList.add("text-center");
-                    thElement4.classList.add("text-center");
+                    // thElement4.classList.add("text-center");
 
                     s.classList.add("col-lg-6");
                     m.classList.add("col-lg-6");
@@ -2526,7 +2480,6 @@
                     s.style.display = "";
                     m.style.display = "";
                     l.style.display = "none";
-                    n.style.display = "none";
 
                     resetClassList(s);
                     resetClassList(m);
@@ -2826,7 +2779,7 @@
                                 let bg = table1[1][key][subKey]['bgcolor'];
 
                                 // Create table row and cell for each 'total' value
-                                let tr = document.createElement('tr');
+                                var tr = document.createElement('tr');
                                 let itemElement1 = document.createElement('td');
                                 let itemElement2 = document.createElement('td');
                                 let itemElement3 = document.createElement('td');
@@ -2866,7 +2819,8 @@
                             let bg = table1est[1][key]['bgcolor'];
 
                             // Create table row and cell for each 'total' value
-                            let tr = document.createElement('tr');
+
+                            var tr = document.createElement('tr');
                             let itemElement1 = document.createElement('td');
                             let itemElement2 = document.createElement('td');
                             let itemElement3 = document.createElement('td');
@@ -2910,7 +2864,8 @@
                                 let bg = table2[1][key][subKey]['bgcolor'];
 
                                 // Create table row and cell for each 'total' value
-                                let tr = document.createElement('tr');
+
+                                var tr = document.createElement('tr');
                                 let itemElement1 = document.createElement('td');
                                 let itemElement2 = document.createElement('td');
                                 let itemElement3 = document.createElement('td');
@@ -2949,7 +2904,8 @@
                             let bg = table2est[1][key]['bgcolor'];
 
                             // Create table row and cell for each 'total' value
-                            let tr = document.createElement('tr');
+
+                            var tr = document.createElement('tr');
                             let itemElement1 = document.createElement('td');
                             let itemElement2 = document.createElement('td');
                             let itemElement3 = document.createElement('td');
@@ -2997,7 +2953,8 @@
                                     let bg = table3[1][key][subKey]['bgcolor'];
 
                                     // Create table row and cell for each 'total' value
-                                    let tr = document.createElement('tr');
+
+                                    var tr = document.createElement('tr');
                                     let itemElement1 = document.createElement('td');
                                     let itemElement2 = document.createElement('td');
                                     let itemElement3 = document.createElement('td');
@@ -3034,7 +2991,8 @@
                                 let bg = table3est[1][key]['bgcolor'];
 
                                 // Create table row and cell for each 'total' value
-                                let tr = document.createElement('tr');
+
+                                var tr = document.createElement('tr');
                                 let itemElement1 = document.createElement('td');
                                 let itemElement2 = document.createElement('td');
                                 let itemElement3 = document.createElement('td');
@@ -3075,7 +3033,8 @@
                         let item3 = dataReg[1][1]
                         let item4 = dataReg[21][1] + dataReg[33][1] + dataReg[60][1]
 
-                        let tr = document.createElement('tr');
+
+                        var tr = document.createElement('tr');
                         let itemElement1 = document.createElement('td');
                         let itemElement2 = document.createElement('td');
                         let itemElement3 = document.createElement('td');
@@ -3343,7 +3302,8 @@
                 let item4 = table1wil[1]['total_skor'];
                 let item5 = table1wil[1]['rank'] ?? '-';
                 let bg = table1wil[1]['bgcolor'];
-                let tr = document.createElement('tr');
+
+                var tr = document.createElement('tr');
                 let itemElement1 = document.createElement('td');
                 let itemElement2 = document.createElement('td');
                 let itemElement3 = document.createElement('td');
@@ -3378,7 +3338,8 @@
                 let item4 = table1wil[1]['total_skor'];
                 let item5 = table1wil[1]['rank'] ?? '-';
                 let bg = table1wil[1]['bgcolor'];
-                let tr = document.createElement('tr');
+
+                var tr = document.createElement('tr');
                 let itemElement1 = document.createElement('td');
                 let itemElement2 = document.createElement('td');
                 let itemElement3 = document.createElement('td');
@@ -3413,7 +3374,8 @@
                 let item4 = table1wil[1]['total_skor'];
                 let item5 = table1wil[1]['rank'] ?? '-';
                 let bg = table1wil[1]['bgcolor'];
-                let tr = document.createElement('tr');
+
+                var tr = document.createElement('tr');
                 let itemElement1 = document.createElement('td');
                 let itemElement2 = document.createElement('td');
                 let itemElement3 = document.createElement('td');
@@ -3462,8 +3424,7 @@
                 $('#reg').empty()
                 $('#rekapAFD').empty()
 
-                var year = ''
-                $regData = ''
+
                 var _token = $('input[name="_token"]').val();
                 var year = document.getElementById('yearDate').value
                 var regData = document.getElementById('regionalData').value
@@ -3504,7 +3465,7 @@
                         var list_will = Object.entries(parseResult['list_estate'])
                         var estateEST = Object.entries(parseResult['estateEST'])
                         var RekapBulanPlasma = Object.entries(parseResult['RekapBulanPlasma'])
-                        regInpt = regData
+                        var regInpt = regData
                         // console.log(RekapBulanPlasma);
 
                         var nama_asisten = Object.entries(parseResult['asisten'])
@@ -3619,6 +3580,7 @@
                         var tbody1 = document.getElementById('tb_tahun');
 
                         arrbodywil.forEach((element, index) => {
+
                             var tr = document.createElement('tr');
                             let namaEst = {
                                 "KNE": "Samuel M. Sidabutar",
@@ -3685,7 +3647,7 @@
                             let item16 = element[1].December.bulan_skor;
 
                             // Find the skor_tahun for the current element
-                            // let item17;
+                            let item17;
                             for (var i = 0; i < totalBody.length; i++) {
                                 if (totalBody[i][0] == item3) {
                                     item17 = totalBody[i][1]['tahun_skor'];
@@ -3736,7 +3698,7 @@
                         var tbody2 = document.getElementById('tablewil');
 
                         arrwil.forEach((element, index) => {
-                            tr = document.createElement('tr')
+                            var tr = document.createElement('tr')
                             let angka = element[0];
                             if (angka === '1') {
                                 angka = 'I';
@@ -3838,7 +3800,7 @@
                         var plasma = document.getElementById('tablewil');
 
                         plasmaWil.forEach((element, index) => {
-                            tr = document.createElement('tr')
+                            var tr = document.createElement('tr')
 
                             let item1 = element[0];
                             let item2 = '-';
@@ -3912,6 +3874,7 @@
 
 
                         let regWil = '';
+                        let regW = '';
 
 
                         if (regInpt === '1') {
@@ -3935,7 +3898,7 @@
                         } else if (regInpt === '11') {
                             regW = 'X'
                         }
-                        tr = document.createElement('tr');
+                        var tr = document.createElement('tr');
 
                         let item1 = regW
                         let regKe = 'REG-' + regW
@@ -4009,7 +3972,7 @@
                             let estate = element[0];
                             let namaAFD = Object.keys(element[1].January);
                             namaAFD.forEach((asisten) => {
-                                tr = document.createElement('tr');
+                                var tr = document.createElement('tr');
                                 let item0 = '-';
                                 let item1 = estate;
                                 let item2 = asisten;
@@ -4032,17 +3995,18 @@
                                 let item4 = element[1].January[asisten].bulan_afd;
                                 let item5 = element[1].February[asisten].bulan_afd;
                                 let item6 = element[1].March[asisten].bulan_afd;
-                                let item7 = element[1].April[asisten].bulan_afd;
-                                let item8 = element[1].May[asisten].bulan_afd;
-                                let item9 = element[1].June[asisten].bulan_afd;
-                                let item10 = element[1].July[asisten].bulan_afd;
-                                let item11 = element[1].August[asisten].bulan_afd;
-                                let item12 = element[1].September[asisten].bulan_afd;
-                                let item13 = element[1].October[asisten].bulan_afd;
-                                let item14 = element[1].November[asisten].bulan_afd;
-                                let item15 = element[1].December[asisten].bulan_afd;
-                                // let item17 = arrAFDTH[0][1].OA.tahun_skorwil;
+                                let item7 = element[1]?.April?.asisten?.bulan_afd ?? '-';
+                                let item8 = element[1].May?.[asisten]?.bulan_afd;
+                                let item9 = element[1].June?.[asisten]?.bulan_afd;
+                                let item10 = element[1].July?.[asisten]?.bulan_afd;
+                                let item11 = element[1].August?.[asisten]?.bulan_afd;
+                                let item12 = element[1].September?.[asisten]?.bulan_afd;
+                                let item13 = element[1].October?.[asisten]?.bulan_afd;
+                                let item14 = element[1].November?.[asisten]?.bulan_afd;
+                                let item15 = element[1].December?.[asisten]?.bulan_afd;
 
+                                // let item17 = arrAFDTH[0][1].OA.tahun_skorwil;
+                                let item16;
                                 for (var i = 0; i < arrAFDTH.length; i++) {
                                     if (arrAFDTH[i][0] == item1) {
                                         item16 = arrAFDTH[i][1][item2]['tahun_skorwil'];
@@ -4419,7 +4383,7 @@
                     sx.style.display = "";
                     mx.style.display = "";
                     lx.style.display = "";
-                    nx.style.display = "none";
+                    // nx.style.display = "none";
 
 
                     resetClassList(nx);
@@ -4431,8 +4395,8 @@
                     thElement1x.classList.add("text-center");
                     thElement2x.classList.add("text-center");
                     thElement3x.classList.add("text-center");
-                    thElement4x.textContent = 'PLASMA I';
-                    thElement4x.classList.add("text-center");
+                    // thElement4x.textContent = 'PLASMA I';
+                    // thElement4x.classList.add("text-center");
 
 
                     sx.classList.add("col-lg-4");
@@ -4444,7 +4408,7 @@
                     sx.style.display = "";
                     mx.style.display = "";
                     lx.style.display = "";
-                    nx.style.display = "none";
+                    // nx.style.display = "none";
 
 
                     resetClassList(nx);
@@ -4456,7 +4420,7 @@
                     thElement1x.textContent = 'WILAYAH IV';
                     thElement2x.textContent = 'WILAYAH V';
                     thElement3x.textContent = 'WILAYAH VI';
-                    thElement4x.textContent = 'PLASMA II';
+                    // thElement4x.textContent = 'PLASMA II';
 
 
 
@@ -4467,7 +4431,7 @@
                     sx.style.display = "";
                     mx.style.display = "";
                     lx.style.display = "none";
-                    nx.style.display = "none";
+                    // nx.style.display = "none";
 
 
                     resetClassList(lx);
@@ -4475,11 +4439,11 @@
 
                     thElement1x.textContent = 'WILAYAH VII';
                     thElement2x.textContent = 'WILAYAH VIII';
-                    thElement4x.textContent = 'PLASMA III';
+                    // thElement4x.textContent = 'PLASMA III';
 
                     thElement1x.classList.add("text-center");
                     thElement2x.classList.add("text-center");
-                    thElement4x.classList.add("text-center");
+                    // thElement4x.classList.add("text-center");
 
                     sx.classList.add("col-lg-6");
                     mx.classList.add("col-lg-6");
@@ -4488,7 +4452,7 @@
                     sx.style.display = "";
                     mx.style.display = "";
                     lx.style.display = "none";
-                    nx.style.display = "none";
+                    // nx.style.display = "none";
 
                     resetClassList(sx);
                     resetClassList(mx);
@@ -4713,7 +4677,8 @@
 
                         arrTbody1.forEach(element => {
 
-                            tr = document.createElement('tr')
+
+                            var tr = document.createElement('tr')
                             let item1 = element['est']
                             let item2 = element['afd']
                             let item3 = element['nama']
@@ -4810,7 +4775,8 @@
                         arrTbody1.forEach(element => {
                             // for (let i = 0; i < 5; i++) {
 
-                            tr = document.createElement('tr')
+
+                            var tr = document.createElement('tr')
                             let item1 = element['est']
                             let item2 = element['em']
                             let item3 = element['nama']
@@ -4893,7 +4859,8 @@
                         });
 
                         //untuk GM
-                        tr = document.createElement('tr')
+
+                        var tr = document.createElement('tr')
                         let item1 = GM_list[0].est;
                         let item2 = GM_list[0].em;
                         let item3 = GM_list[0].nama;
@@ -4968,7 +4935,8 @@
 
                         arrTbody2.forEach(element => {
 
-                            tr = document.createElement('tr')
+
+                            var tr = document.createElement('tr')
                             let item1 = element['est']
                             let item2 = element['afd']
                             let item3 = element['nama']
@@ -5060,7 +5028,8 @@
                         arrTbody2.forEach(element => {
                             // for (let i = 0; i < 5; i++) {
 
-                            tr = document.createElement('tr')
+
+                            var tr = document.createElement('tr')
                             let item1 = element['est']
                             let item2 = element['em']
                             let item3 = element['nama']
@@ -5141,7 +5110,8 @@
                             // }
                         });
                         //untuk GM
-                        tr = document.createElement('tr')
+
+                        var tr = document.createElement('tr')
                         let items1 = GM_list[1].est;
                         let items2 = GM_list[1].em;
                         let items3 = GM_list[1].nama;
@@ -5192,7 +5162,8 @@
 
                         arrTbody3.forEach(element => {
 
-                            tr = document.createElement('tr')
+
+                            var tr = document.createElement('tr')
                             let item1 = element['est']
                             let item2 = element['afd']
                             let item3 = element['nama']
@@ -5304,7 +5275,8 @@
                         // var table1 = document.getElementById('table1');
                         var tbody3 = document.getElementById('tbodys3');
                         arrTbody3.forEach(element => {
-                            tr = document.createElement('tr')
+
+                            var tr = document.createElement('tr')
                             let item1 = element['est']
                             let item2 = element['em']
                             let item3 = element['nama']
@@ -5385,7 +5357,7 @@
 
 
                         //untuk GM
-                        tr = document.createElement('tr')
+                        var tr = document.createElement('tr')
                         let itemx1 = GM_list[2].est;
                         let itemx2 = GM_list[2].em;
                         let itemx3 = GM_list[2].nama;
@@ -5472,7 +5444,7 @@
 
                         // console.log(regional);
 
-                        tr = document.createElement('tr')
+                        var tr = document.createElement('tr')
                         let reg1 = regIonal
                         let reg2 = regIonalRH
                         let reg3 = regIonalNama

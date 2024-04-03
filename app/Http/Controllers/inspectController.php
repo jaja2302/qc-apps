@@ -8,6 +8,9 @@ use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
 use Illuminate\Support\Facades\Session;
+use App\DataTables\InspeksimutuancakDataTable;
+use App\Models\mutu_ancak;
+use Yajra\DataTables\Facades\Datatables;
 
 require_once(app_path('helpers.php'));
 
@@ -2803,7 +2806,7 @@ class inspectController extends Controller
         $dataReg['TOTAL_SKORbh'] = $totalSkorBuah;
         $dataReg['check_databh'] = 'ada';
         // dd($dataReg);
-        return view('dataInspeksi', ['data' => $rekap, 'reg' => $regional, 'bulan' => $bulan, 'datareg' => $dataReg]);
+        return view('Qcinspeksi.dataInspeksi', ['data' => $rekap, 'reg' => $regional, 'bulan' => $bulan, 'datareg' => $dataReg]);
     }
 
     public function dashboard_inspeksi(Request $request)
@@ -3108,8 +3111,25 @@ class inspectController extends Controller
         $arrView['reg'] =  $reg;
         $arrView['tanggal'] =  $date;
         json_encode($arrView);
+        // dd($dataTable);
+        // if ($request->ajax()) {
+        //     $data = mutu_ancak::select('*')
+        //         ->where('estate', $request->est)
+        //         ->where('afdeling', $request->afd)
+        //         ->get();
 
-        return view('dataDetail', $arrView);
+        //     return Datatables::of($data)
+        //         ->addIndexColumn()
+        //         ->addColumn('action', function ($row) {
+        //             $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm">Edit</a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm">Delete</a>';
+        //             return $actionBtn;
+        //         })
+        //         ->rawColumns(['action'])
+        //         ->make(true);
+        // }
+
+        // return $dataTable->render('Qcinspeksi.dataDetail', $arrView);
+        return view('Qcinspeksi.dataDetail', $arrView);
     }
 
     public function filterDataDetail(Request $request)

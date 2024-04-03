@@ -57,6 +57,11 @@
     </style>
     <script src="https://cdn.jsdelivr.net/npm/lottie-web@latest"></script>
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <script src="{{asset('apexchart/dist/apexcharts.js')}}"></script>
+    <script src="{{asset('leaflet/leaflet.js')}}"></script>\
+    <link rel="stylesheet" href="{{ asset('leaflet/leaflet.css') }}">
+    <link rel="stylesheet" href="{{asset('Datatables/datatables.css')}}">
+    <script src="{{asset('DataTables/datatables.js')}}"></script>
 </head>
 
 
@@ -226,13 +231,14 @@
             </div>
         </div>
 
-        <footer class="main-footer">
+        <footer class="main-footer fixed-bottom">
             <strong>Copyright © 2021-2026 <a href="https://srs-ssms.com">SRS-SSMS.COM</a>.</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
                 <b>Version</b> 4.0.1
             </div>
         </footer>
+
 
         <!-- Add the necessary JavaScript files for the AdminLTE template -->
         <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
@@ -287,6 +293,7 @@
                 });
             });
         </script>
+
 </body>
 
 </html>

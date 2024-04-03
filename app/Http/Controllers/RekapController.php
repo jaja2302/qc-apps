@@ -40,7 +40,7 @@ class RekapController extends Controller
         $bulan = $request->input('bulan');
         $newparamsdate = '2024-03-01';
 
-        dd($newparamsdate);
+        // dd($newparamsdate);
 
         $tanggalDateTime = new DateTime($bulan);
         // dd($tanggalDateTime);
@@ -5019,7 +5019,7 @@ class RekapController extends Controller
 
         $regional = $request->input('reg');
         $tahun = $request->input('bulan');
-        dd($tahun);
+        // dd($tahun);
         // dd($tahun, $regional);
         $queryAsisten = DB::connection('mysql2')->table('asisten_qc')
             ->select('asisten_qc.*')

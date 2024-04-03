@@ -2476,7 +2476,8 @@
 
             function getrhrekap(rhresult) {
                 var theadreg = document.getElementById('tbodySkorRHYear');
-                tr = document.createElement('tr')
+                var tr = document.createElement('tr'); // Define tr here
+
                 let reg1 = rhresult[0]['est']
                 let reg2 = rhresult[0]['jab']
                 let reg3 = rhresult[0]['nama']
@@ -2507,7 +2508,8 @@
 
             function getrhsidakmtb(rhsidakbuah) {
                 var theadreg = document.getElementById('rhmutubuah');
-                tr = document.createElement('tr')
+                var tr = document.createElement('tr'); // Define tr here
+
                 let reg1 = rhsidakbuah[0]['est']
                 let reg2 = rhsidakbuah[0]['jab']
                 let reg3 = 'Mutu buah'
@@ -2543,7 +2545,8 @@
 
             function getrhsidaktph(rhsidaktphx) {
                 var theadreg = document.getElementById('rhsidaktph');
-                tr = document.createElement('tr')
+                var tr = document.createElement('tr'); // Define tr here
+
                 let reg1 = rhsidaktphx[0]['est']
                 let reg2 = rhsidaktphx[0]['jab']
                 let reg3 = 'Mutu transport'
@@ -2580,7 +2583,8 @@
 
             function getrhqcinspeksi(rhqcinspeksix) {
                 var theadreg = document.getElementById('rhqcinspeksi');
-                tr = document.createElement('tr')
+                var tr = document.createElement('tr'); // Define tr here
+
                 let reg1 = rhqcinspeksix[0]['est']
                 let reg2 = rhqcinspeksix[0]['jab']
                 let reg3 = 'Panen Reguler'
