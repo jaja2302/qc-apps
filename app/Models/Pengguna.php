@@ -3,20 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
-use Illuminate\Contracts\Auth\Authenticatable; // Use Authenticatable contract
-use Illuminate\Support\Facades\Auth; // Add Auth facade for login method
-use Illuminate\Http\Request; // Add Request class for type hinting in authenticate method
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Pengguna extends Model implements Authenticatable
+class Pengguna extends Authenticatable
 {
-    use HasFactory, AuthenticatableTrait;
+    use HasFactory, Notifiable;
 
     protected $table = 'pengguna';
-    public $timestamps = false;
+    protected $primaryKey = 'user_id';
 
-    // Your model code here
-
-
+    // Other model properties and methods
 }

@@ -35,10 +35,12 @@ use App\Http\Controllers\RekapController;
 //     return view('welcome');
 // });
 
-Route::get('/', [LoginController::class, 'index'])->name('login');
-Route::post('/postlogin', [LoginController::class, 'authenticate'])->name('postlogin');
-Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
+
+Route::get('/', [LoginController::class, 'index'])->name('logina');
+Route::post('/', [loginController::class, 'authenticate'])->name('login');
+Route::post('logout', [loginController::class, 'logout'])->name('logout');
+Route::get('/gettaksasi/{query}', [taksasiController::class, 'dashboard']);
 Route::middleware(['auth'])->group(function () {
     Route::get('/index', [unitController::class, 'index']);
     Route::get('/dashboard', [unitController::class, 'dashboard'])->name('dashboard');

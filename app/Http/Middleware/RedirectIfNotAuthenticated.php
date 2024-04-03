@@ -18,6 +18,7 @@ class RedirectIfNotAuthenticated
     {
 
         if (!$request->session()->has('user_name')) {
+            // dd('fail');
             return redirect()->route('login');
         }
         return $next($request);

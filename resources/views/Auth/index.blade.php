@@ -48,7 +48,7 @@
                                     Silakan masukkan Nama atau Email dan Password yang ada miliki untuk mengakses portal <span style="color: #4CAF50">QC Apps SRS</span>
                                 </p>
                             </div>
-                            <form action="{{ route('postlogin') }}" method="post">
+                            <form class="text-center mt-4" action="{{ route('login') }}" method="post">
                                 @csrf
                                 <div class="row gy-2 overflow-hidden">
                                     <div class="col-12">
