@@ -67,7 +67,7 @@ class emplacementsController extends Controller
 
 
         // $arrView['list_bulan'] =  $bulan;
-        return view('dashboard_perum', [
+        return view('Perumahan.dashboard_perum', [
             'arrHeader' => $arrHeader,
             'arrHeaderSc' => $arrHeaderSc,
             'arrHeaderTrd' => $arrHeaderTrd,
@@ -2299,7 +2299,7 @@ class emplacementsController extends Controller
         $arrView['listafd'] =  $listafd;
 
         $arrView['date'] = $uniqueDates;
-        return view('datailEmplashmend', $arrView);
+        return view('Perumahan.datailEmplashmend', $arrView);
     }
 
 
@@ -3775,7 +3775,7 @@ class emplacementsController extends Controller
         $arrView['total'] =  $mergedArray;
         // $arrView['lingkungan'] =  $nila_akhir_lingkungan;
 
-        $pdf = PDF::loadView('baemp', ['data' => $arrView]);
+        $pdf = PDF::loadView('Perumahan.baemp', ['data' => $arrView]);
 
         $customPaper = array(360, 360, 360, 360);
         $pdf->set_paper('A2', 'landscape');
@@ -4287,6 +4287,7 @@ class emplacementsController extends Controller
         // $baseURL2 = 'https://mobilepro.srs-ssms.com/storage/app/public/qc/lingkungan/PLG_2023829_112324_RGE_OB.jpg';
         $delArr = [];
 
+        // dd($baseURL);
         foreach ($arrayMerge2['data_temuan'] as $key => $imageURL) {
             // Extract the location from the image URL (e.g., 'rmh', 'lcp', 'lkn')
             $location = explode('@', $imageURL)[1];
@@ -4333,7 +4334,7 @@ class emplacementsController extends Controller
                 }
             }
         }
-        // dd($delArr);
+        dd($delArr);
 
         if ($delArr !== []) {
             foreach ($delArr['key'] as $keyToDelete) {
@@ -4361,7 +4362,7 @@ class emplacementsController extends Controller
         $arrView['total'] =  $arrayMerge2;
         // $arrView['lingkungan'] =  $nila_akhir_lingkungan;
 
-        $pdf = PDF::loadView('emplPDF', ['data' => $arrView]);
+        $pdf = PDF::loadView('Perumahan.emplPDF', ['data' => $arrView]);
 
         $customPaper = array(360, 360, 360, 360);
         $pdf->set_paper('A2', 'potrait');
