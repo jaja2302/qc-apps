@@ -865,7 +865,7 @@ class emplacementsController extends Controller
 
                     // $tod_nilai = round($totalNil / $avg, 1);
 
-                    if ($avg != 1) {
+                    if ($avg != 1 || ($value3['skor_total'] != 0 && $value3['date'] !== '-')) {
                         $avarage[$key][$key1][$key2]['dividen'] = $avg;
                     } else {
                         $avarage[$key][$key1][$key2]['dividen'] = 0;
@@ -903,6 +903,8 @@ class emplacementsController extends Controller
 
 
                 $averages[$key][$key1]['avgafd'] = $todNilai;
+                $averages[$key][$key1]['totalNil'] = $totalNil;
+                $averages[$key][$key1]['avgCount'] = $avgCount;
                 $estAvg[] = $todNilai;
             }
 
@@ -988,24 +990,6 @@ class emplacementsController extends Controller
         $sum_header = [
             "head" => array_sum($header_cell) + 2,
         ];
-
-        // $AfdFinals = array();
-        // foreach ($resultArray as $key => $value) {
-        //     foreach ($value as $key1 => $value1) {
-        //         foreach ($value1 as $key2 => $value2) {
-        //             foreach ($averages as $key3 => $value3) if ($key3 == $key) {
-
-        //                 foreach ($value3 as $key4 => $value4) if ($key4 == $key1) {
-        //                     // dd($key4 == $key1);
-        //                     foreach ($value4 as $key5 => $value5) {
-        //                         $AfdFinals[$key][$key1]['afd'] = $value5;
-        //                         $AfdFinals[$key][$key1] = $value1;
-        //                     } # code...
-        //                 } # code...
-        //             }
-        //         }
-        //     }
-        // }
         $AfdFinals = array();
 
         foreach ($resultArray as $key => $value) {
@@ -1022,7 +1006,7 @@ class emplacementsController extends Controller
 
 
         // dd($resultArray, $averages, $AfdFinals);
-        // dd($resultArray, $sum_header);
+        // dd($averages);
         $arrView = array();
         $arrView['reg'] =  $regional;
         $arrView['bulan'] =  $bulan;

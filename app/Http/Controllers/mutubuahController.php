@@ -6664,7 +6664,7 @@ class mutubuahController extends Controller
         $arrView['rowspan'] =  $outputArray;
         // $arrView['total_buah'] =  $total_buah;
 
-        $pdf = PDF::loadView('pdfBA_sidakbuah', ['data' => $arrView]);
+        $pdf = PDF::loadView('sidakmutubuah.pdfBA_sidakbuah', ['data' => $arrView]);
 
         $customPaper = array(360, 360, 360, 360);
         $pdf->set_paper('A2', 'landscape');
