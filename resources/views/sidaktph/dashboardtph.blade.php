@@ -557,37 +557,11 @@
                   </li>
                 </ul>
                 <div class="tab-content" id="myTabsContent">
-                  <style>
-                    #newweek1 thead {
-                      background-color: white;
-                    }
-
-                    #newweek2 thead {
-                      background-color: white;
-                    }
-
-                    #newweek3 thead {
-                      background-color: white;
-                    }
-
-                    #newweek4 thead {
-                      background-color: white;
-                    }
-
-                    #newweek5 thead {
-                      background-color: white;
-                    }
-
-                    th,
-                    td {
-                      white-space: nowrap;
-                    }
-                  </style>
 
                   <!-- mingg pertama  -->
                   <div class="tab-pane fade show active" id="week1" role="tabpanel" aria-labelledby="week1-tab">
                     <div class="row text-center tbl-fixed">
-                      <table id="newweek1" class="stripe row-border order-column" style="width:100%">
+                      <table id="newweek1" class="table table-striped nowrap" style="width:100%">
                         <thead>
                           <tr>
                             <th rowspan="3">EST</th>
@@ -1850,7 +1824,9 @@
             var parseResult = JSON.parse(result)
 
             var datatableweek1 = $('#newweek1').DataTable({
-              fixedColumns: true,
+              fixedColumns: {
+                leftColumns: 3
+              },
               paging: false,
               scrollCollapse: true,
               scrollX: true,
