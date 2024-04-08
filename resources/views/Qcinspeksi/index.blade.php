@@ -2366,9 +2366,9 @@
                             for (let i = 1; i <= maxVisits; i++) {
                                 let itemElement = document.createElement('td');
                                 if (i <= visit) {
-                                    itemElement.innerHTML = '<a href="/cetakPDFFI/' + i + '/' + item1 + '/' + date + '" class="btn btn-primary" target="_blank"><i class="nav-icon fa fa-download"></i></a>';
+                                    itemElement.innerHTML = '<a href="/cetakPDFFI/' + i + '/' + item1 + '/' + date + '" class="btn btn-primary" target="_blank"><i class="bi bi-filetype-pdf"></i></a>';
                                 } else {
-                                    itemElement.innerHTML = '<a href="#" class="btn btn-secondary" disabled><i class="nav-icon fa fa-ban"></i></a>';
+                                    itemElement.innerHTML = '<a href="#" class="btn btn-secondary" disabled><i class="bi bi-filetype-pdf"></i></a>';
                                 }
                                 tr.appendChild(itemElement);
                             }
@@ -2376,9 +2376,9 @@
                             // Check if visit is more than 1, if so, create a new button with ID 4
                             let itemElement7 = document.createElement('td');
                             if (visit > 1) {
-                                itemElement7.innerHTML = '<a href="/cetakPDFFI/4/' + item1 + '/' + date + '" class="btn btn-primary" target="_blank" id="4"><i class="nav-icon fa fa-download"></i></a>';
+                                itemElement7.innerHTML = '<a href="/cetakPDFFI/4/' + item1 + '/' + date + '" class="btn btn-primary" target="_blank" id="4"><i class="bi bi-filetype-pdf"></i></a>';
                             } else {
-                                itemElement7.innerHTML = '<a href="#" class="btn btn-secondary" disabled><i class="nav-icon fa fa-ban"></i></a>';
+                                itemElement7.innerHTML = '<a href="#" class="btn btn-secondary" disabled><i class="bi bi-filetype-pdf"></i></a>';
                             }
                             tr.appendChild(itemElement7)
 
@@ -7178,7 +7178,7 @@
                                         icon: 'success',
                                         title: 'PDF siap di download',
                                         showConfirmButton: false,
-                                        html: '<a href="/pdfPage/' + result.filename + '/' + result.est + '" class="btn btn-primary download-btn" target="_blank"><i class="nav-icon fa fa-download"></i> Download PDF</a>',
+                                        html: '<a href="/pdfPage/' + result.filename + '/' + result.est + '" class="btn btn-primary download-btn" target="_blank"><i class="bi bi-filetype-pdf"></i> Download PDF</a>',
                                     });
 
                                     document.querySelector('.download-btn').addEventListener('click', function() {

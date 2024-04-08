@@ -578,13 +578,16 @@
                       background-color: white;
                     }
 
-                    feFlood
+                    th,
+                    td {
+                      white-space: nowrap;
+                    }
                   </style>
 
                   <!-- mingg pertama  -->
                   <div class="tab-pane fade show active" id="week1" role="tabpanel" aria-labelledby="week1-tab">
                     <div class="row text-center tbl-fixed">
-                      <table class="table-responsive" style="width: 100%;" id="newweek1">
+                      <table id="newweek1" class="stripe row-border order-column" style="width:100%">
                         <thead>
                           <tr>
                             <th rowspan="3">EST</th>
@@ -712,521 +715,515 @@
 
                   <!-- minggu ke dua  -->
                   <div class="tab-pane fade" id="week2" role="tabpanel" aria-labelledby="week2-tab">
-                    <div class="row text-center tbl-fixed">
-                      <table class="table-responsive" style="width: 100%;" id="newweek2">
-                        <thead>
-                          <tr>
-                            <th rowspan="3">EST</th>
-                            <th rowspan="3">AFD</th>
-                            <th colspan="10"> H+1</th>
-                            <th colspan="10"> H+2</th>
-                            <th colspan="10"> H+3</th>
-                            <th colspan="10"> H+4</th>
-                            <th colspan="10"> H+5</th>
-                            <th colspan="10"> H+6</th>
-                            <th colspan="10"> H+7</th>
-                            <th colspan="10"> >H+7 </th>
-                            <th rowspan="3"> All Skor</th>
-                            <th rowspan="3"> Kategori</th>
-                          </tr>
-                          <tr>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                          </tr>
-                          <tr>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
+                    <table id="newweek2" class="stripe row-border order-column" style="width:100%">
+                      <thead>
+                        <tr>
+                          <th rowspan="3">EST</th>
+                          <th rowspan="3">AFD</th>
+                          <th colspan="10"> H+1</th>
+                          <th colspan="10"> H+2</th>
+                          <th colspan="10"> H+3</th>
+                          <th colspan="10"> H+4</th>
+                          <th colspan="10"> H+5</th>
+                          <th colspan="10"> H+6</th>
+                          <th colspan="10"> H+7</th>
+                          <th colspan="10"> >H+7 </th>
+                          <th rowspan="3"> All Skor</th>
+                          <th rowspan="3"> Kategori</th>
+                        </tr>
+                        <tr>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                        </tr>
+                        <tr>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
 
-                          </tr>
-                        </thead>
+                        </tr>
+                      </thead>
 
-                        <tbody>
+                      <tbody>
 
-                        </tbody>
-                      </table>
-                    </div>
+                      </tbody>
+                    </table>
+
                   </div>
 
                   <!-- minggu ke 3  -->
                   <div class="tab-pane fade" id="week3" role="tabpanel" aria-labelledby="week3-tab">
-                    <div class="row text-center tbl-fixed">
-                      <table class="table-responsive" style="width: 100%;" id="newweek3">
-                        <thead>
-                          <tr>
-                            <th rowspan="3">EST</th>
-                            <th rowspan="3">AFD</th>
-                            <th colspan="10"> H+1</th>
-                            <th colspan="10"> H+2</th>
-                            <th colspan="10"> H+3</th>
-                            <th colspan="10"> H+4</th>
-                            <th colspan="10"> H+5</th>
-                            <th colspan="10"> H+6</th>
-                            <th colspan="10"> H+7</th>
-                            <th colspan="10"> >H+7 </th>
-                            <th rowspan="3"> All Skor</th>
-                            <th rowspan="3"> Kategori</th>
-                          </tr>
-                          <tr>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                          </tr>
-                          <tr>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
 
-                          </tr>
-                        </thead>
+                    <table id="newweek3" class="stripe row-border order-column" style="width:100%">
+                      <thead>
+                        <tr>
+                          <th rowspan="3">EST</th>
+                          <th rowspan="3">AFD</th>
+                          <th colspan="10"> H+1</th>
+                          <th colspan="10"> H+2</th>
+                          <th colspan="10"> H+3</th>
+                          <th colspan="10"> H+4</th>
+                          <th colspan="10"> H+5</th>
+                          <th colspan="10"> H+6</th>
+                          <th colspan="10"> H+7</th>
+                          <th colspan="10"> >H+7 </th>
+                          <th rowspan="3"> All Skor</th>
+                          <th rowspan="3"> Kategori</th>
+                        </tr>
+                        <tr>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                        </tr>
+                        <tr>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
 
-                        <tbody>
+                        </tr>
+                      </thead>
 
-                        </tbody>
-                      </table>
-                    </div>
+                      <tbody>
+
+                      </tbody>
+                    </table>
 
                   </div>
 
                   <!-- minggu ke 4  -->
                   <div class="tab-pane fade" id="week4" role="tabpanel" aria-labelledby="week4-tab">
-                    <div class="row text-center tbl-fixed">
-                      <table class="table-responsive" style="width: 100%;" id="newweek4">
-                        <thead>
-                          <tr>
-                            <th rowspan="3">EST</th>
-                            <th rowspan="3">AFD</th>
-                            <th colspan="10"> H+1</th>
-                            <th colspan="10"> H+2</th>
-                            <th colspan="10"> H+3</th>
-                            <th colspan="10"> H+4</th>
-                            <th colspan="10"> H+5</th>
-                            <th colspan="10"> H+6</th>
-                            <th colspan="10"> H+7</th>
-                            <th colspan="10"> >H+7 </th>
-                            <th rowspan="3"> All Skor</th>
-                            <th rowspan="3"> Kategori</th>
-                          </tr>
-                          <tr>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                          </tr>
-                          <tr>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
+                    <table id="newweek4" class="stripe row-border order-column" style="width:100%">
+                      <thead>
+                        <tr>
+                          <th rowspan="3">EST</th>
+                          <th rowspan="3">AFD</th>
+                          <th colspan="10"> H+1</th>
+                          <th colspan="10"> H+2</th>
+                          <th colspan="10"> H+3</th>
+                          <th colspan="10"> H+4</th>
+                          <th colspan="10"> H+5</th>
+                          <th colspan="10"> H+6</th>
+                          <th colspan="10"> H+7</th>
+                          <th colspan="10"> >H+7 </th>
+                          <th rowspan="3"> All Skor</th>
+                          <th rowspan="3"> Kategori</th>
+                        </tr>
+                        <tr>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                        </tr>
+                        <tr>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
 
-                          </tr>
-                        </thead>
+                        </tr>
+                      </thead>
 
-                        <tbody>
+                      <tbody>
 
-                        </tbody>
-                      </table>
-                    </div>
+                      </tbody>
+                    </table>
+
                   </div>
 
 
                   <!-- bulan  -->
                   <div class="tab-pane fade" id="month" role="tabpanel" aria-labelledby="month-tab">
-                    <div class="row text-center tbl-fixed">
-                      <table class="table-responsive" style="width: 100%;" id="newweek5">
-                        <thead>
-                          <tr>
-                            <th rowspan="3">EST</th>
-                            <th rowspan="3">AFD</th>
-                            <th colspan="10"> H+1</th>
-                            <th colspan="10"> H+2</th>
-                            <th colspan="10"> H+3</th>
-                            <th colspan="10"> H+4</th>
-                            <th colspan="10"> H+5</th>
-                            <th colspan="10"> H+6</th>
-                            <th colspan="10"> H+7</th>
-                            <th colspan="10"> >H+7 </th>
-                            <th rowspan="3"> All Skor</th>
-                            <th rowspan="3"> Kategori</th>
-                          </tr>
-                          <tr>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                          </tr>
-                          <tr>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
+                    <table id="newweek5" class="stripe row-border order-column" style="width:100%">
+                      <thead>
+                        <tr>
+                          <th rowspan="3">EST</th>
+                          <th rowspan="3">AFD</th>
+                          <th colspan="10"> H+1</th>
+                          <th colspan="10"> H+2</th>
+                          <th colspan="10"> H+3</th>
+                          <th colspan="10"> H+4</th>
+                          <th colspan="10"> H+5</th>
+                          <th colspan="10"> H+6</th>
+                          <th colspan="10"> H+7</th>
+                          <th colspan="10"> >H+7 </th>
+                          <th rowspan="3"> All Skor</th>
+                          <th rowspan="3"> Kategori</th>
+                        </tr>
+                        <tr>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                        </tr>
+                        <tr>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
 
-                          </tr>
-                        </thead>
+                        </tr>
+                      </thead>
 
-                        <tbody>
+                      <tbody>
 
-                        </tbody>
-                      </table>
-                    </div>
-
+                      </tbody>
+                    </table>
                   </div>
 
                 </div>
@@ -1853,7 +1850,11 @@
             var parseResult = JSON.parse(result)
 
             var datatableweek1 = $('#newweek1').DataTable({
-              "iDisplayLength": 100,
+              fixedColumns: true,
+              paging: false,
+              scrollCollapse: true,
+              scrollX: true,
+              scrollY: 300,
               columns: [{
                   data: 'est'
                 },
@@ -2239,13 +2240,18 @@
                   $(row).find('td:eq(83)').css('background-color', '#609cd4');
                 }
 
-              }
+              },
+
             });
             datatableweek1.clear().rows.add(parseResult['week1']).draw();
 
             // console.log(parseResult['week1']);
             var datatableweek2 = $('#newweek2').DataTable({
-              "iDisplayLength": 100,
+              fixedColumns: true,
+              paging: false,
+              scrollCollapse: true,
+              scrollX: true,
+              scrollY: 300,
               columns: [{
                   data: 'est'
                 },
@@ -2636,7 +2642,11 @@
 
 
             var datatableweek3 = $('#newweek3').DataTable({
-              "iDisplayLength": 100,
+              fixedColumns: true,
+              paging: false,
+              scrollCollapse: true,
+              scrollX: true,
+              scrollY: 300,
               columns: [{
                   data: 'est'
                 },
@@ -3026,7 +3036,11 @@
             datatableweek3.clear().rows.add(parseResult['week3']).draw();
 
             var datatableweek4 = $('#newweek4').DataTable({
-              "iDisplayLength": 100,
+              fixedColumns: true,
+              paging: false,
+              scrollCollapse: true,
+              scrollX: true,
+              scrollY: 300,
               columns: [{
                   data: 'est'
                 },
@@ -3415,7 +3429,11 @@
             datatableweek4.clear().rows.add(parseResult['week4']).draw();
 
             var datatableweek5 = $('#newweek5').DataTable({
-              "iDisplayLength": 100,
+              fixedColumns: true,
+              paging: false,
+              scrollCollapse: true,
+              scrollX: true,
+              scrollY: 300,
               columns: [{
                   data: 'est'
                 },

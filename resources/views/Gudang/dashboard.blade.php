@@ -120,7 +120,7 @@
             background-color: white;
         }
     </style>
-    <div class="content-wrapper">
+    <div class="container-fluid">
         <section class="content">
             <br>
             <div class="row">
