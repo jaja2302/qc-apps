@@ -557,139 +557,20 @@
                   </li>
                 </ul>
                 <div class="tab-content" id="myTabsContent">
-
+                  <style>
+                    th.est,
+                    th.afd {
+                      position: sticky;
+                      left: 0;
+                      /* Adjust the left or right value as needed to stick to the appropriate side */
+                      z-index: 1;
+                      background-color: #ffffff;
+                      /* Background color for the frozen columns */
+                    }
+                  </style>
                   <!-- mingg pertama  -->
                   <div class="tab-pane fade show active" id="week1" role="tabpanel" aria-labelledby="week1-tab">
-                    <div class="row text-center tbl-fixed">
-                      <table id="newweek1" class="table table-striped nowrap" style="width:100%">
-                        <thead>
-                          <tr>
-                            <th rowspan="3">EST</th>
-                            <th rowspan="3">AFD</th>
-                            <th colspan="10"> H+1</th>
-                            <th colspan="10"> H+2</th>
-                            <th colspan="10"> H+3</th>
-                            <th colspan="10"> H+4</th>
-                            <th colspan="10"> H+5</th>
-                            <th colspan="10"> H+6</th>
-                            <th colspan="10"> H+7</th>
-                            <th colspan="10"> >H+7 </th>
-                            <th rowspan="3"> All Skor</th>
-                            <th rowspan="3"> Kategori</th>
-                          </tr>
-                          <tr>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                            <th colspan="6">Brondolan Tinggal</th>
-                            <th colspan="4">Buah Tinggal</th>
-                          </tr>
-                          <tr>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-                            <th> Di TPH</th>
-                            <th> Di Jalan</th>
-                            <th> Di Bin</th>
-                            <th> Di Karung</th>
-                            <th> Total Brd</th>
-                            <th> Skor</th>
-                            <th> Buah Sortiran / Buah Jatuh </th>
-                            <th>Restan Tidak Dilaporkan </th>
-                            <th>Total Jjg </th>
-                            <th>Skor</th>
-
-                          </tr>
-                        </thead>
-
-                        <tbody>
-
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-
-                  <!-- minggu ke dua  -->
-                  <div class="tab-pane fade" id="week2" role="tabpanel" aria-labelledby="week2-tab">
-                    <table id="newweek2" class="stripe row-border order-column" style="width:100%">
+                    <table id="newweek1" class="table table-striped nowrap" style="width:100%; height:100%">
                       <thead>
                         <tr>
                           <th rowspan="3">EST</th>
@@ -815,10 +696,137 @@
 
                   </div>
 
+                  <!-- minggu ke dua  -->
+                  <div class="tab-pane fade" id="week2" role="tabpanel" aria-labelledby="week2-tab">
+                    <table id="newweek2" class="table table-striped nowrap" style="width:100%">
+                      <thead>
+                        <tr>
+                          <th rowspan="3">EST</th>
+                          <th rowspan="3">AFD</th>
+                          <th colspan="10"> H+1</th>
+                          <th colspan="10"> H+2</th>
+                          <th colspan="10"> H+3</th>
+                          <th colspan="10"> H+4</th>
+                          <th colspan="10"> H+5</th>
+                          <th colspan="10"> H+6</th>
+                          <th colspan="10"> H+7</th>
+                          <th colspan="10"> >H+7 </th>
+                          <th rowspan="3"> All Skor</th>
+                          <th rowspan="3"> Kategori</th>
+                        </tr>
+                        <tr>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                          <th colspan="6">Brondolan Tinggal</th>
+                          <th colspan="4">Buah Tinggal</th>
+                        </tr>
+                        <tr>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+                          <th> Di TPH</th>
+                          <th> Di Jalan</th>
+                          <th> Di Bin</th>
+                          <th> Di Karung</th>
+                          <th> Total Brd</th>
+                          <th> Skor</th>
+                          <th> Buah Sortiran / Buah Jatuh </th>
+                          <th>Restan Tidak Dilaporkan </th>
+                          <th>Total Jjg </th>
+                          <th>Skor</th>
+
+                        </tr>
+                      </thead>
+
+                      <tbody>
+
+                      </tbody>
+                    </table>
+                  </div>
+
                   <!-- minggu ke 3  -->
                   <div class="tab-pane fade" id="week3" role="tabpanel" aria-labelledby="week3-tab">
 
-                    <table id="newweek3" class="stripe row-border order-column" style="width:100%">
+                    <table id="newweek3" class="table table-striped nowrap" style="width:100%">
                       <thead>
                         <tr>
                           <th rowspan="3">EST</th>
@@ -946,7 +954,7 @@
 
                   <!-- minggu ke 4  -->
                   <div class="tab-pane fade" id="week4" role="tabpanel" aria-labelledby="week4-tab">
-                    <table id="newweek4" class="stripe row-border order-column" style="width:100%">
+                    <table id="newweek4" class="table table-striped nowrap" style="width:100%;">
                       <thead>
                         <tr>
                           <th rowspan="3">EST</th>
@@ -1075,7 +1083,7 @@
 
                   <!-- bulan  -->
                   <div class="tab-pane fade" id="month" role="tabpanel" aria-labelledby="month-tab">
-                    <table id="newweek5" class="stripe row-border order-column" style="width:100%">
+                    <table id="newweek5" class="table table-striped nowrap" style="width:100%;">
                       <thead>
                         <tr>
                           <th rowspan="3">EST</th>
@@ -1823,14 +1831,15 @@
             Swal.close();
             var parseResult = JSON.parse(result)
 
+
             var datatableweek1 = $('#newweek1').DataTable({
               fixedColumns: {
-                leftColumns: 3
+                start: 2
               },
               paging: false,
               scrollCollapse: true,
+              scrollY: '300px',
               scrollX: true,
-              scrollY: 300,
               columns: [{
                   data: 'est'
                 },
@@ -2227,7 +2236,7 @@
               paging: false,
               scrollCollapse: true,
               scrollX: true,
-              scrollY: 300,
+              scrollY: false,
               columns: [{
                   data: 'est'
                 },
@@ -2622,7 +2631,7 @@
               paging: false,
               scrollCollapse: true,
               scrollX: true,
-              scrollY: 300,
+              scrollY: false,
               columns: [{
                   data: 'est'
                 },
@@ -3016,7 +3025,7 @@
               paging: false,
               scrollCollapse: true,
               scrollX: true,
-              scrollY: 300,
+              scrollY: false,
               columns: [{
                   data: 'est'
                 },
@@ -3409,7 +3418,7 @@
               paging: false,
               scrollCollapse: true,
               scrollX: true,
-              scrollY: 300,
+              scrollY: false,
               columns: [{
                   data: 'est'
                 },

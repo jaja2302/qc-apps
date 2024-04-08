@@ -10,8 +10,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link rel="stylesheet" href="{{ asset('css/ionicons.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+
     <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/jquery.fancybox.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css')}}">
@@ -24,9 +23,6 @@
 
     <script type="text/javascript" src="{{ asset('js/loader.js') }}"></script>
 
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/buttons.dataTables.min.css') }}" />
-
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/jquery.dataTables.min.css') }}" />
     <style type="text/css">
         .center {
             margin: auto;
@@ -60,9 +56,7 @@
     <script src="{{asset('apexchart/dist/apexcharts.js')}}"></script>
     <script src="{{asset('leaflet/leaflet.js')}}"></script>\
     <link rel="stylesheet" href="{{ asset('leaflet/leaflet.css') }}">
-    <link rel="stylesheet" href="{{asset('Datatables/datatables.css')}}">
-    <script src="{{asset('DataTables/datatables.js')}}"></script>
-
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
 </head>
 
 
@@ -248,10 +242,10 @@
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
         <!-- Other JavaScript files -->
-        <script src="{{ asset('js/js_tabel/jquery-3.5.1.js') }}"></script>
-        <script src="{{ asset('js/js_tabel/jquery.dataTables.min.js') }}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <!-- DataTables CSS -->
+
+
+
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 var currentUrl = window.location.href;
