@@ -1,7 +1,18 @@
 <x-layout.app>
+  <style>
+        th,
+        td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 8px;
+        }
+
+      
+  </style>
   <div class="container-fluid">
+   
     <section class="content"><br>
-      <div class="container-fluid">
+      
         <div class="card table_wrapper">
           <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -557,20 +568,10 @@
                   </li>
                 </ul>
                 <div class="tab-content" id="myTabsContent">
-                  <style>
-                    th.est,
-                    th.afd {
-                      position: sticky;
-                      left: 0;
-                      /* Adjust the left or right value as needed to stick to the appropriate side */
-                      z-index: 1;
-                      background-color: #ffffff;
-                      /* Background color for the frozen columns */
-                    }
-                  </style>
+               
                   <!-- mingg pertama  -->
                   <div class="tab-pane fade show active" id="week1" role="tabpanel" aria-labelledby="week1-tab">
-                    <table id="newweek1" class="table table-striped nowrap" style="width:100%; height:100%">
+                    <table id="newweek1"  class="table table-striped nowrap" style="width:100%">
                       <thead>
                         <tr>
                           <th rowspan="3">EST</th>
@@ -1499,6 +1500,15 @@
 
 
     $(document).ready(function() {
+      //  $('#newweek1').DataTable({
+      //       fixedColumns: {
+      //       start: 2
+      //   },
+      //   paging: false,
+      //   scrollCollapse: true,
+      //   scrollX: true,
+      //   scrollY: 300
+      //   });
       const estDataMapSelect = document.querySelector('#estSidakYear');
       const regDataMapSelect = document.querySelector('#regionalSidakYear');
 
@@ -1799,26 +1809,27 @@
           }
         });
       }
+   
 
       function changeData() {
         var regTph = $("#regDataTph").val();
         var dateTph = $("#dateDataTph").val();
         var _token = $('input[name="_token"]').val();
-        // if ($.fn.DataTable.isDataTable('#newweek1')) {
-        //   $('#newweek1').DataTable().destroy();
-        // }
-        // if ($.fn.DataTable.isDataTable('#newweek2')) {
-        //   $('#newweek2').DataTable().destroy();
-        // }
-        // if ($.fn.DataTable.isDataTable('#newweek3')) {
-        //   $('#newweek3').DataTable().destroy();
-        // }
-        // if ($.fn.DataTable.isDataTable('#newweek4')) {
-        //   $('#newweek4').DataTable().destroy();
-        // }
-        // if ($.fn.DataTable.isDataTable('#newweek5')) {
-        //   $('#newweek5').DataTable().destroy();
-        // }
+        if ($.fn.DataTable.isDataTable('#newweek1')) {
+          $('#newweek1').DataTable().destroy();
+        }
+        if ($.fn.DataTable.isDataTable('#newweek2')) {
+          $('#newweek2').DataTable().destroy();
+        }
+        if ($.fn.DataTable.isDataTable('#newweek3')) {
+          $('#newweek3').DataTable().destroy();
+        }
+        if ($.fn.DataTable.isDataTable('#newweek4')) {
+          $('#newweek4').DataTable().destroy();
+        }
+        if ($.fn.DataTable.isDataTable('#newweek5')) {
+          $('#newweek5').DataTable().destroy();
+        }
         $.ajax({
           url: "{{ route('changeDataTph') }}",
           method: "GET",
@@ -1833,14 +1844,8 @@
             var parseResult = JSON.parse(result)
 
 
+           
             var datatableweek1 = $('#newweek1').DataTable({
-              fixedColumns: {
-                start: 2
-              },
-              paging: false,
-              scrollCollapse: true,
-              scrollY: '300px',
-              scrollX: true,
               columns: [{
                   data: 'est'
                 },
@@ -2227,17 +2232,15 @@
                 }
 
               },
-
-            });
-            datatableweek1.clear().rows.add(parseResult['week1']).draw();
-
-            // console.log(parseResult['week1']);
-            var datatableweek2 = $('#newweek2').DataTable({
               fixedColumns: true,
               paging: false,
               scrollCollapse: true,
               scrollX: true,
-              scrollY: false,
+              scrollY: 500
+            });
+            datatableweek1.clear().rows.add(parseResult['week1']).draw();
+
+            var datatableweek2 = $('#newweek2').DataTable({
               columns: [{
                   data: 'est'
                 },
@@ -2622,17 +2625,18 @@
                   $(row).find('td:eq(82)').css('background-color', '#609cd4');
                   $(row).find('td:eq(83)').css('background-color', '#609cd4');
                 }
-              }
+              },
+              fixedColumns: true,
+              paging: false,
+              scrollCollapse: true,
+              scrollX: true,
+              scrollY: 500
             });
             datatableweek2.clear().rows.add(parseResult['week2']).draw();
 
 
             var datatableweek3 = $('#newweek3').DataTable({
-              fixedColumns: true,
-              paging: false,
-              scrollCollapse: true,
-              scrollX: true,
-              scrollY: false,
+             
               columns: [{
                   data: 'est'
                 },
@@ -3017,16 +3021,17 @@
                   $(row).find('td:eq(82)').css('background-color', '#609cd4');
                   $(row).find('td:eq(83)').css('background-color', '#609cd4');
                 }
-              }
+              },
+              fixedColumns: true,
+              paging: false,
+              scrollCollapse: true,
+              scrollX: true,
+              scrollY: 500
             });
             datatableweek3.clear().rows.add(parseResult['week3']).draw();
 
             var datatableweek4 = $('#newweek4').DataTable({
-              fixedColumns: true,
-              paging: false,
-              scrollCollapse: true,
-              scrollX: true,
-              scrollY: false,
+            
               columns: [{
                   data: 'est'
                 },
@@ -3410,16 +3415,17 @@
                   $(row).find('td:eq(82)').css('background-color', '#609cd4');
                   $(row).find('td:eq(83)').css('background-color', '#609cd4');
                 }
-              }
-            });
-            datatableweek4.clear().rows.add(parseResult['week4']).draw();
-
-            var datatableweek5 = $('#newweek5').DataTable({
+              },
               fixedColumns: true,
               paging: false,
               scrollCollapse: true,
               scrollX: true,
-              scrollY: false,
+              scrollY: 500
+            });
+            datatableweek4.clear().rows.add(parseResult['week4']).draw();
+
+            var datatableweek5 = $('#newweek5').DataTable({
+            
               columns: [{
                   data: 'est'
                 },
@@ -3808,7 +3814,12 @@
                   $(row).find('td:eq(82)').css('background-color', '#609cd4');
                   $(row).find('td:eq(83)').css('background-color', '#609cd4');
                 }
-              }
+              },
+              fixedColumns: true,
+              paging: false,
+              scrollCollapse: true,
+              scrollX: true,
+              scrollY: 500
             });
             datatableweek5.clear().rows.add(parseResult['week5']).draw();
           }

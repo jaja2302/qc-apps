@@ -22,7 +22,7 @@
    
     {{-- <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/datatables.min.css" rel="stylesheet"> --}}
  
-    <script src="https://cdn.datatables.net/v/dt/jq-3.7.0/datatables.min.js"></script>
+    {{-- <script src="https://cdn.datatables.net/v/dt/jq-3.7.0/datatables.min.js"></script> --}}
 </head>
 
 
