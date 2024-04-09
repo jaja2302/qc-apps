@@ -1445,6 +1445,7 @@
     </div>
     @endif
   </div>
+  
   <script type="module">
     let checkdata = @json($check);
     let recordsdupt = @json($idduplicate);
@@ -1803,21 +1804,21 @@
         var regTph = $("#regDataTph").val();
         var dateTph = $("#dateDataTph").val();
         var _token = $('input[name="_token"]').val();
-        if ($.fn.DataTable.isDataTable('#newweek1')) {
-          $('#newweek1').DataTable().destroy();
-        }
-        if ($.fn.DataTable.isDataTable('#newweek2')) {
-          $('#newweek2').DataTable().destroy();
-        }
-        if ($.fn.DataTable.isDataTable('#newweek3')) {
-          $('#newweek3').DataTable().destroy();
-        }
-        if ($.fn.DataTable.isDataTable('#newweek4')) {
-          $('#newweek4').DataTable().destroy();
-        }
-        if ($.fn.DataTable.isDataTable('#newweek5')) {
-          $('#newweek5').DataTable().destroy();
-        }
+        // if ($.fn.DataTable.isDataTable('#newweek1')) {
+        //   $('#newweek1').DataTable().destroy();
+        // }
+        // if ($.fn.DataTable.isDataTable('#newweek2')) {
+        //   $('#newweek2').DataTable().destroy();
+        // }
+        // if ($.fn.DataTable.isDataTable('#newweek3')) {
+        //   $('#newweek3').DataTable().destroy();
+        // }
+        // if ($.fn.DataTable.isDataTable('#newweek4')) {
+        //   $('#newweek4').DataTable().destroy();
+        // }
+        // if ($.fn.DataTable.isDataTable('#newweek5')) {
+        //   $('#newweek5').DataTable().destroy();
+        // }
         $.ajax({
           url: "{{ route('changeDataTph') }}",
           method: "GET",

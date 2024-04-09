@@ -19,7 +19,10 @@
     <link rel="stylesheet" href="{{ asset('leaflet/leaflet.css') }}">
     <!-- <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script> -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-
+   
+    {{-- <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/datatables.min.css" rel="stylesheet"> --}}
+ 
+    <script src="https://cdn.datatables.net/v/dt/jq-3.7.0/datatables.min.js"></script>
 </head>
 
 
