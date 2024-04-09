@@ -30,7 +30,7 @@
 
 
 
-    <script type="text/javascript">
+    <script type="module">
         var currentUserName = "{{ session('jabatan') }}";
         $(document).ready(function() {
             // Get the session values
@@ -446,7 +446,7 @@
 
         <p> User ID anda akan terecord di database mencoba akses ke halaman ini</p>
     </div>
-    <script>
+    <script type="module">
         // Redirect to the home page after a delay
         setTimeout(function() {
             window.location.href = "{{ route('dashboard_inspeksi') }}";

@@ -740,7 +740,7 @@
     </div>
 
 
-    <script>
+    <script type="module">
         var currentUserName = "{{ session('jabatan') }}";
         const openNestedModalBtn = document.getElementById("openNestedModalBtn");
         const closeNestedModalBtn = document.getElementById("closeNestedModalBtn");

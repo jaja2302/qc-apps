@@ -1445,7 +1445,7 @@
     </div>
     @endif
   </div>
-  <script>
+  <script type="module">
     let checkdata = @json($check);
     let recordsdupt = @json($idduplicate);
     if (checkdata === 'ada') {

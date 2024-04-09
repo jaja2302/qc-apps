@@ -180,7 +180,7 @@
         </div>
     </div>
 
-    <script type="text/javascript">
+    <script type="module">
         $(document).ready(function() {
 
             var lokasiKerja = "{{ session('lok') }}";

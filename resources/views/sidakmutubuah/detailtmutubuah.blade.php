@@ -704,7 +704,7 @@
 
 
 
-    <script type="text/javascript">
+    <script type="module">
         $(document).ready(function() {
             // Close modal when the close button is clicked
             $('#closeModalBtn_buah').click(function() {

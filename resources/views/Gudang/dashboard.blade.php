@@ -172,7 +172,7 @@
         </section>
     </div>
 
-    <script type="text/javascript">
+    <script type="module">
         var lokasiKerja = "{{ session('lok') }}";
         // console.log(lokasiKerja);
         if (lokasiKerja == 'Regional II' || lokasiKerja == 'Regional 2') {

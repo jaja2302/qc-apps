@@ -284,7 +284,7 @@
 
 
 
-    <script type="text/javascript">
+    <script type="module">
         var currentUserName = "{{ session('jabatan') }}";
 
         $(document).ready(function() {

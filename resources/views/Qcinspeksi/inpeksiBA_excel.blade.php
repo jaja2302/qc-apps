@@ -17,7 +17,7 @@
 
     <button onclick="exportToExcel()">Export to Excel</button>
 
-    <script>
+    <script type="module">
         // Define exportToExcel function
         function exportToExcel() {
             // Replace 'headshot' with the correct ID of the table you want to export

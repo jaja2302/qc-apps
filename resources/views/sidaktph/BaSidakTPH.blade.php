@@ -683,7 +683,7 @@
     </div>
 
 
-    <script>
+    <script type="module">
         function updateButtonState() {
             var inputDate = document.getElementById("inputDate");
             var showFindingYear = document.getElementById("showFindingYear");

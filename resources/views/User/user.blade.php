@@ -230,7 +230,7 @@
 
 
 
-    <script type="text/javascript">
+    <script type="module">
         $(document).ready(function() {
             if ($('.alert-success').length) {
                 setTimeout(function() {

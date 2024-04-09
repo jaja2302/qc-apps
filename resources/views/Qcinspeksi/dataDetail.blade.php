@@ -1490,7 +1490,7 @@
     </div>
 
 
-    <script type="text/javascript">
+    <script type="module">
         // var $j = jQuery.noConflict();
         document.addEventListener("DOMContentLoaded", function() {
             const inputDate = document.getElementById("inputDate");

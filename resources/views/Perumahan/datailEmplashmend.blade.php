@@ -463,7 +463,7 @@
         </div>
     </div>
 
-    <script type="text/javascript">
+    <script type="module">
         document.addEventListener('DOMContentLoaded', function() {
             const toggleButton = document.getElementById('toggleButton');
             const content = document.getElementById('content');

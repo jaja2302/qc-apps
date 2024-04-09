@@ -9,54 +9,17 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <link rel="stylesheet" href="{{ asset('css/ionicons.min.css') }}">
-
     <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/jquery.fancybox.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css')}}">
-    <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
-
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.14/lottie.min.js"></script>
-    <link href="{{ asset('css/css.css') }}" rel="stylesheet">
-
-
-    <script type="text/javascript" src="{{ asset('js/loader.js') }}"></script>
-
-    <style type="text/css">
-        .center {
-            margin: auto;
-            height: 500px;
-            width: 70%;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .tengah {
-            vertical-align: middle;
-        }
-
-        .hijau {
-            background-color: #00621A;
-            color: white;
-        }
-
-        .biru {
-            background-color: #001494;
-            color: white;
-        }
-
-        .merah {
-            background-color: red;
-            color: red;
-        }
-    </style>
     <script src="https://cdn.jsdelivr.net/npm/lottie-web@latest"></script>
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
     <script src="{{asset('apexchart/dist/apexcharts.js')}}"></script>
     <script src="{{asset('leaflet/leaflet.js')}}"></script>\
     <link rel="stylesheet" href="{{ asset('leaflet/leaflet.css') }}">
-    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script> -->
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
 </head>
 
 
@@ -246,7 +209,7 @@
 
 
 
-        <script>
+        <script type="module">
             document.addEventListener('DOMContentLoaded', function() {
                 var currentUrl = window.location.href;
                 var navLinks = document.querySelectorAll('.nav-link');

@@ -1300,7 +1300,7 @@
 
     </div>
 
-    <script type="text/javascript">
+    <script type="module">
         // untuk buat table data bisa d scroll dengan mouse
         document.addEventListener("DOMContentLoaded", function() {
             const tableWrapper = document.querySelector(".table-wrapper");
