@@ -319,7 +319,7 @@
                         let allMonths = Object.keys(element[1][namaAFD[0]]); // Assuming all AFDs have the same months
                         var num = 0
                         namaAFD.forEach((key) => {
-                            tr = document.createElement('tr');
+                            let tr = document.createElement('tr');
                             let item0 = item1x++
                             let item1 = estate;
                             let item2 = key;
@@ -521,7 +521,7 @@
                     var tbody1 = document.getElementById('data_est');
 
                     // console.log(table1);
-                    inc = 1
+                    let inc = 1
                     table1.forEach((element, index) => {
                         let tr = document.createElement('tr');
                         let item1 = inc++

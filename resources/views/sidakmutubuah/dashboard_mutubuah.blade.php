@@ -2458,29 +2458,26 @@
                     })
 
 
+                    // Declare wil_est variable before using it
+                    var wil_est;
+                    var warna; // Also declare the warna variable
+
                     if (regInpt === '1') {
-                        wil_est = ['I', 'II', 'III']
-                        warna = ['#00FF00',
-                            '#FF8D1A',
-                            '#00ffff'
-                        ]
+                        wil_est = ['I', 'II', 'III'];
+                        warna = ['#00FF00', '#FF8D1A', '#00ffff'];
                     } else if (regInpt === '2') {
-                        wil_est = ['IV', 'V', 'VI']
-                        warna = ['#00FF00',
-                            '#FF8D1A',
-                            '#00ffff'
-                        ]
+                        wil_est = ['IV', 'V', 'VI'];
+                        warna = ['#00FF00', '#FF8D1A', '#00ffff'];
                     } else if (regInpt === '3') {
-                        wil_est = ['VII', 'VIII']
-                        warna = ['#00FF00',
-                            '#00ffff'
-                        ]
+                        wil_est = ['VII', 'VIII'];
+                        warna = ['#00FF00', '#00ffff'];
                     } else {
-                        wil_est = ['IX', 'X']
-                        warna = ['#00FF00',
-                            '#00ffff'
-                        ]
+                        wil_est = ['IX', 'X'];
+                        warna = ['#00FF00', '#00ffff'];
                     }
+
+                    // Now you can use wil_est and warna in your code without getting a ReferenceError
+
                     chart_wil.updateSeries([{
                         name: 'matang',
                         data: matang_chart_wil,
@@ -2725,27 +2722,33 @@
                         tbody1.appendChild(tr);
 
                     });
+                    // Declare variables wil1, wil2, wil3, wil4 before using them
+                    var wil1, wil2, wil3, wil4;
+
                     if (regInpt === '1') {
                         wil1 = 'WIL-I';
                         wil2 = 'WIL-II';
                         wil3 = 'WIL-III';
-                        wil4 = 'Plasma1'
+                        wil4 = 'Plasma1';
                     } else if (regInpt === '2') {
                         wil1 = 'WIL-IV';
                         wil2 = 'WIL-V';
                         wil3 = 'WIL-VI';
-                        wil4 = 'Plasma2'
+                        wil4 = 'Plasma2';
                     } else if (regInpt === '3') {
                         wil1 = 'WIL-VII';
                         wil2 = 'WIL-VIII';
                         wil3 = 'Plasma3';
-                        wil4 = 'Plasma3'
+                        wil4 = 'Plasma3';
                     } else {
                         wil1 = 'WIL-IX';
                         wil2 = 'WIL-X';
                         wil3 = '-';
-                        wil4 = '-'
+                        wil4 = '-';
                     }
+
+                    // Now you can use wil1, wil2, wil3, wil4 in your code without getting a ReferenceError
+
                     var arrEst1 = mutuBuah_wil[0][1];
                     // console.log(arrEst1);
                     var tbody1 = document.getElementById('week1');
@@ -3534,7 +3537,7 @@
             $('#plasmas1').empty()
             $('#theadregs').empty()
             var week = ''
-            $regData = ''
+            var regData = ''
             var _token = $('input[name="_token"]').val();
             var week = document.getElementById('dateWeek').value
             var regData = document.getElementById('regionalData').value
@@ -3844,29 +3847,26 @@
                     })
 
 
+                    // Declare wil_est variable before using it
+                    var wil_est;
+                    var warna; // Also declare the warna variable
+
                     if (regInpt === '1') {
-                        wil_est = ['I', 'II', 'III']
-                        warna = ['#00FF00',
-                            '#FF8D1A',
-                            '#00ffff'
-                        ]
+                        wil_est = ['I', 'II', 'III'];
+                        warna = ['#00FF00', '#FF8D1A', '#00ffff'];
                     } else if (regInpt === '2') {
-                        wil_est = ['IV', 'V', 'VI']
-                        warna = ['#00FF00',
-                            '#FF8D1A',
-                            '#00ffff'
-                        ]
+                        wil_est = ['IV', 'V', 'VI'];
+                        warna = ['#00FF00', '#FF8D1A', '#00ffff'];
                     } else if (regInpt === '3') {
-                        wil_est = ['VII', 'VIII']
-                        warna = ['#00FF00',
-                            '#00ffff'
-                        ]
+                        wil_est = ['VII', 'VIII'];
+                        warna = ['#00FF00', '#00ffff'];
                     } else {
-                        wil_est = ['IX', 'X']
-                        warna = ['#00FF00',
-                            '#00ffff'
-                        ]
+                        wil_est = ['IX', 'X'];
+                        warna = ['#00FF00', '#00ffff'];
                     }
+
+                    // Now you can use wil_est and warna in your code without getting a ReferenceError
+
                     chart_wils.updateSeries([{
                         name: 'matang',
                         data: matang_chart_wil,
@@ -4099,27 +4099,33 @@
                         tbody1.appendChild(tr);
 
                     });
+                    // Declare variables wil1, wil2, wil3, wil4 before using them
+                    var wil1, wil2, wil3, wil4;
+
                     if (regInpt === '1') {
                         wil1 = 'WIL-I';
                         wil2 = 'WIL-II';
                         wil3 = 'WIL-III';
-                        wil4 = 'Plasma1'
+                        wil4 = 'Plasma1';
                     } else if (regInpt === '2') {
                         wil1 = 'WIL-IV';
                         wil2 = 'WIL-V';
                         wil3 = 'WIL-VI';
-                        wil4 = 'Plasma2'
+                        wil4 = 'Plasma2';
                     } else if (regInpt === '3') {
                         wil1 = 'WIL-VII';
                         wil2 = 'WIL-VIII';
                         wil3 = 'Plasma3';
-                        wil4 = 'Plasma3'
+                        wil4 = 'Plasma3';
                     } else {
                         wil1 = 'WIL-IX';
                         wil2 = 'WIL-X';
                         wil3 = '-';
-                        wil4 = '-'
+                        wil4 = '-';
                     }
+
+                    // Now you can use wil1, wil2, wil3, wil4 in your code without getting a ReferenceError
+
                     var arrEst1 = mutuBuah_wil[0][1];
                     // console.log(arrEst1);
                     var tbody1 = document.getElementById('weeks1');
@@ -4988,7 +4994,7 @@
 
 
 
-                    counters = 1;
+                    let counters = 1;
 
 
                     function setBackgroundColorForEstate(data, bgColor) {
@@ -5016,7 +5022,7 @@
                                     let innerData = currentData[innerKey];
                                     if (typeof innerData === 'object' && innerData !== null && innerData.hasOwnProperty('Jumlah_janjang')) {
 
-                                        tr = document.createElement('tr');
+                                        let tr = document.createElement('tr');
                                         let item1 = counters++
 
                                         let item4 = innerData.est;
@@ -5125,7 +5131,7 @@
                         });
 
                         if (wilayahData) {
-                            tr = document.createElement('tr');
+                            let tr = document.createElement('tr');
                             let item1 = counters++
 
                             let item4 = wilayahData.est;
@@ -5232,11 +5238,11 @@
                     var arrTbody1 = regional;
                     // console.log(arrTbody1);
                     var tbody1 = document.getElementById('data_weekTab2');
-                    counter = 1;
+                    let counter = 1;
 
 
                     arrTbody1.forEach(element => {
-                        tr = document.createElement('tr');
+                        let tr = document.createElement('tr');
 
                         let dataItems = {
                             item1: counter++,
@@ -5394,7 +5400,7 @@
 
                     // console.log(regional);
 
-                    tr = document.createElement('tr')
+                    let tr = document.createElement('tr')
                     let reg1 = rhdata[1][1]
                     let reg2 = rhdata[3][1]
                     let reg3 = '-'
@@ -5922,7 +5928,7 @@
                                     // console.log(value2)
                                     var tbody1 = document.getElementById('bodyIssue');
 
-                                    tr = document.createElement('tr')
+                                    let tr = document.createElement('tr')
 
                                     let item1 = value2[0]
                                     let item2 = value2[1]['total_temuan']

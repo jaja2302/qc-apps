@@ -4465,7 +4465,7 @@
 
             var rh = document.getElementById('tbodySkorRHMonth');
             // console.log(hasilRh);
-            tr = document.createElement('tr')
+            let tr = document.createElement('tr')
             let reg1 = hasilRh[0][1]['est']
             let reg2 = hasilRh[0][1]['jab']
             let reg3 = hasilRh[0][1]['nama']
@@ -4515,7 +4515,7 @@
             // Create a copy of the original array and sort it in descending order of scores
             arrTbody1.forEach((element, index) => {
 
-              tr = document.createElement('tr')
+              let tr = document.createElement('tr')
               let item1 = element[1]['est']
               let item2 = element[1]['afd']
               let item3 = element[1]['asisten']
@@ -4606,7 +4606,7 @@
             var tbody1 = document.getElementById('tbody1Month');
             arrTbody1.forEach(element => {
               // for (let i = 0; i < 5; i++) {
-              tr = document.createElement('tr')
+              let tr = document.createElement('tr')
               let item1 = element[1]['est']
               let item2 = element[1]['afd']
               let item3 = element[1]['asisten']
@@ -4690,7 +4690,7 @@
             var tbody2 = document.getElementById('tbody2Month');
             arrTbody2.forEach(element => {
               // for (let i = 0; i < 5; i++) {
-              tr = document.createElement('tr')
+              let tr = document.createElement('tr')
               let item1 = element[1]['est']
               let item2 = element[1]['afd']
               let item3 = element[1]['asisten']
@@ -4776,7 +4776,7 @@
             var arrTbody2 = estate2
             arrTbody2.forEach(element => {
               // for (let i = 0; i < 5; i++) {
-              tr = document.createElement('tr')
+              let tr = document.createElement('tr')
               let item1 = element[1]['est']
               let item2 = element[1]['afd']
               let item3 = element[1]['asisten']
@@ -4859,7 +4859,7 @@
             var tbody3 = document.getElementById('tbody3Month');
             arrTbody3.forEach(element => {
               // for (let i = 0; i < 5; i++) {
-              tr = document.createElement('tr')
+              let tr = document.createElement('tr')
               let item1 = element[1]['est']
               let item2 = element[1]['afd']
               let item3 = element[1]['asisten']
@@ -4976,7 +4976,7 @@
             var arrTbody3 = estate3
             arrTbody3.forEach(element => {
               // for (let i = 0; i < 5; i++) {
-              tr = document.createElement('tr')
+              let tr = document.createElement('tr')
               let item1 = element[1]['est']
               let item2 = element[1]['afd']
               let item3 = element[1]['asisten']
@@ -5124,7 +5124,7 @@
 
             // console.log(regional);
 
-            tr = document.createElement('tr')
+            let tr = document.createElement('tr')
             let reg1 = rhdata[1][1]
             let reg2 = rhdata[3][1]
             let reg3 = '-'

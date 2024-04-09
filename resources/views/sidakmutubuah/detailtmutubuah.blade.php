@@ -1546,7 +1546,7 @@
                         "Google Satellite": googleSatellite
                     };
                     L.control.layers(baseMaps).addTo(map);
-                    blokLayer = L.layerGroup();
+                    let blokLayer = L.layerGroup();
 
                     var getPlotStr = '{"type"'
                     getPlotStr += ":"
@@ -1715,7 +1715,7 @@
                         marker.addTo(map);
 
                     }
-                    legendContainer = L.control({
+                    let legendContainer = L.control({
                         position: 'bottomright'
                     });
 

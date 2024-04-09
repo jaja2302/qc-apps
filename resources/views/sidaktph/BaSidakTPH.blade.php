@@ -386,22 +386,8 @@
     </style>
 
 
-    <div class="content-wrapper">
-        <!-- <style>
-        #back-to-data-btn {
-            position: fixed;
-            bottom: 30px;
-            left: 80px;
-            opacity: 0.7;
-            transition: opacity 0.5s ease-in-out;
-            z-index: 9999;
-            /* Set a higher z-index value */
-        }
+    <div class="container-fluid">
 
-        #back-to-data-btn:hover {
-            opacity: 1;
-        }
-    </style> -->
 
 
         <div class="card table_wrapper">
@@ -423,7 +409,7 @@
                         <div class="date">
                             {{ csrf_field() }}
                             <input type="hidden" name="est" id="est" value="{{$est}}">
-                            <select class="form-control" name="date" id="inputDate" onchange="updateButtonState()">
+                            <select class="form-control" name="date" id="inputDate">
                                 <option value="" disabled selected hidden>Pilih tanggal</option>
                                 @foreach($filter as $item)
                                 <option value="{{ $item}}">{{ $item }}</option>
@@ -679,27 +665,34 @@
     </div>
     <input type="hidden" id="estate" value="{{$est}}">
     <input type="hidden" id="afd" value="{{$afd}}">
-    </div>
-    </div>
 
 
     <script type="module">
-        function updateButtonState() {
+        var currentUserName = "{{ session('jabatan') }}";
+        document.addEventListener("DOMContentLoaded", function() {
             var inputDate = document.getElementById("inputDate");
-            var showFindingYear = document.getElementById("showFindingYear");
-            var inputDates = document.getElementById("inputDates");
+            // var showFindingYear = document.getElementById("showFindingYear");
 
-            if (inputDate.value !== "") {
-                showFindingYear.disabled = false;
-                inputDates.value = inputDate.value; // Update the hidden input field value
-            } else {
-                showFindingYear.disabled = true;
-                inputDates.value = ""; // Reset the hidden input field value
-            }
-        }
+            inputDate.addEventListener("change", function() {
+                document.getElementById('showFindingYear').disabled = false;
+                inputDates.value = inputDate.value;
+
+                // console.log(in);
+            });
+            // if (inputDate.value !== "") {
+            //     showFindingYear.disabled = false;
+            //     inputDates.value = inputDate.value; // Update the hidden input field value
+            // } else {
+            //     showFindingYear.disabled = true;
+            //     inputDates.value = ""; // Reset the hidden input field value
+            // }
+        });
 
         document.getElementById('showFindingYear').addEventListener('click', function() {
-            document.getElementById('moveDataButton').disabled = false;
+            if (currentUserName === 'Askep' || currentUserName === 'Manager') {
+                document.getElementById('moveDataButton').disabled = false;
+            }
+
         });
 
         document.getElementById('showFindingYear').onclick = function() {
@@ -717,7 +710,7 @@
 
 
 
-        var currentUserName = "{{ session('jabatan') }}";
+
         // window.onload = function() {
         //     // Add the event listener for the "Save changes" button when the DOM is ready
         //     document.getElementById('save-changes-button').addEventListener('click', updateFunction);
@@ -1431,10 +1424,14 @@
                             }).addTo(map);
                         }
                     });
-                    legendContainer = L.control({
+
+
+                    // Define legendContainer first
+                    var legendContainer = L.control({
                         position: 'bottomright'
                     });
 
+                    // Now define the onAdd function for legendContainer
                     legendContainer.onAdd = function(map) {
                         var div = L.DomUtil.create('div', 'legend');
                         div.innerHTML = '<h4 style="text-align: center;">Info</h4>';
@@ -1454,7 +1451,9 @@
                         return div;
                     };
 
+                    // Now add legendContainer to the map
                     legendContainer.addTo(map);
+
                     Swal.close()
                 },
                 error: function(xhr, status, error) {
@@ -1553,9 +1552,10 @@
                 }
             });
         }
-
+        if (currentUserName === 'Askep' || currentUserName === 'Manager') {
+            document.getElementById("moveDataButton").addEventListener("click", selectDate);
+        }
         // Attach click event listener to the button
-        document.getElementById("moveDataButton").addEventListener("click", selectDate);
     </script>
 
 </x-layout.app>

@@ -4318,7 +4318,7 @@ class emplacementsController extends Controller
                 }
             }
         }
-        dd($delArr);
+        // dd($delArr);
 
         if ($delArr !== []) {
             foreach ($delArr['key'] as $keyToDelete) {

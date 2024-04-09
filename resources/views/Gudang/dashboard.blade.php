@@ -185,13 +185,16 @@
             $('#regionalData').val('4');
 
         }
+        // Declare year and regional variables before using them
+        var year, regional;
+
         $(document).ready(function() {
             year = $('#yearData option:selected').val();
             regional = $('#regionalData option:selected').val();
 
-            getData(year, regional)
-
+            getData(year, regional);
         });
+
 
 
         $('#regionalData').change(function() {
@@ -288,7 +291,7 @@
 
                     for (let i = 0; i < 1; i++) {
 
-                        reg = ''
+                        let reg = ''
                         var cell3 = row.insertCell(i);
                         if (parserowReg[0] == 1) {
                             reg = 'I'

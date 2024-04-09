@@ -1499,50 +1499,8 @@
             inputDate.addEventListener("change", function() {
                 const selectedDate = inputDate.value;
                 document.getElementById('show-button').disabled = false;
-                console.log("Selected date:", selectedDate); // You can replace console.log with any action you want
+                // console.log("Selected date:", selectedDate); // You can replace console.log with any action you want
 
-                // Pass the selected date to the DataTables initialization
-                // var est = 'KDE'; // Replace 'KDE' with the actual value
-                // var afd = 'OD'; // Replace 'OD' with the actual value
-                // var date = selectedDate;
-                // var reg = '1'; // Replace '1' with the actual value
-
-                // // Initialize DataTables with the updated date value
-                // var table = $('.data-table').DataTable({
-                //     processing: true,
-                //     serverSide: true,
-                //     ajax: {
-                //         url: "{{ route('dataDetail', ['est' => ':est', 'afd' => ':afd', 'date' => ':date', 'reg' => ':reg']) }}"
-                //             .replace(':est', est)
-                //             .replace(':afd', afd)
-                //             .replace(':date', date)
-                //             .replace(':reg', reg),
-                //         type: 'GET',
-                //         data: {
-                //             est: est,
-                //             afd: afd,
-                //             date: date,
-                //             reg: reg
-                //         }
-                //     },
-                //     columns: [{
-                //             title: 'ID',
-                //             data: 'id'
-                //         },
-                //         {
-                //             title: 'Estate',
-                //             data: 'estate'
-                //         },
-                //         {
-                //             title: 'Afdeling',
-                //             data: 'afdeling'
-                //         },
-                //         {
-                //             title: 'Blok',
-                //             data: 'blok'
-                //         }
-                //     ]
-                // });
             });
         });
         // Call setInitialDate function and add event listener to update the date when the selected date changes

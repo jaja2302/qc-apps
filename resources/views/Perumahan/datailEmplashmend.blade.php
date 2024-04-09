@@ -86,7 +86,7 @@
                                 <option value="{{ $item }}">{{ $item }}</option>
                                 @endforeach
                             </select>
-                            <button type="button" class="ml-2 btn btn-primary mb-2" id="empData" onclick="showData()">Show</button>
+                            <button type="button" class="ml-2 btn btn-primary mb-2" id="empData">Show</button>
                         </div>
                         <div class="afd mt-2"> ESTATE/ AFD : {{$est}}</div>
                         <div class="afd">Tahun/Bulan : <span id="selectedDate">{{ $tanggal }}</span></div>
@@ -2894,17 +2894,26 @@
             });
         }
 
-        function showData() {
-            var selectedDate = document.getElementById("inputDate").value;
-            if (selectedDate) {
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var selectedDate = document.getElementById("inputDate");
+            selectedDate.addEventListener("change", function() {
+                const selectedDate = inputDate.value;
                 document.getElementById("downloadba").disabled = false;
                 document.getElementById("downloadpdf").disabled = false;
                 document.getElementById("tglPDF").value = selectedDate;
                 document.getElementById("tglpdfnew").value = selectedDate;
-            } else {
-                alert("Please select a date first.");
-            }
-        }
+            });
+            // if (selectedDate) {
+            //     document.getElementById("downloadba").disabled = false;
+            //     document.getElementById("downloadpdf").disabled = false;
+            //     document.getElementById("tglPDF").value = selectedDate;
+            //     document.getElementById("tglpdfnew").value = selectedDate;
+            // } else {
+            //     alert("Please select a date first.");
+            // }
+        });
+
 
 
 
