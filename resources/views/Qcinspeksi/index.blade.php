@@ -955,8 +955,8 @@
 
 
                     <div class="ml-3 mr-3 mb-3">
-                        <div class="row text-center tbl-fixed">
-                            <table>
+                        <div class="row text-center">
+                            <table class="table-responsive">
                                 <thead style="color: white;">
                                     <tr>
                                         {{-- <th rowspan="3" bgcolor="darkblue">Est.</th>
@@ -1548,7 +1548,7 @@
                     thElement1.textContent = 'WILAYAH VII';
                     thElement2.textContent = 'WILAYAH VIII';
                     thElement3.textContent = 'WILAYAH VIII';
-                    thElement4.textContent = 'PLASMA III';
+                    // thElement4.textContent = 'PLASMA III';
                     thElement1x.textContent = 'WILAYAH VII';
                     thElement2x.textContent = 'WILAYAH VIII';
                     thElement3x.textContent = 'WILAYAH VIII';
@@ -1561,7 +1561,7 @@
                     thElement1x.classList.add("text-center");
                     thElement2x.classList.add("text-center");
                     thElement3x.classList.add("text-center");
-                    thElement4x.classList.add("text-center");
+                    // thElement4x.classList.add("text-center");
 
 
                     const nons = document.getElementById("Tab1");

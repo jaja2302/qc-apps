@@ -1092,19 +1092,26 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr></tr>
-                    <tr></tr>
-                    <tr></tr>
-                    <tr></tr>
+                 
 
                     <tr>
                         <td colspan="2" style="vertical-align: bottom;padding-top: 244px;text-align:center">__________</td>
                         <td colspan="2" style="vertical-align: bottom;text-align:center">__________</td>
                         <td colspan="2" style="vertical-align: bottom;text-align:center">__________</td>
-                        <td colspan="3" style="vertical-align: bottom;text-align:center">Asisten Afdeling</td>
-
-                        <td colspan="3" style="vertical-align: bottom;text-align:center">Estate Manager</td>
-
+                        @if ($data['statusdata'] === 'not_approved')
+                        <td colspan="3" style="vertical-align: bottom; text-align: center">Asisten Belum Terverifikasi Secara Digital</td>
+                        <td colspan="3" style="vertical-align: bottom; text-align: center">Manajer Estate Belum Terverifikasi Secara Digital</td>
+                    @elseif ($data['statusdata'] === 'askep_not_approved')
+                        <td colspan="3" style="vertical-align: bottom; text-align: center">Asisten Belum Terverifikasi Secara Digital</td>
+                        <td colspan="3" style="vertical-align: bottom; text-align: center">Manajer Estate Sudah Terverifikasi Secara Digital</td>
+                    @elseif ($data['statusdata'] === 'manager_not_approved')
+                        <td colspan="3" style="vertical-align: bottom; text-align: center">Asisten Sudah Terverifikasi Secara Digital</td>
+                        <td colspan="3" style="vertical-align: bottom; text-align: center">Manajer Estate Belum Terverifikasi Secara Digital</td>
+                    @elseif ($data['statusdata'] === 'all_approved')
+                        <td colspan="3" style="vertical-align: bottom; text-align: center">Asisten Sudah Terverifikasi Secara Digital</td>
+                        <td colspan="3" style="vertical-align: bottom; text-align: center">Manajer Estate Sudah Terverifikasi Secara Digital</td>
+                    @endif
+                    
                     </tr>
 
                 </tbody>

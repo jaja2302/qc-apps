@@ -13026,4 +13026,103 @@ class inspectController extends Controller
 
         return view('Pdf.qcinspeksiexcel', ['data' => $rekap, 'reg' => $regional, 'bulan' => $bulan, 'datareg' => $dataReg]);
     }
+
+    public function verifdata(Request $request)
+    {
+        // Retrieve input values from the request
+        $Tanggal = $request->input('Tanggal');
+        $est = $request->input('est');
+        $afd = $request->input('afd');
+        $menu = $request->input('menu');
+
+        // Debug the input values using dd()
+
+        // Perform your database query
+        $status = DB::connection('mysql2')->table('verification')
+            ->where('est', $est)
+            ->where('afd', $afd)
+            ->where('menu', $menu)
+            ->where('datetime', 'LIKE', '%' . $Tanggal . '%')
+            ->get();
+
+        if ($status->isEmpty()) {
+            return response()->json('empty');
+        } else {
+            $verifby_askep = $status[0]->verifby_askep;
+            $verifby_manager = $status[0]->verifby_manager;
+
+            if ($verifby_askep != 1) {
+                return response()->json('askep_not_approved');
+            }
+
+            if ($verifby_manager != 1) {
+                return response()->json('manager_not_approved');
+            }
+
+            return response()->json('all_approved');
+        }
+    }
+
+    public function verifaction(Request $request)
+    {
+        // Retrieve input values from the request
+        $Tanggal = $request->input('Tanggal');
+        $est = $request->input('est');
+        $afd = $request->input('afd');
+        $menu = $request->input('menu');
+        $jabatan = $request->input('jabatan');
+        $nama = $request->input('nama');
+        $action = $request->input('action');
+
+        try {
+            DB::beginTransaction();
+
+            // Retrieve current verification status
+            $currentStatus = DB::connection('mysql2')->table('verification')
+                ->where([
+                    'est' => $est,
+                    'afd' => $afd,
+                    'datetime' => $Tanggal,
+                    'menu' => $menu,
+                ])->first();
+
+            $verifby_askep = $jabatan === 'Askep' ? 1 : 0;
+            $verifby_manager = $jabatan === 'Manager' ? 1 : 0;
+
+            if ($currentStatus == null) {
+                DB::connection('mysql2')->table('verification')->insert([
+                    'est' => $est,
+                    'afd' => $afd,
+                    'datetime' => $Tanggal,
+                    'menu' => $menu,
+                    'verifby_askep' => $verifby_askep,
+                    'verifby_manager' => $verifby_manager,
+                    'action' => $action,
+                ]);
+
+                DB::commit();
+                return response()->json('success', 200);
+            } else {
+                if ($jabatan === 'Askep') {
+                    DB::connection('mysql2')->table('verification')->where('id', $currentStatus->id)->update([
+                        'verifby_askep' => $verifby_askep,
+                    ]);
+                } else if ($jabatan === 'Manager') {
+                    DB::connection('mysql2')->table('verification')->where('id', $currentStatus->id)->update([
+                        'verifby_manager' => $verifby_manager,
+                    ]);
+                } else {
+                    // Handle other cases or return an error response
+                    DB::rollback();
+                    return response()->json('error', 400);
+                }
+
+                DB::commit();
+                return response()->json('success', 200);
+            }
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return response()->json($th->getMessage(), 500);
+        }
+    }
 }

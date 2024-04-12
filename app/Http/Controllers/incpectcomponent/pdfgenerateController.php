@@ -674,6 +674,32 @@ class pdfgenerateController extends Controller
         $date = $request->input('tglPDF');
         $reg = $request->input('regPDF');
 
+        // Debug the input values using dd()
+
+        // Perform your database query
+        $status = DB::connection('mysql2')->table('verification')
+            ->where('est', $est)
+            ->where('afd', $afd)
+            ->where('menu', 'qcinspeksi')
+            ->where('datetime', 'LIKE', '%' . $date . '%')
+            ->get();
+
+        if ($status->isEmpty()) {
+            $statusdata = 'not_approved';
+        } else {
+            $verifby_askep = $status[0]->verifby_askep;
+            $verifby_manager = $status[0]->verifby_manager;
+
+            if ($verifby_askep != 1) {
+                $statusdata = 'askep_not_approved';
+            } elseif ($verifby_manager != 1) {
+                $statusdata = 'manager_not_approved';
+            } else {
+                $statusdata = 'all_approved';
+            }
+        }
+
+        // dd($statusdata);
         $mutuAncak = DB::connection('mysql2')
             ->table('mutu_ancak_new')
             ->select("mutu_ancak_new.*", DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%Y") as tahun'))
@@ -1239,6 +1265,8 @@ class pdfgenerateController extends Controller
         $arrView['reg'] =  $reg;
         $arrView['tanggal'] =  $date;
         $arrView['ancak_trans'] =  $newVariable;
+        $arrView['statusdata'] =  $statusdata;
+        // dd($statusdata);
 
         $pdf = PDF::loadView('Qcinspeksi.pdfBA', ['data' => $arrView]);
 

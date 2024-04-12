@@ -216,6 +216,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pdfsidaktphdata/{reg}/{est}', [SidaktphController::class, 'pdfsidaktphdata'])->name('pdfsidaktphdata');
     Route::get('/excelqcinspeksi/{reg}/{est}', [inspectController::class, 'excelqcinspeksi'])->name('excelqcinspeksi');
     Route::get('/getmonthrh', [RekapController::class, 'getmonthrh'])->name('getmonthrh');
+
+    Route::get('verifinspeksi', [inspectController::class, 'verifdata'])->name('verifinspeksi');
+    Route::post('verifaction', [inspectController::class, 'verifaction'])->name('verifaction');
 });
 
 Route::get('/user_qc/{lokasi_kerja}', [UserQCController::class, 'index'])->name('user_qc');
