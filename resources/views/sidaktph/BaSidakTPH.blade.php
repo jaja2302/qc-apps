@@ -78,35 +78,7 @@
         }
 
         /* The Modal (background) */
-        /* Add Bootstrap-like styling for the modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.5s;
-        }
-
-        .modal-content {
-            background-color: #ffffff;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #dee2e6;
-            width: 40%;
-            max-width: 500px;
-            max-height: 70%;
-            /* Set a maximum height */
-            overflow-y: auto;
-            /* Enable vertical scrolling if content overflows */
-            border-radius: 0.3rem;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-            animation: scaleUp 0.3s;
-        }
+     
 
 
         /* Add Bootstrap-like button styling */
@@ -653,30 +625,7 @@
 
 
         <style>
-            .modal-dialog {
-                max-width: 100%;
-                margin: auto;
-            }
-
-            .modal-content {
-                width: 100%;
-            }
-
-            .modal-body {
-                text-align: center;
-            }
-
-            .modal-image {
-                max-width: 100%;
-                max-height: calc(100vh - 200px);
-                object-fit: contain;
-            }
-
-            .modal-image-container {
-                position: relative;
-                display: inline-block;
-            }
-
+            
             .download-button-container {
                 position: absolute;
                 top: 0;
@@ -692,26 +641,30 @@
                         <button type="button" id="modalCloseButton" class="btn-close" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="modal-image-container">
-                            <img class="modal-image" id="img01">
-                            <div class="download-button-container">
-                                <!-- Remove the "download" attribute from the anchor element -->
-                                <a id="downloadButton" class="btn btn-primary" href="#">Download Image</a>
+                        <div class="row">
+                            <div class="text-center">
+                                <img id="img01" src="path_to_your_image.jpg" alt="..." class="img-fluid">
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <p id="modalKomentar"></p>
+                                <div class="download-button-container">
+                                    <a id="downloadButton" class="btn btn-primary" href="#">Download Image</a>
+                                </div>
                             </div>
                         </div>
-                        <p>Komentar:</p>
-                        <p id="modalKomentar"></p>
                     </div>
                 </div>
             </div>
         </div>
+
+
 
     </div>
     <input type="hidden" id="estate" value="{{$est}}">
     <input type="hidden" id="afd" value="{{$afd}}">
 
 
-    <script type="module">
+    <script type="text/javascript">
         var currentUserName = "{{ session('jabatan') }}";
         var user_name = "{{ session('user_name') }}";
         document.addEventListener("DOMContentLoaded", function() {
@@ -1005,23 +958,24 @@
 
                     $('#new_Sidak').on('click', '.edit-btn', function() {
                         var rowData = sidakTPhNEw.row($(this).closest('tr')).data();
-                        var rowIndex = sidakTPhNEw.row($(this).closest('tr')).index();
-                        editSidakTPh(rowIndex);
+                      
+                        editSidakTPh(rowData);
                     });
 
                     $('#new_Sidak').on('click', '.delete-btn', function() {
-                        var rowIndex = sidakTPhNEw.row($(this).closest('tr')).index();
-                        deleteRowBuah(rowIndex);
+                        var rowData = sidakTPhNEw.row($(this).closest('tr')).data();
+                      
+                        deleteRowBuah(rowData);
                     });
 
 
-                    function editSidakTPh(id) {
+                    function editSidakTPh(rowData) {
                         // Save the selected row index
-                        selectedRowIndex = id;
+                        // selectedRowIndex = id;
 
                         // Retrieve the id from the first column of the selected row
-                        var rowData = sidakTPhNEw.row(id).data();
-                        var rowId = rowData[0];
+                        // var rowData = sidakTPhNEw.row(id).data();
+                        // var rowId = rowData[0];
 
                         // Populate the form with the data of the selected row
                         $('#editId_buah').val(rowData.id).prop('disabled', true);
@@ -1040,15 +994,18 @@
                         $('#update-hplus').val(rowData.status)
                         // update-hplus
                         // hplus
+                        var modal = new bootstrap.Modal(document.getElementById('editModalTPH'));
+                         modal.show();
 
-
-                        $('#editModalTPH').modal('show');
+                        // $('#editModalTPH').modal('show');
                     }
 
                     $(document).ready(function() {
                         // Close modal when the close button is clicked
                         $('#closeModalBtn_buah').click(function() {
-                            $('#editModalTPH').modal('hide');
+                            // $('#editModalTPH').modal('hide');
+                            var modal = new bootstrap.Modal(document.getElementById('editModalTPH'));
+                            modal.hide();
                         });
 
                         // Submit the form when the Save Changes button is clicked
@@ -1102,7 +1059,10 @@
                                 success: function(response) {
                                     // console.log(response);
                                     // Close the modal
-                                    $('#editModalTPH').modal('hide');
+                                    // $('#editModalTPH').modal('hide');
+                                    var modal = new bootstrap.Modal(document.getElementById('editModalTPH'));
+                                     modal.hide();
+
                                     // console.log(formData);
 
                                     Swal.fire({
@@ -1137,8 +1097,8 @@
                         var rowId = rowData.id;
 
                         // Show the delete modal
-                        $('#deleteModalancak').modal('show');
-
+                        var modal = new bootstrap.Modal(document.getElementById('deleteModalancak'));
+                         modal.show();
                         // Handle delete confirmation
                         $('#confirmDeleteBtn').off('click').on('click', function() {
                             // Create a form data object
@@ -1164,7 +1124,7 @@
                                 contentType: false,
                                 success: function(response) {
                                     // Close the delete modal
-                                    $('#deleteModalancak').modal('hide');
+                                    // $('#deleteModalancak').modal('hide');
 
                                     // Show a success message using SweetAlert
                                     Swal.fire({
@@ -1180,7 +1140,7 @@
                                     console.error(error);
 
                                     // Close the delete modal
-                                    $('#deleteModalancak').modal('hide');
+                                    // $('#deleteModalancak').modal('hide');
                                 }
                             });
                         });

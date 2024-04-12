@@ -344,7 +344,7 @@
 
 
     <div class="container-fluid">
-
+    
         <div class="card table_wrapper">
             <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark ">
                 <h2>REKAP HARIAN SIDAK MUTU BUAH </h2>
@@ -653,19 +653,22 @@
                         <button type="button" id="modalCloseButton" class="btn-close" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="modal-image-container">
-                            <img class="modal-image" id="img01">
-                            <div class="download-button-container">
-                                <!-- Remove the "download" attribute from the anchor element -->
-                                <a id="downloadButton" class="btn btn-primary" href="#">Download Image</a>
+                        <div class="row">
+                            <div class="text-center">
+                                <img id="img01"  alt="..." class="img-fluid">
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <p id="modalKomentar"></p>
+                                <div class="download-button-container">
+                                    <a id="downloadButton" class="btn btn-primary" href="#">Download Image</a>
+                                </div>
                             </div>
                         </div>
-                        <p>Komentar:</p>
-                        <p id="modalKomentar"></p>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <div id="editModalTPH" class="modal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-xl" role="document">
@@ -741,18 +744,22 @@
             </div>
         </div>
 
+<!-- Button trigger modal -->
+   
 
 
-    </div>
 
 
+    <script type="text/javascript">
+      
 
-
-    <script type="module">
         $(document).ready(function() {
+           
             // Close modal when the close button is clicked
             $('#closeModalBtn_buah').click(function() {
-                $('#editModalTPH').modal('hide');
+                var modal = new bootstrap.Modal(document.getElementById('editModalTPH'));
+                modal.hide();
+                // $('#editModalTPH').modal('hide');
             });
 
             // Submit the form when the Save Changes button is clicked
@@ -760,9 +767,6 @@
             function isNumber(value) {
                 return !isNaN(parseFloat(value)) && isFinite(value);
             }
-
-
-
         });
         $("#show-button").click(function() {
             Swal.fire({
@@ -944,124 +948,16 @@
             path: "https://assets3.lottiefiles.com/packages/lf20_vfcbh2yp.json",
         });
 
-        var table = $('#new_Sidak').DataTable({
-            columns: [{
-                    title: 'ID',
-                    data: 'id',
-                },
-                {
-                    title: 'Estate',
-                    data: 'estate'
-                },
-                {
-                    title: 'Afdeling',
-                    data: 'afdeling'
-                },
-                {
-                    title: 'Blok',
-                    data: 'blok'
-                },
-                {
-                    title: 'Petugas',
-                    data: 'petugas'
-                },
-                {
-                    title: 'Waktu',
-                    data: 'datetime'
-                },
-                {
-                    title: 'TPH Baris',
-                    data: 'tph_baris'
-                },
-                {
-                    title: 'Ancak Pemanen',
-                    data: 'ancak_pemanen'
-                },
-                {
-                    title: 'Jumlah Janjang',
-                    data: 'jumlah_jjg'
-                }, {
-                    title: 'Buah Mentah',
-                    data: 'bmt'
-                },
-                {
-                    title: 'Buah Masak',
-                    data: 'bmk'
-                },
-                {
-                    title: 'Buah Lewat Masak',
-                    data: 'overripe'
-                },
-                {
-                    title: 'Buah Kosong',
-                    data: 'empty_bunch'
-                },
-                {
-                    title: 'Buah Abnormal',
-                    data: 'abnormal'
-                },
-                {
-                    title: 'Rat Damage',
-                    data: 'rd'
-                },
-                {
-                    title: 'Tidak Vcut',
-                    data: 'vcut'
-                },
-                {
-                    title: 'Alas Karung',
-                    data: 'alas_br'
-                },
-                {
-                    title: 'Maps',
-                    data: 'app_version',
-                    render: function(data, type, row, meta) {
-                        var parts = data.split(';'); // Use the 'data' parameter instead of 'dataString'
-
-                        // Get the last part
-                        var lastPart = parts[parts.length - 1];
-
-                        // Define variables for the conditions
-                        var Akurat = 'Akurat';
-                        var Liar = 'Liar';
-                        var result = null;
-
-                        // Check conditions and assign values
-                        if (lastPart === 'GA') {
-                            result = Akurat;
-                        } else if (lastPart === 'GL') {
-                            result = Liar;
-                        }
-
-                        return result; // Return the computed result
-                    }
-                },
-
-                {
-                    title: 'Actions',
-                    visible: (currentUserName === 'Askep' || currentUserName === 'Manager'),
-                    render: function(data, type, row, meta) {
-                        // Assuming 'id' is the field containing the ID
-                        var id = row.id; // Fetch the ID from the row data
-                        var buttons =
-                            '<button class="edit-btn" data-id="' + id + '">Edit</button>' +
-                            '<button class="delete-btn">Delete</button>';
-                        return buttons;
-                    }
-                }
-            ],
-            // Add other DataTable options as needed
-        });
-        $('#closeModalBtn_buah').click(function() {
-            $('#editModalTPH').modal('hide');
-        });
+       
 
         function fetchAndUpdateData() {
             var est = document.getElementById('est').value;
             var afd = document.getElementById('afd').value;
             var tanggal = document.getElementById('inputDate').value
             var _token = $('input[name="_token"]').val();
-
+            if ($.fn.DataTable.isDataTable('#new_Sidak')) {
+                $('#new_Sidak').DataTable().destroy();
+            }
             $.ajax({
                 url: "{{ route('filterdetialMutubuah') }}",
                 method: "GET",
@@ -1074,21 +970,130 @@
                 success: function(result) {
 
                     var parseResult = JSON.parse(result);
+                    let table = $('#new_Sidak').DataTable({
+                    columns: [{
+                            title: 'ID',
+                            data: 'id',
+                        },
+                        {
+                            title: 'Estate',
+                            data: 'estate'
+                        },
+                        {
+                            title: 'Afdeling',
+                            data: 'afdeling'
+                        },
+                        {
+                            title: 'Blok',
+                            data: 'blok'
+                        },
+                        {
+                            title: 'Petugas',
+                            data: 'petugas'
+                        },
+                        {
+                            title: 'Waktu',
+                            data: 'datetime'
+                        },
+                        {
+                            title: 'TPH Baris',
+                            data: 'tph_baris'
+                        },
+                        {
+                            title: 'Ancak Pemanen',
+                            data: 'ancak_pemanen'
+                        },
+                        {
+                            title: 'Jumlah Janjang',
+                            data: 'jumlah_jjg'
+                        }, {
+                            title: 'Buah Mentah',
+                            data: 'bmt'
+                        },
+                        {
+                            title: 'Buah Masak',
+                            data: 'bmk'
+                        },
+                        {
+                            title: 'Buah Lewat Masak',
+                            data: 'overripe'
+                        },
+                        {
+                            title: 'Buah Kosong',
+                            data: 'empty_bunch'
+                        },
+                        {
+                            title: 'Buah Abnormal',
+                            data: 'abnormal'
+                        },
+                        {
+                            title: 'Rat Damage',
+                            data: 'rd'
+                        },
+                        {
+                            title: 'Tidak Vcut',
+                            data: 'vcut'
+                        },
+                        {
+                            title: 'Alas Karung',
+                            data: 'alas_br'
+                        },
+                        {
+                            title: 'Maps',
+                            data: 'app_version',
+                            render: function(data, type, row, meta) {
+                                var parts = data.split(';'); // Use the 'data' parameter instead of 'dataString'
 
+                                // Get the last part
+                                var lastPart = parts[parts.length - 1];
+
+                                // Define variables for the conditions
+                                var Akurat = 'Akurat';
+                                var Liar = 'Liar';
+                                var result = null;
+
+                                // Check conditions and assign values
+                                if (lastPart === 'GA') {
+                                    result = Akurat;
+                                } else if (lastPart === 'GL') {
+                                    result = Liar;
+                                }
+
+                                return result; // Return the computed result
+                            }
+                        },
+
+                        {
+                            title: 'Actions',
+                            visible: (currentUserName === 'Askep' || currentUserName === 'Manager'),
+                            render: function(data, type, row, meta) {
+                                var buttons =
+                                        '<button class="edit-btn">Edit</button>' +
+                                        '<button class="delete-btn">Delete</button>';
+                                return buttons;
+                            }
+                        }
+                    ],
+                        // Add other DataTable options as needed
+                    });
+                
+                    // $('#closeModalBtn_buah').click(function() {
+                    //     $('#editModalTPH').modal('hide');
+                    // });
                     // Clear existing data and add new data to the DataTable
                     table.clear().rows.add(parseResult['mutubuah']).draw();
+
                     $('#new_Sidak').on('click', '.edit-btn', function() {
-                        var id = $(this).data('id'); // Retrieve the ID from the button's data attribute
-
                         var rowData = table.row($(this).closest('tr')).data();
-                        var rowIndex = table.row($(this).closest('tr')).index();
+                      
+                        editSidakTPh(rowData);
 
-                        editSidakTPh(rowIndex); // Pass the ID to your edit function
+                   
                     });
-
                     $('#new_Sidak').on('click', '.delete-btn', function() {
-                        var rowIndex = table.row($(this).closest('tr')).index();
-                        deleteRowBuah(rowIndex);
+                        var rowData = table.row($(this).closest('tr')).data();
+                      
+                        deleteRowBuah(rowData);
                     });
 
 
@@ -1099,12 +1104,10 @@
                 }
             });
 
-            function editSidakTPh(id) {
+            function editSidakTPh(rowData) {
 
-                // Retrieve the id from the first column of the selected row
-                var rowData = table.row(id).data();
-
-                // console.log(rowId);
+          
+                // console.log(rowData.id);
 
                 $('#update-blokCak').val(rowData.blok)
                 $('#idbuah').val(rowData.id)
@@ -1120,16 +1123,14 @@
                 $('#ratdmg').val(rowData.rd)
                 $('#vcut').val(rowData.vcut)
                 $('#alasbr').val(rowData.alas_br)
-                $('#editModalTPH').modal('show')
-
-
-
+                var modal = new bootstrap.Modal(document.getElementById('editModalTPH'));
+                modal.show();
+                // $('#editModalTPH').modal('show')
             }
 
 
-            function deleteRowBuah(id) {
-                // Get the selected row data
-                var rowData = table.row(id).data();
+            function deleteRowBuah(rowData) {
+
                 var rowId = rowData.id;
 
                 // Show the confirmation alert
@@ -1196,12 +1197,15 @@
 
             $(document).ready(function() {
                 // Close modal when the close button is clicked
-                $('#closeModalBtn_buah').click(function() {
-                    $('#editModalTPH').modal('hide');
-                });
+                // $('#closeModalBtn_buah').click(function() {
+                //     $('#editModalTPH').modal('hide');
+                // });
 
                 // Submit the form when the Save Changes button is clicked
                 $('#saveChangesBtn_buah').off('click').on('click', function() {
+                    // var modal = new bootstrap.Modal(document.getElementById('editForm_buah'));
+                    //  modal.submit();
+
                     $('#editForm_buah').submit();
                 });
 
@@ -1265,7 +1269,9 @@
                         processData: false,
                         contentType: false,
                         success: function(response) {
-                            $('#editModalTPH').modal('hide');
+                            // $('#editModalTPH').modal('hide');
+                              var modal = new bootstrap.Modal(document.getElementById('editModalTPH'));
+                                  modal.hide();
 
                             if (response.message === 'Success') {
                                 Swal.fire({
@@ -1330,7 +1336,9 @@
                         contentType: false,
                         success: function(response) {
                             // Close the delete modal
-                            $('#deleteModalancak').modal('hide');
+                            //    var modal = new bootstrap.Modal(document.getElementById('deleteModalancak'));
+                            //        modal.hide();
+                            // $('#deleteModalancak').modal('hide');
 
                             // Show a success message using SweetAlert
                             Swal.fire({
@@ -1344,9 +1352,9 @@
                         error: function(xhr, status, error) {
                             // Handle the error if needed
                             console.error(error);
-
-                            // Close the delete modal
-                            $('#deleteModalancak').modal('hide');
+                            // var modal = new bootstrap.Modal(document.getElementById('deleteModalancak'));
+                            //        modal.hide();
+                            // $('#deleteModalancak').modal('hide');
                         }
                     });
                 });
@@ -1500,79 +1508,6 @@
 
                         });
                     });
-
-
-
-
-                    // const tr = document.createElement('tr');
-                    // let item1 = EstTotal[2][1];
-                    // let item2 = EstTotal[3][1];
-                    // let item3 = EstTotal[0][1];
-                    // let item4 = EstTotal[4][1];
-                    // let item5 = EstTotal[6][1];
-                    // let item6 = EstTotal[5][1];
-                    // let item7 = EstTotal[7][1];
-                    // let item8 = EstTotal[8][1];
-                    // let item9 = EstTotal[9][1];
-                    // let item10 = EstTotal[10][1];
-
-                    // let item11 = EstTotal[11][1];
-                    // let item12 = EstTotal[12][1];
-                    // let item13 = EstTotal[13][1];
-                    // let item14 = EstTotal[14][1];
-                    // let item15 = EstTotal[15][1];
-                    // let item16 = EstTotal[16][1];
-                    // let item17 = EstTotal[17][1];
-                    // let item18 = EstTotal[18][1];
-                    // let item19 = EstTotal[19][1];
-                    // let item20 = EstTotal[20][1];
-                    // let item21 = EstTotal[21][1];
-                    // let item22 = EstTotal[22][1];
-                    // let item23 = EstTotal[23][1];
-                    // let item24 = EstTotal[25][1];
-                    // let item25 = EstTotal[26][1];
-                    // let item26 = EstTotal[27][1];
-                    // let item27 = EstTotal[28][1];
-                    // let item28 = EstTotal[29][1];
-                    // let item29 = EstTotal[30][1];
-                    // let item30 = EstTotal[31][1];
-                    // let item31 = EstTotal[32][1];
-
-
-                    // const items = [];
-                    // for (let i = 1; i <= 31; i++) {
-                    //     items.push(eval(`item${i}`));
-                    // }
-
-                    // items.forEach((item, index) => {
-                    //     const itemElement = document.createElement('td');
-                    //     itemElement.classList.add('text-center');
-                    //     itemElement.innerText = item;
-                    //     if (index === 0) {
-                    //         itemElement.setAttribute('colspan', '2'); // Add colspan attribute for item1
-                    //     }
-                    //     if (index < 30) {
-                    //         // Apply background color for indices 0 to 29
-                    //         itemElement.style.backgroundColor = '#b8d48c'; // Set your desired background color here
-                    //     }
-                    //     if (index === 30) {
-                    //         // Apply background color based on the value of item32
-                    //         if (item === 'SATISFACTORY') {
-                    //             itemElement.style.backgroundColor = '#fffc04';
-                    //         } else if (item === 'EXCELLENT') {
-                    //             itemElement.style.backgroundColor = '#5874c4';
-                    //         } else if (item === 'GOOD') {
-                    //             itemElement.style.backgroundColor = '#10fc2c';
-                    //         } else if (item === 'POOR') {
-                    //             itemElement.style.backgroundColor = '#ff0404';
-                    //         } else if (item === 'FAIR') {
-                    //             itemElement.style.backgroundColor = '#ffa404';
-                    //         }
-                    //     }
-                    //     tr.appendChild(itemElement);
-                    // });
-
-                    // tbody1.appendChild(tr);
                 }
             })
         }
@@ -1654,6 +1589,11 @@
                 });
         }
 
+        $('#yourPopupContentElementId').on('click', function() {
+            console.log('Element clicked!');
+            // Your code here
+            yourNewFunction(); // Call your function here or add more code
+        });
 
         function getmapsbuah() {
 

@@ -7741,6 +7741,7 @@ class mutubuahController extends Controller
                 $plotMarker[$inc]['latln'] = '[' . $value->lat . ',' . $value->lon . ']';
                 $plotMarker[$inc]['bmt'] = $value->bmt;
                 $plotMarker[$inc]['bmk'] = $value->bmk;
+                $plotMarker[$inc]['id'] = $value->id;
                 $plotMarker[$inc]['overripe'] = $value->overripe;
                 $plotMarker[$inc]['empty_bunch'] = $value->empty_bunch;
                 $plotMarker[$inc]['abnormal'] = $value->abnormal;
@@ -7756,10 +7757,12 @@ class mutubuahController extends Controller
 
                 // Check if the string contains the word "verif"
                 if (strpos($checktemuan, 'verif') !== false) {
+
                     // Assuming $value->foto_temuan and $value->komentar contain your string data
                     $checktemuan = json_decode($value->foto_temuan, true);
-
+                    // dd($checktemuan);
                     if (isset($checktemuan['temuan'])) {
+                        // dd('verif found');
                         $temuanValues = explode(';', $checktemuan['temuan']);
                         $verif = explode(';', $checktemuan['verif']);
                         $komentarValues = explode(';', $value->komentar);
@@ -7776,13 +7779,34 @@ class mutubuahController extends Controller
 
                         $plotMarker[$inc]['jam'] = Carbon::parse($value->datetime)->format('H:i');
                         $plotMarker[$inc]['verif'] = $verif[0];
+                    }
+                    if (isset($checktemuan['verif'])) {
+                        // dd('verif found');
+
+                        $verif = explode(';', $checktemuan['verif']);
+                        $komentarValues = explode(';', $value->komentar);
+
+                        // Unset the foto_temuan and komentar keys
+                        unset($plotMarker[$inc]['foto_temuan'], $plotMarker[$inc]['komentar']);
+
+                        $index = 0;
+                        foreach ($verif as $key => $temuanValue) {
+                            $plotMarker[$inc]['foto_temuan' . ($index ? $index : '')] = $temuanValue;
+                            $plotMarker[$inc]['komentar' . ($index ? $index : '')] = isset($komentarValues[$key]) ? $komentarValues[$key] : '';
+                            $index++;
+                        }
+
+                        $plotMarker[$inc]['jam'] = Carbon::parse($value->datetime)->format('H:i');
+                        $plotMarker[$inc]['verif'] = $verif[0];
                     } else {
+                        dd('verif not found');
                         unset($plotMarker[$inc]['foto_temuan'], $plotMarker[$inc]['komentar']);
                         $plotMarker[$inc]['komentar'] = $value->komentar ?? '';
                         $plotMarker[$inc]['jam'] = Carbon::parse($value->datetime)->format('H:i');
                         $plotMarker[$inc]['verif'] = '';
                     }
                 } else {
+
                     $fotoTemuan = explode('; ', $value->foto_temuan);
                     $komentar = explode('; ', $value->komentar);
 
@@ -8028,7 +8052,7 @@ class mutubuahController extends Controller
         $plot['marker'] = $plotMarker;
         $plot['blok'] = $messageResponse;
         $plot['plotarrow'] = $pkLatLn;
-        // dd($plot);
+        // dd($plotMarker);
         echo json_encode($plot);
     }
 

@@ -577,82 +577,10 @@
                 <img id="modalImage" src="" style="width: 100%;">
             </div>
         </div>
-        <style>
-            .modal-custom-update {
-                display: none;
-                position: fixed;
-                z-index: 1;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                overflow: auto;
-                background-color: rgba(0, 0, 0, 0.4);
-            }
+       
 
-            .modal-content-custom-update {
-                background-color: #fefefe;
-                margin-left: 12%;
-                margin-top: 8%;
-                padding: 20px;
-                border: 1px solid #888;
-                max-width: 80%;
-                /* Adjust the width as needed */
-                text-align: center;
-                /* display: flex; */
-                /* justify-content: center;
-            align-items: center; */
-            }
-
-            .modal-content-custom-update h2 {
-                margin-top: 0;
-            }
-
-            .modal-content-custom-update .form-control {
-                width: 100%;
-            }
-
-            .modal-content-custom-update .btn {
-                margin-top: 10px;
-            }
-
-            .modal-content-custom-update .mb-3 {
-                margin-bottom: 15px;
-            }
-        </style>
-
-
-        <style>
-            .modal-custom {
-                display: none;
-                position: fixed;
-                z-index: 1;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                overflow: auto;
-                background-color: rgba(0, 0, 0, 0.4);
-            }
-
-            .modal-content-custom {
-                background-color: #fefefe;
-                margin: 15% auto;
-                padding: 20px;
-                border: 1px solid #888;
-                width: 40%;
-                text-align: center;
-            }
-
-            @media (max-width: 600px) {
-                .modal-content-custom {
-                    width: 80%;
-                }
-            }
-        </style>
-
-        <div id="delete-modal" class="modal-custom">
-            <div class="modal-content-custom">
+        <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
                 <h2>Delete Mutu Ancak</h2>
                 <p>Apakah anda Yakin ingin Menghapus?</p>
                 <div class="row">
@@ -674,8 +602,8 @@
 
             </div>
         </div>
-        <div id="delete-modal-buah" class="modal-custom">
-            <div class="modal-content-custom">
+        <div class="modal fade" id="delete-modal-buah" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
                 <h2>Delete Mutu Buah</h2>
                 <p>Apakah anda Yakin ingin Menghapus?</p>
                 <div class="row">
@@ -695,9 +623,8 @@
                 </div>
             </div>
         </div>
-
-        <div id="delete-modal-transport" class="modal-custom">
-            <div class="modal-content-custom">
+        <div class="modal fade" id="delete-modal-transport" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
                 <h2>Delete Mutu Transport</h2>
                 <p>Apakah anda Yakin ingin Menghapus?</p>
                 <div class="row">
@@ -1107,30 +1034,7 @@
 
 
         <style>
-            .modal-dialog {
-                max-width: 100%;
-                margin: auto;
-            }
-
-            .modal-content {
-                width: 100%;
-            }
-
-            .modal-body {
-                text-align: center;
-            }
-
-            .modal-image {
-                max-width: 100%;
-                max-height: calc(100vh - 200px);
-                object-fit: contain;
-            }
-
-            .modal-image-container {
-                position: relative;
-                display: inline-block;
-            }
-
+       
             .download-button-container {
                 position: absolute;
                 top: 0;
@@ -1146,15 +1050,17 @@
                         <button type="button" id="modalCloseButton" class="btn-close" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="modal-image-container">
-                            <img class="modal-image" id="img01">
-                            <div class="download-button-container">
-                                <!-- Remove the "download" attribute from the anchor element -->
-                                <a id="downloadButton" class="btn btn-primary" href="#">Download Image</a>
+                        <div class="row">
+                            <div class="text-center">
+                                <img id="img01"  alt="..." class="img-fluid">
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <p id="modalKomentar"></p>
+                                <div class="download-button-container">
+                                    <a id="downloadButton" class="btn btn-primary" href="#">Download Image</a>
+                                </div>
                             </div>
                         </div>
-                        <p>Komentar:</p>
-                        <p id="modalKomentar"></p>
                     </div>
                 </div>
             </div>
@@ -2422,7 +2328,9 @@
                     // console.log(mutuAncakData);
 
                     document.getElementById('closeModalBtn').addEventListener('click', function() {
-                        $('#editModal').modal('hide');
+                        // $('#editModal').modal('hide');
+                        var modal = new bootstrap.Modal(document.getElementById('editModal'));
+                         modal.hide();
                     });
 
 
@@ -2468,13 +2376,17 @@
                         // Add similar lines for other fields
 
                         // Show the modal
-                        $('#editModal').modal('show');
+                        var modal = new bootstrap.Modal(document.getElementById('editModal'));
+                         modal.show();
+                        // $('#editModal').modal('show');
                     }
 
                     $(document).ready(function() {
                         // Close modal when the close button is clicked
                         $('#closeModalBtn_Ancak').click(function() {
-                            $('#editModal').modal('hide');
+                            var modal = new bootstrap.Modal(document.getElementById('editModal'));
+                             modal.hide();
+                            // $('#editModal').modal('hide');
                         });
 
                         // Submit the form when the Save Changes button is clicked
@@ -2544,8 +2456,9 @@
                                 success: function(response) {
                                     // console.log(response);
                                     // Close the modal
-                                    $('#editModal').modal('hide');
-
+                                    // $('#editModal').modal('hide');
+                                    var modal = new bootstrap.Modal(document.getElementById('editModal'));
+                                     modal.hide();
                                     // Show a success message or perform any other actions
                                     Swal.fire({
                                         icon: 'success',
@@ -2580,7 +2493,9 @@
                         var rowId = rowData.id; // Directly access the ID property
 
                         // Show the delete modal
-                        $('#deleteModalancak').modal('show');
+                        var modal = new bootstrap.Modal(document.getElementById('deleteModalancak'));
+                         modal.show();
+                        // $('#deleteModalancak').modal('show');
 
                         $(document).ready(function() {
                             // Handle delete confirmation
@@ -2612,27 +2527,21 @@
                                     processData: false,
                                     contentType: false,
                                     success: function(response) {
-                                        // Handle the response from the controller if needed
-                                        // console.log(response);
-
-                                        // Implement the logic to delete the row with the provided ID
-                                        // You can use the rowIndex to delete the corresponding row from the DataTable
-                                        // Example code:
-                                        // Assuming you have a DataTable variable called 'dataTableAncakTest'
-                                        dataTableAncakTest.row(rowIndex).remove().draw();
-
-                                        // Close the delete modal
-                                        $('#deleteModalancak').modal('hide');
-
-                                        // location.reload()
-                                        fetchAndUpdateData()
+                                    
+                                                Swal.fire({
+                                                icon: 'success',
+                                                title: 'Success',
+                                                text: 'Data deleted successfully!',
+                                            }).then(function() {
+                                                location.reload();
+                                            });
                                     },
                                     error: function(xhr, status, error) {
                                         // Handle the error if needed
                                         console.error(error);
 
-                                        // Close the delete modal
-                                        $('#deleteModalancak').modal('hide');
+                                        // var modal = new bootstrap.Modal(document.getElementById('deleteModalancak'));
+                                        // modal.hide();
                                         // fetchAndUpdateData()
                                     }
                                 });
@@ -2642,8 +2551,9 @@
 
                     // Example function to save changes
                     document.getElementById('saveChangesBtn').addEventListener('click', function() {
-
-                        $('#editModal').modal('hide');
+                        var modal = new bootstrap.Modal(document.getElementById('editModal'));
+                        modal.hide();
+                        // $('#editModal').modal('hide');
                     });
 
 
@@ -2860,14 +2770,17 @@
                         $('#update-alsBR').val(rowData.alas_br)
                         $('#update-bhmandor').val(rowData.kemandoran)
 
-
-                        $('#editModalBuah').modal('show');
+                        var modal = new bootstrap.Modal(document.getElementById('editModalBuah'));
+                        modal.show();
+                        // $('#editModalBuah').modal('show');
                     }
 
                     $(document).ready(function() {
                         // Close modal when the close button is clicked
                         $('#closeModalBtn_buah').click(function() {
-                            $('#editModalBuah').modal('hide');
+                            var modal = new bootstrap.Modal(document.getElementById('editModalBuah'));
+                            modal.hide();
+                            // $('#editModalBuah').modal('hide');
                         });
 
                         // Submit the form when the Save Changes button is clicked
@@ -2919,8 +2832,9 @@
                                 success: function(response) {
                                     // console.log(response);
                                     // Close the modal
-                                    $('#editModalBuah').modal('hide');
-
+                                    // $('#editModalBuah').modal('hide');
+                                    var modal = new bootstrap.Modal(document.getElementById('editModalBuah'));
+                                    modal.hide();
                                     // Show a success message
                                     Swal.fire({
                                         icon: 'success',
@@ -2958,9 +2872,10 @@
                         // Retrieve the ID from the first column of the selected row
                         var rowData = dataTablesBuah.row(id).data();
                         var rowId = rowData.id;
-
+                        var modal = new bootstrap.Modal(document.getElementById('deleteModalBuah'));
+                        modal.show();
                         // Show the delete modal
-                        $('#deleteModalBuah').modal('show');
+                        // $('#deleteModalBuah').modal('show');
 
                         $(document).ready(function() {
                             // Handle delete confirmation
@@ -2992,19 +2907,13 @@
                                     processData: false,
                                     contentType: false,
                                     success: function(response) {
-                                        // Handle the response from the controller if needed
-                                        // console.log(response);
-
-                                        // Implement the logic to delete the row with the provided ID
-                                        // You can use the rowIndex to delete the corresponding row from the DataTable
-                                        // Example code:
-                                        // Assuming you have a DataTable variable called 'mutuAncakTable'
-                                        dataTablesBuah.row(rowIndex).remove().draw();
-
-                                        // Close the delete modal
-                                        $('#deleteModalBuah').modal('hide');
-
-                                        location.reload()
+                                        Swal.fire({
+                                        icon: 'success',
+                                        title: 'Success',
+                                        text: 'Data deleted successfully!',
+                                    }).then(function() {
+                                        location.reload();
+                                    });
                                     },
                                     error: function(xhr, status, error) {
                                         // Handle the error if needed
@@ -3020,8 +2929,9 @@
 
                     // Example function to save changes
                     document.getElementById('saveChangesBtn').addEventListener('click', function() {
-
-                        $('#editModal').modal('hide');
+                        var modal = new bootstrap.Modal(document.getElementById('editModal'));
+                        modal.hide();
+                        // $('#editModal').modal('hide');
                     });
 
 
@@ -3191,14 +3101,17 @@
                         $('#update-bt_trans').val(rowData.bt)
                         $('#update-rstTrans').val(rowData.rst)
                         $('#update-transmandor').val(rowData.kemandoran)
-
-                        $('#editModalTrans').modal('show');
+                        var modal = new bootstrap.Modal(document.getElementById('editModalTrans'));
+                        modal.show();
+                        // $('#editModalTrans').modal('show');
                     }
 
                     $(document).ready(function() {
                         // Close modal when the close button is clicked
                         $('#closeModalBtn_Trans').click(function() {
-                            $('#editModalTrans').modal('hide');
+                            var modal = new bootstrap.Modal(document.getElementById('editModalTrans'));
+                            modal.hide();
+                            // $('#editModalTrans').modal('hide');
                         });
 
                         // Submit the form when the Save Changes button is clicked
@@ -3237,8 +3150,9 @@
                                 success: function(response) {
                                     // console.log(response);
                                     // Close the modal
-                                    $('#editModalTrans').modal('hide');
-
+                                    // $('#editModalTrans').modal('hide');
+                                    var modal = new bootstrap.Modal(document.getElementById('editModalTrans'));
+                                     modal.hide();
                                     // Show a success message
                                     Swal.fire({
                                         icon: 'success',
@@ -3279,8 +3193,9 @@
                         var rowId = rowData.id;
 
                         // Show the delete modal
-                        $('#deleteModalTrans').modal('show');
-
+                        // $('#deleteModalTrans').modal('show');
+                        var modal = new bootstrap.Modal(document.getElementById('deleteModalTrans'));
+                            modal.show();
                         $(document).ready(function() {
                             // Handle delete confirmation
                             $('#confirmDeleteBtn_trans').click(function() {
@@ -3311,26 +3226,20 @@
                                     processData: false,
                                     contentType: false,
                                     success: function(response) {
-                                        // Handle the response from the controller if needed
-                                        // console.log(response);
-
-                                        // Implement the logic to delete the row with the provided ID
-                                        // You can use the rowIndex to delete the corresponding row from the DataTable
-                                        // Example code:
-                                        // Assuming you have a DataTable variable called 'mutuAncakTable'
-                                        dataTablesTrans.row(rowIndex).remove().draw();
-
-                                        // Close the delete modal
-                                        $('#deleteModalTrans').modal('hide');
-
-                                        location.reload()
+                                        Swal.fire({
+                                        icon: 'success',
+                                        title: 'Success',
+                                        text: 'Data deleted successfully!',
+                                    }).then(function() {
+                                        location.reload();
+                                    });
                                     },
                                     error: function(xhr, status, error) {
                                         // Handle the error if needed
                                         console.error(error);
 
                                         // Close the delete modal
-                                        $('#deleteModalTrans').modal('hide');
+                                        // $('#deleteModalTrans').modal('hide');
                                     }
                                 });
                             });
@@ -3342,8 +3251,9 @@
                     }
                     // Example function to save changes
                     document.getElementById('saveChangesBtn').addEventListener('click', function() {
-
-                        $('#editModal').modal('hide');
+                        var modal = new bootstrap.Modal(document.getElementById('editModal'));
+                        modal.hide();
+                        // $('#editModal').modal('hide');
                     });
 
                     var dataTablesTrans = $('#mutuTransportable').DataTable({
