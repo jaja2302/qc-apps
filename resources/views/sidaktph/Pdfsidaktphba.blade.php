@@ -413,8 +413,21 @@
 
                     </tr>
                     <tr>
-                        <td colspan="6" style="text-align: center;">Quality Control</td>
-                        <td colspan="3" style="text-align: center;">Estate Manager</td>
+                        @if ($data['statusdata'] === 'not_approved')
+                        <td colspan="6" style="text-align: center;">Asisten Belum Terverifikasi Secara Digital</td>
+                        <td  colspan="3" style="text-align: center;">Manajer Estate Belum Terverifikasi Secara Digital</td>
+                    @elseif ($data['statusdata'] === 'askep_not_approved')
+                        <td colspan="6" style="text-align: center;">Asisten Belum Terverifikasi Secara Digital</td>
+                        <td  colspan="3" style="text-align: center;">Manajer Estate Sudah Terverifikasi Secara Digital</td>
+                    @elseif ($data['statusdata'] === 'manager_not_approved')
+                        <td colspan="6" style="text-align: center;">Asisten Sudah Terverifikasi Secara Digital</td>
+                        <td  colspan="3" style="text-align: center;">Manajer Estate Belum Terverifikasi Secara Digital</td>
+                    @elseif ($data['statusdata'] === 'all_approved')
+                        <td colspan="6" style="text-align: center;">Asisten Sudah Terverifikasi Secara Digital</td>
+                        <td colspan="3" style="text-align: center;">Manajer Estate Sudah Terverifikasi Secara Digital</td>
+                    @endif
+                        {{-- <td colspan="6" style="text-align: center;">Quality Control</td>
+                        <td colspan="3" style="text-align: center;">Estate Manager</td> --}}
                     </tr>
 
                 </tbody>

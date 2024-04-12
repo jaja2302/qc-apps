@@ -241,9 +241,27 @@
 
             </thead>
             <tbody>
-                <tr>
+                {{-- <tr>
                     <td rowspan="{{$data['rowspan']['b'] +4}}"></td>
+                </tr> --}}
+                @if ($data['statusdata'] === 'not_approved')
+                <tr>
+                    <td style="text-align:center;border-bottom: 1px solid red;" rowspan="{{$data['rowspan']['b'] +4}}"> Asisten Belum Terverifikasi Secara Digital</td>
                 </tr>
+               
+                @elseif ($data['statusdata'] === 'askep_not_approved')
+                <tr>
+                    <td style="text-align:center;border-bottom: 1px solid red;" rowspan="{{$data['rowspan']['b'] +4}}"> Asisten Belum Terverifikasi Secara Digital</td>
+                </tr>
+                @elseif ($data['statusdata'] === 'manager_not_approved')
+                <tr>
+                    <td style="text-align:center;border-bottom: 1px solid red;" rowspan="{{$data['rowspan']['b'] +4}}"> Asisten Sudah Terverifikasi Secara Digital</td>
+                </tr>
+                @elseif ($data['statusdata'] === 'all_approved')
+                <tr>
+                    <td style="text-align:center;border-bottom: 1px solid red;" rowspan="{{$data['rowspan']['b'] +4}}"> Asisten Sudah Terverifikasi Secara Digital</td>
+                </tr>
+                @endif
             </tbody>
         </table>
         <table>
@@ -253,10 +271,28 @@
                 </tr>
             </thead>
             <tbody>
+                @if ($data['statusdata'] === 'not_approved')
                 <tr>
-                    <td style="border-bottom: 1px solid red;" rowspan="{{$data['rowspan']['c'] + 3 }}"></td>
+                    <td style="text-align:center;border-bottom: 1px solid red;" rowspan="{{$data['rowspan']['c'] + 3 }}"> Manajer Estate Belum Terverifikasi Secara Digital</td>
                 </tr>
-                <!-- Add more rows as needed -->
+               
+                @elseif ($data['statusdata'] === 'askep_not_approved')
+                <tr>
+                    <td style="text-align:center;border-bottom: 1px solid red;" rowspan="{{$data['rowspan']['c'] + 3 }}"> Manajer Estate Sudah Terverifikasi Secara Digital</td>
+                </tr>
+                @elseif ($data['statusdata'] === 'manager_not_approved')
+                <tr>
+                    <td style="text-align:center;border-bottom: 1px solid red;" rowspan="{{$data['rowspan']['c'] + 3 }}"> Manajer Estate Belum Terverifikasi Secara Digital</td>
+                </tr>
+                @elseif ($data['statusdata'] === 'all_approved')
+                <tr>
+                    <td style="text-align:center;border-bottom: 1px solid red;" rowspan="{{$data['rowspan']['c'] + 3 }}"> Manajer Estate Sudah Terverifikasi Secara Digital</td>
+                </tr>
+                @endif
+                {{-- <tr>
+                    <td style="border-bottom: 1px solid red;" rowspan="{{$data['rowspan']['c'] + 3 }}"></td>
+                </tr> --}}
+               
             </tbody>
         </table>
         <table>

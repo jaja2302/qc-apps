@@ -3465,11 +3465,10 @@
             let menu = 'qcinspeksi'
             var _token = $('input[name="_token"]').val();
 
-            // console.log(Tanggal);
-
-            //notverif
-            // verifdone
-      
+            document.getElementById('notverif').classList.add('d-none');
+            document.getElementById('verifdone').classList.add('d-none');
+            document.getElementById('askepnotverif').classList.add('d-none');
+            document.getElementById('managernotverif').classList.add('d-none');
             $.ajax({
                 url: "{{ route('verifinspeksi') }}",
                 method: "GET",
@@ -3504,61 +3503,57 @@
 
         }
         function verifbutton() {
-         // Your JavaScript code for verifying here
-        // console.log(currentUserName);
-        // (currentUserName === 'Askep' || currentUserName === 'Manager')
-
-        Swal.fire({
-            title: "Apakah Anda ingin Approve Laporan ini?",
-            text: `Jabatan Saat Ini ${currentUserName}`,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: "Yes",
-            cancelButtonText: "No",
-            allowOutsideClick: false
-        }).then((result) => {
-            if (result.isConfirmed) {
-                let Tanggal = document.getElementById('inputDate').value;
-                let est = document.getElementById('est').value;
-                let afd = document.getElementById('afd').value;
-                let menu = 'qcinspeksi'
-                $.ajax({
-                    url: "{{ route('verifaction') }}",
-                    method: "POST",
-                    data: {
-                        Tanggal: Tanggal,
-                        est: est,
-                        afd: afd,
-                        menu: menu,
-                        jabatan: currentUserName,
-                        nama: user_name,
-                        action: 'approve',
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        console.log('Approval successful:', response);
-                        Swal.fire({
-                        title: 'Success',
-                        text: 'Data berhasil diupdate',
-                        icon: 'success',
-                        allowOutsideClick: false
-                        }).then((result) => {
-                        if (result.isConfirmed) {
-                            location.reload();
+            Swal.fire({
+                title: "Apakah Anda ingin Approve Laporan ini?",
+                text: `Jabatan Saat Ini ${currentUserName}`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let Tanggal = document.getElementById('inputDate').value;
+                    let est = document.getElementById('est').value;
+                    let afd = document.getElementById('afd').value;
+                    let menu = 'qcinspeksi'
+                    $.ajax({
+                        url: "{{ route('verifaction') }}",
+                        method: "POST",
+                        data: {
+                            Tanggal: Tanggal,
+                            est: est,
+                            afd: afd,
+                            menu: menu,
+                            jabatan: currentUserName,
+                            nama: user_name,
+                            action: 'approve',
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            console.log('Approval successful:', response);
+                            Swal.fire({
+                            title: 'Success',
+                            text: 'Data berhasil diupdate',
+                            icon: 'success',
+                            allowOutsideClick: false
+                            }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Approval error:', xhr.responseText);
+                            // Handle the error response as needed
                         }
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Approval error:', xhr.responseText);
-                        // Handle the error response as needed
-                    }
-                });
-            } else if (result.isDenied) {
-                // User clicked No
-                console.log('User declined approval.');
-            }
-        });
-    }
+                    });
+                } else if (result.isDenied) {
+                    // User clicked No
+                    console.log('User declined approval.');
+                }
+            });
+        }
 
 
         function goBack() {

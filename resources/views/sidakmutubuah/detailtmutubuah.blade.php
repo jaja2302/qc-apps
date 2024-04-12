@@ -349,7 +349,51 @@
             <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark ">
                 <h2>REKAP HARIAN SIDAK MUTU BUAH </h2>
             </div>
+            <div class="alert alert-danger d-none d-flex flex-column align-items-start justify-content-between" role="alert" id="notverif">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                <div>
+                    Data belum Tervertifikasi oleh Manager/Askep
+                </div>
+                @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' )
 
+                <div>
+                    <button class="btn btn-primary align-self-end" id="verifbutton_default">Verif now</button>
+                </div>
+                
+                @endif
+            </div>
+                <div class="alert alert-warning d-none d-flex align-items-center" role="alert" id="managernotverif">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                    <div>
+                    Manager Belum melakukan Aprroval
+                    </div>
+                    @if (session('jabatan') == 'Manager')
+
+                    <div>
+                        <button class="btn btn-primary align-self-end" id="verifbutton_manager">Verif now</button>
+                    </div>
+                    
+                    @endif
+                </div>
+                <div class="alert alert-warning d-none d-flex align-items-center" role="alert" id="askepnotverif">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                    <div>
+                    Askep Belum melakukan Aprroval
+                    </div>
+                    @if (session('jabatan') == 'Askep')
+
+                    <div>
+                        <button class="btn btn-primary align-self-end" id="verifbutton_askep">Verif now</button>
+                    </div>
+                    
+                    @endif
+                </div>
+              <div class="alert alert-primary d-none  d-flex align-items-center" role="alert" id="verifdone" dis>
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                <div>
+                  Data Sudah Tervertifikasi
+                </div>
+              </div>
             <div class="header-container">
 
                 <div class="header d-flex justify-content-center mt-3 mb-2 ml-3 mr-3">
@@ -735,7 +779,115 @@
             getDataTphYear()
             getmapsbuah();
             fetchAndUpdateData();
+            getverif()
         });
+        function getverif() {
+            let Tanggal = document.getElementById('inputDate').value;
+            let est = document.getElementById('est').value;
+            let afd = document.getElementById('afd').value;
+            let menu = 'sidakmutubuah'
+            var _token = $('input[name="_token"]').val();
+
+            document.getElementById('notverif').classList.add('d-none');
+            document.getElementById('verifdone').classList.add('d-none');
+            document.getElementById('askepnotverif').classList.add('d-none');
+            document.getElementById('managernotverif').classList.add('d-none');
+            $.ajax({
+                url: "{{ route('verifinspeksi') }}",
+                method: "GET",
+                data: {
+                    Tanggal: Tanggal,
+                    est: est,
+                    afd: afd,
+                    menu: menu,
+                    _token: _token
+                },
+                success: function(response) {
+                   
+
+                    if (response === 'empty') {
+                        document.getElementById('notverif').classList.remove('d-none');
+                    } else if (response === 'all_approved') {
+                        document.getElementById('verifdone').classList.remove('d-none');
+                    } else if (response === 'askep_not_approved') {
+                        // console.log('askep_not_approved');
+                        document.getElementById('askepnotverif').classList.remove('d-none');
+                    }  else if (response === 'manager_not_approved') {
+                        // console.log('manager_not_approved');
+                        document.getElementById('managernotverif').classList.remove('d-none');
+                    }else {
+                        console.error('Unexpected response:', response);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+
+        }
+        const addClickListener = (elementId) => {
+            const element = document.getElementById(elementId);
+            if (element !== null) {
+                element.addEventListener('click', verifbutton);
+            }
+        };
+
+        addClickListener('verifbutton_default');
+        addClickListener('verifbutton_manager');
+        addClickListener('verifbutton_askep');
+        var user_name = "{{ session('user_name') }}";
+        function verifbutton() {
+            Swal.fire({
+                title: "Apakah Anda ingin Approve Laporan ini?",
+                text: `Jabatan Saat Ini ${currentUserName}`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let Tanggal = document.getElementById('inputDate').value;
+                    let est = document.getElementById('est').value;
+                    let afd = document.getElementById('afd').value;
+                    let menu = 'sidakmutubuah'
+                    $.ajax({
+                        url: "{{ route('verifaction') }}",
+                        method: "POST",
+                        data: {
+                            Tanggal: Tanggal,
+                            est: est,
+                            afd: afd,
+                            menu: menu,
+                            jabatan: currentUserName,
+                            nama: user_name,
+                            action: 'approve',
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            console.log('Approval successful:', response);
+                            Swal.fire({
+                            title: 'Success',
+                            text: 'Data berhasil diupdate',
+                            icon: 'success',
+                            allowOutsideClick: false
+                            }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Approval error:', xhr.responseText);
+                            // Handle the error response as needed
+                        }
+                    });
+                } else if (result.isDenied) {
+                    // User clicked No
+                    console.log('User declined approval.');
+                }
+            });
+        }
 
 
         document.getElementById('show-button').addEventListener('click', function() {

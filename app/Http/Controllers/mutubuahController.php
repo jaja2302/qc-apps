@@ -6358,7 +6358,29 @@ class mutubuahController extends Controller
         $mutuAncak = json_decode($mutuAncak, true);
 
         $sidakblok = array();
+        $status = DB::connection('mysql2')->table('verification')
+            ->where('est', $est)
+            ->where('afd', 'EST')
+            ->where('menu', 'sidakmutubuah')
+            ->where('datetime', 'LIKE', '%' . $date . '%')
+            ->get();
+        // dd($est, $tanggal);
+        if ($status->isEmpty()) {
+            $statusdata = 'not_approved';
+        } else {
+            $verifby_askep = $status[0]->verifby_askep;
+            $verifby_manager = $status[0]->verifby_manager;
 
+            if ($verifby_askep != 1) {
+                $statusdata = 'askep_not_approved';
+            } elseif ($verifby_manager != 1) {
+                $statusdata = 'manager_not_approved';
+            } else {
+                $statusdata = 'all_approved';
+            }
+        }
+
+        // dd($statusdata);
 
         // dd($mutuAncak);
         foreach ($mutuAncak as $key => $value) {
@@ -6662,6 +6684,7 @@ class mutubuahController extends Controller
         $arrView['estdata'] =  $estdata;
         $arrView['totalrs'] =  $gerowspan['total'];
         $arrView['rowspan'] =  $outputArray;
+        $arrView['statusdata'] =  $statusdata;
         // $arrView['total_buah'] =  $total_buah;
 
         $pdf = PDF::loadView('sidakmutubuah.pdfBA_sidakbuah', ['data' => $arrView]);

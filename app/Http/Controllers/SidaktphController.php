@@ -6534,7 +6534,29 @@ class SidaktphController extends Controller
 
         $tanggal = $request->get('inputDates');
 
+        $status = DB::connection('mysql2')->table('verification')
+            ->where('est', $est)
+            ->where('afd', '-')
+            ->where('menu', 'sidaktph')
+            ->where('datetime', 'LIKE', '%' . $tanggal . '%')
+            ->get();
+        // dd($est, $tanggal);
+        if ($status->isEmpty()) {
+            $statusdata = 'not_approved';
+        } else {
+            $verifby_askep = $status[0]->verifby_askep;
+            $verifby_manager = $status[0]->verifby_manager;
 
+            if ($verifby_askep != 1) {
+                $statusdata = 'askep_not_approved';
+            } elseif ($verifby_manager != 1) {
+                $statusdata = 'manager_not_approved';
+            } else {
+                $statusdata = 'all_approved';
+            }
+        }
+
+        // dd($status);
         $newparamsdate = '2024-03-01';
 
         $tanggalDateTime = new DateTime($tanggal);
@@ -7056,6 +7078,7 @@ class SidaktphController extends Controller
         $arrView['est'] =  $request->input('est');
         $arrView['afd'] =  '-';
         $arrView['awal'] =  $tanggal;
+        $arrView['statusdata'] =  $statusdata;
         // $arrView['akhir'] =  $formattedEndDate;
 
         $pdf = PDF::loadView('sidaktph.Pdfsidaktphba', ['data' => $arrView]);

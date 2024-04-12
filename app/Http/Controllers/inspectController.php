@@ -13035,9 +13035,7 @@ class inspectController extends Controller
         $afd = $request->input('afd');
         $menu = $request->input('menu');
 
-        // Debug the input values using dd()
-
-        // Perform your database query
+        // dd($afd);
         $status = DB::connection('mysql2')->table('verification')
             ->where('est', $est)
             ->where('afd', $afd)
