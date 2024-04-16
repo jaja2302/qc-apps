@@ -1527,7 +1527,7 @@
                     thElement1x.classList.add("text-center");
                     thElement2x.classList.add("text-center");
                     thElement3x.classList.add("text-center");
-                    thElement4x.classList.add("text-center");
+                    // thElement4x.classList.add("text-center");
 
                 } else if ((lokasiKerja == 'Regional III' || lokasiKerja == 'Regional 3') && !isTableHeaderModified) {
                     $('#regionalPanen').val('3');

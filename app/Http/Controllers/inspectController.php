@@ -1928,6 +1928,8 @@ class inspectController extends Controller
                 }
             }
         }
+
+
         $transNewdata = array();
         foreach ($dataMTTransRegs2 as $key => $value) {
             foreach ($value as $key1 => $value1) {
@@ -1977,6 +1979,7 @@ class inspectController extends Controller
                 }
             }
         }
+
         foreach ($ancakRegss2 as $key => $value) {
             foreach ($value as $key1 => $value1) {
 
@@ -2020,7 +2023,7 @@ class inspectController extends Controller
         unset($value); // unset the reference
         unset($value1); // unset the reference
         // dd($transNewdata);
-
+        // dd($ancakRegss2['SBE']['OE'], $dataMTTransRegs2['SBE']['OE'], $transNewdata['SBE']['OE']);
         $defaultMtTrans = array();
         foreach ($queryEste as $est) {
             // dd($est);
@@ -2089,7 +2092,7 @@ class inspectController extends Controller
 
         // dd($mtTranstab1Wilmua, $sidak_buah_mua);
 
-
+        // dd($transNewdata);
 
         $mtTranstab1Wil = array();
         foreach ($mtTransWiltab1 as $key => $value) if (!empty($value)) {
@@ -2325,7 +2328,7 @@ class inspectController extends Controller
                 'mututrans' => '-----------------------------------'
             ];
         }
-        // dd($rekap[3]);
+        // dd($rekap[5]);
 
         // dd($rekap[3]['SKE']);
 
@@ -2607,7 +2610,7 @@ class inspectController extends Controller
             }
         }
 
-        // dd($rekap[3]);
+        // dd($rekap);
         $dataReg = array();
 
         $ha_samplecak = 0;
@@ -13071,7 +13074,10 @@ class inspectController extends Controller
         $jabatan = $request->input('jabatan');
         $nama = $request->input('nama');
         $action = $request->input('action');
-
+        $tanggal_approve = $request->input('tanggal_approve');
+        $departemen = $request->input('departemen');
+        $lokasikerja = $request->input('lokasikerja');
+        // dd($action, $nama, $jabatan);
         try {
             DB::beginTransaction();
 
@@ -13088,7 +13094,7 @@ class inspectController extends Controller
             $verifby_manager = $jabatan === 'Manager' ? 1 : 0;
 
             if ($currentStatus == null) {
-                DB::connection('mysql2')->table('verification')->insert([
+                $data = [
                     'est' => $est,
                     'afd' => $afd,
                     'datetime' => $Tanggal,
@@ -13096,7 +13102,22 @@ class inspectController extends Controller
                     'verifby_askep' => $verifby_askep,
                     'verifby_manager' => $verifby_manager,
                     'action' => $action,
-                ]);
+                ];
+
+                if ($jabatan === 'Askep') {
+                    $data['detail_askep'] = $departemen;
+                    $data['nama_askep'] = $nama;
+                    $data['approve_askep'] = $tanggal_approve;
+                    $data['lok_askep'] = $lokasikerja;
+                } else {
+                    $data['detail_manager'] = $departemen;
+                    $data['nama_maneger'] = $nama;
+                    $data['approve_maneger'] = $tanggal_approve;
+                    $data['lok_manager'] = $lokasikerja;
+                }
+
+                DB::connection('mysql2')->table('verification')->insert($data);
+
 
                 DB::commit();
                 return response()->json('success', 200);
@@ -13104,10 +13125,18 @@ class inspectController extends Controller
                 if ($jabatan === 'Askep') {
                     DB::connection('mysql2')->table('verification')->where('id', $currentStatus->id)->update([
                         'verifby_askep' => $verifby_askep,
+                        'detail_askep' => $departemen,
+                        'nama_askep' => $nama,
+                        'approve_askep' => $tanggal_approve,
+                        'lok_askep' => $lokasikerja,
                     ]);
                 } else if ($jabatan === 'Manager') {
                     DB::connection('mysql2')->table('verification')->where('id', $currentStatus->id)->update([
                         'verifby_manager' => $verifby_manager,
+                        'detail_manager' => $departemen,
+                        'nama_maneger' => $nama,
+                        'approve_maneger' => $tanggal_approve,
+                        'lok_manager' => $lokasikerja,
                     ]);
                 } else {
                     // Handle other cases or return an error response

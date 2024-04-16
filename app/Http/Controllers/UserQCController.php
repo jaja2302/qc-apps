@@ -20,7 +20,9 @@ class UserQCController extends Controller
         //
 
         $query = DB::connection('mysql')->table("pengguna")->where('departemen', 'QC')->where('lokasi_kerja', $lokasi_kerja)->get();
-        return view('qc.index', ['data' => $query]);
+
+        // dd($query);
+        return view('Gudang.edit', ['data' => $query]);
     }
 
     /**

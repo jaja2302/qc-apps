@@ -3412,6 +3412,20 @@
             });
 
         }
+
+        function hariini() {
+            let today = new Date();
+            let year = today.getFullYear();
+            let month = String(today.getMonth() + 1).padStart(2, '0');
+            let day = String(today.getDate()).padStart(2, '0');
+            let hours = String(today.getHours()).padStart(2, '0');
+            let minutes = String(today.getMinutes()).padStart(2, '0');
+
+            return `${year}-${month}-${day} ${hours}:${minutes}`;
+        }
+        var departemen = "{{ session('departemen') }}";
+        var lokasikerja = "{{ session('lok') }}";
+
         function verifbutton() {
             Swal.fire({
                 title: "Apakah Anda ingin Approve Laporan ini?",
@@ -3427,6 +3441,7 @@
                     let est = document.getElementById('est').value;
                     let afd = document.getElementById('afd').value;
                     let menu = 'qcinspeksi'
+                    let tanggal_approve = hariini();
                     $.ajax({
                         url: "{{ route('verifaction') }}",
                         method: "POST",
@@ -3437,6 +3452,9 @@
                             menu: menu,
                             jabatan: currentUserName,
                             nama: user_name,
+                            departemen: departemen,
+                            lokasikerja: lokasikerja,
+                            tanggal_approve: tanggal_approve,
                             action: 'approve',
                             _token: '{{ csrf_token() }}'
                         },

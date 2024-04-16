@@ -1705,7 +1705,7 @@ class unitController extends Controller
 
         $queryReg = DB::connection('mysql2')->table('reg')->pluck('nama', 'id');
 
-        return view('listktu', ['pekerja' => $ktu, 'estate' => $queryEst, 'afdeling' => $queryAfd, 'regional' => $queryReg]);
+        return view('Gudang.listktu', ['pekerja' => $ktu, 'estate' => $queryEst, 'afdeling' => $queryAfd, 'regional' => $queryReg]);
     }
 
     public function getEstateListKtu(Request $request)

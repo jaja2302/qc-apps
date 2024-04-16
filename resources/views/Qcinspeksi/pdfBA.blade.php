@@ -11,6 +11,46 @@
 </head>
 
 <style>
+                        
+                        .stamp {
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                            width: 50%;
+                            height: 140px;
+                            margin-left: 25%;
+                            border: 2px dashed gray; /* Change border style here */
+                            border-radius: 20px; /* Adjust border-radius for slightly rounded corners */
+                            transform: rotate(-10deg);
+                            overflow: hidden; /* Ensure stamp-text stays inside the border */
+                        }
+                        
+                        .stamp-logo {
+                            width: 80px; /* Adjust logo size */
+                            height: 80px;
+                            margin-top: 4px;
+                            object-fit: contain;
+                            z-index: 1;
+                        }
+                        
+                        .stamp-text {
+                            text-align: center;
+                            font-size: 16px;
+                            font-weight: bold;
+                            margin: 0;
+                            z-index: 2; /* Ensure stamp-text appears above the logo */
+                        }
+                        
+                        /* Details styles */
+                        .details {
+                            margin-top: 20px;
+                            padding: 10px;
+                            background-color: #f0f0f0;
+                            border-radius: 5px;
+                            font-size: 14px;
+                        }
+                    
     .table-responsive {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -1098,18 +1138,66 @@
                         <td colspan="2" style="vertical-align: bottom;padding-top: 244px;text-align:center">__________</td>
                         <td colspan="2" style="vertical-align: bottom;text-align:center">__________</td>
                         <td colspan="2" style="vertical-align: bottom;text-align:center">__________</td>
-                        @if ($data['statusdata'] === 'not_approved')
+                        @if ($data['statusdata']['status'] === 'not_approved')
                         <td colspan="3" style="vertical-align: bottom; text-align: center">Asisten Belum Terverifikasi Secara Digital</td>
                         <td colspan="3" style="vertical-align: bottom; text-align: center">Manajer Estate Belum Terverifikasi Secara Digital</td>
-                    @elseif ($data['statusdata'] === 'askep_not_approved')
-                        <td colspan="3" style="vertical-align: bottom; text-align: center">Asisten Belum Terverifikasi Secara Digital</td>
-                        <td colspan="3" style="vertical-align: bottom; text-align: center">Manajer Estate Sudah Terverifikasi Secara Digital</td>
-                    @elseif ($data['statusdata'] === 'manager_not_approved')
-                        <td colspan="3" style="vertical-align: bottom; text-align: center">Asisten Sudah Terverifikasi Secara Digital</td>
+                        @elseif ($data['statusdata']['status'] === 'askep_not_approved')
+                            <td colspan="3" style="vertical-align: bottom; text-align: center">Asisten Belum Terverifikasi Secara Digital</td>
+                            <td colspan="3" style="vertical-align: bottom; text-align: center">
+                                <div class="stamp-container">
+                                    <div class="stamp">
+                                        <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
+                                        <div class="stamp-text">APPROVED</div>
+                                        <div class="stamp-text">{{$data['statusdata']['approve_maneger']}}</div>
+                                    </div>
+                                    <div class="details">
+                                        <div>{{$data['statusdata']['nama_maneger']}}</div>
+                                        <div>Manager {{$data['statusdata']['detail_manager']}} <span>{{$data['statusdata']['lok_manager']}}</span> </div>
+                                    </div>
+                                </div>
+                            </td>
+                        @elseif ($data['statusdata']['status'] === 'manager_not_approved')
+                        <td colspan="3" style="vertical-align: bottom; text-align: center">
+                            <div class="stamp-container">
+                                <div class="stamp">
+                                    <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
+                                    <div class="stamp-text">APPROVED</div>
+                                    <div class="stamp-text">{{$data['statusdata']['approve_askep']}}</div>
+                                </div>
+                                <div class="details">
+                                    <div>{{$data['statusdata']['nama_askep']}}</div>
+                                    <div>Manager {{$data['statusdata']['detail_askep']}} <span>{{$data['statusdata']['lok_askep']}}</span> </div>
+                                </div>
+                            </div>
+                        </td>
                         <td colspan="3" style="vertical-align: bottom; text-align: center">Manajer Estate Belum Terverifikasi Secara Digital</td>
-                    @elseif ($data['statusdata'] === 'all_approved')
-                        <td colspan="3" style="vertical-align: bottom; text-align: center">Asisten Sudah Terverifikasi Secara Digital</td>
-                        <td colspan="3" style="vertical-align: bottom; text-align: center">Manajer Estate Sudah Terverifikasi Secara Digital</td>
+                    @elseif ($data['statusdata']['status'] === 'all_approved')
+                        <td colspan="3" style="vertical-align: bottom; text-align: center">
+                            <div class="stamp-container">
+                                <div class="stamp">
+                                    <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
+                                    <div class="stamp-text">APPROVED</div>
+                                    <div class="stamp-text">{{$data['statusdata']['approve_askep']}}</div>
+                                </div>
+                                <div class="details">
+                                    <div>{{$data['statusdata']['nama_askep']}}</div>
+                                    <div>Manager {{$data['statusdata']['detail_askep']}} <span>{{$data['statusdata']['lok_askep']}}</span> </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td colspan="3" style="vertical-align: bottom; text-align: center">
+                            <div class="stamp-container">
+                                <div class="stamp">
+                                    <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
+                                    <div class="stamp-text">APPROVED</div>
+                                    <div class="stamp-text">{{$data['statusdata']['approve_maneger']}}</div>
+                                </div>
+                                <div class="details">
+                                    <div>{{$data['statusdata']['nama_maneger']}}</div>
+                                    <div>Manager {{$data['statusdata']['detail_manager']}} <span>{{$data['statusdata']['lok_manager']}}</span> </div>
+                                </div>
+                            </div>
+                        </td>
                     @endif
                     
                     </tr>

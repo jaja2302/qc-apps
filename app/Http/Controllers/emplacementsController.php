@@ -3284,7 +3284,7 @@ class emplacementsController extends Controller
             $tabLanscape[$key]["total_nilai"] = array_sum($nilai);
             // $tabLanscape[$key][]
         }
-
+        // dd($tabLingkn);
         foreach ($tabLingkn as $key => $value) {
             # code...
 

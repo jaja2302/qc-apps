@@ -219,11 +219,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('verifinspeksi', [inspectController::class, 'verifdata'])->name('verifinspeksi');
     Route::post('verifaction', [inspectController::class, 'verifaction'])->name('verifaction');
-});
 
-Route::get('/user_qc/{lokasi_kerja}', [UserQCController::class, 'index'])->name('user_qc');
-Route::get('/create', [UserQCController::class, 'create'])->name('create');
-Route::post('/store/{lokasi_kerja}', [UserQCController::class, 'store'])->name('store');
-Route::get('/edit/{id}', [UserQCController::class, 'edit'])->name('edit');
-Route::post('/update/{id}/{lokasi_kerja}', [UserQCController::class, 'update'])->name('update');
-Route::post('/delete/{id}', [UserQCController::class, 'destroy'])->name('delete');
+    Route::get('/user_qc/{lokasi_kerja}', [UserQCController::class, 'index'])->name('user_qc');
+    Route::get('/create', [UserQCController::class, 'create'])->name('create');
+    Route::post('/store/{lokasi_kerja}', [UserQCController::class, 'store'])->name('store');
+    Route::get('/edit/{id}', [UserQCController::class, 'edit'])->name('edit');
+    Route::post('/update/{id}/{lokasi_kerja}', [UserQCController::class, 'update'])->name('update');
+    Route::post('/delete/{id}', [UserQCController::class, 'destroy'])->name('delete');
+});

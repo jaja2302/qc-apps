@@ -6542,17 +6542,54 @@ class SidaktphController extends Controller
             ->get();
         // dd($est, $tanggal);
         if ($status->isEmpty()) {
-            $statusdata = 'not_approved';
+            // $statusdata = 'not_approved';
+            $statusdata = [
+                'status' =>  'not_approved',
+            ];
         } else {
             $verifby_askep = $status[0]->verifby_askep;
             $verifby_manager = $status[0]->verifby_manager;
 
             if ($verifby_askep != 1) {
-                $statusdata = 'askep_not_approved';
+                // $statusdata = 'askep_not_approved';
+                $statusdata = [
+                    'status' =>  'askep_not_approved',
+                    'nama_maneger' => $status[0]->nama_maneger,
+                    'detail_manager' => $status[0]->detail_manager,
+                    'approve_maneger' => $status[0]->approve_maneger,
+                    'nama_askep' => $status[0]->nama_askep,
+                    'detail_askep' => $status[0]->detail_askep,
+                    'approve_askep' => $status[0]->approve_askep,
+                    'lok_manager' => $status[0]->lok_manager,
+                    'lok_askep' => $status[0]->lok_askep,
+                ];
             } elseif ($verifby_manager != 1) {
-                $statusdata = 'manager_not_approved';
+                // $statusdata = 'manager_not_approved';
+                $statusdata = [
+                    'status' =>  'manager_not_approved',
+                    'nama_maneger' => $status[0]->nama_maneger,
+                    'detail_manager' => $status[0]->detail_manager,
+                    'approve_maneger' => $status[0]->approve_maneger,
+                    'nama_askep' => $status[0]->nama_askep,
+                    'detail_askep' => $status[0]->detail_askep,
+                    'approve_askep' => $status[0]->approve_askep,
+                    'lok_manager' => $status[0]->lok_manager,
+                    'lok_askep' => $status[0]->lok_askep,
+                ];
             } else {
-                $statusdata = 'all_approved';
+                // $statusdata = 'all_approved';
+
+                $statusdata = [
+                    'status' =>  'all_approved',
+                    'nama_maneger' => $status[0]->nama_maneger,
+                    'detail_manager' => $status[0]->detail_manager,
+                    'approve_maneger' => $status[0]->approve_maneger,
+                    'nama_askep' => $status[0]->nama_askep,
+                    'detail_askep' => $status[0]->detail_askep,
+                    'approve_askep' => $status[0]->approve_askep,
+                    'lok_manager' => $status[0]->lok_manager,
+                    'lok_askep' => $status[0]->lok_askep,
+                ];
             }
         }
 
