@@ -1284,7 +1284,7 @@ class SidaktphController extends Controller
             $week2[] = $weekestate;
         }
 
-        // dd($week2[15]);
+        // dd($newSidak);
 
         $week3 = []; // Initialize the new array
         foreach ($newSidak as $key => $value) {
@@ -7061,13 +7061,20 @@ class SidaktphController extends Controller
                     } # code...
 
                     $skorakhir = 100 - ($tot_janjnag + $tod_brd);
+
+                    if ($skorakhir <= 0) {
+                        $newskor = 0;
+                    } else {
+                        $newskor = $skorakhir;
+                    }
+
                     $totskor = $tot_janjnag + $tod_brd;
                     $final[$key][$key1]['blok'] = $blok;
                     $final[$key][$key1]['luas'] = $luasbw;
                     $final[$key][$key1]['total_skor'] = $totskor;
-                    $final[$key][$key1]['skor_akhir'] = $skorakhir;
+                    $final[$key][$key1]['skor_akhir'] = $newskor;
                 } # code...
-                $estakhir[] = $skorakhir;
+                $estakhir[] = $newskor;
                 $esttod[] = $totskor;
             }  # code...
             $div = count($estakhir);
@@ -7082,7 +7089,7 @@ class SidaktphController extends Controller
                 'skor_akhir' => round($sum / $div, 2)
             ];
         }
-        // dd($final);
+        // dd($estakhir);
         // Now $keysCollection contains the keys as you described, including the date values.
 
         // dd($final);

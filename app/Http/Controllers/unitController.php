@@ -1295,12 +1295,13 @@ class unitController extends Controller
         }
 
         if ($query->komentar_barang_nonstok != null) {
-            if (strpos($query->komentar_barang_nonstok, 'Tidak terdapat barang Non-Stock') !== false) {
+            // if (strpos($query->komentar_barang_nonstok, 'Tidak terdapat barang Non-Stock') !== false) {
 
-                $query->komentar_barang_nonstok = 'Barang Non-Stock';
-            } else {
-                $query->komentar_barang_nonstok;
-            }
+            //     $query->komentar_barang_nonstok = 'Barang Non-Stock';
+            // } else {
+            //     $query->komentar_barang_nonstok;
+            // }
+            $query->komentar_barang_nonstok;
         }
 
 
@@ -1464,12 +1465,13 @@ class unitController extends Controller
             $query->foto_barang_nonstok_2 = 0;
         }
         if ($query->komentar_barang_nonstok != null) {
-            if (strpos($query->komentar_barang_nonstok, 'Tidak terdapat barang Non-Stock') !== false) {
+            // if (strpos($query->komentar_barang_nonstok, 'Tidak terdapat barang Non-Stock') !== false) {
 
-                $query->komentar_barang_nonstok = 'Barang Non-Stock';
-            } else {
-                $query->komentar_barang_nonstok;
-            }
+            //     $query->komentar_barang_nonstok = 'Barang Non-Stock';
+            // } else {
+            //     $query->komentar_barang_nonstok;
+            // }
+            $query->komentar_barang_nonstok;
         }
 
 

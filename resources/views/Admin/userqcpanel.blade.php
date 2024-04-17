@@ -114,17 +114,17 @@
                     $('#user_qc').on('click', '.edit-btn', function() {
                         var rowData = listQC.row($(this).closest('tr')).data();
                         var rowIndex = listQC.row($(this).closest('tr')).index();
-                        editqc(rowIndex);
+                        editqc(rowData);
                     });
 
-                    function editqc(id) {
+                    function editqc(rowData) {
 
-                        selectedRowIndex = id;
-
-
-                        var rowData = listQC.row(id).data();
+                        // selectedRowIndex = id;
 
 
+                        // var rowData = listQC.row(id).data();
+
+                        console.log(rowData);
                         var emailValue = rowData.email;
                         var passwordValue = rowData.password;
                         var namaLengkapValue = rowData.nama_lengkap;
@@ -284,16 +284,16 @@
                     }
 
                     $('#user_qc').on('click', '.delete-btn', function() {
-                        var rowIndex = listQC.row($(this).closest('tr')).index();
+                        var rowIndex = listQC.row($(this).closest('tr')).data();
                         deleteqc(rowIndex);
                     });
 
-                    function deleteqc(id) {
+                    function deleteqc(rowIndex) {
 
-                        selectedRowIndex = id;
+                        // selectedRowIndex = id;
 
 
-                        var rowData = listQC.row(id).data();
+                        var rowData = rowIndex
                         var _token = $('input[name="_token"]').val();
                         const actionType = "delete";
 

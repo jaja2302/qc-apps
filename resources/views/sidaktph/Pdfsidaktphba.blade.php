@@ -363,7 +363,9 @@
                             <td>{{$items1['8']['skor_brd'] ?? ''}}</td>
                             <td>{{$items1['8']['skor_luas'] ?? ''}}</td>
                             <td>{{$items1['total_skor'] ?? ''}}</td>
-                            <td>{{$items1['skor_akhir'] ?? ''}}</td>
+                            <td>
+                                {{$items1['skor_akhir'] ?? ''}}
+                            </td>
 
 
                         </tr>
