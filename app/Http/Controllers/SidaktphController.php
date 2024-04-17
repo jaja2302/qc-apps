@@ -6547,50 +6547,23 @@ class SidaktphController extends Controller
                 'status' =>  'not_approved',
             ];
         } else {
-            $verifby_askep = $status[0]->verifby_askep;
-            $verifby_manager = $status[0]->verifby_manager;
+            $statusdata = [
+                'status' =>  'have_data',
+                'nama_maneger' => $status[0]->nama_maneger,
+                'detail_manager' => $status[0]->detail_manager,
+                'approve_maneger' => $status[0]->approve_maneger,
+                'lok_manager' => $status[0]->lok_manager,
 
-            if ($verifby_askep != 1) {
-                // $statusdata = 'askep_not_approved';
-                $statusdata = [
-                    'status' =>  'askep_not_approved',
-                    'nama_maneger' => $status[0]->nama_maneger,
-                    'detail_manager' => $status[0]->detail_manager,
-                    'approve_maneger' => $status[0]->approve_maneger,
-                    'nama_askep' => $status[0]->nama_askep,
-                    'detail_askep' => $status[0]->detail_askep,
-                    'approve_askep' => $status[0]->approve_askep,
-                    'lok_manager' => $status[0]->lok_manager,
-                    'lok_askep' => $status[0]->lok_askep,
-                ];
-            } elseif ($verifby_manager != 1) {
-                // $statusdata = 'manager_not_approved';
-                $statusdata = [
-                    'status' =>  'manager_not_approved',
-                    'nama_maneger' => $status[0]->nama_maneger,
-                    'detail_manager' => $status[0]->detail_manager,
-                    'approve_maneger' => $status[0]->approve_maneger,
-                    'nama_askep' => $status[0]->nama_askep,
-                    'detail_askep' => $status[0]->detail_askep,
-                    'approve_askep' => $status[0]->approve_askep,
-                    'lok_manager' => $status[0]->lok_manager,
-                    'lok_askep' => $status[0]->lok_askep,
-                ];
-            } else {
-                // $statusdata = 'all_approved';
+                'nama_askep' => $status[0]->nama_askep,
+                'detail_askep' => $status[0]->detail_askep,
+                'approve_askep' => $status[0]->approve_askep,
+                'lok_askep' => $status[0]->lok_askep,
 
-                $statusdata = [
-                    'status' =>  'all_approved',
-                    'nama_maneger' => $status[0]->nama_maneger,
-                    'detail_manager' => $status[0]->detail_manager,
-                    'approve_maneger' => $status[0]->approve_maneger,
-                    'nama_askep' => $status[0]->nama_askep,
-                    'detail_askep' => $status[0]->detail_askep,
-                    'approve_askep' => $status[0]->approve_askep,
-                    'lok_manager' => $status[0]->lok_manager,
-                    'lok_askep' => $status[0]->lok_askep,
-                ];
-            }
+                'nama_asisten' => $status[0]->nama_asisten,
+                'detail_asisten' => $status[0]->detail_asisten,
+                'approve_asisten' => $status[0]->approve_asisten,
+                'lok_asisten' => $status[0]->lok_asisten,
+            ];
         }
 
         // dd($status);
@@ -6637,8 +6610,26 @@ class SidaktphController extends Controller
 
         $ancakFA = $ancakFA->groupBy(['est', 'afd', 'statuspanen', 'tanggal', 'blok']);
         $ancakFA = json_decode($ancakFA, true);
+        $buahpetugas1 = [];
+        foreach ($ancakFA as $key => $value) {
 
-        // dd($ancakFA);
+            foreach ($value as $key1 => $value1) {
+                foreach ($value1 as $key2 => $value2) {
+                    foreach ($value2 as $key3 => $value3) {
+                        foreach ($value3 as $key4 => $value4) {
+                            foreach ($value4 as $key5 => $value5) {
+                                $buahpetugas1[] = $value5['qc'];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // dd($buahpetugas1);
+        $petugas = array_unique($buahpetugas1);
+        $petugasnama = array_values($petugas);
+
+        // dd($petugasnama, $petugas);
         $dateString = $tanggal;
         $dateParts = date_parse($dateString);
         $year = $dateParts['year'];
@@ -7116,6 +7107,7 @@ class SidaktphController extends Controller
         $arrView['afd'] =  '-';
         $arrView['awal'] =  $tanggal;
         $arrView['statusdata'] =  $statusdata;
+        $arrView['finalpetugas'] =  $petugasnama;
         // $arrView['akhir'] =  $formattedEndDate;
 
         $pdf = PDF::loadView('sidaktph.Pdfsidaktphba', ['data' => $arrView]);

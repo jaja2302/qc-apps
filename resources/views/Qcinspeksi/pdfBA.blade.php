@@ -1132,8 +1132,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                 
-
                     <tr>
                         @php
                             $totalpetugas= count($data['finalpetugas']);

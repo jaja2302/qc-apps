@@ -3454,7 +3454,7 @@
                 },
                 success: function(response) {
                    
-                    console.log(response);
+                    // console.log(response);
                     if (response === 'not_approved_all') {
                         document.getElementById('notverif').classList.remove('d-none');
                     } else if (response === 'all_approved') {
