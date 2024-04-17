@@ -449,7 +449,7 @@
 
             </tr>
 
-            @if ($data->foto_kebersihan_gudang_count == 6 ||$data->foto_kebersihan_gudang_count == 5 )
+            @if ($data->foto_kebersihan_gudang_count > 2 )
             <tr class="table-primary">
 
                 <th class="my-cell text-center" colspan="2">7. BUKU INSPEKSI KTU</th>
@@ -484,7 +484,7 @@
                 <!-- GUDANG  -->
 
                 <td class="my-cell" rowspan="2">{{$kondisigd}}</td>
-                @if ($data->foto_kebersihan_gudang_3)
+                @if (isset($data->foto_kebersihan_gudang_3))
                 <td class="my-cell col-md-4"><img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/inspeksi_gudang/{{$data->foto_kebersihan_gudang_3}}" class="img-fluid modal-image"></td>
                 @else
                 <td><img src="{{asset('noimage.png')}}" style="weight:75pt;height:150pt"></td>
@@ -492,7 +492,7 @@
 
                 <td class="my-cell" rowspan="2">{{$kondisigd}}</td>
                 </td>
-                @if ($data->foto_kebersihan_gudang_4)
+                @if (isset($data->foto_kebersihan_gudang_4))
                 <td class="my-cell col-md-4"><img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/inspeksi_gudang/{{$data->foto_kebersihan_gudang_4}}" class="img-fluid modal-image"></td>
                 @else
                 <td><img src="{{asset('noimage.png')}}" style="weight:75pt;height:150pt"></td>
@@ -507,16 +507,16 @@
                 @endif
 
                 <!-- GUDANG  -->
-                @if ($data->foto_kebersihan_gudang_5)
+                @if (isset($data->foto_kebersihan_gudang_5))
                 <td class="my-cell col-md-4"><img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/inspeksi_gudang/{{$data->foto_kebersihan_gudang_5}}" class="img-fluid modal-image"></td>
                 @else
-                <td><img src="{{asset('noimage.png')}}" style="weight:75pt;height:150pt"></td>
+                <td></td>
                 @endif
 
                 @if (isset($data->foto_kebersihan_gudang_6))
                 <td class="my-cell col-md-4"><img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/inspeksi_gudang/{{$data->foto_kebersihan_gudang_6}}" class="img-fluid modal-image"></td>
                 @else
-                <td><img src="{{asset('noimage.png')}}" style="weight:75pt;height:150pt"></td>
+                <td style="border: 1px solid black"></td>
                 @endif
             </tr>
             <tr>

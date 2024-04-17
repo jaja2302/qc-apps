@@ -529,9 +529,9 @@
                                         <td colspan="2" class="text-center my-cell">{{ $data->komentar_kebersihan_gudang }}
                                         </td>
                                     </tr>
+                                 
 
-
-                                    @if ($data->foto_kebersihan_gudang_count == 6 ||$data->foto_kebersihan_gudang_count == 5 )
+                                    @if ($data->foto_kebersihan_gudang_count > 2 )
                                     <tr class="table-primary">
 
                                         <th class="my-cell text-center" colspan="2">7. BUKU INSPEKSI KTU</th>
@@ -549,7 +549,7 @@
                                     <tr>
                                         <td class="my-cell" rowspan="2">
                                             {{($data->inspeksi_ktu == 5) ? 'Logbook todate & lengkap ' :
-    (($data->inspeksi_ktu == 0) ? ' Logbook tidak todate' : '')}}
+                                     (($data->inspeksi_ktu == 0) ? ' Logbook tidak todate' : '')}}
                                         </td>
                                         @if ($data->foto_inspeksi_ktu_1)
                                         <td class="my-cell col-md-4"><img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/inspeksi_gudang/{{$data->foto_inspeksi_ktu_1}}" class="img-fluid modal-image"></td>
@@ -581,17 +581,17 @@
                                         @endif
 
                                         <!-- GUDANG  -->
-                                        @if ($data->foto_kebersihan_gudang_5)
+                                        @if (isset($data->foto_kebersihan_gudang_5))
                                         <td class="my-cell col-md-4"><img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/inspeksi_gudang/{{$data->foto_kebersihan_gudang_5}}" class="img-fluid modal-image"></td>
                                         @else
-                                        <td><img src="{{asset('noimage.png')}}" style="weight:75pt;height:150pt"></td>
+                                        <td></td>
                                         @endif
 
 
                                         @if (isset($data->foto_kebersihan_gudang_6))
                                         <td class="my-cell col-md-4"><img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/inspeksi_gudang/{{$data->foto_kebersihan_gudang_6}}" class="img-fluid modal-image"></td>
                                         @else
-                                        <td><img src="{{asset('noimage.png')}}" style="weight:75pt;height:150pt"></td>
+                                        <td></td>
                                         @endif
 
                                     </tr>
@@ -617,7 +617,7 @@
                                     <tr>
                                         <td class="my-cell" rowspan="2">
                                             {{($data->inspeksi_ktu == 5) ? 'Logbook todate & lengkap ' :
-    (($data->inspeksi_ktu == 0) ? ' Logbook tidak todate' : '')}}
+                                        (($data->inspeksi_ktu == 0) ? ' Logbook tidak todate' : '')}}
                                         </td>
                                         @if ($data->foto_inspeksi_ktu_1)
                                         <td class="my-cell col-md-4"><img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/inspeksi_gudang/{{$data->foto_inspeksi_ktu_1}}" class="img-fluid modal-image"></td>

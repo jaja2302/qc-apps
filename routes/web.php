@@ -35,7 +35,9 @@ use App\Http\Controllers\RekapController;
 //     return view('welcome');
 // });
 
-
+// Route::get('/linkstorage', function () {
+//     Artisan::call('storage:link');
+// });
 
 Route::get('/', [LoginController::class, 'index'])->name('logina');
 Route::post('/', [loginController::class, 'authenticate'])->name('login');

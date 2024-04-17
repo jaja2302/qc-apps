@@ -526,9 +526,9 @@
                         @endif
                         
                         @if ($data['statusdata']['status'] === 'not_approved')
-                        <td colspan="2" style="vertical-align: bottom; text-align: center">Asisten Tidak Terverifikasi Secara Digital</td>
+                        <td colspan="2" style="vertical-align: bottom; text-align: center">Asisten Estate Tidak Terverifikasi Secara Digital</td>
                         <td colspan="2" style="vertical-align: bottom; text-align: center">Askep Tidak Terverifikasi Secara Digital</td>
-                        <td colspan="2" style="vertical-align: bottom; text-align: center">Manajer Tidak Terverifikasi Secara Digital</td>
+                        <td colspan="2" style="vertical-align: bottom; text-align: center">Manajer Estate Tidak Terverifikasi Secara Digital</td>
                         @else
                         <td colspan="2" style="vertical-align: bottom; text-align: center">
                             @if ($data['statusdata']['nama_asisten'] != null)
@@ -540,11 +540,11 @@
                                     </div>
                                     <div class="details">
                                         <div>{{$data['statusdata']['nama_asisten']}}</div>
-                                        <div>Asisten {{$data['statusdata']['detail_asisten']}} <span>{{$data['statusdata']['lok_asisten']}}</span> </div>
+                                        <div>Asisten Estate {{$data['statusdata']['detail_asisten']}} <span>{{$data['statusdata']['lok_asisten']}}</span> </div>
                                     </div>
                                 </div> 
                             @else
-                                Asisten Tidak Terverifikasi Secara Digital
+                                Asisten Estate Tidak Terverifikasi Secara Digital
                             @endif
                         </td>
                         <td colspan="2" style="vertical-align: bottom; text-align: center">
@@ -575,11 +575,11 @@
                                 </div>
                                 <div class="details">
                                     <div>{{$data['statusdata']['nama_maneger']}}</div>
-                                    <div>Manager {{$data['statusdata']['detail_manager']}} <span>{{$data['statusdata']['lok_manager']}}</span> </div>
+                                    <div>Manager Estate {{$data['statusdata']['detail_manager']}} <span>{{$data['statusdata']['lok_manager']}}</span> </div>
                                 </div>
                             </div>
                             @else
-                            Manager Tidak Terverifikasi Secara Digital
+                            Manager Estate Tidak Terverifikasi Secara Digital
                             @endif
                         </td>
                         @endif   
