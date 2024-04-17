@@ -692,48 +692,66 @@ class pdfgenerateController extends Controller
         } else {
             $verifby_askep = $status[0]->verifby_askep;
             $verifby_manager = $status[0]->verifby_manager;
+            $verifby_asisten = $status[0]->verifby_asisten;
 
-            if ($verifby_askep != 1) {
-                // $statusdata = 'askep_not_approved';
-                $statusdata = [
-                    'status' =>  'askep_not_approved',
-                    'nama_maneger' => $status[0]->nama_maneger,
-                    'detail_manager' => $status[0]->detail_manager,
-                    'approve_maneger' => $status[0]->approve_maneger,
-                    'nama_askep' => $status[0]->nama_askep,
-                    'detail_askep' => $status[0]->detail_askep,
-                    'approve_askep' => $status[0]->approve_askep,
-                    'lok_manager' => $status[0]->lok_manager,
-                    'lok_askep' => $status[0]->lok_askep,
-                ];
-            } elseif ($verifby_manager != 1) {
-                // $statusdata = 'manager_not_approved';
-                $statusdata = [
-                    'status' =>  'manager_not_approved',
-                    'nama_maneger' => $status[0]->nama_maneger,
-                    'detail_manager' => $status[0]->detail_manager,
-                    'approve_maneger' => $status[0]->approve_maneger,
-                    'nama_askep' => $status[0]->nama_askep,
-                    'detail_askep' => $status[0]->detail_askep,
-                    'approve_askep' => $status[0]->approve_askep,
-                    'lok_manager' => $status[0]->lok_manager,
-                    'lok_askep' => $status[0]->lok_askep,
-                ];
-            } else {
-                // $statusdata = 'all_approved';
+            $statusdata = [
+                'status' =>  'have_data',
+                'nama_maneger' => $status[0]->nama_maneger,
+                'detail_manager' => $status[0]->detail_manager,
+                'approve_maneger' => $status[0]->approve_maneger,
+                'lok_manager' => $status[0]->lok_manager,
 
-                $statusdata = [
-                    'status' =>  'all_approved',
-                    'nama_maneger' => $status[0]->nama_maneger,
-                    'detail_manager' => $status[0]->detail_manager,
-                    'approve_maneger' => $status[0]->approve_maneger,
-                    'nama_askep' => $status[0]->nama_askep,
-                    'detail_askep' => $status[0]->detail_askep,
-                    'approve_askep' => $status[0]->approve_askep,
-                    'lok_manager' => $status[0]->lok_manager,
-                    'lok_askep' => $status[0]->lok_askep,
-                ];
-            }
+                'nama_askep' => $status[0]->nama_askep,
+                'detail_askep' => $status[0]->detail_askep,
+                'approve_askep' => $status[0]->approve_askep,
+                'lok_askep' => $status[0]->lok_askep,
+
+                'nama_asisten' => $status[0]->nama_asisten,
+                'detail_asisten' => $status[0]->detail_asisten,
+                'approve_asisten' => $status[0]->approve_asisten,
+                'lok_asisten' => $status[0]->lok_asisten,
+            ];
+            // if ($verifby_askep != 1) {
+            //     // $statusdata = 'askep_not_approved';
+            //     $statusdata = [
+            //         'status' =>  'askep_not_approved',
+            //         'nama_maneger' => $status[0]->nama_maneger,
+            //         'detail_manager' => $status[0]->detail_manager,
+            //         'approve_maneger' => $status[0]->approve_maneger,
+            //         'nama_askep' => $status[0]->nama_askep,
+            //         'detail_askep' => $status[0]->detail_askep,
+            //         'approve_askep' => $status[0]->approve_askep,
+            //         'lok_manager' => $status[0]->lok_manager,
+            //         'lok_askep' => $status[0]->lok_askep,
+            //     ];
+            // } elseif ($verifby_manager != 1) {
+            //     // $statusdata = 'manager_not_approved';
+            //     $statusdata = [
+            //         'status' =>  'manager_not_approved',
+            //         'nama_maneger' => $status[0]->nama_maneger,
+            //         'detail_manager' => $status[0]->detail_manager,
+            //         'approve_maneger' => $status[0]->approve_maneger,
+            //         'nama_askep' => $status[0]->nama_askep,
+            //         'detail_askep' => $status[0]->detail_askep,
+            //         'approve_askep' => $status[0]->approve_askep,
+            //         'lok_manager' => $status[0]->lok_manager,
+            //         'lok_askep' => $status[0]->lok_askep,
+            //     ];
+            // } else {
+            //     // $statusdata = 'all_approved';
+
+            //     $statusdata = [
+            //         'status' =>  'all_approved',
+            //         'nama_maneger' => $status[0]->nama_maneger,
+            //         'detail_manager' => $status[0]->detail_manager,
+            //         'approve_maneger' => $status[0]->approve_maneger,
+            //         'nama_askep' => $status[0]->nama_askep,
+            //         'detail_askep' => $status[0]->detail_askep,
+            //         'approve_askep' => $status[0]->approve_askep,
+            //         'lok_manager' => $status[0]->lok_manager,
+            //         'lok_askep' => $status[0]->lok_askep,
+            //     ];
+            // }
         }
 
         // dd($status, $statusdata);
@@ -770,6 +788,15 @@ class pdfgenerateController extends Controller
         $mutuAncak = json_decode(json_encode($mutuAncak), true);
         // dd($mutuAncak);
 
+        $ancakpetugas1 = [];
+        foreach ($mutuAncak as $key => $value) {
+
+            foreach ($value as $key1 => $value1) {
+                $ancakpetugas1[] = $value1['petugas'];
+            }
+        }
+        $ancakpetugas[] = array_unique($ancakpetugas1);
+        // dd($ancakpetugas, $ancakpetugas1);
         // dd($mutuAncak);
         $mutuBuahQuery = DB::connection('mysql2')->table('mutu_buah')
             ->select("mutu_buah.*", DB::raw('DATE_FORMAT(mutu_buah.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(mutu_buah.datetime, "%Y") as tahun'))
@@ -781,7 +808,14 @@ class pdfgenerateController extends Controller
         $mutuBuahQuery = $mutuBuahQuery->groupBy(['blok']);
         $mutuBuahQuery = json_decode($mutuBuahQuery, true);
 
+        $buahpetugas1 = [];
+        foreach ($mutuBuahQuery as $key => $value) {
 
+            foreach ($value as $key1 => $value1) {
+                $buahpetugas1[] = $value1['petugas'];
+            }
+        }
+        $buahpetugas[] = array_unique($buahpetugas1);
         // $mutuTransport = json_decode($mutuTransport, true);
         $mutuTransport = DB::connection('mysql2')
             ->table('mutu_transport')
@@ -797,7 +831,19 @@ class pdfgenerateController extends Controller
 
         $mutuTransport = $mutuTransport->groupBy('blok')->toArray();
 
+        $transpetugas1 = [];
+        foreach ($mutuTransport as $key => $value) {
 
+            foreach ($value as $key1 => $value1) {
+                $transpetugas1[] = $value1->petugas;
+            }
+        }
+        $transpetugas[] = array_unique($transpetugas1);
+        $combinedArray = array_merge($transpetugas, $ancakpetugas, $buahpetugas);
+
+
+        $finalpetugas = array_unique(array_reduce($combinedArray, 'array_merge', []));
+        // dd($combinedArray, $finalpetugas);
 
         if ($reg == 1) {
             $mutuTransport = array_combine(
@@ -1303,8 +1349,7 @@ class pdfgenerateController extends Controller
         $arrView['tanggal'] =  $date;
         $arrView['ancak_trans'] =  $newVariable;
         $arrView['statusdata'] =  $statusdata;
-        // dd($statusdata);
-
+        $arrView['finalpetugas'] =  $finalpetugas;
         $pdf = PDF::loadView('Qcinspeksi.pdfBA', ['data' => $arrView]);
 
         $customPaper = array(360, 360, 360, 360);

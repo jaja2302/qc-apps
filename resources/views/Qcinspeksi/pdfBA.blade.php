@@ -1127,65 +1127,142 @@
                     </tr>
                     <tr>
                         <th colspan="6" class="text-center">Dibuat</th>
-                        <th colspan="3" class="text-center">Diterima</th>
-                        <th colspan="3" class="text-center">Diketahui</th>
+                        <th colspan="4" class="text-center">Diterima</th>
+                        <th colspan="2" class="text-center">Diketahui</th>
                     </tr>
                 </thead>
                 <tbody>
                  
 
                     <tr>
-                        <td colspan="2" style="vertical-align: bottom;padding-top: 244px;text-align:center">__________</td>
-                        <td colspan="2" style="vertical-align: bottom;text-align:center">__________</td>
-                        <td colspan="2" style="vertical-align: bottom;text-align:center">__________</td>
+                        @php
+                            $totalpetugas= count($data['finalpetugas']);
+                        @endphp
+                        @if ($totalpetugas == 1)
+                        <td colspan="6" style="vertical-align: bottom;text-align:center;padding-top:45px">
+                            <div class="stamp-container">
+                                <div class="stamp">
+                                    <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
+                                    <div class="stamp-text">Created</div>
+                                    <div class="stamp-text">{{$data['tanggal']}}</div>
+                                </div>
+                                <div class="details">
+                                    <div> {{$data['finalpetugas'][0]}}</div>
+                                    <div>Petugas Quality Control </div>
+                                </div>
+                            </div>
+                        </td>
+                        @elseif ($totalpetugas == 2)
+                        <td colspan="3" style="vertical-align: bottom;text-align:center;padding-top:45px">
+                            <div class="stamp-container">
+                                <div class="stamp">
+                                    <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
+                                    <div class="stamp-text">Created</div>
+                                    <div class="stamp-text">{{$data['tanggal']}}</div>
+                                </div>
+                                <div class="details">
+                                    <div> {{$data['finalpetugas'][0]}}</div>
+                                    <div>Petugas Quality Control </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td colspan="3" style="vertical-align: bottom;text-align:center;padding-top:45px">
+                            <div class="stamp-container">
+                                <div class="stamp">
+                                    <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
+                                    <div class="stamp-text">Created</div>
+                                    <div class="stamp-text">{{$data['tanggal']}}</div>
+                                </div>
+                                <div class="details">
+                                    <div> {{$data['finalpetugas'][1]}}</div>
+                                    <div>Petugas Quality Control </div>
+                                </div>
+                            </div>
+                        </td>
+                        @elseif ($totalpetugas == 3)
+                        <td colspan="2" style="vertical-align: bottom;text-align:center">
+                            <div class="stamp-container">
+                                <div class="stamp">
+                                    <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
+                                    <div class="stamp-text">Created</div>
+                                    <div class="stamp-text">{{$data['tanggal']}}</div>
+                                </div>
+                                <div class="details">
+                                    <div> {{$data['finalpetugas'][0]}}</div>
+                                    <div>Petugas Quality Control </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td colspan="2" style="vertical-align: bottom;text-align:center">
+                            <div class="stamp-container">
+                                <div class="stamp">
+                                    <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
+                                    <div class="stamp-text">Created</div>
+                                    <div class="stamp-text">{{$data['tanggal']}}</div>
+                                </div>
+                                <div class="details">
+                                    <div> {{$data['finalpetugas'][1]}}</div>
+                                    <div>Petugas Quality Control </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td colspan="2" style="vertical-align: bottom;text-align:center">
+                            <div class="stamp-container">
+                                <div class="stamp">
+                                    <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
+                                    <div class="stamp-text">Created</div>
+                                    <div class="stamp-text">{{$data['tanggal']}}</div>
+                                </div>
+                                <div class="details">
+                                    <div> {{$data['finalpetugas'][2]}}</div>
+                                    <div>Petugas Quality Control </div>
+                                </div>
+                            </div>
+                        </td>
+                        @endif
+                        
                         @if ($data['statusdata']['status'] === 'not_approved')
-                        <td colspan="3" style="vertical-align: bottom; text-align: center">Asisten Belum Terverifikasi Secara Digital</td>
-                        <td colspan="3" style="vertical-align: bottom; text-align: center">Manajer Estate Belum Terverifikasi Secara Digital</td>
-                        @elseif ($data['statusdata']['status'] === 'askep_not_approved')
-                            <td colspan="3" style="vertical-align: bottom; text-align: center">Asisten Belum Terverifikasi Secara Digital</td>
-                            <td colspan="3" style="vertical-align: bottom; text-align: center">
+                        <td colspan="2" style="vertical-align: bottom; text-align: center">Asisten Tidak Terverifikasi Secara Digital</td>
+                        <td colspan="2" style="vertical-align: bottom; text-align: center">Askep Tidak Terverifikasi Secara Digital</td>
+                        <td colspan="2" style="vertical-align: bottom; text-align: center">Manajer Tidak Terverifikasi Secara Digital</td>
+                        @else
+                        <td colspan="2" style="vertical-align: bottom; text-align: center">
+                            @if ($data['statusdata']['nama_asisten'] != null)
                                 <div class="stamp-container">
                                     <div class="stamp">
                                         <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
                                         <div class="stamp-text">APPROVED</div>
-                                        <div class="stamp-text">{{$data['statusdata']['approve_maneger']}}</div>
+                                        <div class="stamp-text">{{$data['statusdata']['approve_asisten']}}</div>
                                     </div>
                                     <div class="details">
-                                        <div>{{$data['statusdata']['nama_maneger']}}</div>
-                                        <div>Manager {{$data['statusdata']['detail_manager']}} <span>{{$data['statusdata']['lok_manager']}}</span> </div>
+                                        <div>{{$data['statusdata']['nama_asisten']}}</div>
+                                        <div>Asisten {{$data['statusdata']['detail_asisten']}} <span>{{$data['statusdata']['lok_asisten']}}</span> </div>
+                                    </div>
+                                </div> 
+                            @else
+                                Asisten Tidak Terverifikasi Secara Digital
+                            @endif
+                        </td>
+                        <td colspan="2" style="vertical-align: bottom; text-align: center">
+                            @if ($data['statusdata']['nama_askep'] != null)
+                                <div class="stamp-container">
+                                    <div class="stamp">
+                                        <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
+                                        <div class="stamp-text">APPROVED</div>
+                                        <div class="stamp-text">{{$data['statusdata']['approve_askep']}}</div>
+                                    </div>
+                                    <div class="details">
+                                        <div>{{$data['statusdata']['nama_askep']}}</div>
+                                        <div>Askep {{$data['statusdata']['detail_askep']}} <span>{{$data['statusdata']['lok_askep']}}</span> </div>
                                     </div>
                                 </div>
-                            </td>
-                        @elseif ($data['statusdata']['status'] === 'manager_not_approved')
-                        <td colspan="3" style="vertical-align: bottom; text-align: center">
-                            <div class="stamp-container">
-                                <div class="stamp">
-                                    <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
-                                    <div class="stamp-text">APPROVED</div>
-                                    <div class="stamp-text">{{$data['statusdata']['approve_askep']}}</div>
-                                </div>
-                                <div class="details">
-                                    <div>{{$data['statusdata']['nama_askep']}}</div>
-                                    <div>Manager {{$data['statusdata']['detail_askep']}} <span>{{$data['statusdata']['lok_askep']}}</span> </div>
-                                </div>
-                            </div>
+                            @else
+                                Askep Tidak Terverifikasi Secara Digital
+                            @endif
+                            
                         </td>
-                        <td colspan="3" style="vertical-align: bottom; text-align: center">Manajer Estate Belum Terverifikasi Secara Digital</td>
-                    @elseif ($data['statusdata']['status'] === 'all_approved')
-                        <td colspan="3" style="vertical-align: bottom; text-align: center">
-                            <div class="stamp-container">
-                                <div class="stamp">
-                                    <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
-                                    <div class="stamp-text">APPROVED</div>
-                                    <div class="stamp-text">{{$data['statusdata']['approve_askep']}}</div>
-                                </div>
-                                <div class="details">
-                                    <div>{{$data['statusdata']['nama_askep']}}</div>
-                                    <div>Manager {{$data['statusdata']['detail_askep']}} <span>{{$data['statusdata']['lok_askep']}}</span> </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td colspan="3" style="vertical-align: bottom; text-align: center">
+                        <td colspan="2" style="vertical-align: bottom; text-align: center">
+                            @if ($data['statusdata']['nama_maneger'] != null)
                             <div class="stamp-container">
                                 <div class="stamp">
                                     <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
@@ -1197,9 +1274,11 @@
                                     <div>Manager {{$data['statusdata']['detail_manager']}} <span>{{$data['statusdata']['lok_manager']}}</span> </div>
                                 </div>
                             </div>
+                            @else
+                            Manager Tidak Terverifikasi Secara Digital
+                            @endif
                         </td>
-                    @endif
-                    
+                        @endif   
                     </tr>
 
                 </tbody>

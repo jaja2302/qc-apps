@@ -13046,21 +13046,33 @@ class inspectController extends Controller
             ->where('datetime', 'LIKE', '%' . $Tanggal . '%')
             ->get();
 
+        // dd($status);
+
         if ($status->isEmpty()) {
-            return response()->json('empty');
+            return response()->json('not_approved_all');
         } else {
             $verifby_askep = $status[0]->verifby_askep;
             $verifby_manager = $status[0]->verifby_manager;
-
-            if ($verifby_askep != 1) {
+            $verifby_asisten = $status[0]->verifby_asisten;
+            if ($verifby_askep != 1 && $verifby_manager != 1 && $verifby_asisten != 1) {
+                return response()->json('not_approved_all');
+            } elseif ($verifby_askep != 1 && $verifby_manager == 1 && $verifby_asisten == 1) {
                 return response()->json('askep_not_approved');
-            }
-
-            if ($verifby_manager != 1) {
+            } elseif ($verifby_askep == 1 && $verifby_manager != 1 && $verifby_asisten == 1) {
                 return response()->json('manager_not_approved');
+            } elseif ($verifby_askep == 1 && $verifby_manager == 1 && $verifby_asisten != 1) {
+                return response()->json('asisten_not_approved');
+            } elseif ($verifby_askep != 1 && $verifby_manager == 1 && $verifby_asisten != 1) {
+                return response()->json('askep_asisten_not_approved');
+            } elseif ($verifby_askep != 1 && $verifby_manager != 1 && $verifby_asisten == 1) {
+                return response()->json('askep_manager_not_approved');
+            } elseif ($verifby_askep == 1 && $verifby_manager != 1 && $verifby_asisten != 1) {
+                return response()->json('manager_asisten_not_approved');
+            } elseif ($verifby_askep == 1 && $verifby_manager == 1 && $verifby_asisten == 1) {
+                return response()->json('all_approved');
+            } else {
+                return response()->json('condition_not_met');
             }
-
-            return response()->json('all_approved');
         }
     }
 
@@ -13092,6 +13104,7 @@ class inspectController extends Controller
 
             $verifby_askep = $jabatan === 'Askep' ? 1 : 0;
             $verifby_manager = $jabatan === 'Manager' ? 1 : 0;
+            $verifby_asisten = $jabatan === 'Asisten' ? 1 : 0;
 
             if ($currentStatus == null) {
                 $data = [
@@ -13101,6 +13114,7 @@ class inspectController extends Controller
                     'menu' => $menu,
                     'verifby_askep' => $verifby_askep,
                     'verifby_manager' => $verifby_manager,
+                    'verifby_asisten' => $verifby_asisten,
                     'action' => $action,
                 ];
 
@@ -13109,6 +13123,11 @@ class inspectController extends Controller
                     $data['nama_askep'] = $nama;
                     $data['approve_askep'] = $tanggal_approve;
                     $data['lok_askep'] = $lokasikerja;
+                } elseif ($jabatan === 'Asisten') {
+                    $data['detail_asisten'] = $departemen;
+                    $data['nama_asisten'] = $nama;
+                    $data['approve_asisten'] = $tanggal_approve;
+                    $data['lok_asisten'] = $lokasikerja;
                 } else {
                     $data['detail_manager'] = $departemen;
                     $data['nama_maneger'] = $nama;
@@ -13129,6 +13148,14 @@ class inspectController extends Controller
                         'nama_askep' => $nama,
                         'approve_askep' => $tanggal_approve,
                         'lok_askep' => $lokasikerja,
+                    ]);
+                } else if ($jabatan === 'Asisten') {
+                    DB::connection('mysql2')->table('verification')->where('id', $currentStatus->id)->update([
+                        'verifby_asisten' => $verifby_asisten,
+                        'detail_asisten' => $departemen,
+                        'nama_asisten' => $nama,
+                        'approve_asisten' => $tanggal_approve,
+                        'lok_asisten' => $lokasikerja,
                     ]);
                 } else if ($jabatan === 'Manager') {
                     DB::connection('mysql2')->table('verification')->where('id', $currentStatus->id)->update([
