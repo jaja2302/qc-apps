@@ -1079,7 +1079,7 @@
 
         <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3  border border-dark" style="padding: 10px;">
 
-            <table class=" custom-table table-1-no-border" style="float: left; width: 20%;">
+            <table class="custom-table table-1-no-border" style="float: left; width: 20%;">
                 <thead>
                     <tr>
                         <th colspan="2" class="text-center">Catatan Lainnya(%)</th>

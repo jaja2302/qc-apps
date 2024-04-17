@@ -7108,7 +7108,8 @@ class SidaktphController extends Controller
         $arrView['awal'] =  $tanggal;
         $arrView['statusdata'] =  $statusdata;
         $arrView['finalpetugas'] =  $petugasnama;
-        // $arrView['akhir'] =  $formattedEndDate;
+
+
 
         $pdf = PDF::loadView('sidaktph.Pdfsidaktphba', ['data' => $arrView]);
 

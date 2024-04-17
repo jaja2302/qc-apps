@@ -6357,6 +6357,20 @@ class mutubuahController extends Controller
         $mutuAncak = $mutuAncak->groupBy(['afdeling', 'blok']);
         $mutuAncak = json_decode($mutuAncak, true);
 
+        $buahpetugas1 = [];
+        foreach ($mutuAncak as $key => $value) {
+
+            foreach ($value as $key1 => $value1) {
+                foreach ($value1 as $key2 => $value2) {
+                    // dd($value2);
+                    $buahpetugas1[] = $value2['petugas'];
+                }
+            }
+        }
+        // dd($buahpetugas1);
+        $petugas = array_unique($buahpetugas1);
+        $petugasnama = array_values($petugas);
+
         $sidakblok = array();
         $status = DB::connection('mysql2')->table('verification')
             ->where('est', $est)
@@ -6371,52 +6385,24 @@ class mutubuahController extends Controller
                 'status' =>  'not_approved',
             ];
         } else {
-            $verifby_askep = $status[0]->verifby_askep;
-            $verifby_manager = $status[0]->verifby_manager;
+            $statusdata = [
+                'status' =>  'have_data',
+                'nama_maneger' => $status[0]->nama_maneger,
+                'detail_manager' => $status[0]->detail_manager,
+                'approve_maneger' => $status[0]->approve_maneger,
+                'lok_manager' => $status[0]->lok_manager,
 
-            if ($verifby_askep != 1) {
-                // $statusdata = 'askep_not_approved';
-                $statusdata = [
-                    'status' =>  'askep_not_approved',
-                    'nama_maneger' => $status[0]->nama_maneger,
-                    'detail_manager' => $status[0]->detail_manager,
-                    'approve_maneger' => $status[0]->approve_maneger,
-                    'nama_askep' => $status[0]->nama_askep,
-                    'detail_askep' => $status[0]->detail_askep,
-                    'approve_askep' => $status[0]->approve_askep,
-                    'lok_manager' => $status[0]->lok_manager,
-                    'lok_askep' => $status[0]->lok_askep,
-                ];
-            } elseif ($verifby_manager != 1) {
-                // $statusdata = 'manager_not_approved';
-                $statusdata = [
-                    'status' =>  'manager_not_approved',
-                    'nama_maneger' => $status[0]->nama_maneger,
-                    'detail_manager' => $status[0]->detail_manager,
-                    'approve_maneger' => $status[0]->approve_maneger,
-                    'nama_askep' => $status[0]->nama_askep,
-                    'detail_askep' => $status[0]->detail_askep,
-                    'approve_askep' => $status[0]->approve_askep,
-                    'lok_manager' => $status[0]->lok_manager,
-                    'lok_askep' => $status[0]->lok_askep,
-                ];
-            } else {
-                // $statusdata = 'all_approved';
+                'nama_askep' => $status[0]->nama_askep,
+                'detail_askep' => $status[0]->detail_askep,
+                'approve_askep' => $status[0]->approve_askep,
+                'lok_askep' => $status[0]->lok_askep,
 
-                $statusdata = [
-                    'status' =>  'all_approved',
-                    'nama_maneger' => $status[0]->nama_maneger,
-                    'detail_manager' => $status[0]->detail_manager,
-                    'approve_maneger' => $status[0]->approve_maneger,
-                    'nama_askep' => $status[0]->nama_askep,
-                    'detail_askep' => $status[0]->detail_askep,
-                    'approve_askep' => $status[0]->approve_askep,
-                    'lok_manager' => $status[0]->lok_manager,
-                    'lok_askep' => $status[0]->lok_askep,
-                ];
-            }
+                'nama_asisten' => $status[0]->nama_asisten,
+                'detail_asisten' => $status[0]->detail_asisten,
+                'approve_asisten' => $status[0]->approve_asisten,
+                'lok_asisten' => $status[0]->lok_asisten,
+            ];
         }
-        // dd($statusdata);
 
         // dd($mutuAncak);
         foreach ($mutuAncak as $key => $value) {
@@ -6721,7 +6707,45 @@ class mutubuahController extends Controller
         $arrView['totalrs'] =  $gerowspan['total'];
         $arrView['rowspan'] =  $outputArray;
         $arrView['statusdata'] =  $statusdata;
-        // $arrView['total_buah'] =  $total_buah;
+        $arrView['finalpetugas'] =  $petugasnama;
+        $totalpetugas = count($petugasnama);
+
+        $cellspan = 12;
+        $rowspan_b = 2;
+        $rowspan_c = 2;
+
+        $findrowspan_a = $cellspan - ($rowspan_b + $rowspan_c);
+
+        // $getrowspan = ceil($findrowspan_a / $totalpetugas);
+        $getrowspan = round($findrowspan_a / $totalpetugas, 2);
+
+        $rowsapn = explode('.', $getrowspan);
+
+        $rowspan_a = $rowsapn[0] * $totalpetugas;
+        $findrowbc = $cellspan - $rowspan_a;
+
+        $rowspana = $findrowbc / 2;
+        $rowspanb = $findrowbc / 2;
+
+
+        if ($rowspana == 3) {
+            $cellspana = 1;
+            $cellspana_second = 2;
+        } elseif ($rowspana == 2) {
+            $cellspana = 1;
+            $cellspana_second = 1;
+        } elseif ($rowspana == 4) {
+            $cellspana = 2;
+            $cellspana_second = 2;
+        } elseif ($rowspana == 5) {
+            $cellspana = 2;
+            $cellspana_second = 3;
+        } else {
+            $cellspana = 1;
+            $cellspana_second = 1;
+        }
+
+        // dd($findrowspan_a, $totalpetugas);
 
         $pdf = PDF::loadView('sidakmutubuah.pdfBA_sidakbuah', ['data' => $arrView]);
 
