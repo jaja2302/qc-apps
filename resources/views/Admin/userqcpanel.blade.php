@@ -1,5 +1,5 @@
 <x-layout.app>
-    @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep')
+    @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Admin')
     <div class="container-fluid">
 
         <div class="col-sm-12">
@@ -32,6 +32,7 @@
 
     <script type="module">
         var currentUserName = "{{ session('jabatan') }}";
+        var departemen = "{{ session('departemen') }}";
         $(document).ready(function() {
             // Get the session values
             var user_name = "{{ session('user_name') }}";
@@ -95,7 +96,7 @@
                             {
                                 // -1 targets the last column
                                 title: 'Actions',
-                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager'),
+                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager' ||  (currentUserName === 'Admin' && departemen ==='QC')),
                                 render: function(data, type, row, meta) {
                                     var buttons =
                                         '<button class="edit-btn">Edit</button>' +

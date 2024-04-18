@@ -141,7 +141,7 @@
                         </li>
                         @endif
 
-                        @if (strpos(session('departemen'), 'QC') !== false && session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten')
+                        @if (strpos(session('departemen'), 'QC') !== false && session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' || session('jabatan') == 'Admin')
                         <li class="nav-item">
                             <a href="{{ asset('/userqcpanel') }}" class="nav-link">
                                 <div class="nav-icon lottie-animation" data-animation-path="{{ asset('img/homejson.json') }}"></div>
@@ -154,7 +154,7 @@
 
                         <div class="fixed-bottom mb-3" style="position: absolute;">
 
-                            @if (strpos(session('departemen'), 'QC') !== false && session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten')
+                            @if (strpos(session('departemen'), 'QC') !== false && session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten'  || session('jabatan') == 'Admin')
                             <li class="nav-item">
                                 <a href="{{ route('user.show') }}" class="nav-link">
 
