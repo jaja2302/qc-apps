@@ -1127,8 +1127,8 @@
                     </tr>
                     <tr>
                         <th colspan="6" class="text-center">Dibuat</th>
-                        <th colspan="4" class="text-center">Diterima</th>
-                        <th colspan="2" class="text-center">Diketahui</th>
+                        <th colspan="2" class="text-center">Diterima</th>
+                        <th colspan="4" class="text-center">Diketahui</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1221,8 +1221,7 @@
                         
                         @if ($data['statusdata']['status'] === 'not_approved')
                         <td colspan="2" style="vertical-align: bottom; text-align: center">Asisten Estate Tidak Terverifikasi Secara Digital</td>
-                        <td colspan="2" style="vertical-align: bottom; text-align: center">Askep  Tidak Terverifikasi Secara Digital</td>
-                        <td colspan="2" style="vertical-align: bottom; text-align: center">Manajer Estate Tidak Terverifikasi Secara Digital</td>
+                        <td colspan="4" style="vertical-align: bottom; text-align: center">Manajer/Askep Estate Tidak Terverifikasi Secara Digital</td>
                         @else
                         <td colspan="2" style="vertical-align: bottom; text-align: center">
                             @if ($data['statusdata']['nama_asisten'] != null)
@@ -1234,14 +1233,14 @@
                                     </div>
                                     <div class="details">
                                         <div>{{$data['statusdata']['nama_asisten']}}</div>
-                                        <div>Asisten Estate {{$data['statusdata']['detail_asisten']}} <span>{{$data['statusdata']['lok_asisten']}}</span> </div>
+                                        <div>Asisten {{$data['statusdata']['detail_asisten']}} <span>{{$data['statusdata']['lok_asisten']}}</span> </div>
                                     </div>
                                 </div> 
                             @else
-                                Asisten Estate Tidak Terverifikasi Secara Digital
+                                Asisten Tidak Terverifikasi Secara Digital
                             @endif
                         </td>
-                        <td colspan="2" style="vertical-align: bottom; text-align: center">
+                        <td colspan="4" style="vertical-align: bottom; text-align: center">
                             @if ($data['statusdata']['nama_askep'] != null)
                                 <div class="stamp-container">
                                     <div class="stamp">
@@ -1254,27 +1253,22 @@
                                         <div>Askep  {{$data['statusdata']['detail_askep']}} <span>{{$data['statusdata']['lok_askep']}}</span> </div>
                                     </div>
                                 </div>
+                            @elseif($data['statusdata']['nama_maneger'] != null)
+                                <div class="stamp-container">
+                                    <div class="stamp">
+                                        <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
+                                        <div class="stamp-text">APPROVED</div>
+                                        <div class="stamp-text">{{$data['statusdata']['approve_maneger']}}</div>
+                                    </div>
+                                    <div class="details">
+                                        <div>{{$data['statusdata']['nama_maneger']}}</div>
+                                        <div>Manager {{$data['statusdata']['detail_manager']}} <span>{{$data['statusdata']['lok_manager']}}</span> </div>
+                                    </div>
+                                </div>
                             @else
-                                Askep Tidak Terverifikasi Secara Digital
+                                Maneger/Askep Tidak Terverifikasi Secara Digital
                             @endif
                             
-                        </td>
-                        <td colspan="2" style="vertical-align: bottom; text-align: center">
-                            @if ($data['statusdata']['nama_maneger'] != null)
-                            <div class="stamp-container">
-                                <div class="stamp">
-                                    <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
-                                    <div class="stamp-text">APPROVED</div>
-                                    <div class="stamp-text">{{$data['statusdata']['approve_maneger']}}</div>
-                                </div>
-                                <div class="details">
-                                    <div>{{$data['statusdata']['nama_maneger']}}</div>
-                                    <div>Manager Estate {{$data['statusdata']['detail_manager']}} <span>{{$data['statusdata']['lok_manager']}}</span> </div>
-                                </div>
-                            </div>
-                            @else
-                            Manager Estate Tidak Terverifikasi Secara Digital
-                            @endif
                         </td>
                         @endif   
                     </tr>
