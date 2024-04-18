@@ -379,32 +379,6 @@
                 
                 @endif
             </div>
-            <div class="alert alert-warning d-none d-flex align-items-center" role="alert" id="managernotverif">
-                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
-                    <div>
-                    Manager Belum melakukan Aprroval
-                    </div>
-                    @if (session('jabatan') == 'Manager')
-
-                    <div>
-                        <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
-                    </div>
-                    
-                    @endif
-            </div>
-            <div class="alert alert-warning d-none d-flex align-items-center" role="alert" id="askepnotverif">
-                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
-                    <div>
-                    Askep Belum melakukan Aprroval
-                    </div>
-                    @if (session('jabatan') == 'Askep')
-
-                    <div>
-                        <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
-                    </div>
-                    
-                    @endif
-            </div>
             <div class="alert alert-warning d-none d-flex align-items-center" role="alert" id="asistennotverif">
                     <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
                     <div>
@@ -418,38 +392,12 @@
                     
                     @endif
             </div>
-            <div class="alert alert-warning d-none d-flex align-items-center" role="alert" id="askep_asisten_not_approved">
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
-                <div>
-                Asisten/Askep Belum melakukan Aprroval
-                </div>
-                @if (session('jabatan') == 'Asisten' || session('jabatan') == 'Askep')
-
-                <div>
-                    <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
-                </div>
-                
-                @endif
-            </div>
             <div class="alert alert-warning d-none d-flex align-items-center" role="alert" id="askep_manager_not_approved">
                 <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
                 <div>
                 Askep/Manager Belum melakukan Aprroval
                 </div>
                 @if (session('jabatan') == 'Askep' || session('jabatan') == 'Manager')
-
-                <div>
-                    <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
-                </div>
-                
-                @endif
-            </div>
-            <div class="alert alert-warning d-none d-flex align-items-center" role="alert" id="manager_asisten_not_approved">
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
-                <div>
-                Asisten/Manager Belum melakukan Aprroval
-                </div>
-                @if (session('jabatan') == 'Asisten' || session('jabatan') == 'Manager')
 
                 <div>
                     <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
@@ -774,10 +722,7 @@
 
             document.getElementById('notverif').classList.add('d-none');
             document.getElementById('verifdone').classList.add('d-none');
-            document.getElementById('askepnotverif').classList.add('d-none');
-            document.getElementById('managernotverif').classList.add('d-none');
             document.getElementById('asistennotverif').classList.add('d-none');
-            document.getElementById('askep_asisten_not_approved').classList.add('d-none');
             document.getElementById('askep_manager_not_approved').classList.add('d-none');
             $.ajax({
                 url: "{{ route('verifinspeksi') }}",
@@ -792,28 +737,17 @@
                 success: function(response) {
                    
 
-                    if (response === 'not_approved_all') {
+                     // console.log(response);
+                     if (response === 'not_approved_all') {
                         document.getElementById('notverif').classList.remove('d-none');
                     } else if (response === 'all_approved') {
                         document.getElementById('verifdone').classList.remove('d-none');
-                    } else if (response === 'askep_not_approved') {
-                        // console.log('askep_not_approved');
-                        document.getElementById('askepnotverif').classList.remove('d-none');
-                    }  else if (response === 'manager_not_approved') {
-                        // console.log('manager_not_approved');
-                        document.getElementById('managernotverif').classList.remove('d-none');
-                    } else if (response === 'asisten_not_approved') {
+                    }else if (response === 'asisten_not_approved') {
                         // console.log('manager_not_approved');
                         document.getElementById('asistennotverif').classList.remove('d-none');
-                    } else if (response === 'askep_asisten_not_approved') {
-                        // console.log('manager_not_approved');
-                        document.getElementById('askep_asisten_not_approved').classList.remove('d-none');
                     } else if (response === 'askep_manager_not_approved') {
                         // console.log('manager_not_approved');
                         document.getElementById('askep_manager_not_approved').classList.remove('d-none');
-                    } else if (response === 'manager_asisten_not_approved') {
-                        // console.log('manager_not_approved');
-                        document.getElementById('manager_asisten_not_approved').classList.remove('d-none');
                     } else if (response === 'condition_not_met') {
                         console.error('Unexpected response:', response);
                     }else {

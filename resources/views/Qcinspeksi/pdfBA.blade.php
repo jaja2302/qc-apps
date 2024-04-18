@@ -1220,8 +1220,8 @@
                         @endif
                         
                         @if ($data['statusdata']['status'] === 'not_approved')
-                        <td colspan="2" style="vertical-align: bottom; text-align: center">Asisten Estate Tidak Terverifikasi Secara Digital</td>
-                        <td colspan="4" style="vertical-align: bottom; text-align: center">Manajer/Askep Estate Tidak Terverifikasi Secara Digital</td>
+                        <td colspan="2" style="vertical-align: bottom; text-align: center">Asisten Tidak Terverifikasi Secara Digital</td>
+                        <td colspan="4" style="vertical-align: bottom; text-align: center">Manajer/Askep Tidak Terverifikasi Secara Digital</td>
                         @else
                         <td colspan="2" style="vertical-align: bottom; text-align: center">
                             @if ($data['statusdata']['nama_asisten'] != null)

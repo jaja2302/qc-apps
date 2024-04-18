@@ -6371,6 +6371,40 @@ class mutubuahController extends Controller
         $petugas = array_unique($buahpetugas1);
         $petugasnama = array_values($petugas);
 
+        $datapetugas = count($petugasnama);
+
+        function generateArray($totalpetugas)
+        {
+            $array = [];
+            $value = floor(8 / $totalpetugas);
+            $remaining = 8 - ($value * ($totalpetugas - 1));
+
+            for ($i = 0; $i < $totalpetugas - 1; $i++) {
+                $array[] = $value;
+            }
+
+            // Add the remaining value to the last item in the array
+            $array[] = $remaining;
+
+            // Convert all values in the array to integers
+            $array = array_map('intval', $array);
+
+            return $array;
+        }
+
+        $result = generateArray($datapetugas);
+        $datapetugaskahir = [];
+        foreach ($petugasnama as $key => $value) {
+            foreach ($result as $key1 => $value1) {
+                if ($key == $key1) {
+
+                    $datapetugaskahir[$key]['nama'] = $value;
+                    $datapetugaskahir[$key]['row'] = $value1;
+                }
+            }
+        }
+        // dd($datapetugaskahir);
+
         $sidakblok = array();
         $status = DB::connection('mysql2')->table('verification')
             ->where('est', $est)
@@ -6381,11 +6415,11 @@ class mutubuahController extends Controller
         // dd($est, $tanggal);
         if ($status->isEmpty()) {
             // $statusdata = 'not_approved';
-            $statusdata = [
+            $statusdata_verif = [
                 'status' =>  'not_approved',
             ];
         } else {
-            $statusdata = [
+            $statusdata_verif = [
                 'status' =>  'have_data',
                 'nama_maneger' => $status[0]->nama_maneger,
                 'detail_manager' => $status[0]->detail_manager,
@@ -6404,7 +6438,7 @@ class mutubuahController extends Controller
             ];
         }
 
-        // dd($mutuAncak);
+        // dd($statusdata);
         foreach ($mutuAncak as $key => $value) {
             $bloks = 0;
             foreach ($value as $key1 => $value1) {
@@ -6694,7 +6728,49 @@ class mutubuahController extends Controller
         ];
         // dd($gerowspan, $outputArray);
 
+        // dd($final);
 
+
+        $statusdata = false; // Initialize the flag variable outside the loop
+
+        foreach ($final as $key => $string) {
+            if ($key === 'OE') {
+                $statusdata = true; // Set the flag to true if 'OE' is found
+                break; // Exit the loop since 'OE' is already found
+            }
+        }
+
+        if ($statusdata) {
+            $newdata = $final;
+            $table_first = [];
+            $table_second = [];
+            foreach ($newdata as $key => $value) {
+                if ($key !== 'OE' && $key !== 'OF') {
+                    $table_first[$key] = $value;
+                } else {
+                    $table_second[$key] = $value;
+                }
+            }
+
+            // dd($table_first, $table_second);
+            $finalarr = [
+                'statusarr' => 'multiarray',
+                'table1' => $table_first,
+                'table2' => $table_second
+            ];
+        } else {
+            $finalarr = [
+                'statusarr' => 'onearray',
+                'table1' => $final
+            ];
+            // dd(false);
+        }
+
+        // dd($finalarr);
+
+
+
+        // dd($petugasnama);
 
         // dd($outputArray, $gerowspan);
         $arrView = array();
@@ -6702,50 +6778,14 @@ class mutubuahController extends Controller
         $arrView['est'] =  $est;
         $arrView['afd'] =  $afd;
         $arrView['tanggal'] =  $date;
-        $arrView['sidak_buah'] =  $final;
+        $arrView['sidak_buah'] =  $finalarr;
         $arrView['estdata'] =  $estdata;
         $arrView['totalrs'] =  $gerowspan['total'];
         $arrView['rowspan'] =  $outputArray;
-        $arrView['statusdata'] =  $statusdata;
-        $arrView['finalpetugas'] =  $petugasnama;
-        $totalpetugas = count($petugasnama);
+        $arrView['statusdata'] =  $statusdata_verif;
+        $arrView['finalpetugas'] =  $datapetugaskahir;
 
-        $cellspan = 12;
-        $rowspan_b = 2;
-        $rowspan_c = 2;
-
-        $findrowspan_a = $cellspan - ($rowspan_b + $rowspan_c);
-
-        // $getrowspan = ceil($findrowspan_a / $totalpetugas);
-        $getrowspan = round($findrowspan_a / $totalpetugas, 2);
-
-        $rowsapn = explode('.', $getrowspan);
-
-        $rowspan_a = $rowsapn[0] * $totalpetugas;
-        $findrowbc = $cellspan - $rowspan_a;
-
-        $rowspana = $findrowbc / 2;
-        $rowspanb = $findrowbc / 2;
-
-
-        if ($rowspana == 3) {
-            $cellspana = 1;
-            $cellspana_second = 2;
-        } elseif ($rowspana == 2) {
-            $cellspana = 1;
-            $cellspana_second = 1;
-        } elseif ($rowspana == 4) {
-            $cellspana = 2;
-            $cellspana_second = 2;
-        } elseif ($rowspana == 5) {
-            $cellspana = 2;
-            $cellspana_second = 3;
-        } else {
-            $cellspana = 1;
-            $cellspana_second = 1;
-        }
-
-        // dd($findrowspan_a, $totalpetugas);
+        // dd($statusdata_verif, $petugasnama);
 
         $pdf = PDF::loadView('sidakmutubuah.pdfBA_sidakbuah', ['data' => $arrView]);
 
