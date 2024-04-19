@@ -64,7 +64,7 @@
 
 
 
-                        @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten')
+                        @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' || session('jabatan') == 'Admin')
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editProfileModal">
                             Edit Profile
                         </button>
@@ -251,7 +251,7 @@
                 },
                 success: function(response) {
                     var user = Object.entries(response['user']);
-                    console.log(user);
+                    // console.log(user);
                     // Loop through the user data array
                     user.forEach(function(entry) {
                         var key = entry[0];

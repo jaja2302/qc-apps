@@ -333,8 +333,7 @@
                 <div>
                     Data belum Tervertifikasi oleh Manager/Askep/Asisten
                 </div>
-                @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' )
-
+                @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' || session('jabatan') == 'Asisten Afdeling' )
                 <div>
                     <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
                 </div>
@@ -346,7 +345,7 @@
                     <div>
                     Asisten Belum melakukan Aprroval
                     </div>
-                    @if (session('jabatan') == 'Asisten')
+                    @if (session('jabatan') == 'Asisten'  || session('jabatan') == 'Asisten Afdeling')
 
                     <div>
                         <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>

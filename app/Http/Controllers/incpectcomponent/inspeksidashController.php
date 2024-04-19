@@ -2280,7 +2280,7 @@ class inspeksidashController extends Controller
                 }
             }
         }
-        // dd($tabelafdeling);
+        // dd($dataestate);
         $tableestate = array();
         foreach ($dataestate as $key => $value) {
             foreach ($value as $key1 => $value1) {
@@ -2296,7 +2296,7 @@ class inspeksidashController extends Controller
                     } else {
                         $TOTAL_SKORbh = 0;
                     }
-                    if ($value2['estate']['check_datatrans'] != 'kosong') {
+                    if ($value2['estate']['tph_sampleNew'] != 0) {
                         $totalSkortrans = $value2['estate']['totalSkortrans'];
                     } else {
                         $totalSkortrans = 0;
@@ -2312,13 +2312,14 @@ class inspeksidashController extends Controller
                     // $TOTAL_SKORbh = $value2['estate']['TOTAL_SKORbh'];
                     // $totalSkortrans = $value2['estate']['totalSkortrans'];
                     $tableestate[$key][$key1]['total_skor'] = $skor_akhircak + $TOTAL_SKORbh + $totalSkortrans;
+                    $tableestate[$key][$key1]['total_skor_string'] = $skor_akhircak . '+' . $TOTAL_SKORbh . '+' . $totalSkortrans;
                     $tableestate[$key][$key1]['est'] = $value2['estate']['est'];
                     $tableestate[$key][$key1]['afd'] = $value2['estate']['afd'];
                     $tableestate[$key][$key1]['nama'] = $value2['estate']['namaGM'] ?? '-';
                 }
             }
         }
-        // dd($tableestate);
+        // dd($dataestate, $tableestate);
         $tablewil = array();
         foreach ($datawil as $key => $value) {
             $skor_akhircak = $value['skor_akhircak'];
@@ -2372,7 +2373,7 @@ class inspeksidashController extends Controller
         }
         // dd($getnamewil, $vcutbuahwiil, $emptybuahwiil);
         $arrView = array();
-        // dd($tabelafdeling);
+        // dd($tableestate);
         $arrView['tab_afdeling'] = $tabelafdeling;
         $arrView['tab_estate'] = $tableestate;
         $arrView['tab_wil'] = $tablewil;
