@@ -134,15 +134,23 @@ class SidaktphController extends Controller
             ->select('*')
             ->where('nama', '=', $lok)
             ->pluck('id');
-        // dd($getreg);
+        // dd($lok);
+        if ($getreg != []) {
+            $regdata = 1;
+        } else {
+            $regdata = $getreg;
+        }
+
+        // dd($regdata);
         $sidaktph = DB::connection('mysql2')->table('sidak_tph')
             ->select('sidak_tph.*')
             ->join('estate', 'estate.est', '=', 'sidak_tph.est')
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('estate.emp', '!=', 1)
-            ->where('wil.regional', $getreg)
+            ->where('wil.regional', $regdata)
             ->whereDate('datetime', today())
             ->get();
+        // dd($sidaktph);
         $columns = [
             'qc',
             'status',

@@ -1290,6 +1290,10 @@ class pdfgenerateController extends Controller
         // dd($ancak);
         // Session::put('transReg2', $transReg2);
         // dd($transport);
+
+        $reindexedArray = array_values($finalpetugas);
+        // dd($reindexedArray);
+
         $arrView = array();
         $arrView['hitung'] =  $CalculateStack;
 
@@ -1304,8 +1308,14 @@ class pdfgenerateController extends Controller
         $arrView['tanggal'] =  $date;
         $arrView['ancak_trans'] =  $newVariable;
         $arrView['statusdata'] =  $statusdata;
-        $arrView['finalpetugas'] =  $finalpetugas;
+        $arrView['finalpetugas'] =  $reindexedArray;
+
+        // dd($finalpetugas);
+
+
         $pdf = PDF::loadView('Qcinspeksi.pdfBA', ['data' => $arrView]);
+
+
 
         $customPaper = array(360, 360, 360, 360);
         $pdf->set_paper('A2', 'landscape');

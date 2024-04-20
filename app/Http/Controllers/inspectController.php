@@ -13100,7 +13100,7 @@ class inspectController extends Controller
 
             $verifby_askep = $jabatan === 'Askep' ? 1 : 0;
             $verifby_manager = $jabatan === 'Manager' ? 1 : 0;
-            $verifby_asisten = $jabatan === 'Asisten' ? 1 : 0;
+            $verifby_asisten = ($jabatan === 'Asisten' || $jabatan === 'Asisten Afdeling') ? 1 : 0;
 
             if ($currentStatus == null) {
                 $data = [
@@ -13119,7 +13119,7 @@ class inspectController extends Controller
                     $data['nama_askep'] = $nama;
                     $data['approve_askep'] = $tanggal_approve;
                     $data['lok_askep'] = $lokasikerja;
-                } elseif ($jabatan === 'Asisten') {
+                } elseif ($jabatan === 'Asisten' || $jabatan === 'Asisten Afdeling') {
                     $data['detail_asisten'] = $departemen;
                     $data['nama_asisten'] = $nama;
                     $data['approve_asisten'] = $tanggal_approve;

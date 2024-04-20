@@ -86,13 +86,17 @@ class mutubuahController extends Controller
 
         $optionREg = json_decode($optionREg, true);
         // dd($optionREg);
-
+        if ($getreg != []) {
+            $regdata = 1;
+        } else {
+            $regdata = $getreg;
+        }
         $sidakmtb = DB::connection('mysql2')->table('sidak_mutu_buah')
             ->select('sidak_mutu_buah.*')
             ->join('estate', 'estate.est', '=', 'sidak_mutu_buah.estate')
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('estate.emp', '!=', 1)
-            ->where('wil.regional', $getreg)
+            ->where('wil.regional', $regdata)
             ->whereDate('datetime', today())
             ->get();
         $columns = [
