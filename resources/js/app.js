@@ -17,16 +17,36 @@ window.html2canvas = html2canvas;
 
 
 // helper 
-
 window.captureTableScreenshot = (tableId, fileName) => {
-    const tableElement = document.getElementById(tableId);
-    html2canvas(tableElement).then(canvas => {
-        const dataUrl = canvas.toDataURL();
-        const downloadLink = document.createElement('a');
-        downloadLink.href = dataUrl;
-        downloadLink.download = fileName || 'screenshot.png';
+    Swal.fire({
+        title: 'Loading',
+        html: '<span class="loading-text">Mohon Tunggu...</span>',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        willOpen: () => {
+            Swal.showLoading();
+            setTimeout(() => {
+                const tableElement = document.getElementById(tableId);
+                html2canvas(tableElement).then(canvas => {
+                    const dataUrl = canvas.toDataURL();
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = dataUrl;
+                    downloadLink.download = fileName || 'screenshot.png';
 
-        // Trigger the download
-        downloadLink.click();
+                    // Trigger the download
+                    downloadLink.click();
+
+                    // Close Swal after the download link is clicked
+                    Swal.close();
+                }).catch(error => {
+                    console.error('Error capturing screenshot:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to capture screenshot. Please try again.',
+                    });
+                });
+            }, 2000);
+        }
     });
 };

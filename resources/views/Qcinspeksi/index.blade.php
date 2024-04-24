@@ -6159,8 +6159,8 @@
                 const rankBtn = document.getElementById('sort-est-btnWeek');
                 const showBtn = document.getElementById('showWeek');
                 const regionalSelect = document.getElementById('regionalDataweek');
-                const scrennshotimg = document.getElementById('scrennshotimg');
-                const downloadimgmap = document.getElementById('downloadimgmap');
+                // const scrennshotimg = document.getElementById('scrennshotimg');
+                // const downloadimgmap = document.getElementById('downloadimgmap');
 
                 let currentRegion = regionalSelect.value;
 
@@ -6221,14 +6221,7 @@
                     // Implement your filtering logic here, if necessary
                 }
 
-                scrennshotimg.addEventListener('click', () => {
 
-                    captureTableScreenshot('screnshot_bulanan', 'REKAPITULASI RANKING NILAI KUALITAS PANEN')
-                });
-                downloadimgmap.addEventListener('click', () => {
-
-                    captureTableScreenshot('map', 'SCORE KUALITAS PANEN BERDASARKAN BLOK')
-                });
             });
 
 
@@ -7240,6 +7233,14 @@
 
                 // Close the new tab/window after submission (optional)
                 newWindow.close();
+            });
+
+
+            $("#scrennshotimg").click(function() {
+                captureTableScreenshot('screnshot_bulanan', 'REKAPITULASI RANKING NILAI SIDAK PEMERIKSAAN TPH')
+            });
+            $("#downloadimgmap").click(function() {
+                captureTableScreenshot('map', 'SCORE KUALITAS PANEN BERDASARKAN BLOK')
             });
         </script>
 
