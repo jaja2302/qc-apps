@@ -78,7 +78,7 @@
         }
 
         /* The Modal (background) */
-     
+
 
 
         /* Add Bootstrap-like button styling */
@@ -367,7 +367,9 @@
                 <h2>REKAP HARIAN SIDAK TPH </h2>
             </div>
             <div class="alert alert-danger d-none d-flex flex-column align-items-start justify-content-between" role="alert" id="notverif">
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                    <use xlink:href="#exclamation-triangle-fill" />
+                </svg>
                 <div>
                     Data belum Tervertifikasi oleh Manager/Askep/Asisten
                 </div>
@@ -375,45 +377,53 @@
                 <div>
                     <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
                 </div>
-                
+
                 @endif
             </div>
             <div class="alert alert-warning d-none d-flex align-items-center" role="alert" id="asistennotverif">
-                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
-                    <div>
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:">
+                    <use xlink:href="#exclamation-triangle-fill" />
+                </svg>
+                <div>
                     Asisten Belum melakukan Aprroval
-                    </div>
-                    @if (session('jabatan') == 'Asisten'  || session('jabatan') == 'Asisten Afdeling')
+                </div>
+                @if (session('jabatan') == 'Asisten' || session('jabatan') == 'Asisten Afdeling')
 
-                    <div>
-                        <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
-                    </div>
-                    
-                    @endif
+                <div>
+                    <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
+                </div>
+
+                @endif
             </div>
             <div class="alert alert-warning d-none d-flex align-items-center" role="alert" id="askep_manager_not_approved">
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:">
+                    <use xlink:href="#exclamation-triangle-fill" />
+                </svg>
                 <div>
-                Askep/Manager Belum melakukan Aprroval
+                    Askep/Manager Belum melakukan Aprroval
                 </div>
                 @if (session('jabatan') == 'Askep' || session('jabatan') == 'Manager')
 
                 <div>
                     <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
                 </div>
-                
+
                 @endif
             </div>
             <div class="alert alert-warning d-none d-flex align-items-center" role="alert" id="condition_not_met">
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                    <use xlink:href="#exclamation-triangle-fill" />
+                </svg>
                 <div>
-                Terjadi Kesalahan
+                    Terjadi Kesalahan
                 </div>
             </div>
             <div class="alert alert-primary d-none  d-flex align-items-center" role="alert" id="verifdone" dis>
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                    <use xlink:href="#info-fill" />
+                </svg>
                 <div>
-                  Data Sudah Tervertifikasi
+                    Data Sudah Tervertifikasi
                 </div>
             </div>
 
@@ -620,18 +630,20 @@
         </div>
 
 
+
         <div class="card p-4">
+
             <h4 class="text-center mt-2" style="font-weight: bold">Tracking Plot Sidak TPH - {{ $est }}
                 {{ $afd }}
             </h4>
             <hr>
+
             <div id="map" style="height:800px"></div>
         </div>
 
 
 
         <style>
-            
             .download-button-container {
                 position: absolute;
                 top: 0;
@@ -712,6 +724,7 @@
             dashboardFindingYear()
             getverif()
         }
+
         function getverif() {
             let Tanggal = document.getElementById('inputDate').value;
             let est = document.getElementById('est').value;
@@ -734,14 +747,14 @@
                     _token: _token
                 },
                 success: function(response) {
-                   
 
-                     // console.log(response);
-                     if (response === 'not_approved_all') {
+
+                    // console.log(response);
+                    if (response === 'not_approved_all') {
                         document.getElementById('notverif').classList.remove('d-none');
                     } else if (response === 'all_approved') {
                         document.getElementById('verifdone').classList.remove('d-none');
-                    }else if (response === 'asisten_not_approved') {
+                    } else if (response === 'asisten_not_approved') {
                         // console.log('manager_not_approved');
                         document.getElementById('asistennotverif').classList.remove('d-none');
                     } else if (response === 'askep_manager_not_approved') {
@@ -749,7 +762,7 @@
                         document.getElementById('askep_manager_not_approved').classList.remove('d-none');
                     } else if (response === 'condition_not_met') {
                         console.error('Unexpected response:', response);
-                    }else {
+                    } else {
                         console.error('Unexpected response:', response);
                     }
                 },
@@ -759,7 +772,7 @@
             });
 
         }
-        
+
 
 
         const addClickListener = (elementId) => {
@@ -772,6 +785,7 @@
         addClickListener('verifbutton_default');
         addClickListener('verifbutton_manager');
         addClickListener('verifbutton_askep');
+
         function hariini() {
             let today = new Date();
             let year = today.getFullYear();
@@ -820,14 +834,14 @@
                         success: function(response) {
                             console.log('Approval successful:', response);
                             Swal.fire({
-                            title: 'Success',
-                            text: 'Data berhasil diupdate',
-                            icon: 'success',
-                            allowOutsideClick: false
+                                title: 'Success',
+                                text: 'Data berhasil diupdate',
+                                icon: 'success',
+                                allowOutsideClick: false
                             }).then((result) => {
-                            if (result.isConfirmed) {
-                                location.reload();
-                            }
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
                             });
                         },
                         error: function(xhr, status, error) {
@@ -983,13 +997,13 @@
 
                     $('#new_Sidak').on('click', '.edit-btn', function() {
                         var rowData = sidakTPhNEw.row($(this).closest('tr')).data();
-                      
+
                         editSidakTPh(rowData);
                     });
 
                     $('#new_Sidak').on('click', '.delete-btn', function() {
                         var rowData = sidakTPhNEw.row($(this).closest('tr')).data();
-                      
+
                         deleteRowBuah(rowData);
                     });
 
@@ -1020,7 +1034,7 @@
                         // update-hplus
                         // hplus
                         var modal = new bootstrap.Modal(document.getElementById('editModalTPH'));
-                         modal.show();
+                        modal.show();
 
                         // $('#editModalTPH').modal('show');
                     }
@@ -1086,7 +1100,7 @@
                                     // Close the modal
                                     // $('#editModalTPH').modal('hide');
                                     var modal = new bootstrap.Modal(document.getElementById('editModalTPH'));
-                                     modal.hide();
+                                    modal.hide();
 
                                     // console.log(formData);
 
@@ -1123,7 +1137,7 @@
 
                         // Show the delete modal
                         var modal = new bootstrap.Modal(document.getElementById('deleteModalancak'));
-                         modal.show();
+                        modal.show();
                         // Handle delete confirmation
                         $('#confirmDeleteBtn').off('click').on('click', function() {
                             // Create a form data object

@@ -67,7 +67,7 @@
                     </div>
 
 
-                    <div class="row justify-content-center">
+                    <div class="row justify-content-center" id="screnshot_bulanan">
                         <div class="col-12 col-md-4 " data-regional="1" id="Tab1">
                             <div class="table-responsive">
                                 <table class="table table-bordered" style="font-size: 13px;background-color:white" id="tabblan1">
@@ -1170,13 +1170,13 @@
                             </div>
                         </div>
                         <button class="btn btn-primary mb-3 ml-3" id="showEstMap">Show</button>
+                        <button class="btn btn-primary" id="downloadimgmap">Download Image</button>
 
                     </div>
 
 
                     <div class="ml-4 mr-4 mb-3">
                         <div class="row text-center">
-                            <button class="btn btn-primary mb-3 ml-3" onclick="convertMapToImage()" id="downloadimgmap">Download As PDF</button>
 
 
                             <div id="map" style="width: 100%; height: 700px;"></div>
@@ -6160,6 +6160,7 @@
                 const showBtn = document.getElementById('showWeek');
                 const regionalSelect = document.getElementById('regionalDataweek');
                 const scrennshotimg = document.getElementById('scrennshotimg');
+                const downloadimgmap = document.getElementById('downloadimgmap');
 
                 let currentRegion = regionalSelect.value;
 
@@ -6222,7 +6223,11 @@
 
                 scrennshotimg.addEventListener('click', () => {
 
-                    captureTableScreenshot('tbody1', 'testet')
+                    captureTableScreenshot('screnshot_bulanan', 'REKAPITULASI RANKING NILAI KUALITAS PANEN')
+                });
+                downloadimgmap.addEventListener('click', () => {
+
+                    captureTableScreenshot('map', 'SCORE KUALITAS PANEN BERDASARKAN BLOK')
                 });
             });
 
@@ -7212,24 +7217,6 @@
                 }
             }
 
-            const captureTableScreenshot = (tableId, fileName) => {
-                // Select the table element by its ID
-                const tableElement = document.getElementById(tableId);
-
-                // Use html2canvas to capture the table as an image
-                html2canvas(tableElement).then(canvas => {
-                    // Convert the canvas to a data URL representing the image
-                    const dataUrl = canvas.toDataURL();
-
-                    // Create a temporary link element to download the image
-                    const downloadLink = document.createElement('a');
-                    downloadLink.href = dataUrl;
-                    downloadLink.download = fileName || 'screenshot.png'; // Default filename if not provided
-
-                    // Trigger the download
-                    downloadLink.click();
-                });
-            };
             // showDataIns
 
             document.getElementById('exportForm').addEventListener('submit', function(event) {

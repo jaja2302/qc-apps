@@ -70,12 +70,12 @@
             <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 ">
               <button id="sort-est-btn">sort by Afd</button>
               <button id="sort-rank-btn">Sort by Rank</button>
-              <button onclick="openNewTabAndSendData()" id="downladbulan">Download As IMG</button>
+              <button id="scrennshotimg">Download As IMG</button>
             </div>
             <div id="tablesContainer">
               <div class="tabContainer">
                 <div class="ml-3 mr-3">
-                  <div class="row justify-content-center">
+                  <div class="row justify-content-center" id="scrensshot_bulanan">
                     <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="table1Month">
                       <div class="table-responsive">
                         <table class=" table table-bordered" style="font-size: 13px;background-color:white" id="table1">
@@ -1503,15 +1503,6 @@
 
 
     $(document).ready(function() {
-      //  $('#newweek1').DataTable({
-      //       fixedColumns: {
-      //       start: 2
-      //   },
-      //   paging: false,
-      //   scrollCollapse: true,
-      //   scrollX: true,
-      //   scrollY: 300
-      //   });
       const estDataMapSelect = document.querySelector('#estSidakYear');
       const regDataMapSelect = document.querySelector('#regionalSidakYear');
 
@@ -5599,103 +5590,6 @@
       }
     });
 
-    function openNewTabAndSendData() {
-      // Define the URL of the new page where you want to send the data
-      const newPageUrl = '/getimgqc'; // Replace with the actual URL
-
-      // Retrieve the CSRF token from the input field using jQuery
-      var csrfToken = $('input[name="_token"]').val(); // Changed variable name to csrfToken
-
-      // Create an empty form element
-      const form = document.createElement('form');
-      form.method = 'POST'; // Change the method to POST
-      form.action = newPageUrl;
-
-      // Add a hidden input field for the CSRF token
-      const csrfInput = document.createElement('input');
-      csrfInput.type = 'hidden';
-      csrfInput.name = '_token';
-      csrfInput.value = csrfToken;
-      form.appendChild(csrfInput);
-
-      // Add hidden input fields for your data
-      const tables = [
-        document.getElementById('table1'),
-        document.getElementById('table2'),
-        document.getElementById('table3'),
-        document.getElementById('table4')
-      ];
-      let date = document.getElementById('inputDateMonth').value;
-      let reg = document.getElementById('regionalSidakMonth').value;
-
-
-      // Track how many tables have been processed
-      let tablesProcessed = 0;
-
-      // Function to submit the form when all tables are processed
-      function submitFormIfReady() {
-        tablesProcessed++;
-        if (tablesProcessed === tables.length) {
-          const dateInput = document.createElement('input');
-          dateInput.type = 'hidden';
-          dateInput.name = 'date';
-          dateInput.value = date;
-
-          const regInput = document.createElement('input');
-          regInput.type = 'hidden';
-          regInput.name = 'reg';
-          regInput.value = reg;
-          const title = document.createElement('input');
-          title.type = 'hidden';
-          title.name = 'title';
-          title.value = 'Sidak QC Mutu Transport';
-
-          const href = document.createElement('input');
-          href.type = 'hidden';
-          href.name = 'href';
-          href.value = '/dashboardtph';
-
-          form.appendChild(dateInput);
-          form.appendChild(regInput);
-          form.appendChild(title);
-          form.appendChild(href);
-
-          // Submit the form to open the new tab
-          document.body.appendChild(form);
-          form.submit();
-        }
-      }
-
-      tables.forEach((table, index) => {
-        const options = {
-          scale: 10, // Increase the scale for higher resolution (adjust as needed)
-        };
-
-        html2canvas(table, options).then(canvas => {
-          const dataURL = canvas.toDataURL('image/jpeg');
-          const base64Data = dataURL.split(',')[1];
-
-          // Create a hidden input field for each table's data
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = `table${index + 1}`;
-          input.value = base64Data;
-
-          form.appendChild(input);
-
-          // Check if it's the last table, then add date and reg and submit
-          if (index === tables.length - 1) {
-            submitFormIfReady();
-          } else {
-            submitFormIfReady();
-          }
-        });
-      });
-    }
-
-    // document.getElementById('showDataTph').addEventListener('click', function() {
-    //   document.getElementById('downloaddataexcel').disabled = false;
-    // });
 
     document.getElementById('exportForm').addEventListener('submit', function(event) {
       // Prevent the default form submission
@@ -5719,6 +5613,10 @@
 
       // Close the new tab/window after submission (optional)
       newWindow.close();
+    });
+
+    $("#scrennshotimg").click(function() {
+      captureTableScreenshot('scrensshot_bulanan', 'REKAPITULASI RANKING NILAI SIDAK PEMERIKSAAN TPH')
     });
   </script>
 </x-layout.app>

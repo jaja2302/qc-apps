@@ -154,11 +154,11 @@
                                 <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 ">
                                     <button id="sort-est-btn">Sort by Afd</button>
                                     <button id="sort-rank-btn">Sort by Rank</button>
-                                    <button onclick="openNewTabAndSendData()" id="downladbulan">Download As IMG</button>
+                                    <button id="scrennshotimg">Download As IMG</button>
                                 </div>
                                 <div id="tablesContainer">
                                     <div class="tabContainer">
-                                        <div class="ml-3 mr-3">
+                                        <div class="ml-3 mr-3" id="scrensshot_bulanan">
                                             <div class="row justify-content-center">
                                                 <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="Tab1">
                                                     <div class="table-responsive">
@@ -6384,6 +6384,9 @@
 
             // Close the new tab/window after submission (optional)
             newWindow.close();
+        });
+        $("#scrennshotimg").click(function() {
+            captureTableScreenshot('scrensshot_bulanan', 'REKAPITULASI RANKING NILAI SIDAK PEMERIKSAAN TPH')
         });
     </script>
 
