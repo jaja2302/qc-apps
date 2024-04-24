@@ -329,7 +329,9 @@
                 <h2>REKAP HARIAN SIDAK INPEKSI </h2>
             </div>
             <div class="alert alert-danger d-none d-flex flex-column align-items-start justify-content-between" role="alert" id="notverif">
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                    <use xlink:href="#exclamation-triangle-fill" />
+                </svg>
                 <div>
                     Data belum Tervertifikasi oleh Manager/Askep/Asisten
                 </div>
@@ -337,45 +339,53 @@
                 <div>
                     <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
                 </div>
-                
+
                 @endif
             </div>
             <div class="alert alert-warning d-none d-flex align-items-center" role="alert" id="asistennotverif">
-                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
-                    <div>
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:">
+                    <use xlink:href="#exclamation-triangle-fill" />
+                </svg>
+                <div>
                     Asisten Belum melakukan Aprroval
-                    </div>
-                    @if (session('jabatan') == 'Asisten'  || session('jabatan') == 'Asisten Afdeling')
+                </div>
+                @if (session('jabatan') == 'Asisten' || session('jabatan') == 'Asisten Afdeling')
 
-                    <div>
-                        <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
-                    </div>
-                    
-                    @endif
+                <div>
+                    <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
+                </div>
+
+                @endif
             </div>
             <div class="alert alert-warning d-none d-flex align-items-center" role="alert" id="askep_manager_not_approved">
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:">
+                    <use xlink:href="#exclamation-triangle-fill" />
+                </svg>
                 <div>
-                Askep/Manager Belum melakukan Aprroval
+                    Askep/Manager Belum melakukan Aprroval
                 </div>
                 @if (session('jabatan') == 'Askep' || session('jabatan') == 'Manager')
 
                 <div>
                     <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
                 </div>
-                
+
                 @endif
             </div>
             <div class="alert alert-warning d-none d-flex align-items-center" role="alert" id="condition_not_met">
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                    <use xlink:href="#exclamation-triangle-fill" />
+                </svg>
                 <div>
-                Terjadi Kesalahan
+                    Terjadi Kesalahan
                 </div>
             </div>
             <div class="alert alert-primary d-none  d-flex align-items-center" role="alert" id="verifdone" dis>
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                    <use xlink:href="#info-fill" />
+                </svg>
                 <div>
-                  Data Sudah Tervertifikasi
+                    Data Sudah Tervertifikasi
                 </div>
             </div>
 
@@ -502,9 +512,9 @@
                     </button>
                 </form>
 
-                <form action="{{ route('pdfBA_excel') }}" method="POST" class="form-inline" style="display: inline;" target="_blank">
+                <!-- <form action="{{ route('pdfBA_excel') }}" method="POST" class="form-inline" style="display: inline;" target="_blank">
                     {{ csrf_field() }}
-                    <!-- Your hidden inputs -->
+
                     <input type="hidden" name="estBA_excel" id="estpdf" value="{{$est}}">
                     <input type="hidden" name="afdBA_excel" id="afdpdf" value="{{$afd}}">
                     <input type="hidden" name="tglPDF_excel" id="tglPDF_excel" value="{{ $tanggal }}">
@@ -513,7 +523,7 @@
                         <div id="lottie-download" style="width: 24px; height: 24px; display: inline-block;"></div> Download
                         BA Excel
                     </button>
-                </form>
+                </form> -->
             </div>
         </div>
 
@@ -584,7 +594,7 @@
                 <img id="modalImage" src="" style="width: 100%;">
             </div>
         </div>
-       
+
 
         <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
@@ -1041,7 +1051,6 @@
 
 
         <style>
-       
             .download-button-container {
                 position: absolute;
                 top: 0;
@@ -1059,7 +1068,7 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="text-center">
-                                <img id="img01"  alt="..." class="img-fluid">
+                                <img id="img01" alt="..." class="img-fluid">
                             </div>
                             <div class="col-12 col-lg-6">
                                 <p id="modalKomentar"></p>
@@ -2337,7 +2346,7 @@
                     document.getElementById('closeModalBtn').addEventListener('click', function() {
                         // $('#editModal').modal('hide');
                         var modal = new bootstrap.Modal(document.getElementById('editModal'));
-                         modal.hide();
+                        modal.hide();
                     });
 
 
@@ -2384,7 +2393,7 @@
 
                         // Show the modal
                         var modal = new bootstrap.Modal(document.getElementById('editModal'));
-                         modal.show();
+                        modal.show();
                         // $('#editModal').modal('show');
                     }
 
@@ -2392,7 +2401,7 @@
                         // Close modal when the close button is clicked
                         $('#closeModalBtn_Ancak').click(function() {
                             var modal = new bootstrap.Modal(document.getElementById('editModal'));
-                             modal.hide();
+                            modal.hide();
                             // $('#editModal').modal('hide');
                         });
 
@@ -2465,7 +2474,7 @@
                                     // Close the modal
                                     // $('#editModal').modal('hide');
                                     var modal = new bootstrap.Modal(document.getElementById('editModal'));
-                                     modal.hide();
+                                    modal.hide();
                                     // Show a success message or perform any other actions
                                     Swal.fire({
                                         icon: 'success',
@@ -2501,7 +2510,7 @@
 
                         // Show the delete modal
                         var modal = new bootstrap.Modal(document.getElementById('deleteModalancak'));
-                         modal.show();
+                        modal.show();
                         // $('#deleteModalancak').modal('show');
 
                         $(document).ready(function() {
@@ -2534,14 +2543,14 @@
                                     processData: false,
                                     contentType: false,
                                     success: function(response) {
-                                    
-                                                Swal.fire({
-                                                icon: 'success',
-                                                title: 'Success',
-                                                text: 'Data deleted successfully!',
-                                            }).then(function() {
-                                                location.reload();
-                                            });
+
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Success',
+                                            text: 'Data deleted successfully!',
+                                        }).then(function() {
+                                            location.reload();
+                                        });
                                     },
                                     error: function(xhr, status, error) {
                                         // Handle the error if needed
@@ -2915,12 +2924,12 @@
                                     contentType: false,
                                     success: function(response) {
                                         Swal.fire({
-                                        icon: 'success',
-                                        title: 'Success',
-                                        text: 'Data deleted successfully!',
-                                    }).then(function() {
-                                        location.reload();
-                                    });
+                                            icon: 'success',
+                                            title: 'Success',
+                                            text: 'Data deleted successfully!',
+                                        }).then(function() {
+                                            location.reload();
+                                        });
                                     },
                                     error: function(xhr, status, error) {
                                         // Handle the error if needed
@@ -3159,7 +3168,7 @@
                                     // Close the modal
                                     // $('#editModalTrans').modal('hide');
                                     var modal = new bootstrap.Modal(document.getElementById('editModalTrans'));
-                                     modal.hide();
+                                    modal.hide();
                                     // Show a success message
                                     Swal.fire({
                                         icon: 'success',
@@ -3202,7 +3211,7 @@
                         // Show the delete modal
                         // $('#deleteModalTrans').modal('show');
                         var modal = new bootstrap.Modal(document.getElementById('deleteModalTrans'));
-                            modal.show();
+                        modal.show();
                         $(document).ready(function() {
                             // Handle delete confirmation
                             $('#confirmDeleteBtn_trans').click(function() {
@@ -3234,12 +3243,12 @@
                                     contentType: false,
                                     success: function(response) {
                                         Swal.fire({
-                                        icon: 'success',
-                                        title: 'Success',
-                                        text: 'Data deleted successfully!',
-                                    }).then(function() {
-                                        location.reload();
-                                    });
+                                            icon: 'success',
+                                            title: 'Success',
+                                            text: 'Data deleted successfully!',
+                                        }).then(function() {
+                                            location.reload();
+                                        });
                                     },
                                     error: function(xhr, status, error) {
                                         // Handle the error if needed
@@ -3375,6 +3384,7 @@
             getverif()
         }
         document.querySelector('button[type="button"]').addEventListener('click', Show);
+
         function getverif() {
             let Tanggal = document.getElementById('inputDate').value;
             let est = document.getElementById('est').value;
@@ -3397,13 +3407,13 @@
                     _token: _token
                 },
                 success: function(response) {
-                   
+
                     // console.log(response);
                     if (response === 'not_approved_all') {
                         document.getElementById('notverif').classList.remove('d-none');
                     } else if (response === 'all_approved') {
                         document.getElementById('verifdone').classList.remove('d-none');
-                    }else if (response === 'asisten_not_approved') {
+                    } else if (response === 'asisten_not_approved') {
                         // console.log('manager_not_approved');
                         document.getElementById('asistennotverif').classList.remove('d-none');
                     } else if (response === 'askep_manager_not_approved') {
@@ -3411,7 +3421,7 @@
                         document.getElementById('askep_manager_not_approved').classList.remove('d-none');
                     } else if (response === 'condition_not_met') {
                         console.error('Unexpected response:', response);
-                    }else {
+                    } else {
                         console.error('Unexpected response:', response);
                     }
                 },
@@ -3470,14 +3480,14 @@
                         success: function(response) {
                             console.log('Approval successful:', response);
                             Swal.fire({
-                            title: 'Success',
-                            text: 'Data berhasil diupdate',
-                            icon: 'success',
-                            allowOutsideClick: false
+                                title: 'Success',
+                                text: 'Data berhasil diupdate',
+                                icon: 'success',
+                                allowOutsideClick: false
                             }).then((result) => {
-                            if (result.isConfirmed) {
-                                location.reload();
-                            }
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
                             });
                         },
                         error: function(xhr, status, error) {
