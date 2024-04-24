@@ -19,22 +19,43 @@
     <link rel="stylesheet" href="{{ asset('leaflet/leaflet.css') }}">
     <!-- <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script> -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-   
+
     {{-- <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/datatables.min.css" rel="stylesheet"> --}}
     <script src="{{asset('jquery/jquery-3.7.1.min.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
 </head>
 
 
 
 <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed">
+    <style>
+        .lottie-animation {
+            width: 40px;
+            /* adjust the width as per your preference */
+            height: 40px;
+            /* adjust the height as per your preference */
+            margin-right: 8px;
+            /* add some spacing between the icon and the text */
+            display: inline-block;
+            /* make the icon and the text appear on the same line */
+            vertical-align: middle;
+            /* align the icon vertically with the text */
+        }
+
+        .nav-link p {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
     <div class="wrapper">
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="hover"><i class="fas fa-bars"></i></a>
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="hover" style="font-size: 24px;"><i class="bi bi-list"></i></a>
                 </li>
+
                 <li class="nav-item d-none d-sm-inline-block">
                     <a class="nav-link">Selamat datang, {{ session('user_name') }} </a>
                 </li>
@@ -49,29 +70,6 @@
             <div class="sidebar">
                 <nav class="" style="height: 100%">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" style="height: 100%">
-                        <!-- USER LAB -->
-
-                        <!-- Include Lottie library -->
-
-                        <style>
-                            .lottie-animation {
-                                width: 40px;
-                                /* adjust the width as per your preference */
-                                height: 40px;
-                                /* adjust the height as per your preference */
-                                margin-right: 8px;
-                                /* add some spacing between the icon and the text */
-                                display: inline-block;
-                                /* make the icon and the text appear on the same line */
-                                vertical-align: middle;
-                                /* align the icon vertically with the text */
-                            }
-
-                            .nav-link p {
-                                display: inline-block;
-                                vertical-align: middle;
-                            }
-                        </style>
                         <li class="nav-item">
                             <a href="{{ asset('/rekap') }}" class="nav-link">
                                 <div class="nav-icon lottie-animation" data-animation-path="{{ asset('img/ALLREKAP.json') }}"></div>
@@ -154,7 +152,7 @@
 
                         <div class="fixed-bottom mb-3" style="position: absolute;">
 
-                            @if (strpos(session('departemen'), 'QC') !== false && session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten'  || session('jabatan') == 'Admin')
+                            @if (strpos(session('departemen'), 'QC') !== false && session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' || session('jabatan') == 'Admin')
                             <li class="nav-item">
                                 <a href="{{ route('user.show') }}" class="nav-link">
 
@@ -182,8 +180,6 @@
 
                     </ul>
                 </nav>
-
-
             </div>
         </aside>
 
