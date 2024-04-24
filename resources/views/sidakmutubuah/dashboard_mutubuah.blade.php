@@ -813,8 +813,12 @@
                                 </div>
 
                                 <button class="btn btn-primary mb-3" style="float: right" id="btnShoWeekdata">Show</button>
-                                <button class="btn btn-primary mb-3" style="float: right" id="downloaddatapdf" disabled>Excel</button>
-
+                                <form id="exportForm" action="{{ route('pdfmutubuhuahdata') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" id="getregionalexcel" name="getregionalexcel">
+                                    <input type="hidden" id="getdateexcel" name="getdateexcel">
+                                    <button type="submit" class="btn btn-primary">Export</button>
+                                </form>
                             </div>
 
                             <style>
@@ -6343,19 +6347,43 @@
                 text: message
             });
         }
-        document.getElementById('btnShoWeekdata').addEventListener('click', function() {
-            document.getElementById('downloaddatapdf').disabled = false;
-        });
-        $('#downloaddatapdf').click(function() {
-            var reg = $('#regional_data').val();
-            var month = $('#inputDateMonth').val();
-            var _token = $('input[name="_token"]').val();
+        // document.getElementById('btnShoWeekdata').addEventListener('click', function() {
+        //     document.getElementById('downloaddatapdf').disabled = false;
+        // });
+        // $('#downloaddatapdf').click(function() {
+        //     var reg = $('#regional_data').val();
+        //     var month = $('#inputDateMonth').val();
+        //     var _token = $('input[name="_token"]').val();
 
-            // Construct the URL
-            var url = '/pdfmutubuhuahdata/' + reg + '/' + month;
+        //     // Construct the URL
+        //     var url = '/pdfmutubuhuahdata/' + reg + '/' + month;
 
-            // Open the URL in a new tab
-            window.open(url, '_blank');
+        //     // Open the URL in a new tab
+        //     window.open(url, '_blank');
+        // });
+
+        document.getElementById('exportForm').addEventListener('submit', function(event) {
+            // Prevent the default form submission
+            event.preventDefault();
+
+            // Get the selected value from regDataIns select element
+            var regDataInsValue = document.getElementById('regional_data').value;
+
+            // Get the value from dateDataIns input element
+            var dateDataInsValue = document.getElementById('inputDateMonth').value;
+
+            // Set the values to the hidden inputs
+            document.getElementById('getregionalexcel').value = regDataInsValue;
+            document.getElementById('getdateexcel').value = dateDataInsValue;
+
+
+            // Open a new tab/window and submit the form there
+            var newWindow = window.open('', '_blank');
+            this.target = '_blank';
+            this.submit();
+
+            // Close the new tab/window after submission (optional)
+            newWindow.close();
         });
     </script>
 

@@ -214,9 +214,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/getestatesidakmtbuah', [MutubuahController::class, 'getestatesidakmtbuah'])->name('getestatesidakmtbuah');
     Route::post('/duplicatesidakmtb', [MutubuahController::class, 'duplicatesidakmtb'])->name('duplicatesidakmtb');
     Route::post('/changedatadate', [MutubuahController::class, 'changedatadate'])->name('changedatadate');
-    Route::get('/pdfmutubuhuahdata/{reg}/{est}', [MutubuahController::class, 'pdfmutubuhuahdata'])->name('pdfmutubuhuahdata');
+    Route::post('/pdfmutubuhuahdata', [MutubuahController::class, 'pdfmutubuhuahdata'])->name('pdfmutubuhuahdata');
     Route::get('/pdfsidaktphdata/{reg}/{est}', [SidaktphController::class, 'pdfsidaktphdata'])->name('pdfsidaktphdata');
-    Route::get('/excelqcinspeksi/{reg}/{est}', [inspectController::class, 'excelqcinspeksi'])->name('excelqcinspeksi');
+    Route::post('/excelqcinspeksi', [inspectController::class, 'excelqcinspeksi'])->name('excelqcinspeksi');
     Route::get('/getmonthrh', [RekapController::class, 'getmonthrh'])->name('getmonthrh');
 
     Route::get('verifinspeksi', [inspectController::class, 'verifdata'])->name('verifinspeksi');
@@ -228,4 +228,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/edit/{id}', [UserQCController::class, 'edit'])->name('edit');
     Route::post('/update/{id}/{lokasi_kerja}', [UserQCController::class, 'update'])->name('update');
     Route::post('/delete/{id}', [UserQCController::class, 'destroy'])->name('delete');
+    Route::post('/excelsidaktph', [SidaktphController::class, 'excelsidaktph'])->name('excelsidaktph');
 });

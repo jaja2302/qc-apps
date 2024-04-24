@@ -1,89 +1,330 @@
 <x-layout.app>
   <style>
-        th,
-        td {
-            border: 1px solid black;
-            text-align: center;
-            padding: 8px;
-        }
-
-      
+    th,
+    td {
+      border: 1px solid black;
+      text-align: center;
+      padding: 8px;
+    }
   </style>
   <div class="container-fluid">
-   
-    <section class="content"><br>
-      
-        <div class="card table_wrapper">
-          <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-              <a class="nav-item nav-link active" id="nav-utama-tab" data-toggle="tab" href="#nav-utama" role="tab" aria-controls="nav-utama" aria-selected="true">Halaman Utama</a>
-              <a class="nav-item nav-link" id="nav-data-tab" data-toggle="tab" href="#nav-data" role="tab" aria-controls="nav-data" aria-selected="false">Data</a>
-              <a class="nav-item nav-link" id="nav-sbi-tab" data-toggle="tab" href="#nav-sbi" role="tab" aria-controls="nav-sbi" aria-selected="false">SBI</a>
-            </div>
-          </nav>
 
-          <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-utama" role="tabpanel" aria-labelledby="nav-utama-tab">
-              <div class="d-flex justify-content-center mt-3 mb-3 ml-3 mr-3 border border-dark">
+    <section class="content"><br>
+
+      <div class="card table_wrapper">
+        <nav>
+          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-utama-tab" data-toggle="tab" href="#nav-utama" role="tab" aria-controls="nav-utama" aria-selected="true">Halaman Utama</a>
+            <a class="nav-item nav-link" id="nav-data-tab" data-toggle="tab" href="#nav-data" role="tab" aria-controls="nav-data" aria-selected="false">Data</a>
+            <a class="nav-item nav-link" id="nav-sbi-tab" data-toggle="tab" href="#nav-sbi" role="tab" aria-controls="nav-sbi" aria-selected="false">SBI</a>
+          </div>
+        </nav>
+
+        <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane fade show active" id="nav-utama" role="tabpanel" aria-labelledby="nav-utama-tab">
+            <div class="d-flex justify-content-center mt-3 mb-3 ml-3 mr-3 border border-dark">
+              <h5><b>REKAPITULASI RANKING NILAI SIDAK PEMERIKSAAN TPH</b></h5>
+            </div>
+
+            <div class="d-flex justify-content-end mt-3 mb-2 ml-3 mr-3" style="padding-top: 20px;">
+              <div class="row w-100">
+                <div class="col-md-2 offset-md-8">
+                  {{csrf_field()}}
+                  <select class="form-control" name="regionalSidakMonth" id="regionalSidakMonth">
+                    @foreach($option_reg as $key => $item)
+                    <option value="{{ $item['id'] }}">{{ $item['nama'] }}</option>
+                    @endforeach
+                  </select>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                  {{ csrf_field() }}
+                  <input class="form-control" value="{{ date('Y-m') }}" type="month" name="inputDateMonth" id="inputDateMonth">
+
+                </div>
+              </div>
+              <button class="btn btn-primary mb-3 ml-3" id="btnShowMonth">Show</button>
+            </div>
+
+            <style>
+              /* Add button styles */
+              button {
+                background-color: #4CAF50;
+                border: none;
+                color: white;
+                padding: 8px 16px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+                transition-duration: 0.4s;
+              }
+
+              /* Add hover effect */
+              button:hover {
+                background-color: #45a049;
+              }
+            </style>
+            <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 ">
+              <button id="sort-est-btn">sort by Afd</button>
+              <button id="sort-rank-btn">Sort by Rank</button>
+              <button onclick="openNewTabAndSendData()" id="downladbulan">Download As IMG</button>
+            </div>
+            <div id="tablesContainer">
+              <div class="tabContainer">
+                <div class="ml-3 mr-3">
+                  <div class="row justify-content-center">
+                    <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="table1Month">
+                      <div class="table-responsive">
+                        <table class=" table table-bordered" style="font-size: 13px;background-color:white" id="table1">
+                          <thead>
+                            <tr bgcolor="yellow">
+                              <th colspan="5" id="thWilOneMonth">WILAYAH I</th>
+                            </tr>
+                            <tr bgcolor="#2044a4" style="color: white">
+                              <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
+                              <th rowspan="2" style="vertical-align: middle;">AFD</th>
+                              <th rowspan="2" style="text-align:center; vertical-align: middle;">Nama</th>
+                              <th colspan="2" class="text-center">Todate</th>
+                            </tr>
+                            <tr bgcolor="#1D43A2" style="color: white">
+                              <th>Score</th>
+                              <th>Rank</th>
+                            </tr>
+                          </thead>
+                          <tbody id="tbody1Month">
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="classTwoMonth">
+                      <div class="table-responsive">
+                        <table class=" table table-bordered" style="font-size: 13px;background-color:white" id="table2">
+                          <thead>
+                            <tr bgcolor="yellow">
+                              <th colspan="5" id="thWilTwoMonth">WILAYAH II</th>
+                            </tr>
+                            <tr bgcolor="#2044a4" style="color: white">
+                              <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
+                              <th rowspan="2" style="vertical-align: middle;">AFD</th>
+                              <th rowspan="2" style="text-align:center; vertical-align: middle;">Nama</th>
+                              <th colspan="2" class="text-center">Todate</th>
+                            </tr>
+                            <tr bgcolor="#1D43A2" style="color: white">
+                              <th>Score</th>
+                              <th>Rank</th>
+                            </tr>
+                          </thead>
+                          <tbody id="tbody2Month">
+
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="classThreeMonth">
+                      <div class="table-responsive">
+                        <table class="table table-bordered" style="font-size: 13px;background-color:white" id="table3">
+                          <thead>
+                            <tr bgcolor="yellow">
+                              <th colspan="5" id="thWilThreeMonth">WILAYAH III</th>
+                            </tr>
+                            <tr bgcolor="#2044a4" style="color: white">
+                              <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
+                              <th rowspan="2" style="vertical-align: middle;">AFD</th>
+                              <th rowspan="2" style="text-align:center; vertical-align: middle;">Nama</th>
+                              <th colspan="2" class="text-center">Todate</th>
+                            </tr>
+                            <tr bgcolor="#1D43A2" style="color: white">
+                              <th>Score</th>
+                              <th>Rank</th>
+                            </tr>
+                          </thead>
+                          <tbody id="tbody3Month">
+
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="classFourMonth">
+                      <div class="table-responsive">
+                        <table class="table table-bordered" style="font-size: 13px;background-color:white" id="table4">
+                          <thead>
+                            <tr bgcolor="yellow">
+                              <th colspan="5" id="thPlasmamonth">PLASMA</th>
+                            </tr>
+                            <tr bgcolor="#2044a4" style="color: white">
+                              <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
+                              <th rowspan="2" style="vertical-align: middle;">AFD</th>
+                              <th rowspan="2" style="text-align:center; vertical-align: middle;">Nama</th>
+                              <th colspan="2" class="text-center">Todate</th>
+                            </tr>
+                            <tr bgcolor="#1D43A2" style="color: white">
+                              <th>Score</th>
+                              <th>Rank</th>
+                            </tr>
+                          </thead>
+                          <tbody id="plasmaMonth">
+
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="col-sm-12">
+              <table class="table table-bordered">
+                <thead id="tbodySkorRHMonth">
+                </thead>
+              </table>
+            </div>
+
+            <div id="accordion" class="ml-3 mr-3">
+              <div class="card">
+                <button class="btn btn-secondary text-uppercase" data-toggle="collapse" data-target="#graphEstMonth" aria-expanded="false" aria-controls="graphEstMonth">
+                  Grafik Sidak TPH berdasarkan Estate
+                </button>
+                <div id="graphEstMonth" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="card">
+                          <div class="card-body">
+                            <p style="font-size: 15px; text-align: center;" class="text-uppercase">
+                              <b>TOTAL BRONDOLAN TINGGAL</b>
+                            </p>
+                            <div id="bttinggalMonth"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="card">
+                          <div class="card-body">
+                            <p style="font-size: 15px; text-align: center;" class="text-uppercase"><b>
+                                TOTAL BUAH TINGGAL</b>
+                            <div id="karungMonth"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="accordion" class="ml-3 mr-3">
+              <div class="card">
+                <button class="btn btn-secondary text-uppercase" data-toggle="collapse" data-target="#graphWilMonth" aria-expanded="false" aria-controls="graphWilMonth">
+                  Grafik Sidak TPH berdasarkan Wilayah
+                </button>
+                <div id="graphWilMonth" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="card">
+                          <div class="card-body">
+                            <p style="font-size: 15px; text-align: center;" class="text-uppercase">
+                              <b>TOTAL BRONDOLAN TINGGAL </b>
+                            </p>
+                            <div id="btt_idMonth"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="card">
+                          <div class="card-body">
+                            <p style="font-size: 15px; text-align: center;" class="text-uppercase"><b>
+                                TOTAL BUAH TINGGAL</b>
+                            <div id="karung_idMonth"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="ml-3 mb-3 mr-3">
+              <button style="width: 100%" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#showByWeek" aria-expanded="false" aria-controls="showByWeek">
+                TAMPILKAN PER MINGGU
+              </button>
+            </p>
+
+            <div class="collapse" id="showByWeek">
+              <div class="d-flex justify-content-center ml-3 mr-3 border border-dark">
                 <h5><b>REKAPITULASI RANKING NILAI SIDAK PEMERIKSAAN TPH</b></h5>
               </div>
+              <style>
+                /* Custom button height */
+                .custom-btn-height {
+                  height: calc(1.5em + .75rem + 2px);
+                  /* Adjust this value according to your desired height */
+                }
+
+                /* CSS for mobile view */
+                @media (max-width: 767.98px) {
+                  .mobile-view .form-container {
+                    margin-bottom: 10px;
+                  }
+                }
+              </style>
 
               <div class="d-flex justify-content-end mt-3 mb-2 ml-3 mr-3" style="padding-top: 20px;">
-                <div class="row w-100">
-                  <div class="col-md-2 offset-md-8">
+                <div class="row w-100 mobile-view">
+                  <div class="col-lg-2 col-md-4 col-sm-6 col-6 offset-lg-8 offset-md-4 offset-sm-0 offset-3 form-container">
                     {{csrf_field()}}
-                    <select class="form-control" name="regionalSidakMonth" id="regionalSidakMonth">
+                    <select class="form-control" name="regionalSidak" id="regionalSidak">
                       @foreach($option_reg as $key => $item)
                       <option value="{{ $item['id'] }}">{{ $item['nama'] }}</option>
                       @endforeach
                     </select>
                   </div>
 
-                  <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                  <div class="col-lg-2 col-md-4 col-sm-6 col-6 form-container">
                     {{ csrf_field() }}
-                    <input class="form-control" value="{{ date('Y-m') }}" type="month" name="inputDateMonth" id="inputDateMonth">
-
+                    <input class="form-control" type="week" name="dateWeek" id="dateWeek" value="{{ date('Y') . '-W' . date('W') }}">
                   </div>
                 </div>
-                <button class="btn btn-primary mb-3 ml-3" id="btnShowMonth">Show</button>
+                <button class="btn btn-primary mb-3 ml-3 custom-btn-height" id="btnShow">Show</button>
+                <button class="btn btn-primary mb-3 ml-3 custom-btn-height" id="btnExport"><i class="fa fa-file-pdf"></i> Download PDF</button>
+                <input class="form-control" type="hidden" id="startWeek" name="start" value="">
+                <input class="form-control" type="hidden" id="lastWeek" name="last" value="">
+                <input class="form-control" type="hidden" id="regional" name="regional" value="">
               </div>
 
-              <style>
-                /* Add button styles */
-                button {
-                  background-color: #4CAF50;
-                  border: none;
-                  color: white;
-                  padding: 8px 16px;
-                  text-align: center;
-                  text-decoration: none;
-                  display: inline-block;
-                  font-size: 16px;
-                  margin: 4px 2px;
-                  cursor: pointer;
-                  transition-duration: 0.4s;
-                }
 
-                /* Add hover effect */
-                button:hover {
-                  background-color: #45a049;
+
+
+              <style>
+                @media (min-width: 992px) {
+                  .d-flex.flex-row-reverse .col-2 {
+                    flex: 0 0 16.66667%;
+                    max-width: 16.66667%;
+                    float: right;
+                  }
                 }
               </style>
               <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 ">
-                <button id="sort-est-btn">sort by Afd</button>
-                <button id="sort-rank-btn">Sort by Rank</button>
-                <button onclick="openNewTabAndSendData()" id="downladbulan">Download As IMG</button>
+                <button id="sort-afd-btnWeek">sort by Afd</button>
+                <button id="sort-est-btnWeek">Sort by Rank</button>
               </div>
               <div id="tablesContainer">
                 <div class="tabContainer">
                   <div class="ml-3 mr-3">
                     <div class="row justify-content-center">
-                      <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="table1Month">
+                      <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="classOne">
                         <div class="table-responsive">
-                          <table class=" table table-bordered" style="font-size: 13px;background-color:white" id="table1">
+                          <table class=" table table-bordered" style="font-size: 13px" id="table1">
                             <thead>
                               <tr bgcolor="yellow">
-                                <th colspan="5" id="thWilOneMonth">WILAYAH I</th>
+                                <th colspan="5" id="thWilOne">WILAYAH I</th>
                               </tr>
                               <tr bgcolor="#2044a4" style="color: white">
                                 <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
@@ -96,17 +337,17 @@
                                 <th>Rank</th>
                               </tr>
                             </thead>
-                            <tbody id="tbody1Month">
+                            <tbody id="tbody1">
                             </tbody>
                           </table>
                         </div>
                       </div>
-                      <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="classTwoMonth">
+                      <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="classTwo">
                         <div class="table-responsive">
-                          <table class=" table table-bordered" style="font-size: 13px;background-color:white" id="table2">
+                          <table class=" table table-bordered" style="font-size: 13px" id="table1">
                             <thead>
                               <tr bgcolor="yellow">
-                                <th colspan="5" id="thWilTwoMonth">WILAYAH II</th>
+                                <th colspan="5" id="thWilTwo">WILAYAH II</th>
                               </tr>
                               <tr bgcolor="#2044a4" style="color: white">
                                 <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
@@ -119,18 +360,18 @@
                                 <th>Rank</th>
                               </tr>
                             </thead>
-                            <tbody id="tbody2Month">
+                            <tbody id="tbody2">
 
                             </tbody>
                           </table>
                         </div>
                       </div>
-                      <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="classThreeMonth">
+                      <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="classThree">
                         <div class="table-responsive">
-                          <table class="table table-bordered" style="font-size: 13px;background-color:white" id="table3">
+                          <table class="table table-bordered" style="font-size: 13px" id="Reg3">
                             <thead>
                               <tr bgcolor="yellow">
-                                <th colspan="5" id="thWilThreeMonth">WILAYAH III</th>
+                                <th colspan="5" id="thWilThree">WILAYAH III</th>
                               </tr>
                               <tr bgcolor="#2044a4" style="color: white">
                                 <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
@@ -143,18 +384,18 @@
                                 <th>Rank</th>
                               </tr>
                             </thead>
-                            <tbody id="tbody3Month">
+                            <tbody id="tbody3">
 
                             </tbody>
                           </table>
                         </div>
                       </div>
-                      <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="classFourMonth">
+                      <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="classFour">
                         <div class="table-responsive">
-                          <table class="table table-bordered" style="font-size: 13px;background-color:white" id="table4">
+                          <table class="table table-bordered" style="font-size: 13px" id="plasmaID">
                             <thead>
                               <tr bgcolor="yellow">
-                                <th colspan="5" id="thPlasmamonth">PLASMA</th>
+                                <th colspan="5" id="thwillPlas">PLASMAa</th>
                               </tr>
                               <tr bgcolor="#2044a4" style="color: white">
                                 <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
@@ -167,7 +408,7 @@
                                 <th>Rank</th>
                               </tr>
                             </thead>
-                            <tbody id="plasmaMonth">
+                            <tbody id="plasma">
 
                             </tbody>
                           </table>
@@ -177,31 +418,31 @@
                   </div>
                 </div>
               </div>
-
 
 
               <div class="col-sm-12">
                 <table class="table table-bordered">
-                  <thead id="tbodySkorRHMonth">
+                  <thead id="tbodySkorRH">
                   </thead>
                 </table>
               </div>
 
+
               <div id="accordion" class="ml-3 mr-3">
                 <div class="card">
-                  <button class="btn btn-secondary text-uppercase" data-toggle="collapse" data-target="#graphEstMonth" aria-expanded="false" aria-controls="graphEstMonth">
+                  <button class="btn btn-secondary text-uppercase" style="width: 100%;" data-toggle="collapse" data-target="#graphEstWeek" aria-expanded="false" aria-controls="graphEstWeek">
                     Grafik Sidak TPH berdasarkan Estate
                   </button>
-                  <div id="graphEstMonth" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                  <div id="graphEstWeek" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                     <div class="card-body">
                       <div class="row">
                         <div class="col-sm-6">
                           <div class="card">
                             <div class="card-body">
                               <p style="font-size: 15px; text-align: center;" class="text-uppercase">
-                                <b>TOTAL BRONDOLAN TINGGAL</b>
+                                <b>Brondolan Tinggal</b>
                               </p>
-                              <div id="bttinggalMonth"></div>
+                              <div id="bttinggal"></div>
                             </div>
                           </div>
                         </div>
@@ -209,307 +450,63 @@
                           <div class="card">
                             <div class="card-body">
                               <p style="font-size: 15px; text-align: center;" class="text-uppercase"><b>
-                                  TOTAL BUAH TINGGAL</b>
-                              <div id="karungMonth"></div>
+                                  Buah Tinggal
+                                </b>
+                              <div id="karung"></div>
                             </div>
                           </div>
                         </div>
                       </div>
+
                     </div>
                   </div>
                 </div>
               </div>
               <div id="accordion" class="ml-3 mr-3">
                 <div class="card">
-                  <button class="btn btn-secondary text-uppercase" data-toggle="collapse" data-target="#graphWilMonth" aria-expanded="false" aria-controls="graphWilMonth">
+                  <button class="btn btn-secondary text-uppercase" style="width: 100%;" data-toggle="collapse" data-target="#graphWilWeek" aria-expanded="false" aria-controls="graphWilWeek">
                     Grafik Sidak TPH berdasarkan Wilayah
                   </button>
-                  <div id="graphWilMonth" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                  <div id="graphWilWeek" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                     <div class="card-body">
                       <div class="row">
                         <div class="col-sm-6">
                           <div class="card">
                             <div class="card-body">
                               <p style="font-size: 15px; text-align: center;" class="text-uppercase">
-                                <b>TOTAL BRONDOLAN TINGGAL </b>
+                                <b>Brondolan Tinggal (Brondol / Blok)</b>
                               </p>
-                              <div id="btt_idMonth"></div>
+                              <div id="btt_id"></div>
                             </div>
                           </div>
                         </div>
                         <div class="col-sm-6">
                           <div class="card">
                             <div class="card-body">
-                              <p style="font-size: 15px; text-align: center;" class="text-uppercase"><b>
-                                  TOTAL BUAH TINGGAL</b>
-                              <div id="karung_idMonth"></div>
+                              <p style="font-size: 15px; text-align: center;" class="text-uppercase"><b>Karung
+                                  Berisi Brondolan (Karung / Blok)</b>
+                              <div id="karung_id"></div>
                             </div>
                           </div>
                         </div>
                       </div>
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <p class="ml-3 mb-3 mr-3">
-                <button style="width: 100%" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#showByWeek" aria-expanded="false" aria-controls="showByWeek">
-                  TAMPILKAN PER MINGGU
-                </button>
-              </p>
-
-              <div class="collapse" id="showByWeek">
-                <div class="d-flex justify-content-center ml-3 mr-3 border border-dark">
-                  <h5><b>REKAPITULASI RANKING NILAI SIDAK PEMERIKSAAN TPH</b></h5>
-                </div>
-                <style>
-                  /* Custom button height */
-                  .custom-btn-height {
-                    height: calc(1.5em + .75rem + 2px);
-                    /* Adjust this value according to your desired height */
-                  }
-
-                  /* CSS for mobile view */
-                  @media (max-width: 767.98px) {
-                    .mobile-view .form-container {
-                      margin-bottom: 10px;
-                    }
-                  }
-                </style>
-
-                <div class="d-flex justify-content-end mt-3 mb-2 ml-3 mr-3" style="padding-top: 20px;">
-                  <div class="row w-100 mobile-view">
-                    <div class="col-lg-2 col-md-4 col-sm-6 col-6 offset-lg-8 offset-md-4 offset-sm-0 offset-3 form-container">
-                      {{csrf_field()}}
-                      <select class="form-control" name="regionalSidak" id="regionalSidak">
-                        @foreach($option_reg as $key => $item)
-                        <option value="{{ $item['id'] }}">{{ $item['nama'] }}</option>
-                        @endforeach
-                      </select>
-                    </div>
-
-                    <div class="col-lg-2 col-md-4 col-sm-6 col-6 form-container">
-                      {{ csrf_field() }}
-                      <input class="form-control" type="week" name="dateWeek" id="dateWeek" value="{{ date('Y') . '-W' . date('W') }}">
-                    </div>
-                  </div>
-                  <button class="btn btn-primary mb-3 ml-3 custom-btn-height" id="btnShow">Show</button>
-                  <button class="btn btn-primary mb-3 ml-3 custom-btn-height" id="btnExport"><i class="fa fa-file-pdf"></i> Download PDF</button>
-                  <input class="form-control" type="hidden" id="startWeek" name="start" value="">
-                  <input class="form-control" type="hidden" id="lastWeek" name="last" value="">
-                  <input class="form-control" type="hidden" id="regional" name="regional" value="">
-                </div>
-
-
-
-
-                <style>
-                  @media (min-width: 992px) {
-                    .d-flex.flex-row-reverse .col-2 {
-                      flex: 0 0 16.66667%;
-                      max-width: 16.66667%;
-                      float: right;
-                    }
-                  }
-                </style>
-                <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 ">
-                  <button id="sort-afd-btnWeek">sort by Afd</button>
-                  <button id="sort-est-btnWeek">Sort by Rank</button>
-                </div>
-                <div id="tablesContainer">
-                  <div class="tabContainer">
-                    <div class="ml-3 mr-3">
-                      <div class="row justify-content-center">
-                        <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="classOne">
-                          <div class="table-responsive">
-                            <table class=" table table-bordered" style="font-size: 13px" id="table1">
-                              <thead>
-                                <tr bgcolor="yellow">
-                                  <th colspan="5" id="thWilOne">WILAYAH I</th>
-                                </tr>
-                                <tr bgcolor="#2044a4" style="color: white">
-                                  <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
-                                  <th rowspan="2" style="vertical-align: middle;">AFD</th>
-                                  <th rowspan="2" style="text-align:center; vertical-align: middle;">Nama</th>
-                                  <th colspan="2" class="text-center">Todate</th>
-                                </tr>
-                                <tr bgcolor="#1D43A2" style="color: white">
-                                  <th>Score</th>
-                                  <th>Rank</th>
-                                </tr>
-                              </thead>
-                              <tbody id="tbody1">
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="classTwo">
-                          <div class="table-responsive">
-                            <table class=" table table-bordered" style="font-size: 13px" id="table1">
-                              <thead>
-                                <tr bgcolor="yellow">
-                                  <th colspan="5" id="thWilTwo">WILAYAH II</th>
-                                </tr>
-                                <tr bgcolor="#2044a4" style="color: white">
-                                  <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
-                                  <th rowspan="2" style="vertical-align: middle;">AFD</th>
-                                  <th rowspan="2" style="text-align:center; vertical-align: middle;">Nama</th>
-                                  <th colspan="2" class="text-center">Todate</th>
-                                </tr>
-                                <tr bgcolor="#1D43A2" style="color: white">
-                                  <th>Score</th>
-                                  <th>Rank</th>
-                                </tr>
-                              </thead>
-                              <tbody id="tbody2">
-
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="classThree">
-                          <div class="table-responsive">
-                            <table class="table table-bordered" style="font-size: 13px" id="Reg3">
-                              <thead>
-                                <tr bgcolor="yellow">
-                                  <th colspan="5" id="thWilThree">WILAYAH III</th>
-                                </tr>
-                                <tr bgcolor="#2044a4" style="color: white">
-                                  <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
-                                  <th rowspan="2" style="vertical-align: middle;">AFD</th>
-                                  <th rowspan="2" style="text-align:center; vertical-align: middle;">Nama</th>
-                                  <th colspan="2" class="text-center">Todate</th>
-                                </tr>
-                                <tr bgcolor="#1D43A2" style="color: white">
-                                  <th>Score</th>
-                                  <th>Rank</th>
-                                </tr>
-                              </thead>
-                              <tbody id="tbody3">
-
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="classFour">
-                          <div class="table-responsive">
-                            <table class="table table-bordered" style="font-size: 13px" id="plasmaID">
-                              <thead>
-                                <tr bgcolor="yellow">
-                                  <th colspan="5" id="thwillPlas">PLASMAa</th>
-                                </tr>
-                                <tr bgcolor="#2044a4" style="color: white">
-                                  <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
-                                  <th rowspan="2" style="vertical-align: middle;">AFD</th>
-                                  <th rowspan="2" style="text-align:center; vertical-align: middle;">Nama</th>
-                                  <th colspan="2" class="text-center">Todate</th>
-                                </tr>
-                                <tr bgcolor="#1D43A2" style="color: white">
-                                  <th>Score</th>
-                                  <th>Rank</th>
-                                </tr>
-                              </thead>
-                              <tbody id="plasma">
-
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-
-                <div class="col-sm-12">
-                  <table class="table table-bordered">
-                    <thead id="tbodySkorRH">
-                    </thead>
-                  </table>
-                </div>
-
-
-                <div id="accordion" class="ml-3 mr-3">
-                  <div class="card">
-                    <button class="btn btn-secondary text-uppercase" style="width: 100%;" data-toggle="collapse" data-target="#graphEstWeek" aria-expanded="false" aria-controls="graphEstWeek">
-                      Grafik Sidak TPH berdasarkan Estate
-                    </button>
-                    <div id="graphEstWeek" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col-sm-6">
-                            <div class="card">
-                              <div class="card-body">
-                                <p style="font-size: 15px; text-align: center;" class="text-uppercase">
-                                  <b>Brondolan Tinggal</b>
-                                </p>
-                                <div id="bttinggal"></div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-sm-6">
-                            <div class="card">
-                              <div class="card-body">
-                                <p style="font-size: 15px; text-align: center;" class="text-uppercase"><b>
-                                    Buah Tinggal
-                                  </b>
-                                <div id="karung"></div>
-                              </div>
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <div class="card">
+                            <div class="card-body">
+                              <p style="font-size: 15px; text-align: center;" class="text-uppercase"><b>Buah
+                                  Tinggal (Janjang / Blok)</b>
+                              </p>
+                              <div id="bttTglTph_id"></div>
                             </div>
                           </div>
                         </div>
-
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div id="accordion" class="ml-3 mr-3">
-                  <div class="card">
-                    <button class="btn btn-secondary text-uppercase" style="width: 100%;" data-toggle="collapse" data-target="#graphWilWeek" aria-expanded="false" aria-controls="graphWilWeek">
-                      Grafik Sidak TPH berdasarkan Wilayah
-                    </button>
-                    <div id="graphWilWeek" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col-sm-6">
-                            <div class="card">
-                              <div class="card-body">
-                                <p style="font-size: 15px; text-align: center;" class="text-uppercase">
-                                  <b>Brondolan Tinggal (Brondol / Blok)</b>
-                                </p>
-                                <div id="btt_id"></div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-sm-6">
-                            <div class="card">
-                              <div class="card-body">
-                                <p style="font-size: 15px; text-align: center;" class="text-uppercase"><b>Karung
-                                    Berisi Brondolan (Karung / Blok)</b>
-                                <div id="karung_id"></div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-6">
-                            <div class="card">
-                              <div class="card-body">
-                                <p style="font-size: 15px; text-align: center;" class="text-uppercase"><b>Buah
-                                    Tinggal (Janjang / Blok)</b>
-                                </p>
-                                <div id="bttTglTph_id"></div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-sm-6">
-                            <div class="card">
-                              <div class="card-body">
-                                <p style="font-size: 15px; text-align: center;" class="text-uppercase"><b>Restan
-                                    Tidak Dilaporkan (Janjang / Blok)</b>
-                                <div id="rst_none_id"></div>
-                              </div>
+                        <div class="col-sm-6">
+                          <div class="card">
+                            <div class="card-body">
+                              <p style="font-size: 15px; text-align: center;" class="text-uppercase"><b>Restan
+                                  Tidak Dilaporkan (Janjang / Blok)</b>
+                              <div id="rst_none_id"></div>
                             </div>
                           </div>
                         </div>
@@ -518,888 +515,894 @@
                   </div>
                 </div>
               </div>
-            </div>
-
-            <div class="tab-pane fade" id="nav-data" role="tabpanel" aria-labelledby="nav-data-tab">
-              <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark">
-                <h5><b>DATA</b></h5>
-              </div>
-
-              <div class="d-flex justify-content-end mt-3 mb-2 ml-3 mr-3" style="padding-top: 20px;">
-                <div class="row w-100">
-                  <div class="col-md-2 offset-md-8">
-                    {{csrf_field()}}
-                    <select class="form-control" id="regDataTph">
-                      @foreach($option_reg as $key => $item)
-                      <option value="{{ $item['id'] }}">{{ $item['nama'] }}</option>
-                      @endforeach
-                    </select>
-                  </div>
-
-                  <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
-                    {{ csrf_field() }}
-                    <input class="form-control" value="{{ date('Y-m') }}" type="month" name="tgl" id="dateDataTph">
-
-                  </div>
-                </div>
-                <button class="btn btn-primary mb-3 ml-3" id="showDataTph">Show</button>
-                <button class="btn btn-primary mb-3 ml-3" id="downloaddataexcel">Excel</button>
-              </div>
-
-
-
-
-              <div class="ml-3 mr-3 mb-3">
-                <ul class="nav nav-tabs" id="myTabs" role="tablist">
-                  <li class="nav-item" role="presentation">
-                    <a class="nav-link active" id="week1-tab" data-toggle="tab" href="#week1" role="tab" aria-controls="week1" aria-selected="true">week1</a>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="week2-tab" data-toggle="tab" href="#week2" role="tab" aria-controls="week2" aria-selected="false">week2</a>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="week3-tab" data-toggle="tab" href="#week3" role="tab" aria-controls="week3" aria-selected="false">week3</a>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="week4-tab" data-toggle="tab" href="#week4" role="tab" aria-controls="week4" aria-selected="false">week4</a>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="month-tab" data-toggle="tab" href="#month" role="tab" aria-controls="month" aria-selected="false">week5</a>
-                  </li>
-                </ul>
-                <div class="tab-content" id="myTabsContent">
-               
-                  <!-- mingg pertama  -->
-                  <div class="tab-pane fade show active" id="week1" role="tabpanel" aria-labelledby="week1-tab">
-                    <table id="newweek1"  class="table table-striped nowrap" style="width:100%">
-                      <thead>
-                        <tr>
-                          <th rowspan="3">EST</th>
-                          <th rowspan="3">AFD</th>
-                          <th colspan="10"> H+1</th>
-                          <th colspan="10"> H+2</th>
-                          <th colspan="10"> H+3</th>
-                          <th colspan="10"> H+4</th>
-                          <th colspan="10"> H+5</th>
-                          <th colspan="10"> H+6</th>
-                          <th colspan="10"> H+7</th>
-                          <th colspan="10"> >H+7 </th>
-                          <th rowspan="3"> All Skor</th>
-                          <th rowspan="3"> Kategori</th>
-                        </tr>
-                        <tr>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                        </tr>
-                        <tr>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-
-                        </tr>
-                      </thead>
-
-                      <tbody>
-
-                      </tbody>
-                    </table>
-
-                  </div>
-
-                  <!-- minggu ke dua  -->
-                  <div class="tab-pane fade" id="week2" role="tabpanel" aria-labelledby="week2-tab">
-                    <table id="newweek2" class="table table-striped nowrap" style="width:100%">
-                      <thead>
-                        <tr>
-                          <th rowspan="3">EST</th>
-                          <th rowspan="3">AFD</th>
-                          <th colspan="10"> H+1</th>
-                          <th colspan="10"> H+2</th>
-                          <th colspan="10"> H+3</th>
-                          <th colspan="10"> H+4</th>
-                          <th colspan="10"> H+5</th>
-                          <th colspan="10"> H+6</th>
-                          <th colspan="10"> H+7</th>
-                          <th colspan="10"> >H+7 </th>
-                          <th rowspan="3"> All Skor</th>
-                          <th rowspan="3"> Kategori</th>
-                        </tr>
-                        <tr>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                        </tr>
-                        <tr>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-
-                        </tr>
-                      </thead>
-
-                      <tbody>
-
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <!-- minggu ke 3  -->
-                  <div class="tab-pane fade" id="week3" role="tabpanel" aria-labelledby="week3-tab">
-
-                    <table id="newweek3" class="table table-striped nowrap" style="width:100%">
-                      <thead>
-                        <tr>
-                          <th rowspan="3">EST</th>
-                          <th rowspan="3">AFD</th>
-                          <th colspan="10"> H+1</th>
-                          <th colspan="10"> H+2</th>
-                          <th colspan="10"> H+3</th>
-                          <th colspan="10"> H+4</th>
-                          <th colspan="10"> H+5</th>
-                          <th colspan="10"> H+6</th>
-                          <th colspan="10"> H+7</th>
-                          <th colspan="10"> >H+7 </th>
-                          <th rowspan="3"> All Skor</th>
-                          <th rowspan="3"> Kategori</th>
-                        </tr>
-                        <tr>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                        </tr>
-                        <tr>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-
-                        </tr>
-                      </thead>
-
-                      <tbody>
-
-                      </tbody>
-                    </table>
-
-                  </div>
-
-                  <!-- minggu ke 4  -->
-                  <div class="tab-pane fade" id="week4" role="tabpanel" aria-labelledby="week4-tab">
-                    <table id="newweek4" class="table table-striped nowrap" style="width:100%;">
-                      <thead>
-                        <tr>
-                          <th rowspan="3">EST</th>
-                          <th rowspan="3">AFD</th>
-                          <th colspan="10"> H+1</th>
-                          <th colspan="10"> H+2</th>
-                          <th colspan="10"> H+3</th>
-                          <th colspan="10"> H+4</th>
-                          <th colspan="10"> H+5</th>
-                          <th colspan="10"> H+6</th>
-                          <th colspan="10"> H+7</th>
-                          <th colspan="10"> >H+7 </th>
-                          <th rowspan="3"> All Skor</th>
-                          <th rowspan="3"> Kategori</th>
-                        </tr>
-                        <tr>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                        </tr>
-                        <tr>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-
-                        </tr>
-                      </thead>
-
-                      <tbody>
-
-                      </tbody>
-                    </table>
-
-                  </div>
-
-
-                  <!-- bulan  -->
-                  <div class="tab-pane fade" id="month" role="tabpanel" aria-labelledby="month-tab">
-                    <table id="newweek5" class="table table-striped nowrap" style="width:100%;">
-                      <thead>
-                        <tr>
-                          <th rowspan="3">EST</th>
-                          <th rowspan="3">AFD</th>
-                          <th colspan="10"> H+1</th>
-                          <th colspan="10"> H+2</th>
-                          <th colspan="10"> H+3</th>
-                          <th colspan="10"> H+4</th>
-                          <th colspan="10"> H+5</th>
-                          <th colspan="10"> H+6</th>
-                          <th colspan="10"> H+7</th>
-                          <th colspan="10"> >H+7 </th>
-                          <th rowspan="3"> All Skor</th>
-                          <th rowspan="3"> Kategori</th>
-                        </tr>
-                        <tr>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                          <th colspan="6">Brondolan Tinggal</th>
-                          <th colspan="4">Buah Tinggal</th>
-                        </tr>
-                        <tr>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-                          <th> Di TPH</th>
-                          <th> Di Jalan</th>
-                          <th> Di Bin</th>
-                          <th> Di Karung</th>
-                          <th> Total Brd</th>
-                          <th> Skor</th>
-                          <th> Buah Sortiran / Buah Jatuh </th>
-                          <th>Restan Tidak Dilaporkan </th>
-                          <th>Total Jjg </th>
-                          <th>Skor</th>
-
-                        </tr>
-                      </thead>
-
-                      <tbody>
-
-                      </tbody>
-                    </table>
-                  </div>
-
-                </div>
-              </div>
-
-
-
-
-            </div>
-
-            <div class="tab-pane fade" id="nav-sbi" role="tabpanel" aria-labelledby="nav-sbi-tab">
-              <div class="d-flex justify-content-center mt-3 mb-3 ml-3 mr-3 border border-dark">
-                <h5><b>REKAPITULASI RANKING NILAI SIDAK PEMERIKSAAN TPH</b></h5>
-              </div>
-
-              <div class="d-flex justify-content-end mt-3 mb-2 ml-3 mr-3" style="padding-top: 20px;">
-                <div class="row w-100">
-                  <div class="col-md-2 offset-md-8">
-                    {{csrf_field()}}
-                    <select class="form-control" name="regionalSidakYear" id="regionalSidakYear">
-                      @foreach($option_reg as $key => $item)
-                      <option value="{{ $item['id'] }}">{{ $item['nama'] }}</option>
-                      @endforeach
-                    </select>
-                  </div>
-
-                  <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
-                    {{ csrf_field() }}
-                    <select class="form-control" name="inputYear" id="inputYear">
-                      @foreach ($optYear as $value)
-                      <option value="{{ $value }}">{{ $value }}</option>
-                      @endforeach
-                    </select>
-
-                  </div>
-                </div>
-                <button class="btn btn-primary mb-3 ml-3" id="btnShowYear">Show</button>
-              </div>
-
-              <div id="tablesContainer">
-                <div class="tabContainer">
-                  <div class="ml-3 mr-3">
-                    <div class="row text-center">
-                      <div class="col-12 col-md-6 col-lg-4" id="Tab1">
-                        <div class="table-responsive">
-                          <table class=" table table-bordered" style="font-size: 13px" id="table1">
-                            <thead>
-                              <tr bgcolor="darkorange">
-                                <th colspan="5" id="thead1">WILAYAH I</th>
-                              </tr>
-                              <tr bgcolor="#2044a4" style="color: white">
-                                <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
-                                <th rowspan="2" style="vertical-align: middle;">AFD</th>
-                                <th rowspan="2" style="text-align:center; vertical-align: middle;">Nama</th>
-                                <th colspan="2" class="text-center">Todate</th>
-                              </tr>
-                              <tr bgcolor="darkblue" style="color: white">
-                                <th>Score</th>
-                                <th>Rank</th>
-                              </tr>
-                            </thead>
-                            <tbody id="tbody1Year">
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                      <div class="col-12 col-md-6 col-lg-4" id="Tab2">
-                        <div class="table-responsive">
-                          <table class=" table table-bordered" style="font-size: 13px" id="table1">
-                            <thead>
-                              <tr bgcolor="darkorange">
-                                <th colspan="5" id="thead2">WILAYAH II</th>
-                              </tr>
-                              <tr bgcolor="#2044a4" style="color: white">
-                                <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
-                                <th rowspan="2" style="vertical-align: middle;">AFD</th>
-                                <th rowspan="2" style="text-align:center; vertical-align: middle;">Nama</th>
-                                <th colspan="2" class="text-center">Todate</th>
-                              </tr>
-                              <tr bgcolor="darkblue" style="color: white">
-                                <th>Score</th>
-                                <th>Rank</th>
-                              </tr>
-                            </thead>
-                            <tbody id="tbody2Year">
-
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                      <div class="col-12 col-md-6 col-lg-4" id="Tab3">
-                        <div class="table-responsive">
-                          <table class="table table-bordered" style="font-size: 13px" id="Reg3">
-                            <thead>
-                              <tr bgcolor="darkorange">
-                                <th colspan="5" id="thead3">WILAYAH III</th>
-                              </tr>
-                              <tr bgcolor="#2044a4" style="color: white">
-                                <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
-                                <th rowspan="2" style="vertical-align: middle;">AFD</th>
-                                <th rowspan="2" style="text-align:center; vertical-align: middle;">Nama</th>
-                                <th colspan="2" class="text-center">Todate</th>
-                              </tr>
-                              <tr bgcolor="darkblue" style="color: white">
-                                <th>Score</th>
-                                <th>Rank</th>
-                              </tr>
-                            </thead>
-                            <tbody id="tbody3Year">
-
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-12">
-                  <table class="table table-bordered">
-                    <thead id="tbodySkorRHYear">
-                    </thead>
-                  </table>
-                </div>
-              </div>
-
-
-              <div class="d-flex justify-content-center mb-3 ml-3 mr-3 border border-dark text-uppercase">
-                <h5><b>GRAFIK REKAPITULASI SIDAK PEMERIKSAAN TPH</b></h5>
-              </div>
-
-              <style>
-                /* CSS for mobile view */
-                @media (max-width: 767.98px) {
-                  .mobile-view {
-                    display: flex;
-                    flex-wrap: nowrap;
-                    justify-content: flex-end;
-                  }
-
-                  .mobile-view .form-container {
-                    flex: 1;
-                    max-width: calc(100% - 90px);
-                  }
-
-                  .mobile-view .form-control {
-                    width: 100%;
-                    box-sizing: border-box;
-                    margin-left: 10px;
-                  }
-
-                  .mobile-view .btn {
-                    width: 80px;
-                    margin-left: 10px;
-                  }
-                }
-              </style>
-
-              <div class="d-flex flex-row-reverse mr-2 mobile-view">
-                <button class="btn btn-primary mb-3 mr-2" style="float: right" id="showGraphYear">Show</button>
-                <div class="form-container mr-2">
-                  {{ csrf_field() }}
-                  <select class="form-control" name="estSidakYear" id="estSidakYear">
-                  </select>
-                </div>
-              </div>
-
-
-              <div class="row ml-2 mr-2">
-                <div class="col-sm-6">
-                  <div class="card">
-                    <div class="card-body">
-                      <p style="font-size: 15px; text-align: center;" class="text-uppercase">
-                        <b>Total Brondolan Tinggal</b>
-                      </p>
-                      <div id="bttinggalYear"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="card">
-                    <div class="card-body">
-                      <p style="font-size: 15px; text-align: center;" class="text-uppercase">
-                        <b>Total Buah Tinggal</b>
-                      <div id="karungYear"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
             </div>
           </div>
+
+          <div class="tab-pane fade" id="nav-data" role="tabpanel" aria-labelledby="nav-data-tab">
+            <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark">
+              <h5><b>DATA</b></h5>
+            </div>
+
+            <div class="d-flex justify-content-end mt-3 mb-2 ml-3 mr-3" style="padding-top: 20px;">
+              <div class="row w-100">
+                <div class="col-md-2 offset-md-8">
+                  {{csrf_field()}}
+                  <select class="form-control" id="regDataTph">
+                    @foreach($option_reg as $key => $item)
+                    <option value="{{ $item['id'] }}">{{ $item['nama'] }}</option>
+                    @endforeach
+                  </select>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                  {{ csrf_field() }}
+                  <input class="form-control" value="{{ date('Y-m') }}" type="month" name="tgl" id="dateDataTph">
+
+                </div>
+              </div>
+              <button class="btn btn-primary mb-3 ml-3" id="showDataTph">Show</button>
+              <form id="exportForm" action="{{ route('excelsidaktph') }}" method="POST">
+                @csrf
+                <input type="hidden" id="getregionalexcel" name="getregionalexcel">
+                <input type="hidden" id="getdateexcel" name="getdateexcel">
+                <button type="submit" class="btn btn-primary">Export</button>
+              </form>
+            </div>
+
+
+
+
+            <div class="ml-3 mr-3 mb-3">
+              <ul class="nav nav-tabs" id="myTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link active" id="week1-tab" data-toggle="tab" href="#week1" role="tab" aria-controls="week1" aria-selected="true">week1</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="week2-tab" data-toggle="tab" href="#week2" role="tab" aria-controls="week2" aria-selected="false">week2</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="week3-tab" data-toggle="tab" href="#week3" role="tab" aria-controls="week3" aria-selected="false">week3</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="week4-tab" data-toggle="tab" href="#week4" role="tab" aria-controls="week4" aria-selected="false">week4</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="month-tab" data-toggle="tab" href="#month" role="tab" aria-controls="month" aria-selected="false">week5</a>
+                </li>
+              </ul>
+              <div class="tab-content" id="myTabsContent">
+
+                <!-- mingg pertama  -->
+                <div class="tab-pane fade show active" id="week1" role="tabpanel" aria-labelledby="week1-tab">
+                  <table id="newweek1" class="table table-striped nowrap" style="width:100%">
+                    <thead>
+                      <tr>
+                        <th rowspan="3">EST</th>
+                        <th rowspan="3">AFD</th>
+                        <th colspan="10"> H+1</th>
+                        <th colspan="10"> H+2</th>
+                        <th colspan="10"> H+3</th>
+                        <th colspan="10"> H+4</th>
+                        <th colspan="10"> H+5</th>
+                        <th colspan="10"> H+6</th>
+                        <th colspan="10"> H+7</th>
+                        <th colspan="10"> >H+7 </th>
+                        <th rowspan="3"> All Skor</th>
+                        <th rowspan="3"> Kategori</th>
+                      </tr>
+                      <tr>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                      </tr>
+                      <tr>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+
+                      </tr>
+                    </thead>
+
+                    <tbody>
+
+                    </tbody>
+                  </table>
+
+                </div>
+
+                <!-- minggu ke dua  -->
+                <div class="tab-pane fade" id="week2" role="tabpanel" aria-labelledby="week2-tab">
+                  <table id="newweek2" class="table table-striped nowrap" style="width:100%">
+                    <thead>
+                      <tr>
+                        <th rowspan="3">EST</th>
+                        <th rowspan="3">AFD</th>
+                        <th colspan="10"> H+1</th>
+                        <th colspan="10"> H+2</th>
+                        <th colspan="10"> H+3</th>
+                        <th colspan="10"> H+4</th>
+                        <th colspan="10"> H+5</th>
+                        <th colspan="10"> H+6</th>
+                        <th colspan="10"> H+7</th>
+                        <th colspan="10"> >H+7 </th>
+                        <th rowspan="3"> All Skor</th>
+                        <th rowspan="3"> Kategori</th>
+                      </tr>
+                      <tr>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                      </tr>
+                      <tr>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+
+                      </tr>
+                    </thead>
+
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- minggu ke 3  -->
+                <div class="tab-pane fade" id="week3" role="tabpanel" aria-labelledby="week3-tab">
+
+                  <table id="newweek3" class="table table-striped nowrap" style="width:100%">
+                    <thead>
+                      <tr>
+                        <th rowspan="3">EST</th>
+                        <th rowspan="3">AFD</th>
+                        <th colspan="10"> H+1</th>
+                        <th colspan="10"> H+2</th>
+                        <th colspan="10"> H+3</th>
+                        <th colspan="10"> H+4</th>
+                        <th colspan="10"> H+5</th>
+                        <th colspan="10"> H+6</th>
+                        <th colspan="10"> H+7</th>
+                        <th colspan="10"> >H+7 </th>
+                        <th rowspan="3"> All Skor</th>
+                        <th rowspan="3"> Kategori</th>
+                      </tr>
+                      <tr>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                      </tr>
+                      <tr>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+
+                      </tr>
+                    </thead>
+
+                    <tbody>
+
+                    </tbody>
+                  </table>
+
+                </div>
+
+                <!-- minggu ke 4  -->
+                <div class="tab-pane fade" id="week4" role="tabpanel" aria-labelledby="week4-tab">
+                  <table id="newweek4" class="table table-striped nowrap" style="width:100%;">
+                    <thead>
+                      <tr>
+                        <th rowspan="3">EST</th>
+                        <th rowspan="3">AFD</th>
+                        <th colspan="10"> H+1</th>
+                        <th colspan="10"> H+2</th>
+                        <th colspan="10"> H+3</th>
+                        <th colspan="10"> H+4</th>
+                        <th colspan="10"> H+5</th>
+                        <th colspan="10"> H+6</th>
+                        <th colspan="10"> H+7</th>
+                        <th colspan="10"> >H+7 </th>
+                        <th rowspan="3"> All Skor</th>
+                        <th rowspan="3"> Kategori</th>
+                      </tr>
+                      <tr>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                      </tr>
+                      <tr>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+
+                      </tr>
+                    </thead>
+
+                    <tbody>
+
+                    </tbody>
+                  </table>
+
+                </div>
+
+
+                <!-- bulan  -->
+                <div class="tab-pane fade" id="month" role="tabpanel" aria-labelledby="month-tab">
+                  <table id="newweek5" class="table table-striped nowrap" style="width:100%;">
+                    <thead>
+                      <tr>
+                        <th rowspan="3">EST</th>
+                        <th rowspan="3">AFD</th>
+                        <th colspan="10"> H+1</th>
+                        <th colspan="10"> H+2</th>
+                        <th colspan="10"> H+3</th>
+                        <th colspan="10"> H+4</th>
+                        <th colspan="10"> H+5</th>
+                        <th colspan="10"> H+6</th>
+                        <th colspan="10"> H+7</th>
+                        <th colspan="10"> >H+7 </th>
+                        <th rowspan="3"> All Skor</th>
+                        <th rowspan="3"> Kategori</th>
+                      </tr>
+                      <tr>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                        <th colspan="6">Brondolan Tinggal</th>
+                        <th colspan="4">Buah Tinggal</th>
+                      </tr>
+                      <tr>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+                        <th> Di TPH</th>
+                        <th> Di Jalan</th>
+                        <th> Di Bin</th>
+                        <th> Di Karung</th>
+                        <th> Total Brd</th>
+                        <th> Skor</th>
+                        <th> Buah Sortiran / Buah Jatuh </th>
+                        <th>Restan Tidak Dilaporkan </th>
+                        <th>Total Jjg </th>
+                        <th>Skor</th>
+
+                      </tr>
+                    </thead>
+
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+
+
+
+
+          </div>
+
+          <div class="tab-pane fade" id="nav-sbi" role="tabpanel" aria-labelledby="nav-sbi-tab">
+            <div class="d-flex justify-content-center mt-3 mb-3 ml-3 mr-3 border border-dark">
+              <h5><b>REKAPITULASI RANKING NILAI SIDAK PEMERIKSAAN TPH</b></h5>
+            </div>
+
+            <div class="d-flex justify-content-end mt-3 mb-2 ml-3 mr-3" style="padding-top: 20px;">
+              <div class="row w-100">
+                <div class="col-md-2 offset-md-8">
+                  {{csrf_field()}}
+                  <select class="form-control" name="regionalSidakYear" id="regionalSidakYear">
+                    @foreach($option_reg as $key => $item)
+                    <option value="{{ $item['id'] }}">{{ $item['nama'] }}</option>
+                    @endforeach
+                  </select>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                  {{ csrf_field() }}
+                  <select class="form-control" name="inputYear" id="inputYear">
+                    @foreach ($optYear as $value)
+                    <option value="{{ $value }}">{{ $value }}</option>
+                    @endforeach
+                  </select>
+
+                </div>
+              </div>
+              <button class="btn btn-primary mb-3 ml-3" id="btnShowYear">Show</button>
+            </div>
+
+            <div id="tablesContainer">
+              <div class="tabContainer">
+                <div class="ml-3 mr-3">
+                  <div class="row text-center">
+                    <div class="col-12 col-md-6 col-lg-4" id="Tab1">
+                      <div class="table-responsive">
+                        <table class=" table table-bordered" style="font-size: 13px" id="table1">
+                          <thead>
+                            <tr bgcolor="darkorange">
+                              <th colspan="5" id="thead1">WILAYAH I</th>
+                            </tr>
+                            <tr bgcolor="#2044a4" style="color: white">
+                              <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
+                              <th rowspan="2" style="vertical-align: middle;">AFD</th>
+                              <th rowspan="2" style="text-align:center; vertical-align: middle;">Nama</th>
+                              <th colspan="2" class="text-center">Todate</th>
+                            </tr>
+                            <tr bgcolor="darkblue" style="color: white">
+                              <th>Score</th>
+                              <th>Rank</th>
+                            </tr>
+                          </thead>
+                          <tbody id="tbody1Year">
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4" id="Tab2">
+                      <div class="table-responsive">
+                        <table class=" table table-bordered" style="font-size: 13px" id="table1">
+                          <thead>
+                            <tr bgcolor="darkorange">
+                              <th colspan="5" id="thead2">WILAYAH II</th>
+                            </tr>
+                            <tr bgcolor="#2044a4" style="color: white">
+                              <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
+                              <th rowspan="2" style="vertical-align: middle;">AFD</th>
+                              <th rowspan="2" style="text-align:center; vertical-align: middle;">Nama</th>
+                              <th colspan="2" class="text-center">Todate</th>
+                            </tr>
+                            <tr bgcolor="darkblue" style="color: white">
+                              <th>Score</th>
+                              <th>Rank</th>
+                            </tr>
+                          </thead>
+                          <tbody id="tbody2Year">
+
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4" id="Tab3">
+                      <div class="table-responsive">
+                        <table class="table table-bordered" style="font-size: 13px" id="Reg3">
+                          <thead>
+                            <tr bgcolor="darkorange">
+                              <th colspan="5" id="thead3">WILAYAH III</th>
+                            </tr>
+                            <tr bgcolor="#2044a4" style="color: white">
+                              <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
+                              <th rowspan="2" style="vertical-align: middle;">AFD</th>
+                              <th rowspan="2" style="text-align:center; vertical-align: middle;">Nama</th>
+                              <th colspan="2" class="text-center">Todate</th>
+                            </tr>
+                            <tr bgcolor="darkblue" style="color: white">
+                              <th>Score</th>
+                              <th>Rank</th>
+                            </tr>
+                          </thead>
+                          <tbody id="tbody3Year">
+
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12">
+                <table class="table table-bordered">
+                  <thead id="tbodySkorRHYear">
+                  </thead>
+                </table>
+              </div>
+            </div>
+
+
+            <div class="d-flex justify-content-center mb-3 ml-3 mr-3 border border-dark text-uppercase">
+              <h5><b>GRAFIK REKAPITULASI SIDAK PEMERIKSAAN TPH</b></h5>
+            </div>
+
+            <style>
+              /* CSS for mobile view */
+              @media (max-width: 767.98px) {
+                .mobile-view {
+                  display: flex;
+                  flex-wrap: nowrap;
+                  justify-content: flex-end;
+                }
+
+                .mobile-view .form-container {
+                  flex: 1;
+                  max-width: calc(100% - 90px);
+                }
+
+                .mobile-view .form-control {
+                  width: 100%;
+                  box-sizing: border-box;
+                  margin-left: 10px;
+                }
+
+                .mobile-view .btn {
+                  width: 80px;
+                  margin-left: 10px;
+                }
+              }
+            </style>
+
+            <div class="d-flex flex-row-reverse mr-2 mobile-view">
+              <button class="btn btn-primary mb-3 mr-2" style="float: right" id="showGraphYear">Show</button>
+              <div class="form-container mr-2">
+                {{ csrf_field() }}
+                <select class="form-control" name="estSidakYear" id="estSidakYear">
+                </select>
+              </div>
+            </div>
+
+
+            <div class="row ml-2 mr-2">
+              <div class="col-sm-6">
+                <div class="card">
+                  <div class="card-body">
+                    <p style="font-size: 15px; text-align: center;" class="text-uppercase">
+                      <b>Total Brondolan Tinggal</b>
+                    </p>
+                    <div id="bttinggalYear"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="card">
+                  <div class="card-body">
+                    <p style="font-size: 15px; text-align: center;" class="text-uppercase">
+                      <b>Total Buah Tinggal</b>
+                    <div id="karungYear"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
+      </div>
     </section>
 
     @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten'|| session('jabatan') == 'Askep/Asisten' )
@@ -1446,7 +1449,7 @@
     </div>
     @endif
   </div>
-  
+
   <script type="module">
     let checkdata = @json($check);
     let recordsdupt = @json($idduplicate);
@@ -1809,7 +1812,7 @@
           }
         });
       }
-   
+
 
       function changeData() {
         var regTph = $("#regDataTph").val();
@@ -1844,7 +1847,7 @@
             var parseResult = JSON.parse(result)
 
 
-           
+
             var datatableweek1 = $('#newweek1').DataTable({
               columns: [{
                   data: 'est'
@@ -2636,7 +2639,7 @@
 
 
             var datatableweek3 = $('#newweek3').DataTable({
-             
+
               columns: [{
                   data: 'est'
                 },
@@ -3031,7 +3034,7 @@
             datatableweek3.clear().rows.add(parseResult['week3']).draw();
 
             var datatableweek4 = $('#newweek4').DataTable({
-            
+
               columns: [{
                   data: 'est'
                 },
@@ -3425,7 +3428,7 @@
             datatableweek4.clear().rows.add(parseResult['week4']).draw();
 
             var datatableweek5 = $('#newweek5').DataTable({
-            
+
               columns: [{
                   data: 'est'
                 },
@@ -5693,16 +5696,29 @@
     // document.getElementById('showDataTph').addEventListener('click', function() {
     //   document.getElementById('downloaddataexcel').disabled = false;
     // });
-    $('#downloaddataexcel').click(function() {
-      var reg = $('#regDataTph').val();
-      var month = $('#dateDataTph').val();
-      var _token = $('input[name="_token"]').val();
 
-      // Construct the URL
-      var url = '/excelqcinspeksi/' + reg + '/' + month;
+    document.getElementById('exportForm').addEventListener('submit', function(event) {
+      // Prevent the default form submission
+      event.preventDefault();
 
-      // Open the URL in a new tab
-      window.open(url, '_blank');
+      // Get the selected value from regDataIns select element
+      var regDataInsValue = document.getElementById('regDataTph').value;
+
+      // Get the value from dateDataIns input element
+      var dateDataInsValue = document.getElementById('dateDataTph').value;
+
+      // Set the values to the hidden inputs
+      document.getElementById('getregionalexcel').value = regDataInsValue;
+      document.getElementById('getdateexcel').value = dateDataInsValue;
+
+
+      // Open a new tab/window and submit the form there
+      var newWindow = window.open('', '_blank');
+      this.target = '_blank';
+      this.submit();
+
+      // Close the new tab/window after submission (optional)
+      newWindow.close();
     });
   </script>
 </x-layout.app>

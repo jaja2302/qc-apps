@@ -949,7 +949,13 @@
                             </div>
                         </div>
                         <button class="btn btn-primary mb-3 ml-3" id="showDataIns">Show</button>
-                        <button class="btn btn-primary mb-3 ml-3" id="downloadexcel">Excel</button>
+                        <form id="exportForm" action="{{ route('excelqcinspeksi') }}" method="POST">
+                            @csrf
+                            <input type="hidden" id="getregional" name="getregional">
+                            <input type="hidden" id="getdate" name="getdate">
+                            <button type="submit" class="btn btn-primary">Export</button>
+                        </form>
+
                     </div>
 
 
@@ -7364,16 +7370,27 @@
 
             // showDataIns
 
-            $('#downloadexcel').click(function() {
-                var reg = $('#regDataIns').val();
-                var month = $('#dateDataIns').val();
-                var _token = $('input[name="_token"]').val();
+            document.getElementById('exportForm').addEventListener('submit', function(event) {
+                // Prevent the default form submission
+                event.preventDefault();
 
-                // Construct the URL
-                var url = '/excelqcinspeksi/' + reg + '/' + month;
+                // Get the selected value from regDataIns select element
+                var regDataInsValue = document.getElementById('regDataIns').value;
 
-                // Open the URL in a new tab
-                window.open(url, '_blank');
+                // Get the value from dateDataIns input element
+                var dateDataInsValue = document.getElementById('dateDataIns').value;
+
+                // Set the values to the hidden inputs
+                document.getElementById('getregional').value = regDataInsValue;
+                document.getElementById('getdate').value = dateDataInsValue;
+
+                // Open a new tab/window and submit the form there
+                var newWindow = window.open('', '_blank');
+                this.target = '_blank';
+                this.submit();
+
+                // Close the new tab/window after submission (optional)
+                newWindow.close();
             });
         </script>
 
