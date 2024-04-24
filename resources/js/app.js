@@ -12,3 +12,5 @@ import DataTable from 'datatables.net-bs5';
 import DateTime from 'datatables.net-datetime';
 import 'datatables.net-fixedcolumns-bs5';
 import 'datatables.net-fixedheader-bs5';
+import html2canvas from 'html2canvas';
+window.html2canvas = html2canvas;

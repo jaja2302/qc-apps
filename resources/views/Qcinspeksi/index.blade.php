@@ -63,7 +63,7 @@
                     <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 ">
                         <button id="sort-est-btn">Sort by Afd</button>
                         <button id="sort-rank-btn">Sort by Rank</button>
-                        <button onclick="openNewTabAndSendData()" id="downladbulan">Download As IMG</button>
+                        <button id="scrennshotimg">Download As IMG</button>
                     </div>
 
 
@@ -6159,6 +6159,7 @@
                 const rankBtn = document.getElementById('sort-est-btnWeek');
                 const showBtn = document.getElementById('showWeek');
                 const regionalSelect = document.getElementById('regionalDataweek');
+                const scrennshotimg = document.getElementById('scrennshotimg');
 
                 let currentRegion = regionalSelect.value;
 
@@ -6218,6 +6219,11 @@
                 function handleFilterShow(filterShowValue) {
                     // Implement your filtering logic here, if necessary
                 }
+
+                scrennshotimg.addEventListener('click', () => {
+
+                    captureTableScreenshot('tbody1', 'testet')
+                });
             });
 
 
@@ -7206,168 +7212,24 @@
                 }
             }
 
-            function openNewTabAndSendData() {
-                // Define the URL of the new page where you want to send the data
-                const newPageUrl = '/getimgqc'; // Replace with the actual URL
+            const captureTableScreenshot = (tableId, fileName) => {
+                // Select the table element by its ID
+                const tableElement = document.getElementById(tableId);
 
-                // Retrieve the CSRF token from the meta tag
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                // Use html2canvas to capture the table as an image
+                html2canvas(tableElement).then(canvas => {
+                    // Convert the canvas to a data URL representing the image
+                    const dataUrl = canvas.toDataURL();
 
-                // Create an empty form element
-                const form = document.createElement('form');
-                form.method = 'POST'; // Change the method to POST
-                form.action = newPageUrl;
-                // form.action = window.open(newPageUrl, '_blank');
+                    // Create a temporary link element to download the image
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = dataUrl;
+                    downloadLink.download = fileName || 'screenshot.png'; // Default filename if not provided
 
-                // Add a hidden input field for the CSRF token
-                const csrfInput = document.createElement('input');
-                csrfInput.type = 'hidden';
-                csrfInput.name = '_token'; // Laravel expects the CSRF token to be named _token
-                csrfInput.value = csrfToken;
-                form.appendChild(csrfInput);
-
-                // Add hidden input fields for your data
-                const tables = [
-                    document.getElementById('tabblan1'),
-                    document.getElementById('tabblan2'),
-                    document.getElementById('tabblan3'),
-                    document.getElementById('tabblan4')
-                ];
-                let date = document.getElementById('inputDate').value;
-                let reg = document.getElementById('regionalPanen').value;
-
-                // Track how many tables have been processed
-                let tablesProcessed = 0;
-
-                // Function to submit the form when all tables are processed
-                function submitFormIfReady() {
-                    tablesProcessed++;
-                    if (tablesProcessed === tables.length) {
-                        const dateInput = document.createElement('input');
-                        dateInput.type = 'hidden';
-                        dateInput.name = 'date';
-                        dateInput.value = date;
-
-                        const regInput = document.createElement('input');
-                        regInput.type = 'hidden';
-                        regInput.name = 'reg';
-                        regInput.value = reg;
-                        const title = document.createElement('input');
-                        title.type = 'hidden';
-                        title.name = 'title';
-                        title.value = 'QC Panen';
-
-                        const href = document.createElement('input');
-                        href.type = 'hidden';
-                        href.name = 'href';
-                        href.value = '/dashboard_inspeksi';
-
-                        form.appendChild(dateInput);
-                        form.appendChild(regInput);
-                        form.appendChild(title);
-                        form.appendChild(href);
-
-                        // Submit the form to open the new tab
-                        document.body.appendChild(form);
-                        form.submit();
-                    }
-                }
-
-                tables.forEach((table, index) => {
-                    const options = {
-                        scale: 10, // Increase the scale for higher resolution (adjust as needed)
-                    };
-
-                    html2canvas(table, options).then(canvas => {
-                        const dataURL = canvas.toDataURL('image/jpeg');
-                        const base64Data = dataURL.split(',')[1];
-
-                        // Create a hidden input field for each table's data
-                        const input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = `table${index + 1}`;
-                        input.value = base64Data;
-
-                        form.appendChild(input);
-
-                        // Check if it's the last table, then add date and reg and submit
-                        if (index === tables.length - 1) {
-                            submitFormIfReady();
-                        } else {
-                            submitFormIfReady();
-                        }
-                    });
+                    // Trigger the download
+                    downloadLink.click();
                 });
-            }
-
-
-
-            function downloadTablesAsImages2() {
-                Swal.fire({
-                    title: 'Tunggu saat siap download PDF',
-                    html: '<span class="loading-text">Mohon Tunggu...</span>',
-                    allowOutsideClick: false,
-                    showConfirmButton: false,
-                    willOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-
-                const tables = [
-                    document.getElementById('tableminggu1'),
-                    document.getElementById('tableminggu2'),
-                    document.getElementById('tableminggu3'),
-                    document.getElementById('tableminggu4')
-                ];
-
-                let reg = document.getElementById('regionalDataweek').value;
-                let date = document.getElementById('dateWeek').value;
-
-                const zip = new JSZip();
-
-                const capturePromises = tables.map((table, index) => {
-                    return new Promise((resolve) => {
-                        const options = {
-                            scale: 10, // Increase the scale for higher resolution (adjust as needed)
-                        };
-
-                        html2canvas(table, options).then(canvas => {
-                            const dataURL = canvas.toDataURL('image/jpeg');
-                            zip.file(`table${index + 1}.jpeg`, dataURL.split(',')[1], {
-                                base64: true
-                            });
-                            resolve();
-                        });
-                    });
-                });
-
-                Promise.all(capturePromises)
-                    .then(() => {
-                        zip.generateAsync({
-                            type: 'blob'
-                        }).then(function(content) {
-                            const url = window.URL.createObjectURL(content);
-
-                            const a = document.createElement('a');
-                            a.href = url;
-                            // Customize the download name with the date
-                            a.download = `QcInspeksi-${date}-Regional-${reg}.zip`;
-                            a.style.display = 'none';
-                            document.body.appendChild(a);
-
-                            a.click();
-
-                            window.URL.revokeObjectURL(url);
-                            document.body.removeChild(a);
-                            Swal.close(); // Close Swal after the download
-                        });
-                    })
-                    .catch(error => {
-                        console.error('An error occurred:', error);
-                        Swal.close(); // Close Swal on error
-                    });
-            }
-
+            };
             // showDataIns
 
             document.getElementById('exportForm').addEventListener('submit', function(event) {
