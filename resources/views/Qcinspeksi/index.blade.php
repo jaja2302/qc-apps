@@ -931,7 +931,7 @@
                         <h5><b>DATA</b></h5>
                     </div>
 
-                    <div class="d-flex justify-content-end mt-3 mb-2 ml-3 mr-3" style="padding-top: 20px;">
+                    <div class="d-flex justify-content-end mt-3 mb-2 ml-3 mr-3 container-fluid" style="padding-top: 20px;">
                         <div class="row w-100">
                             <div class="col-md-2 offset-md-8">
                                 {{csrf_field()}}
@@ -962,13 +962,11 @@
 
                     <div class="ml-3 mr-3 mb-3">
                         <div class="row text-center">
-                            <table class="table-responsive">
+                            <table class="table-responsive table-striped ">
                                 <thead style="color: white;">
                                     <tr>
-                                        {{-- <th rowspan="3" bgcolor="darkblue">Est.</th>
-                                            <th rowspan="3" bgcolor="darkblue">Afd.</th> --}}
-                                        <th class="freeze-col align-middle" rowspan="3" bgcolor="#1c5870">Est.</th>
-                                        <th class="freeze-col align-middle" rowspan="3" bgcolor="#1c5870">Afd.</th>
+                                        <th rowspan="3" bgcolor="#1c5870">Est.</th>
+                                        <th rowspan="3" bgcolor="#1c5870">Afd.</th>
                                         <th class="align-middle" colspan="4" rowspan="2" bgcolor="#588434">DATA BLOK
                                             SAMPEL</th>
                                         <th class="align-middle" colspan="17" bgcolor="#588434">Mutu Ancak (MA)</th>

@@ -10930,27 +10930,42 @@ class inspectController extends Controller
             ->get();
 
         // dd($status);
-
-        if ($status->isEmpty()) {
-            return response()->json('not_approved_all');
-        } else {
-            $verifby_askep = $status[0]->verifby_askep;
-            $verifby_manager = $status[0]->verifby_manager;
-            $verifby_asisten = ($status[0]->verifby_asisten == 1) ?  true : false;
-
-            $askep_manager = ($verifby_manager == 1 || $verifby_askep == 1) ? true : false;
-
-
-            if ($askep_manager && $verifby_asisten) {
-                return response()->json('all_approved');
-            } elseif ($askep_manager && !$verifby_asisten) {
-                return response()->json('asisten_not_approved');
-            } elseif (!$askep_manager && $verifby_asisten) {
-                return response()->json('askep_manager_not_approved');
-            } elseif (!$askep_manager && !$verifby_asisten) {
+        if ($menu === 'sidaktph' || $menu === 'sidakmutubuah') {
+            if ($status->isEmpty()) {
                 return response()->json('not_approved_all');
             } else {
-                return response()->json('condition_not_met');
+                $verifby_askep = $status[0]->verifby_askep;
+                $verifby_manager = $status[0]->verifby_manager;
+
+                if ($verifby_askep || $verifby_manager) {
+                    return response()->json('all_approved');
+                } elseif (!$verifby_askep || !$verifby_manager) {
+                    return response()->json('not_approved_all');
+                } else {
+                    return response()->json('condition_not_met');
+                }
+            }
+        } else {
+            if ($status->isEmpty()) {
+                return response()->json('not_approved_all');
+            } else {
+                $verifby_askep = $status[0]->verifby_askep;
+                $verifby_manager = $status[0]->verifby_manager;
+                $verifby_asisten = ($status[0]->verifby_asisten == 1) ?  true : false;
+
+                $askep_manager = ($verifby_manager == 1 || $verifby_askep == 1) ? true : false;
+
+                if ($askep_manager && $verifby_asisten) {
+                    return response()->json('all_approved');
+                } elseif ($askep_manager && !$verifby_asisten) {
+                    return response()->json('asisten_not_approved');
+                } elseif (!$askep_manager && $verifby_asisten) {
+                    return response()->json('askep_manager_not_approved');
+                } elseif (!$askep_manager && !$verifby_asisten) {
+                    return response()->json('not_approved_all');
+                } else {
+                    return response()->json('condition_not_met');
+                }
             }
         }
     }

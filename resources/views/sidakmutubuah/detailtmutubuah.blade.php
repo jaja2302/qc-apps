@@ -344,59 +344,39 @@
 
 
     <div class="container-fluid">
-    
+
         <div class="card table_wrapper">
             <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark ">
                 <h2>REKAP HARIAN SIDAK MUTU BUAH </h2>
             </div>
             <div class="alert alert-danger d-none d-flex flex-column align-items-start justify-content-between" role="alert" id="notverif">
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                    <use xlink:href="#exclamation-triangle-fill" />
+                </svg>
                 <div>
-                    Data belum Tervertifikasi oleh Manager/Askep/Asisten
+                    Data belum Tervertifikasi oleh Manager/Askep
                 </div>
-                @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' || session('jabatan') == 'Asisten Afdeling' )
-                <div>
-                    <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
-                </div>
-                
-                @endif
-            </div>
-            <div class="alert alert-warning d-none d-flex align-items-center" role="alert" id="asistennotverif">
-                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
-                    <div>
-                    Asisten Belum melakukan Aprroval
-                    </div>
-                    @if (session('jabatan') == 'Asisten'  || session('jabatan') == 'Asisten Afdeling')
-
-                    <div>
-                        <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
-                    </div>
-                    
-                    @endif
-            </div>
-            <div class="alert alert-warning d-none d-flex align-items-center" role="alert" id="askep_manager_not_approved">
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
-                <div>
-                Askep/Manager Belum melakukan Aprroval
-                </div>
-                @if (session('jabatan') == 'Askep' || session('jabatan') == 'Manager')
-
+                @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' )
                 <div>
                     <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
                 </div>
-                
+
                 @endif
             </div>
             <div class="alert alert-warning d-none d-flex align-items-center" role="alert" id="condition_not_met">
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                    <use xlink:href="#exclamation-triangle-fill" />
+                </svg>
                 <div>
-                Terjadi Kesalahan
+                    Terjadi Kesalahan
                 </div>
             </div>
             <div class="alert alert-primary d-none  d-flex align-items-center" role="alert" id="verifdone" dis>
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                    <use xlink:href="#info-fill" />
+                </svg>
                 <div>
-                  Data Sudah Tervertifikasi
+                    Data Sudah Tervertifikasi
                 </div>
             </div>
             <div class="header-container">
@@ -660,7 +640,7 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="text-center">
-                                <img id="img01"  alt="..." class="img-fluid">
+                                <img id="img01" alt="..." class="img-fluid">
                             </div>
                             <div class="col-12 col-lg-6">
                                 <p id="modalKomentar"></p>
@@ -749,425 +729,524 @@
             </div>
         </div>
 
-<!-- Button trigger modal -->
-   
+        <!-- Button trigger modal -->
 
 
 
 
-    <script type="text/javascript">
-      
 
-        $(document).ready(function() {
-           
-            // Close modal when the close button is clicked
-            $('#closeModalBtn_buah').click(function() {
-                var modal = new bootstrap.Modal(document.getElementById('editModalTPH'));
-                modal.hide();
-                // $('#editModalTPH').modal('hide');
-            });
+        <script type="text/javascript">
+            $(document).ready(function() {
 
-            // Submit the form when the Save Changes button is clicked
+                // Close modal when the close button is clicked
+                $('#closeModalBtn_buah').click(function() {
+                    var modal = new bootstrap.Modal(document.getElementById('editModalTPH'));
+                    modal.hide();
+                    // $('#editModalTPH').modal('hide');
+                });
 
-            function isNumber(value) {
-                return !isNaN(parseFloat(value)) && isFinite(value);
-            }
-        });
-        $("#show-button").click(function() {
-            Swal.fire({
-                title: 'Loading',
-                html: '<span class="loading-text">Mohon Tunggu...</span>',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                willOpen: () => {
-                    Swal.showLoading();
+                // Submit the form when the Save Changes button is clicked
+
+                function isNumber(value) {
+                    return !isNaN(parseFloat(value)) && isFinite(value);
                 }
             });
-
-            $('#data_tahunTab').empty()
-            getDataTphYear()
-            getmapsbuah();
-            fetchAndUpdateData();
-            getverif()
-        });
-        function getverif() {
-            let Tanggal = document.getElementById('inputDate').value;
-            let est = document.getElementById('est').value;
-            let afd = document.getElementById('afd').value;
-            let menu = 'sidakmutubuah'
-            var _token = $('input[name="_token"]').val();
-
-            document.getElementById('notverif').classList.add('d-none');
-            document.getElementById('verifdone').classList.add('d-none');
-            document.getElementById('asistennotverif').classList.add('d-none');
-            document.getElementById('askep_manager_not_approved').classList.add('d-none');
-            $.ajax({
-                url: "{{ route('verifinspeksi') }}",
-                method: "GET",
-                data: {
-                    Tanggal: Tanggal,
-                    est: est,
-                    afd: afd,
-                    menu: menu,
-                    _token: _token
-                },
-                success: function(response) {
-                   
-
-                    if (response === 'not_approved_all') {
-                        document.getElementById('notverif').classList.remove('d-none');
-                    } else if (response === 'all_approved') {
-                        document.getElementById('verifdone').classList.remove('d-none');
-                    }else if (response === 'asisten_not_approved') {
-                        // console.log('manager_not_approved');
-                        document.getElementById('asistennotverif').classList.remove('d-none');
-                    } else if (response === 'askep_manager_not_approved') {
-                        // console.log('manager_not_approved');
-                        document.getElementById('askep_manager_not_approved').classList.remove('d-none');
-                    } else if (response === 'condition_not_met') {
-                        console.error('Unexpected response:', response);
-                    }else {
-                        console.error('Unexpected response:', response);
+            $("#show-button").click(function() {
+                Swal.fire({
+                    title: 'Loading',
+                    html: '<span class="loading-text">Mohon Tunggu...</span>',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
                     }
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
+                });
+
+                $('#data_tahunTab').empty()
+                getDataTphYear()
+                getmapsbuah();
+                fetchAndUpdateData();
+                getverif()
             });
 
-        }
-        const addClickListener = (elementId) => {
-            const element = document.getElementById(elementId);
-            if (element !== null) {
-                element.addEventListener('click', verifbutton);
-            }
-        };
+            function getverif() {
+                let Tanggal = document.getElementById('inputDate').value;
+                let est = document.getElementById('est').value;
+                let afd = document.getElementById('afd').value;
+                let menu = 'sidakmutubuah'
+                var _token = $('input[name="_token"]').val();
 
-        addClickListener('verifbutton_default');
-        addClickListener('verifbutton_manager');
-        addClickListener('verifbutton_askep');
-        function hariini() {
-            let today = new Date();
-            let year = today.getFullYear();
-            let month = String(today.getMonth() + 1).padStart(2, '0');
-            let day = String(today.getDate()).padStart(2, '0');
-            let hours = String(today.getHours()).padStart(2, '0');
-            let minutes = String(today.getMinutes()).padStart(2, '0');
-
-            return `${year}-${month}-${day} ${hours}:${minutes}`;
-        }
-        var departemen = "{{ session('departemen') }}";
-        var lokasikerja = "{{ session('lok') }}";
-        var user_name = "{{ session('user_name') }}";
-        function verifbutton() {
-            Swal.fire({
-                title: "Apakah Anda ingin Approve Laporan ini?",
-                text: `Jabatan Saat Ini ${currentUserName}`,
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                cancelButtonText: "No",
-                allowOutsideClick: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    let Tanggal = document.getElementById('inputDate').value;
-                    let est = document.getElementById('est').value;
-                    let afd = document.getElementById('afd').value;
-                    let menu = 'sidakmutubuah'
-                    let tanggal_approve = hariini();
-                    $.ajax({
-                        url: "{{ route('verifaction') }}",
-                        method: "POST",
-                        data: {
-                            Tanggal: Tanggal,
-                            est: est,
-                            afd: afd,
-                            menu: menu,
-                            jabatan: currentUserName,
-                            nama: user_name,
-                            departemen: departemen,
-                            lokasikerja: lokasikerja,
-                            tanggal_approve: tanggal_approve,
-                            action: 'approve',
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function(response) {
-                            console.log('Approval successful:', response);
-                            Swal.fire({
-                            title: 'Success',
-                            text: 'Data berhasil diupdate',
-                            icon: 'success',
-                            allowOutsideClick: false
-                            }).then((result) => {
-                            if (result.isConfirmed) {
-                                location.reload();
-                            }
-                            });
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Approval error:', xhr.responseText);
-                            // Handle the error response as needed
+                document.getElementById('notverif').classList.add('d-none');
+                document.getElementById('condition_not_met').classList.add('d-none');
+                document.getElementById('verifdone').classList.add('d-none');
+                $.ajax({
+                    url: "{{ route('verifinspeksi') }}",
+                    method: "GET",
+                    data: {
+                        Tanggal: Tanggal,
+                        est: est,
+                        afd: afd,
+                        menu: menu,
+                        _token: _token
+                    },
+                    success: function(response) {
+                        if (response === 'not_approved_all') {
+                            document.getElementById('notverif').classList.remove('d-none');
+                        } else if (response === 'all_approved') {
+                            document.getElementById('verifdone').classList.remove('d-none');
+                        } else if (response === 'condition_not_met') {
+                            document.getElementById('condition_not_met').classList.remove('d-none');
+                        } else {
+                            console.error('Unexpected response:', response);
                         }
-                    });
-                } else if (result.isDenied) {
-                    // User clicked No
-                    console.log('User declined approval.');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+
+            }
+            const addClickListener = (elementId) => {
+                const element = document.getElementById(elementId);
+                if (element !== null) {
+                    element.addEventListener('click', verifbutton);
                 }
+            };
+
+            addClickListener('verifbutton_default');
+            addClickListener('verifbutton_manager');
+            addClickListener('verifbutton_askep');
+
+            function hariini() {
+                let today = new Date();
+                let year = today.getFullYear();
+                let month = String(today.getMonth() + 1).padStart(2, '0');
+                let day = String(today.getDate()).padStart(2, '0');
+                let hours = String(today.getHours()).padStart(2, '0');
+                let minutes = String(today.getMinutes()).padStart(2, '0');
+
+                return `${year}-${month}-${day} ${hours}:${minutes}`;
+            }
+            var departemen = "{{ session('departemen') }}";
+            var lokasikerja = "{{ session('lok') }}";
+            var user_name = "{{ session('user_name') }}";
+
+            function verifbutton() {
+                Swal.fire({
+                    title: "Apakah Anda ingin Approve Laporan ini?",
+                    text: `Jabatan Saat Ini ${currentUserName}`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "No",
+                    allowOutsideClick: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let Tanggal = document.getElementById('inputDate').value;
+                        let est = document.getElementById('est').value;
+                        let afd = document.getElementById('afd').value;
+                        let menu = 'sidakmutubuah'
+                        let tanggal_approve = hariini();
+                        $.ajax({
+                            url: "{{ route('verifaction') }}",
+                            method: "POST",
+                            data: {
+                                Tanggal: Tanggal,
+                                est: est,
+                                afd: afd,
+                                menu: menu,
+                                jabatan: currentUserName,
+                                nama: user_name,
+                                departemen: departemen,
+                                lokasikerja: lokasikerja,
+                                tanggal_approve: tanggal_approve,
+                                action: 'approve',
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+                                console.log('Approval successful:', response);
+                                Swal.fire({
+                                    title: 'Success',
+                                    text: 'Data berhasil diupdate',
+                                    icon: 'success',
+                                    allowOutsideClick: false
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        location.reload();
+                                    }
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Approval error:', xhr.responseText);
+                                // Handle the error response as needed
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        // User clicked No
+                        console.log('User declined approval.');
+                    }
+                });
+            }
+
+
+            document.getElementById('show-button').addEventListener('click', function() {
+                document.getElementById('download-button').disabled = false;
+                document.getElementById('moveDataButton').disabled = false;
             });
-        }
 
 
-        document.getElementById('show-button').addEventListener('click', function() {
-            document.getElementById('download-button').disabled = false;
-            document.getElementById('moveDataButton').disabled = false;
-        });
+            document.getElementById('show-button').addEventListener('click', function() {
+                var selectedDate = document.getElementById('inputDate').value;
+                document.getElementById('tglPDF').value = selectedDate;
+
+                // Call the fetchAndUpdateData function to update the data
+            });
+
+            var currentUserName = "{{ session('jabatan') }}";
+
+            //untuk mengirim parameter tanggal ke download pdf BA
+            document.addEventListener('DOMContentLoaded', function() {
+                const showButton = document.getElementById('show-button');
+                const inputDate = document.getElementById('inputDate');
+                const selectedDate = document.getElementById('selectedDate');
+                const tglPDF = document.getElementById('tglPDF');
+                const downloadButton = document.getElementById('download-button');
+                const lottieDownload = document.getElementById('lottie-download');
+
+                // Initialize Lottie animation
+                const downloadAnimation = lottie.loadAnimation({
+                    container: lottieDownload,
+                    renderer: 'svg',
+                    loop: true,
+                    autoplay: true,
+                    path: 'https://assets2.lottiefiles.com/packages/lf20_eUext1.json'
+                });
 
 
-        document.getElementById('show-button').addEventListener('click', function() {
-            var selectedDate = document.getElementById('inputDate').value;
-            document.getElementById('tglPDF').value = selectedDate;
+            });
 
-            // Call the fetchAndUpdateData function to update the data
-        });
-
-        var currentUserName = "{{ session('jabatan') }}";
-
-        //untuk mengirim parameter tanggal ke download pdf BA
-        document.addEventListener('DOMContentLoaded', function() {
-            const showButton = document.getElementById('show-button');
-            const inputDate = document.getElementById('inputDate');
-            const selectedDate = document.getElementById('selectedDate');
-            const tglPDF = document.getElementById('tglPDF');
-            const downloadButton = document.getElementById('download-button');
-            const lottieDownload = document.getElementById('lottie-download');
-
-            // Initialize Lottie animation
-            const downloadAnimation = lottie.loadAnimation({
-                container: lottieDownload,
-                renderer: 'svg',
+            //buat animasi loading ketika tombol show di klik
+            const lottieContainer = document.getElementById('lottie-container');
+            const lottieAnimation = lottie.loadAnimation({
+                container: lottieContainer,
+                renderer: "svg",
                 loop: true,
-                autoplay: true,
-                path: 'https://assets2.lottiefiles.com/packages/lf20_eUext1.json'
+                autoplay: false,
+                path: "https://assets3.lottiefiles.com/private_files/lf30_fup2uejx.json",
+            });
+            const lottieContainer1 = document.getElementById('lottie-container1');
+            const lottieAnimation1 = lottie.loadAnimation({
+                container: lottieContainer1,
+                renderer: "svg",
+                loop: true,
+                autoplay: false,
+                path: "https://assets3.lottiefiles.com/packages/lf20_vfcbh2yp.json",
             });
 
 
-        });
 
-        //buat animasi loading ketika tombol show di klik
-        const lottieContainer = document.getElementById('lottie-container');
-        const lottieAnimation = lottie.loadAnimation({
-            container: lottieContainer,
-            renderer: "svg",
-            loop: true,
-            autoplay: false,
-            path: "https://assets3.lottiefiles.com/private_files/lf30_fup2uejx.json",
-        });
-        const lottieContainer1 = document.getElementById('lottie-container1');
-        const lottieAnimation1 = lottie.loadAnimation({
-            container: lottieContainer1,
-            renderer: "svg",
-            loop: true,
-            autoplay: false,
-            path: "https://assets3.lottiefiles.com/packages/lf20_vfcbh2yp.json",
-        });
+            function fetchAndUpdateData() {
+                var est = document.getElementById('est').value;
+                var afd = document.getElementById('afd').value;
+                var tanggal = document.getElementById('inputDate').value
+                var _token = $('input[name="_token"]').val();
+                if ($.fn.DataTable.isDataTable('#new_Sidak')) {
+                    $('#new_Sidak').DataTable().destroy();
+                }
+                $.ajax({
+                    url: "{{ route('filterdetialMutubuah') }}",
+                    method: "GET",
+                    data: {
+                        tanggal,
+                        est,
+                        afd,
+                        _token: _token
+                    },
+                    success: function(result) {
 
-       
+                        var parseResult = JSON.parse(result);
+                        let table = $('#new_Sidak').DataTable({
+                            columns: [{
+                                    title: 'ID',
+                                    data: 'id',
+                                },
+                                {
+                                    title: 'Estate',
+                                    data: 'estate'
+                                },
+                                {
+                                    title: 'Afdeling',
+                                    data: 'afdeling'
+                                },
+                                {
+                                    title: 'Blok',
+                                    data: 'blok'
+                                },
+                                {
+                                    title: 'Petugas',
+                                    data: 'petugas'
+                                },
+                                {
+                                    title: 'Waktu',
+                                    data: 'datetime'
+                                },
+                                {
+                                    title: 'TPH Baris',
+                                    data: 'tph_baris'
+                                },
+                                {
+                                    title: 'Ancak Pemanen',
+                                    data: 'ancak_pemanen'
+                                },
+                                {
+                                    title: 'Jumlah Janjang',
+                                    data: 'jumlah_jjg'
+                                }, {
+                                    title: 'Buah Mentah',
+                                    data: 'bmt'
+                                },
+                                {
+                                    title: 'Buah Masak',
+                                    data: 'bmk'
+                                },
+                                {
+                                    title: 'Buah Lewat Masak',
+                                    data: 'overripe'
+                                },
+                                {
+                                    title: 'Buah Kosong',
+                                    data: 'empty_bunch'
+                                },
+                                {
+                                    title: 'Buah Abnormal',
+                                    data: 'abnormal'
+                                },
+                                {
+                                    title: 'Rat Damage',
+                                    data: 'rd'
+                                },
+                                {
+                                    title: 'Tidak Vcut',
+                                    data: 'vcut'
+                                },
+                                {
+                                    title: 'Alas Karung',
+                                    data: 'alas_br'
+                                },
+                                {
+                                    title: 'Maps',
+                                    data: 'app_version',
+                                    render: function(data, type, row, meta) {
+                                        var parts = data.split(';'); // Use the 'data' parameter instead of 'dataString'
 
-        function fetchAndUpdateData() {
-            var est = document.getElementById('est').value;
-            var afd = document.getElementById('afd').value;
-            var tanggal = document.getElementById('inputDate').value
-            var _token = $('input[name="_token"]').val();
-            if ($.fn.DataTable.isDataTable('#new_Sidak')) {
-                $('#new_Sidak').DataTable().destroy();
-            }
-            $.ajax({
-                url: "{{ route('filterdetialMutubuah') }}",
-                method: "GET",
-                data: {
-                    tanggal,
-                    est,
-                    afd,
-                    _token: _token
-                },
-                success: function(result) {
+                                        // Get the last part
+                                        var lastPart = parts[parts.length - 1];
 
-                    var parseResult = JSON.parse(result);
-                    let table = $('#new_Sidak').DataTable({
-                    columns: [{
-                            title: 'ID',
-                            data: 'id',
-                        },
-                        {
-                            title: 'Estate',
-                            data: 'estate'
-                        },
-                        {
-                            title: 'Afdeling',
-                            data: 'afdeling'
-                        },
-                        {
-                            title: 'Blok',
-                            data: 'blok'
-                        },
-                        {
-                            title: 'Petugas',
-                            data: 'petugas'
-                        },
-                        {
-                            title: 'Waktu',
-                            data: 'datetime'
-                        },
-                        {
-                            title: 'TPH Baris',
-                            data: 'tph_baris'
-                        },
-                        {
-                            title: 'Ancak Pemanen',
-                            data: 'ancak_pemanen'
-                        },
-                        {
-                            title: 'Jumlah Janjang',
-                            data: 'jumlah_jjg'
-                        }, {
-                            title: 'Buah Mentah',
-                            data: 'bmt'
-                        },
-                        {
-                            title: 'Buah Masak',
-                            data: 'bmk'
-                        },
-                        {
-                            title: 'Buah Lewat Masak',
-                            data: 'overripe'
-                        },
-                        {
-                            title: 'Buah Kosong',
-                            data: 'empty_bunch'
-                        },
-                        {
-                            title: 'Buah Abnormal',
-                            data: 'abnormal'
-                        },
-                        {
-                            title: 'Rat Damage',
-                            data: 'rd'
-                        },
-                        {
-                            title: 'Tidak Vcut',
-                            data: 'vcut'
-                        },
-                        {
-                            title: 'Alas Karung',
-                            data: 'alas_br'
-                        },
-                        {
-                            title: 'Maps',
-                            data: 'app_version',
-                            render: function(data, type, row, meta) {
-                                var parts = data.split(';'); // Use the 'data' parameter instead of 'dataString'
+                                        // Define variables for the conditions
+                                        var Akurat = 'Akurat';
+                                        var Liar = 'Liar';
+                                        var result = null;
 
-                                // Get the last part
-                                var lastPart = parts[parts.length - 1];
+                                        // Check conditions and assign values
+                                        if (lastPart === 'GA') {
+                                            result = Akurat;
+                                        } else if (lastPart === 'GL') {
+                                            result = Liar;
+                                        }
 
-                                // Define variables for the conditions
-                                var Akurat = 'Akurat';
-                                var Liar = 'Liar';
-                                var result = null;
+                                        return result; // Return the computed result
+                                    }
+                                },
 
-                                // Check conditions and assign values
-                                if (lastPart === 'GA') {
-                                    result = Akurat;
-                                } else if (lastPart === 'GL') {
-                                    result = Liar;
+                                {
+                                    title: 'Actions',
+                                    visible: (currentUserName === 'Askep' || currentUserName === 'Manager'),
+                                    render: function(data, type, row, meta) {
+                                        var buttons =
+                                            '<button class="edit-btn">Edit</button>' +
+                                            '<button class="delete-btn">Delete</button>';
+                                        return buttons;
+                                    }
                                 }
+                            ],
+                            // Add other DataTable options as needed
+                        });
 
-                                return result; // Return the computed result
-                            }
-                        },
+                        // $('#closeModalBtn_buah').click(function() {
+                        //     $('#editModalTPH').modal('hide');
+                        // });
+                        // Clear existing data and add new data to the DataTable
+                        table.clear().rows.add(parseResult['mutubuah']).draw();
 
-                        {
-                            title: 'Actions',
-                            visible: (currentUserName === 'Askep' || currentUserName === 'Manager'),
-                            render: function(data, type, row, meta) {
-                                var buttons =
-                                        '<button class="edit-btn">Edit</button>' +
-                                        '<button class="delete-btn">Delete</button>';
-                                return buttons;
-                            }
+                        $('#new_Sidak').on('click', '.edit-btn', function() {
+                            var rowData = table.row($(this).closest('tr')).data();
+
+                            editSidakTPh(rowData);
+
+
+                        });
+                        $('#new_Sidak').on('click', '.delete-btn', function() {
+                            var rowData = table.row($(this).closest('tr')).data();
+
+                            deleteRowBuah(rowData);
+                        });
+
+
+                    },
+                    error: function() {
+                        lottieAnimation.stop(); // Stop the Lottie animation
+                        lottieContainer.style.display = 'none'; // Hide the Lottie container
+                    }
+                });
+
+                function editSidakTPh(rowData) {
+
+
+                    // console.log(rowData.id);
+
+                    $('#update-blokCak').val(rowData.blok)
+                    $('#idbuah').val(rowData.id)
+                    $('#petugasrow').val(rowData.petugas)
+                    $('#tphbaris').val(rowData.tph_baris)
+                    $('#ancakpemanen').val(rowData.ancak_pemanen)
+                    $('#jumlahjanjang').val(rowData.jumlah_jjg)
+                    $('#bmt').val(rowData.bmt)
+                    $('#bmk').val(rowData.bmk)
+                    $('#overripe').val(rowData.overripe)
+                    $('#empty').val(rowData.empty_bunch)
+                    $('#abnormal').val(rowData.abnormal)
+                    $('#ratdmg').val(rowData.rd)
+                    $('#vcut').val(rowData.vcut)
+                    $('#alasbr').val(rowData.alas_br)
+                    var modal = new bootstrap.Modal(document.getElementById('editModalTPH'));
+                    modal.show();
+                    // $('#editModalTPH').modal('show')
+                }
+
+
+                function deleteRowBuah(rowData) {
+
+                    var rowId = rowData.id;
+
+                    // Show the confirmation alert
+                    Swal.fire({
+                        title: 'Anda Yakin?',
+                        text: 'Data yang di hapus tidak dapat di kembalikan',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Oke!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // User confirmed, proceed with deletion
+                            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+                            // console.log(brdtgl);
+                            // Send the AJAX request
+                            $.ajaxSetup({
+                                headers: {
+                                    'X-CSRF-TOKEN': csrfToken
+                                }
+                            });
+
+                            $.ajax({
+                                url: '{{ route("deleteBA_mutubuah") }}',
+                                type: 'POST', // or 'GET' based on your setup
+                                data: {
+                                    id: rowId
+                                }, // send the row ID to your controller
+                                success: function(response) {
+                                    // Handle success response if needed
+                                    if (response.message === 'success') {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Success',
+                                            text: 'Data berhasil dihapus!'
+                                        }).then(function() {
+                                            // Reload the page after the user clicks 'OK' on the success alert
+                                            location.reload();
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: response.message === 'error' ? 'Error updating record' : 'Gagal memperbarui data!'
+                                        }).then(function() {
+                                            // Reload the page after the user clicks 'OK' on the success alert
+                                            location.reload();
+                                        });
+                                    }
+
+                                },
+                                error: function(xhr, status, error) {
+                                    // Handle error response if needed
+                                    console.error('Error deleting row:', error);
+                                }
+                            });
                         }
-                    ],
-                        // Add other DataTable options as needed
                     });
-                
+                }
+
+
+
+                $(document).ready(function() {
+                    // Close modal when the close button is clicked
                     // $('#closeModalBtn_buah').click(function() {
                     //     $('#editModalTPH').modal('hide');
                     // });
-                    // Clear existing data and add new data to the DataTable
-                    table.clear().rows.add(parseResult['mutubuah']).draw();
 
-                    $('#new_Sidak').on('click', '.edit-btn', function() {
-                        var rowData = table.row($(this).closest('tr')).data();
-                      
-                        editSidakTPh(rowData);
+                    // Submit the form when the Save Changes button is clicked
+                    $('#saveChangesBtn_buah').off('click').on('click', function() {
+                        // var modal = new bootstrap.Modal(document.getElementById('editForm_buah'));
+                        //  modal.submit();
 
-                   
-                    });
-                    $('#new_Sidak').on('click', '.delete-btn', function() {
-                        var rowData = table.row($(this).closest('tr')).data();
-                      
-                        deleteRowBuah(rowData);
+                        $('#editForm_buah').submit();
                     });
 
+                    function isNumber(value) {
+                        return !isNaN(parseFloat(value)) && isFinite(value);
+                    }
 
-                },
-                error: function() {
-                    lottieAnimation.stop(); // Stop the Lottie animation
-                    lottieContainer.style.display = 'none'; // Hide the Lottie container
-                }
-            });
+                    $('#editForm_buah').submit(function(e) {
+                        e.preventDefault(); // Prevent the default form submission
 
-            function editSidakTPh(rowData) {
+                        // Get the form data
+                        var formData = new FormData(this);
+                        formData.append('id', $('#idbuah').val());
 
-          
-                // console.log(rowData.id);
+                        var blok = $('#update-blokCak').val();
 
-                $('#update-blokCak').val(rowData.blok)
-                $('#idbuah').val(rowData.id)
-                $('#petugasrow').val(rowData.petugas)
-                $('#tphbaris').val(rowData.tph_baris)
-                $('#ancakpemanen').val(rowData.ancak_pemanen)
-                $('#jumlahjanjang').val(rowData.jumlah_jjg)
-                $('#bmt').val(rowData.bmt)
-                $('#bmk').val(rowData.bmk)
-                $('#overripe').val(rowData.overripe)
-                $('#empty').val(rowData.empty_bunch)
-                $('#abnormal').val(rowData.abnormal)
-                $('#ratdmg').val(rowData.rd)
-                $('#vcut').val(rowData.vcut)
-                $('#alasbr').val(rowData.alas_br)
-                var modal = new bootstrap.Modal(document.getElementById('editModalTPH'));
-                modal.show();
-                // $('#editModalTPH').modal('show')
-            }
+                        var petugas = $('#petugasrow').val();
+                        var Tph_baris = $('#tphbaris').val();
+                        var ancak_pemanen = $('#ancakpemanen').val();
+                        var jml_jjg = $('#jumlahjanjang').val();
+                        var bmk = $('#bmk').val();
+                        var bmt = $('#bmt').val();
+                        var overripe = $('#overripe').val();
+                        var empty = $('#empty').val();
+                        var abnormal = $('#abnormal').val();
+                        var rd = $('#ratdmg').val();
+                        var vcut = $('#vcut').val();
+                        var alas_br = $('#alasbr').val();
 
-
-            function deleteRowBuah(rowData) {
-
-                var rowId = rowData.id;
-
-                // Show the confirmation alert
-                Swal.fire({
-                    title: 'Anda Yakin?',
-                    text: 'Data yang di hapus tidak dapat di kembalikan',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Oke!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // User confirmed, proceed with deletion
+                        if (!isNumber(jml_jjg) ||
+                            !isNumber(bmk) ||
+                            !isNumber(bmt) ||
+                            !isNumber(overripe) ||
+                            !isNumber(empty) ||
+                            !isNumber(rd) ||
+                            !isNumber(vcut) ||
+                            !isNumber(alas_br) ||
+                            !isNumber(abnormal)
+                        ) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Masukan Error',
+                                text: 'Hanya bisa di masukan angka Saja!'
+                            });
+                            return;
+                        }
                         var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
                         // console.log(brdtgl);
@@ -1179,18 +1258,21 @@
                         });
 
                         $.ajax({
-                            url: '{{ route("deleteBA_mutubuah") }}',
-                            type: 'POST', // or 'GET' based on your setup
-                            data: {
-                                id: rowId
-                            }, // send the row ID to your controller
+                            type: 'POST',
+                            url: '{{ route("updateBA_mutubuah") }}',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
                             success: function(response) {
-                                // Handle success response if needed
-                                if (response.message === 'success') {
+                                // $('#editModalTPH').modal('hide');
+                                var modal = new bootstrap.Modal(document.getElementById('editModalTPH'));
+                                modal.hide();
+
+                                if (response.message === 'Success') {
                                     Swal.fire({
                                         icon: 'success',
                                         title: 'Success',
-                                        text: 'Data berhasil dihapus!'
+                                        text: 'Data berhasil diperbarui!'
                                     }).then(function() {
                                         // Reload the page after the user clicks 'OK' on the success alert
                                         location.reload();
@@ -1199,811 +1281,701 @@
                                     Swal.fire({
                                         icon: 'error',
                                         title: 'Error',
-                                        text: response.message === 'error' ? 'Error updating record' : 'Gagal memperbarui data!'
+                                        text: response.message === 'Invalid ID' ? 'Error updating record' : 'Gagal memperbarui data!'
                                     }).then(function() {
                                         // Reload the page after the user clicks 'OK' on the success alert
                                         location.reload();
                                     });
                                 }
 
+
                             },
                             error: function(xhr, status, error) {
-                                // Handle error response if needed
-                                console.error('Error deleting row:', error);
+                                console.error(xhr.responseText);
+                                // Show an error message or perform any other actions
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Gagal memperbarui data!'
+                                }).then(function() {
+                                    // Reload the page after the user clicks 'OK' on the success alert
+                                    location.reload();
+                                });
+                            }
+                        });
+                    });
+
+                    $('#confirmDeleteBtn').off('click').on('click', function() {
+                        e.preventDefault(); // Prevent the default form submission
+                        // Create a form data object
+                        var formData = new FormData();
+                        // formData.append('delete_id', rowId);
+                        formData.append('delete_id', $('#idbuah').val());
+
+                        // Get the CSRF token from the meta tag
+                        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+                        // Set the CSRF token in the request headers
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken
+                            }
+                        });
+
+                        // Send the AJAX request to the controller
+                        $.ajax({
+                            url: '{{ route("deletedetailtph") }}',
+                            method: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function(response) {
+                                // Close the delete modal
+                                //    var modal = new bootstrap.Modal(document.getElementById('deleteModalancak'));
+                                //        modal.hide();
+                                // $('#deleteModalancak').modal('hide');
+
+                                // Show a success message using SweetAlert
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: 'Data deleted successfully!',
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                // Handle the error if needed
+                                console.error(error);
+                                // var modal = new bootstrap.Modal(document.getElementById('deleteModalancak'));
+                                //        modal.hide();
+                                // $('#deleteModalancak').modal('hide');
+                            }
+                        });
+                    });
+                });
+
+
+            }
+
+
+
+
+            function goBack() {
+                // Save the selected tab to local storage
+                localStorage.setItem('selectedTab', 'nav-data-tab');
+
+                // Redirect to the target page
+                window.location.href = "https://qc-apps.srs-ssms.com/dashboard_mutubuah";
+            }
+
+            document.getElementById("show-button").disabled = true;
+
+            document.getElementById("inputDate").addEventListener("change", function() {
+                document.getElementById("show-button").disabled = false;
+            });
+
+
+
+            function getDataTphYear() {
+
+                var _token = $('input[name="_token"]').val();
+                var est = document.getElementById('est').value
+                var afd = document.getElementById('afd').value
+                var tanggal = document.getElementById('inputDate').value
+
+
+
+                $.ajax({
+                    url: "{{ route('getDataRekap') }}",
+                    method: "GET",
+                    data: {
+                        est,
+                        afd,
+                        tanggal,
+                        _token: _token
+                    },
+                    success: function(result) {
+                        //parsing result ke json untuk dalam estate
+                        var parseResult = JSON.parse(result)
+                        var afdResult = Object.entries(parseResult['sidak_buah'])
+                        // var EstTotal = Object.entries(parseResult['total_buah'])
+
+                        // console.log(arrEst1);
+                        // var arrEst1 = afdResult
+                        // var tbody1 = document.getElementById('data_tahunTab');
+
+                        // console.log(arrEst1);
+                        // Assuming `arrEst1` is your array of data
+
+                        var tbody1 = document.getElementById('data_tahunTab');
+                        afdResult.forEach((outerArray) => {
+                            const key = outerArray[0];
+                            const data = outerArray[1];
+
+                            Object.keys(data).forEach((subKey) => {
+                                const rowData = data[subKey];
+                                const tr = document.createElement('tr');
+                                // console.log(rowData['estate']);
+                                let item1 = rowData['estate']
+                                let item2 = rowData['est']
+                                let item3 = rowData['petugas']
+                                let item4 = rowData['Jumlah_janjang']
+                                // mentah
+                                let item5 = rowData['tnp_brd']
+                                let item6 = rowData['persenTNP_brd']
+                                let item7 = rowData['krg_brd']
+                                let item8 = rowData['persenKRG_brd']
+                                let item9 = rowData['total_jjg']
+                                let item10 = rowData['persen_totalJjg']
+                                let item11 = rowData['skor_total']
+                                // masak 
+                                let item12 = rowData['jjg_matang']
+                                let item13 = rowData['persen_jjgMtang']
+                                let item14 = rowData['skor_jjgMatang']
+                                // lewat matang 
+                                let item15 = rowData['lewat_matang']
+                                let item16 = rowData['persen_lwtMtng']
+                                let item17 = rowData['skor_lewatMTng']
+                                //janjang kosong
+                                let item18 = rowData['janjang_kosong']
+                                let item19 = rowData['persen_kosong']
+                                let item20 = rowData['skor_kosong']
+                                // tidak standar vcut 
+                                let item21 = rowData['vcut']
+                                let item22 = rowData['vcut_persen']
+                                let item23 = rowData['vcut_skor']
+                                // abnormal 
+                                let item24 = rowData['abnormal']
+                                let item25 = rowData['abnormal_persen']
+                                // rat dmg
+                                let item26 = rowData['rat_dmg']
+                                let item27 = rowData['rd_persen']
+                                // penggunaan  karung
+                                let item28 = rowData['TPH']
+                                let item29 = rowData['persen_krg']
+                                let item30 = rowData['skor_kr']
+                                // all skor 
+                                let item31 = rowData['All_skor']
+                                let item32 = rowData['kategori']
+                                const items = [];
+                                for (let i = 1; i <= 32; i++) {
+                                    items.push(eval(`item${i}`));
+                                }
+
+                                items.forEach((item, index) => {
+                                    const itemElement = document.createElement('td');
+                                    itemElement.classList.add('text-center');
+                                    itemElement.innerText = item;
+
+                                    if (index === 31) {
+                                        // Apply background color based on the value of item32
+                                        if (item === 'SATISFACTORY') {
+                                            itemElement.style.backgroundColor = '#fffc04';
+                                        } else if (item === 'EXCELLENT') {
+                                            itemElement.style.backgroundColor = '#5874c4';
+                                        } else if (item === 'GOOD') {
+                                            itemElement.style.backgroundColor = '#10fc2c';
+                                        } else if (item === 'POOR') {
+                                            itemElement.style.backgroundColor = '#ff0404';
+                                        } else if (item === 'FAIR') {
+                                            itemElement.style.backgroundColor = '#ffa404';
+                                        }
+                                    }
+                                    if (item1 === 'TOTAL') {
+                                        if (item32 === 'SATISFACTORY') {
+                                            itemElement.style.backgroundColor = '#fffc04';
+                                        } else if (item32 === 'EXCELLENT') {
+                                            itemElement.style.backgroundColor = '#5874c4';
+                                        } else if (item32 === 'GOOD') {
+                                            itemElement.style.backgroundColor = '#10fc2c';
+                                        } else if (item32 === 'POOR') {
+                                            itemElement.style.backgroundColor = '#ff0404';
+                                        } else if (item32 === 'FAIR') {
+                                            itemElement.style.backgroundColor = '#ffa404';
+                                        }
+                                    }
+
+                                    tr.appendChild(itemElement);
+                                });
+
+                                tbody1.appendChild(tr);
+
+                            });
+                        });
+                    }
+                })
+            }
+
+            function openModal(src, komentar) {
+                var modalImg = document.getElementById("img01");
+                modalImg.src = src;
+                var modalKomentar = document.getElementById("modalKomentar");
+                modalKomentar.textContent = komentar;
+
+                var downloadButton = document.getElementById("downloadButton");
+                downloadButton.addEventListener("click", handleDownload);
+
+                var myModal = new bootstrap.Modal(document.getElementById('myModal'), {});
+                myModal.show();
+
+                var closeButton = document.getElementById('modalCloseButton');
+                closeButton.addEventListener('click', function() {
+                    myModal.hide();
+                    downloadButton.removeEventListener("click", handleDownload); // Remove the event listener when the modal is closed
+                    URL.revokeObjectURL(modalImg.src); // Clean up the object URL to avoid memory leaks
+                });
+            }
+
+            function handleDownload(event) {
+                var src = document.getElementById("img01").src;
+                var filename = getFilenameFromSrc(src);
+                downloadImage(src, filename);
+            }
+
+            function getFilenameFromSrc(src) {
+                var startIndex = src.lastIndexOf("/") + 1;
+                var endIndex = src.lastIndexOf(".");
+                var filename = src.substring(startIndex, endIndex);
+
+                // Split the filename into an array using "_" as the delimiter
+                var parts = filename.split("_");
+
+                // Extract the desired parts from the array
+                var part1 = parts[0]; // IMA
+                var part2 = parts[1]; // 2023710
+                var part3 = parts[2]; // 100348
+                var part4 = parts[3]; // KNE
+                var part5 = parts[4]; // OA
+                var part6 = parts[5]; // R01404
+                var part7 = parts[6]; // 102
+
+                // Construct the desired filename using the extracted parts and spaces
+                var customPart = "Est " + "_" + part4 + " Afd " + "_" + part5 + " Sidak " + "_" + part1 + " Blok " + "_" + part6;
+
+                return customPart;
+            }
+
+
+
+
+            function downloadImage(imageName, filename) {
+                var downloadLink = "https://srs-ssms.com/qc_inspeksi/get_qcIMG.php?image=" + encodeURIComponent(imageName);
+
+                fetch(downloadLink)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        var url = URL.createObjectURL(blob);
+                        var a = document.createElement("a");
+                        a.href = url;
+                        a.download = filename + ".jpg"; // Use the filename for the downloaded image
+                        a.style.display = "none"; // Hide the anchor element
+
+                        document.body.appendChild(a);
+
+                        a.click(); // Trigger the click event on the hidden anchor element
+
+                        // Clean up and remove the anchor element after the download
+                        a.remove();
+                        URL.revokeObjectURL(url);
+                    })
+                    .catch(error => {
+                        console.error("Error downloading image:", error);
+                    });
+            }
+
+            $('#yourPopupContentElementId').on('click', function() {
+                console.log('Element clicked!');
+                // Your code here
+                yourNewFunction(); // Call your function here or add more code
+            });
+
+            function getmapsbuah() {
+
+                var map = L.map('map');
+                map.remove();
+
+
+                var Tanggal = document.getElementById('inputDate').value;
+                var est = document.getElementById('est').value;
+                var afd = document.getElementById('afd').value;
+                var _token = $('input[name="_token"]').val();
+
+                $.ajax({
+                    url: "{{ route('getMapsData') }}",
+                    method: "get",
+                    data: {
+                        Tanggal,
+                        est,
+                        afd,
+                        _token: _token
+                    },
+                    success: function(result) {
+                        var plot = JSON.parse(result);
+                        const blokResult = Object.entries(plot['blok']);
+                        const markerResult = Object.entries(plot['marker']);
+                        const plotarrow = Object.entries(plot['plotarrow']);
+                        var mapContainer = L.DomUtil.get('map');
+                        if (mapContainer != null) {
+                            mapContainer._leaflet_id = null;
+                        }
+
+                        var map = L.map('map').setView([-2.2745234, 111.61404248], 13);
+                        var googleStreet = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+
+                        var googleSatellite = L.tileLayer('http://{s}.google.com/vt?lyrs=s&x={x}&y={y}&z={z}', {
+                            maxZoom: 20,
+                            subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+                        });
+                        // map.addControl(new L.Control.Fullscreen());
+                        var baseMaps = {
+                            "Google Street": googleStreet,
+                            "Google Satellite": googleSatellite
+                        };
+                        L.control.layers(baseMaps).addTo(map);
+                        let blokLayer = L.layerGroup();
+
+                        var getPlotStr = '{"type"'
+                        getPlotStr += ":"
+                        getPlotStr += '"FeatureCollection",'
+                        getPlotStr += '"features"'
+                        getPlotStr += ":"
+                        getPlotStr += '['
+
+                        // console.log(blok)
+                        for (let i = 0; i < blokResult.length; i++) {
+                            getPlotStr += '{"type"'
+                            getPlotStr += ":"
+                            getPlotStr += '"Feature",'
+                            getPlotStr += '"properties"'
+                            getPlotStr += ":"
+                            getPlotStr += '{"blok"'
+                            getPlotStr += ":"
+                            getPlotStr += '"' + blokResult[i][1]['blok'] + '",'
+                            getPlotStr += '"estate"'
+                            getPlotStr += ":"
+                            getPlotStr += '"' + blokResult[i][1]['estate'] + '"'
+                            getPlotStr += '},'
+                            getPlotStr += '"geometry"'
+                            getPlotStr += ":"
+                            getPlotStr += '{"coordinates"'
+                            getPlotStr += ":"
+                            getPlotStr += '[['
+                            getPlotStr += blokResult[i][1]['latln']
+                            getPlotStr += ']],"type"'
+                            getPlotStr += ":"
+                            getPlotStr += '"Polygon"'
+                            getPlotStr += '}},'
+                        }
+                        getPlotStr = getPlotStr.substring(0, getPlotStr.length - 1);
+                        getPlotStr += ']}'
+
+
+                        var blok = JSON.parse(getPlotStr)
+
+                        var test = L.geoJSON(blok, {
+                                onEachFeature: function(feature, layer) {
+                                    layer.myTag = 'BlokMarker';
+                                    var label = L.marker(layer.getBounds().getCenter(), {
+                                        icon: L.divIcon({
+                                            className: 'label-bidang',
+                                            html: feature.properties.blok,
+                                            iconSize: [50, 10]
+                                        })
+                                    }).addTo(blokLayer);
+
+                                    // layer.addTo(blokLayer);
+                                },
+                                style: function(feature) {
+                                    switch (feature.properties.afdeling) {
+                                        case 'OA':
+                                            return {
+                                                fillColor: "#ff1744",
+                                                    color: 'white',
+                                                    fillOpacity: 0.4,
+                                                    opacity: 0.4,
+                                            };
+                                        case 'OB':
+                                            return {
+                                                fillColor: "#d500f9",
+                                                    color: 'white',
+                                                    fillOpacity: 0.4,
+                                                    opacity: 0.4,
+                                            };
+                                        case 'OC':
+                                            return {
+                                                fillColor: "#ffa000",
+                                                    color: 'white',
+                                                    fillOpacity: 0.4,
+                                                    opacity: 0.4,
+                                            };
+                                        case 'OD':
+                                            return {
+                                                fillColor: "#00b0ff",
+                                                    color: 'white',
+                                                    fillOpacity: 0.4,
+                                                    opacity: 0.4,
+                                            };
+
+                                        case 'OE':
+                                            return {
+                                                fillColor: "#67D98A",
+                                                    color: 'white',
+                                                    fillOpacity: 0.4,
+                                                    opacity: 0.4,
+
+                                            };
+                                        case 'OF':
+                                            return {
+                                                fillColor: "#666666",
+                                                    color: 'white',
+                                                    fillOpacity: 0.4,
+                                                    opacity: 0.4,
+
+                                            };
+                                    }
+                                }
+                            })
+                            .addTo(map);
+
+                        map.fitBounds(test.getBounds());
+                        for (let i = 0; i < markerResult.length; i++) {
+                            let latlng = JSON.parse(markerResult[i][1]['latln']);
+                            // Define the custom icons
+                            let numberIcon = L.icon({
+                                iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png",
+                                shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+                                iconSize: [14, 21],
+                                iconAnchor: [7, 22],
+                                popupAnchor: [1, -34],
+                                shadowSize: [28, 20],
+                            });
+
+                            let fotoTemuanIcon = L.icon({
+                                iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
+                                shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+                                iconSize: [14, 21],
+                                iconAnchor: [7, 22],
+                                popupAnchor: [1, -34],
+                                shadowSize: [28, 20],
+                            });
+
+                            let markerIcon = numberIcon; // Default icon
+
+                            if (markerResult[i][1]['foto_temuan1'] || markerResult[i][1]['foto_temuan2']) {
+                                markerIcon = fotoTemuanIcon; // Use fotoTemuanIcon if either foto_temuan1 or foto_temuan2 exists
+                            }
+
+                            let marker = L.marker(latlng, {
+                                icon: markerIcon
+                            });
+
+                            var popupContent = `<strong>Jam Sidak: </strong>${markerResult[i][1]['time']}<br/>`;
+                            popupContent += `<strong>Mentah: </strong>${markerResult[i][1]['bmt']}<br/>`;
+                            popupContent += `<strong>Matang: </strong>${markerResult[i][1]['bmk']}<br/>`;
+                            popupContent += `<strong>Lewat Matang: </strong>${markerResult[i][1]['overripe']}<br/>`;
+                            popupContent += `<strong>Janjang Kosong: </strong>${markerResult[i][1]['empty_bunch']}<br/>`;
+                            popupContent += `<strong>Abnormal: </strong>${markerResult[i][1]['abnormal']}<br/>`;
+                            popupContent += `<strong> Rat Damage: </strong>${markerResult[i][1]['rd']}<br/>`;
+                            popupContent += `<strong>Tidak Standar Vcut: </strong>${markerResult[i][1]['vcut']}<br/>`;
+                            popupContent += `<strong>Alas Brondol: </strong>${markerResult[i][1]['alas_br']}<br/>`;
+                            if (markerResult[i][1]['verif']) {
+                                popupContent += `<strong>Foto verifikasi.: </strong><br/>`;
+                                popupContent += `<img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/sidakMutuBuah/${markerResult[i][1]['verif']}" alt="Foto Temuan" style="max-width:150px; height:auto;" onclick="openModal(this.src, 'Verifikasi')"><br/>`;
+                            }
+                            if (markerResult[i][1]['foto_temuan']) {
+                                popupContent += `<strong>Foto Temuan: </strong><br/>`;
+
+                                popupContent += `<img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/sidakMutuBuah/${markerResult[i][1]['foto_temuan']}" alt="Foto Temuan" style="max-width:150px; height:auto;" onclick="openModal(this.src, '${markerResult[i][1]['komentar']}')"><br/>`;
+                            }
+                            if (markerResult[i][1]['foto_temuan1']) {
+                                popupContent += `<img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/sidakMutuBuah/${markerResult[i][1]['foto_temuan1']}" alt="Foto Temuan" style="max-width:150px; height:auto;" onclick="openModal(this.src, '${markerResult[i][1]['komentar1']}')"><br/>`;
+                            }
+                            if (markerResult[i][1]['foto_temuan2']) {
+                                popupContent += `<img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/sidakMutuBuah/${markerResult[i][1]['foto_temuan2']}" alt="Foto Temuan" style="max-width:150px; height:auto;" onclick="openModal(this.src, '${markerResult[i][1]['komentar2']}')"><br/>`;
+                            }
+
+
+                            marker.bindPopup(popupContent);
+
+                            // Add the marker to the map
+                            marker.addTo(map);
+
+                        }
+                        let legendContainer = L.control({
+                            position: 'bottomright'
+                        });
+
+                        legendContainer.onAdd = function(map) {
+                            var div = L.DomUtil.create('div', 'legend');
+                            div.innerHTML = '<h4 style="text-align: center;">Info</h4>';
+
+                            var temuanCount = 0;
+                            for (let i = 0; i < markerResult.length; i++) {
+                                if (markerResult[i][1]['foto_temuan1'] || markerResult[i][1]['foto_temuan2']) {
+                                    temuanCount++;
+                                }
+                            }
+
+
+                            var verifcount = 0;
+                            for (let i = 0; i < markerResult.length; i++) {
+                                if (markerResult[i][1]['verif']) {
+                                    verifcount++;
+                                }
+                            }
+                            var totalItemsCount = markerResult.length;
+                            // div.innerHTML += '<div class="legend-item">Total Sidak TPH: ' + totalItemsCount + '</div>'; // Added the legend item for total items count
+
+                            div.innerHTML += '<div class="legend-item"><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png" class="legend-icon"> Temuan (' + temuanCount + ')</div>';
+                            div.innerHTML += '<div class="legend-item"><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png" class="legend-icon"> Verif (' + verifcount + ')</div>';
+
+                            return div;
+                        };
+
+                        legendContainer.addTo(map);
+                        for (let i = 0; i < plotarrow.length; i++) {
+                            const [key, nestedArray] = plotarrow[i];
+
+                            const latLngArray = nestedArray.map(item => {
+                                const latLng = item.latln.split(',');
+                                return [parseFloat(latLng[0]), parseFloat(latLng[1])];
+                            });
+
+                            for (let j = 0; j < latLngArray.length - 1; j++) {
+                                const startLatLng = latLngArray[j];
+                                const endLatLng = latLngArray[j + 1];
+
+                                const arrow = L.polyline([startLatLng, endLatLng], {
+                                    color: 'red',
+                                    weight: 2
+                                }).addTo(map);
+
+                                const arrowHead = L.polylineDecorator(arrow, {
+                                    patterns: [{
+                                        offset: '50%',
+                                        repeat: 50,
+                                        symbol: L.Symbol.arrowHead({
+                                            pixelSize: 12,
+                                            polygon: false,
+                                            pathOptions: {
+                                                color: 'yellow'
+                                            }
+                                        })
+                                    }]
+                                }).addTo(map);
+                            }
+                        }
+
+
+                        Swal.close();
+                    },
+
+
+
+                    error: function() {
+                        Swal.close();
+                    }
+                });
+
+
+
+
+
+
+
+            }
+
+            let getest = @json($est)
+
+            function selectDate() {
+                Swal.fire({
+                    title: "Apakah Anda ingin mengubah tanggal sidak?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "No",
+                    allowOutsideClick: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let tanggalorix = document.getElementById('inputDate').value
+
+                        Swal.fire({
+                            title: "Perhatian!",
+                            html: 'Ini Akan memindahkan Data dari semua afdeling {{$est}} di tanggal ' + tanggalorix + '  ke tanggal yang dipilih: <br><input id="swal-input-date" type="date" class="swal2-input">',
+                            showCancelButton: true,
+                            confirmButtonText: "Pindahkan",
+                            cancelButtonText: "Batal",
+                            showLoaderOnConfirm: true,
+                            allowOutsideClick: false,
+                            preConfirm: () => {
+                                const selectedDate = document.getElementById('swal-input-date').value;
+                                if (!selectedDate) {
+                                    Swal.showValidationMessage('Silakan pilih tanggal!');
+                                }
+                                // Handle the selected date with AJAX request
+                                // Replace the code below with your actual logic to handle the selected date with AJAX
+                                return new Promise((resolve) => {
+                                    // Simulate AJAX request delay
+                                    setTimeout(() => {
+                                        resolve(selectedDate);
+                                    }, 1000);
+                                });
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // If user confirms, show a success message
+
+                                // console.log(getest);
+
+                                var tanggalori = document.getElementById('inputDate').value
+                                var tanggalset = result.value
+                                var type = 'sidakmtb'
+                                // console.log(tanggal);
+                                var _token = $('input[name="_token"]').val();
+                                $.ajax({
+                                    url: "{{ route('changedatadate') }}",
+                                    method: "post",
+                                    data: {
+                                        tglreal: tanggalori,
+                                        tgledit: tanggalset,
+                                        est: getest,
+                                        type: type,
+                                        _token: _token
+                                    },
+                                    success: function(result) {
+                                        // Check if data was successfully updated
+                                        if (result && result.message === 'Data berhasil diupdate') {
+                                            Swal.fire({
+                                                title: 'Success',
+                                                text: 'Data berhasil diupdate',
+                                                icon: 'success',
+                                                allowOutsideClick: false // Prevents clicking outside the modal to close it
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    location.reload(); // Reload the page
+                                                }
+                                            });
+                                        } else {
+                                            Swal.fire('Error', 'Gagal mengupdate data', 'error');
+                                        }
+                                    },
+                                    error: function() {
+                                        Swal.fire('Error', 'Gagal menghubungi server', 'error');
+                                    }
+                                });
+
+                            } else {
+                                // If user cancels, show a message
+                                Swal.fire("Pemilihan tanggal dibatalkan!", "", "info");
                             }
                         });
                     }
                 });
             }
 
-
-
-            $(document).ready(function() {
-                // Close modal when the close button is clicked
-                // $('#closeModalBtn_buah').click(function() {
-                //     $('#editModalTPH').modal('hide');
-                // });
-
-                // Submit the form when the Save Changes button is clicked
-                $('#saveChangesBtn_buah').off('click').on('click', function() {
-                    // var modal = new bootstrap.Modal(document.getElementById('editForm_buah'));
-                    //  modal.submit();
-
-                    $('#editForm_buah').submit();
-                });
-
-                function isNumber(value) {
-                    return !isNaN(parseFloat(value)) && isFinite(value);
-                }
-
-                $('#editForm_buah').submit(function(e) {
-                    e.preventDefault(); // Prevent the default form submission
-
-                    // Get the form data
-                    var formData = new FormData(this);
-                    formData.append('id', $('#idbuah').val());
-
-                    var blok = $('#update-blokCak').val();
-
-                    var petugas = $('#petugasrow').val();
-                    var Tph_baris = $('#tphbaris').val();
-                    var ancak_pemanen = $('#ancakpemanen').val();
-                    var jml_jjg = $('#jumlahjanjang').val();
-                    var bmk = $('#bmk').val();
-                    var bmt = $('#bmt').val();
-                    var overripe = $('#overripe').val();
-                    var empty = $('#empty').val();
-                    var abnormal = $('#abnormal').val();
-                    var rd = $('#ratdmg').val();
-                    var vcut = $('#vcut').val();
-                    var alas_br = $('#alasbr').val();
-
-                    if (!isNumber(jml_jjg) ||
-                        !isNumber(bmk) ||
-                        !isNumber(bmt) ||
-                        !isNumber(overripe) ||
-                        !isNumber(empty) ||
-                        !isNumber(rd) ||
-                        !isNumber(vcut) ||
-                        !isNumber(alas_br) ||
-                        !isNumber(abnormal)
-                    ) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Masukan Error',
-                            text: 'Hanya bisa di masukan angka Saja!'
-                        });
-                        return;
-                    }
-                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-                    // console.log(brdtgl);
-                    // Send the AJAX request
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': csrfToken
-                        }
-                    });
-
-                    $.ajax({
-                        type: 'POST',
-                        url: '{{ route("updateBA_mutubuah") }}',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function(response) {
-                            // $('#editModalTPH').modal('hide');
-                              var modal = new bootstrap.Modal(document.getElementById('editModalTPH'));
-                                  modal.hide();
-
-                            if (response.message === 'Success') {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Success',
-                                    text: 'Data berhasil diperbarui!'
-                                }).then(function() {
-                                    // Reload the page after the user clicks 'OK' on the success alert
-                                    location.reload();
-                                });
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: response.message === 'Invalid ID' ? 'Error updating record' : 'Gagal memperbarui data!'
-                                }).then(function() {
-                                    // Reload the page after the user clicks 'OK' on the success alert
-                                    location.reload();
-                                });
-                            }
-
-
-                        },
-                        error: function(xhr, status, error) {
-                            console.error(xhr.responseText);
-                            // Show an error message or perform any other actions
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Gagal memperbarui data!'
-                            }).then(function() {
-                                // Reload the page after the user clicks 'OK' on the success alert
-                                location.reload();
-                            });
-                        }
-                    });
-                });
-
-                $('#confirmDeleteBtn').off('click').on('click', function() {
-                    e.preventDefault(); // Prevent the default form submission
-                    // Create a form data object
-                    var formData = new FormData();
-                    // formData.append('delete_id', rowId);
-                    formData.append('delete_id', $('#idbuah').val());
-
-                    // Get the CSRF token from the meta tag
-                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-                    // Set the CSRF token in the request headers
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': csrfToken
-                        }
-                    });
-
-                    // Send the AJAX request to the controller
-                    $.ajax({
-                        url: '{{ route("deletedetailtph") }}',
-                        method: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function(response) {
-                            // Close the delete modal
-                            //    var modal = new bootstrap.Modal(document.getElementById('deleteModalancak'));
-                            //        modal.hide();
-                            // $('#deleteModalancak').modal('hide');
-
-                            // Show a success message using SweetAlert
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: 'Data deleted successfully!',
-                            }).then(function() {
-                                location.reload();
-                            });
-                        },
-                        error: function(xhr, status, error) {
-                            // Handle the error if needed
-                            console.error(error);
-                            // var modal = new bootstrap.Modal(document.getElementById('deleteModalancak'));
-                            //        modal.hide();
-                            // $('#deleteModalancak').modal('hide');
-                        }
-                    });
-                });
-            });
-
-
-        }
-
-
-
-
-        function goBack() {
-            // Save the selected tab to local storage
-            localStorage.setItem('selectedTab', 'nav-data-tab');
-
-            // Redirect to the target page
-            window.location.href = "https://qc-apps.srs-ssms.com/dashboard_mutubuah";
-        }
-
-        document.getElementById("show-button").disabled = true;
-
-        document.getElementById("inputDate").addEventListener("change", function() {
-            document.getElementById("show-button").disabled = false;
-        });
-
-
-
-        function getDataTphYear() {
-
-            var _token = $('input[name="_token"]').val();
-            var est = document.getElementById('est').value
-            var afd = document.getElementById('afd').value
-            var tanggal = document.getElementById('inputDate').value
-
-
-
-            $.ajax({
-                url: "{{ route('getDataRekap') }}",
-                method: "GET",
-                data: {
-                    est,
-                    afd,
-                    tanggal,
-                    _token: _token
-                },
-                success: function(result) {
-                    //parsing result ke json untuk dalam estate
-                    var parseResult = JSON.parse(result)
-                    var afdResult = Object.entries(parseResult['sidak_buah'])
-                    // var EstTotal = Object.entries(parseResult['total_buah'])
-
-                    // console.log(arrEst1);
-                    // var arrEst1 = afdResult
-                    // var tbody1 = document.getElementById('data_tahunTab');
-
-                    // console.log(arrEst1);
-                    // Assuming `arrEst1` is your array of data
-
-                    var tbody1 = document.getElementById('data_tahunTab');
-                    afdResult.forEach((outerArray) => {
-                        const key = outerArray[0];
-                        const data = outerArray[1];
-
-                        Object.keys(data).forEach((subKey) => {
-                            const rowData = data[subKey];
-                            const tr = document.createElement('tr');
-                            // console.log(rowData['estate']);
-                            let item1 = rowData['estate']
-                            let item2 = rowData['est']
-                            let item3 = rowData['petugas']
-                            let item4 = rowData['Jumlah_janjang']
-                            // mentah
-                            let item5 = rowData['tnp_brd']
-                            let item6 = rowData['persenTNP_brd']
-                            let item7 = rowData['krg_brd']
-                            let item8 = rowData['persenKRG_brd']
-                            let item9 = rowData['total_jjg']
-                            let item10 = rowData['persen_totalJjg']
-                            let item11 = rowData['skor_total']
-                            // masak 
-                            let item12 = rowData['jjg_matang']
-                            let item13 = rowData['persen_jjgMtang']
-                            let item14 = rowData['skor_jjgMatang']
-                            // lewat matang 
-                            let item15 = rowData['lewat_matang']
-                            let item16 = rowData['persen_lwtMtng']
-                            let item17 = rowData['skor_lewatMTng']
-                            //janjang kosong
-                            let item18 = rowData['janjang_kosong']
-                            let item19 = rowData['persen_kosong']
-                            let item20 = rowData['skor_kosong']
-                            // tidak standar vcut 
-                            let item21 = rowData['vcut']
-                            let item22 = rowData['vcut_persen']
-                            let item23 = rowData['vcut_skor']
-                            // abnormal 
-                            let item24 = rowData['abnormal']
-                            let item25 = rowData['abnormal_persen']
-                            // rat dmg
-                            let item26 = rowData['rat_dmg']
-                            let item27 = rowData['rd_persen']
-                            // penggunaan  karung
-                            let item28 = rowData['TPH']
-                            let item29 = rowData['persen_krg']
-                            let item30 = rowData['skor_kr']
-                            // all skor 
-                            let item31 = rowData['All_skor']
-                            let item32 = rowData['kategori']
-                            const items = [];
-                            for (let i = 1; i <= 32; i++) {
-                                items.push(eval(`item${i}`));
-                            }
-
-                            items.forEach((item, index) => {
-                                const itemElement = document.createElement('td');
-                                itemElement.classList.add('text-center');
-                                itemElement.innerText = item;
-
-                                if (index === 31) {
-                                    // Apply background color based on the value of item32
-                                    if (item === 'SATISFACTORY') {
-                                        itemElement.style.backgroundColor = '#fffc04';
-                                    } else if (item === 'EXCELLENT') {
-                                        itemElement.style.backgroundColor = '#5874c4';
-                                    } else if (item === 'GOOD') {
-                                        itemElement.style.backgroundColor = '#10fc2c';
-                                    } else if (item === 'POOR') {
-                                        itemElement.style.backgroundColor = '#ff0404';
-                                    } else if (item === 'FAIR') {
-                                        itemElement.style.backgroundColor = '#ffa404';
-                                    }
-                                }
-                                if (item1 === 'TOTAL') {
-                                    if (item32 === 'SATISFACTORY') {
-                                        itemElement.style.backgroundColor = '#fffc04';
-                                    } else if (item32 === 'EXCELLENT') {
-                                        itemElement.style.backgroundColor = '#5874c4';
-                                    } else if (item32 === 'GOOD') {
-                                        itemElement.style.backgroundColor = '#10fc2c';
-                                    } else if (item32 === 'POOR') {
-                                        itemElement.style.backgroundColor = '#ff0404';
-                                    } else if (item32 === 'FAIR') {
-                                        itemElement.style.backgroundColor = '#ffa404';
-                                    }
-                                }
-
-                                tr.appendChild(itemElement);
-                            });
-
-                            tbody1.appendChild(tr);
-
-                        });
-                    });
-                }
-            })
-        }
-
-        function openModal(src, komentar) {
-            var modalImg = document.getElementById("img01");
-            modalImg.src = src;
-            var modalKomentar = document.getElementById("modalKomentar");
-            modalKomentar.textContent = komentar;
-
-            var downloadButton = document.getElementById("downloadButton");
-            downloadButton.addEventListener("click", handleDownload);
-
-            var myModal = new bootstrap.Modal(document.getElementById('myModal'), {});
-            myModal.show();
-
-            var closeButton = document.getElementById('modalCloseButton');
-            closeButton.addEventListener('click', function() {
-                myModal.hide();
-                downloadButton.removeEventListener("click", handleDownload); // Remove the event listener when the modal is closed
-                URL.revokeObjectURL(modalImg.src); // Clean up the object URL to avoid memory leaks
-            });
-        }
-
-        function handleDownload(event) {
-            var src = document.getElementById("img01").src;
-            var filename = getFilenameFromSrc(src);
-            downloadImage(src, filename);
-        }
-
-        function getFilenameFromSrc(src) {
-            var startIndex = src.lastIndexOf("/") + 1;
-            var endIndex = src.lastIndexOf(".");
-            var filename = src.substring(startIndex, endIndex);
-
-            // Split the filename into an array using "_" as the delimiter
-            var parts = filename.split("_");
-
-            // Extract the desired parts from the array
-            var part1 = parts[0]; // IMA
-            var part2 = parts[1]; // 2023710
-            var part3 = parts[2]; // 100348
-            var part4 = parts[3]; // KNE
-            var part5 = parts[4]; // OA
-            var part6 = parts[5]; // R01404
-            var part7 = parts[6]; // 102
-
-            // Construct the desired filename using the extracted parts and spaces
-            var customPart = "Est " + "_" + part4 + " Afd " + "_" + part5 + " Sidak " + "_" + part1 + " Blok " + "_" + part6;
-
-            return customPart;
-        }
-
-
-
-
-        function downloadImage(imageName, filename) {
-            var downloadLink = "https://srs-ssms.com/qc_inspeksi/get_qcIMG.php?image=" + encodeURIComponent(imageName);
-
-            fetch(downloadLink)
-                .then(response => response.blob())
-                .then(blob => {
-                    var url = URL.createObjectURL(blob);
-                    var a = document.createElement("a");
-                    a.href = url;
-                    a.download = filename + ".jpg"; // Use the filename for the downloaded image
-                    a.style.display = "none"; // Hide the anchor element
-
-                    document.body.appendChild(a);
-
-                    a.click(); // Trigger the click event on the hidden anchor element
-
-                    // Clean up and remove the anchor element after the download
-                    a.remove();
-                    URL.revokeObjectURL(url);
-                })
-                .catch(error => {
-                    console.error("Error downloading image:", error);
-                });
-        }
-
-        $('#yourPopupContentElementId').on('click', function() {
-            console.log('Element clicked!');
-            // Your code here
-            yourNewFunction(); // Call your function here or add more code
-        });
-
-        function getmapsbuah() {
-
-            var map = L.map('map');
-            map.remove();
-
-
-            var Tanggal = document.getElementById('inputDate').value;
-            var est = document.getElementById('est').value;
-            var afd = document.getElementById('afd').value;
-            var _token = $('input[name="_token"]').val();
-
-            $.ajax({
-                url: "{{ route('getMapsData') }}",
-                method: "get",
-                data: {
-                    Tanggal,
-                    est,
-                    afd,
-                    _token: _token
-                },
-                success: function(result) {
-                    var plot = JSON.parse(result);
-                    const blokResult = Object.entries(plot['blok']);
-                    const markerResult = Object.entries(plot['marker']);
-                    const plotarrow = Object.entries(plot['plotarrow']);
-                    var mapContainer = L.DomUtil.get('map');
-                    if (mapContainer != null) {
-                        mapContainer._leaflet_id = null;
-                    }
-
-                    var map = L.map('map').setView([-2.2745234, 111.61404248], 13);
-                    var googleStreet = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
-
-                    var googleSatellite = L.tileLayer('http://{s}.google.com/vt?lyrs=s&x={x}&y={y}&z={z}', {
-                        maxZoom: 20,
-                        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-                    });
-                    // map.addControl(new L.Control.Fullscreen());
-                    var baseMaps = {
-                        "Google Street": googleStreet,
-                        "Google Satellite": googleSatellite
-                    };
-                    L.control.layers(baseMaps).addTo(map);
-                    let blokLayer = L.layerGroup();
-
-                    var getPlotStr = '{"type"'
-                    getPlotStr += ":"
-                    getPlotStr += '"FeatureCollection",'
-                    getPlotStr += '"features"'
-                    getPlotStr += ":"
-                    getPlotStr += '['
-
-                    // console.log(blok)
-                    for (let i = 0; i < blokResult.length; i++) {
-                        getPlotStr += '{"type"'
-                        getPlotStr += ":"
-                        getPlotStr += '"Feature",'
-                        getPlotStr += '"properties"'
-                        getPlotStr += ":"
-                        getPlotStr += '{"blok"'
-                        getPlotStr += ":"
-                        getPlotStr += '"' + blokResult[i][1]['blok'] + '",'
-                        getPlotStr += '"estate"'
-                        getPlotStr += ":"
-                        getPlotStr += '"' + blokResult[i][1]['estate'] + '"'
-                        getPlotStr += '},'
-                        getPlotStr += '"geometry"'
-                        getPlotStr += ":"
-                        getPlotStr += '{"coordinates"'
-                        getPlotStr += ":"
-                        getPlotStr += '[['
-                        getPlotStr += blokResult[i][1]['latln']
-                        getPlotStr += ']],"type"'
-                        getPlotStr += ":"
-                        getPlotStr += '"Polygon"'
-                        getPlotStr += '}},'
-                    }
-                    getPlotStr = getPlotStr.substring(0, getPlotStr.length - 1);
-                    getPlotStr += ']}'
-
-
-                    var blok = JSON.parse(getPlotStr)
-
-                    var test = L.geoJSON(blok, {
-                            onEachFeature: function(feature, layer) {
-                                layer.myTag = 'BlokMarker';
-                                var label = L.marker(layer.getBounds().getCenter(), {
-                                    icon: L.divIcon({
-                                        className: 'label-bidang',
-                                        html: feature.properties.blok,
-                                        iconSize: [50, 10]
-                                    })
-                                }).addTo(blokLayer);
-
-                                // layer.addTo(blokLayer);
-                            },
-                            style: function(feature) {
-                                switch (feature.properties.afdeling) {
-                                    case 'OA':
-                                        return {
-                                            fillColor: "#ff1744",
-                                                color: 'white',
-                                                fillOpacity: 0.4,
-                                                opacity: 0.4,
-                                        };
-                                    case 'OB':
-                                        return {
-                                            fillColor: "#d500f9",
-                                                color: 'white',
-                                                fillOpacity: 0.4,
-                                                opacity: 0.4,
-                                        };
-                                    case 'OC':
-                                        return {
-                                            fillColor: "#ffa000",
-                                                color: 'white',
-                                                fillOpacity: 0.4,
-                                                opacity: 0.4,
-                                        };
-                                    case 'OD':
-                                        return {
-                                            fillColor: "#00b0ff",
-                                                color: 'white',
-                                                fillOpacity: 0.4,
-                                                opacity: 0.4,
-                                        };
-
-                                    case 'OE':
-                                        return {
-                                            fillColor: "#67D98A",
-                                                color: 'white',
-                                                fillOpacity: 0.4,
-                                                opacity: 0.4,
-
-                                        };
-                                    case 'OF':
-                                        return {
-                                            fillColor: "#666666",
-                                                color: 'white',
-                                                fillOpacity: 0.4,
-                                                opacity: 0.4,
-
-                                        };
-                                }
-                            }
-                        })
-                        .addTo(map);
-
-                    map.fitBounds(test.getBounds());
-                    for (let i = 0; i < markerResult.length; i++) {
-                        let latlng = JSON.parse(markerResult[i][1]['latln']);
-                        // Define the custom icons
-                        let numberIcon = L.icon({
-                            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png",
-                            shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
-                            iconSize: [14, 21],
-                            iconAnchor: [7, 22],
-                            popupAnchor: [1, -34],
-                            shadowSize: [28, 20],
-                        });
-
-                        let fotoTemuanIcon = L.icon({
-                            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
-                            shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
-                            iconSize: [14, 21],
-                            iconAnchor: [7, 22],
-                            popupAnchor: [1, -34],
-                            shadowSize: [28, 20],
-                        });
-
-                        let markerIcon = numberIcon; // Default icon
-
-                        if (markerResult[i][1]['foto_temuan1'] || markerResult[i][1]['foto_temuan2']) {
-                            markerIcon = fotoTemuanIcon; // Use fotoTemuanIcon if either foto_temuan1 or foto_temuan2 exists
-                        }
-
-                        let marker = L.marker(latlng, {
-                            icon: markerIcon
-                        });
-
-                        var popupContent = `<strong>Jam Sidak: </strong>${markerResult[i][1]['time']}<br/>`;
-                        popupContent += `<strong>Mentah: </strong>${markerResult[i][1]['bmt']}<br/>`;
-                        popupContent += `<strong>Matang: </strong>${markerResult[i][1]['bmk']}<br/>`;
-                        popupContent += `<strong>Lewat Matang: </strong>${markerResult[i][1]['overripe']}<br/>`;
-                        popupContent += `<strong>Janjang Kosong: </strong>${markerResult[i][1]['empty_bunch']}<br/>`;
-                        popupContent += `<strong>Abnormal: </strong>${markerResult[i][1]['abnormal']}<br/>`;
-                        popupContent += `<strong> Rat Damage: </strong>${markerResult[i][1]['rd']}<br/>`;
-                        popupContent += `<strong>Tidak Standar Vcut: </strong>${markerResult[i][1]['vcut']}<br/>`;
-                        popupContent += `<strong>Alas Brondol: </strong>${markerResult[i][1]['alas_br']}<br/>`;
-                        if (markerResult[i][1]['verif']) {
-                            popupContent += `<strong>Foto verifikasi.: </strong><br/>`;
-                            popupContent += `<img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/sidakMutuBuah/${markerResult[i][1]['verif']}" alt="Foto Temuan" style="max-width:150px; height:auto;" onclick="openModal(this.src, 'Verifikasi')"><br/>`;
-                        }
-                        if (markerResult[i][1]['foto_temuan']) {
-                            popupContent += `<strong>Foto Temuan: </strong><br/>`;
-
-                            popupContent += `<img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/sidakMutuBuah/${markerResult[i][1]['foto_temuan']}" alt="Foto Temuan" style="max-width:150px; height:auto;" onclick="openModal(this.src, '${markerResult[i][1]['komentar']}')"><br/>`;
-                        }
-                        if (markerResult[i][1]['foto_temuan1']) {
-                            popupContent += `<img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/sidakMutuBuah/${markerResult[i][1]['foto_temuan1']}" alt="Foto Temuan" style="max-width:150px; height:auto;" onclick="openModal(this.src, '${markerResult[i][1]['komentar1']}')"><br/>`;
-                        }
-                        if (markerResult[i][1]['foto_temuan2']) {
-                            popupContent += `<img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/sidakMutuBuah/${markerResult[i][1]['foto_temuan2']}" alt="Foto Temuan" style="max-width:150px; height:auto;" onclick="openModal(this.src, '${markerResult[i][1]['komentar2']}')"><br/>`;
-                        }
-
-
-                        marker.bindPopup(popupContent);
-
-                        // Add the marker to the map
-                        marker.addTo(map);
-
-                    }
-                    let legendContainer = L.control({
-                        position: 'bottomright'
-                    });
-
-                    legendContainer.onAdd = function(map) {
-                        var div = L.DomUtil.create('div', 'legend');
-                        div.innerHTML = '<h4 style="text-align: center;">Info</h4>';
-
-                        var temuanCount = 0;
-                        for (let i = 0; i < markerResult.length; i++) {
-                            if (markerResult[i][1]['foto_temuan1'] || markerResult[i][1]['foto_temuan2']) {
-                                temuanCount++;
-                            }
-                        }
-
-
-                        var verifcount = 0;
-                        for (let i = 0; i < markerResult.length; i++) {
-                            if (markerResult[i][1]['verif']) {
-                                verifcount++;
-                            }
-                        }
-                        var totalItemsCount = markerResult.length;
-                        // div.innerHTML += '<div class="legend-item">Total Sidak TPH: ' + totalItemsCount + '</div>'; // Added the legend item for total items count
-
-                        div.innerHTML += '<div class="legend-item"><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png" class="legend-icon"> Temuan (' + temuanCount + ')</div>';
-                        div.innerHTML += '<div class="legend-item"><img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png" class="legend-icon"> Verif (' + verifcount + ')</div>';
-
-                        return div;
-                    };
-
-                    legendContainer.addTo(map);
-                    for (let i = 0; i < plotarrow.length; i++) {
-                        const [key, nestedArray] = plotarrow[i];
-
-                        const latLngArray = nestedArray.map(item => {
-                            const latLng = item.latln.split(',');
-                            return [parseFloat(latLng[0]), parseFloat(latLng[1])];
-                        });
-
-                        for (let j = 0; j < latLngArray.length - 1; j++) {
-                            const startLatLng = latLngArray[j];
-                            const endLatLng = latLngArray[j + 1];
-
-                            const arrow = L.polyline([startLatLng, endLatLng], {
-                                color: 'red',
-                                weight: 2
-                            }).addTo(map);
-
-                            const arrowHead = L.polylineDecorator(arrow, {
-                                patterns: [{
-                                    offset: '50%',
-                                    repeat: 50,
-                                    symbol: L.Symbol.arrowHead({
-                                        pixelSize: 12,
-                                        polygon: false,
-                                        pathOptions: {
-                                            color: 'yellow'
-                                        }
-                                    })
-                                }]
-                            }).addTo(map);
-                        }
-                    }
-
-
-                    Swal.close();
-                },
-
-
-
-                error: function() {
-                    Swal.close();
-                }
-            });
-
-
-
-
-
-
-
-        }
-
-        let getest = @json($est)
-
-        function selectDate() {
-            Swal.fire({
-                title: "Apakah Anda ingin mengubah tanggal sidak?",
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                cancelButtonText: "No",
-                allowOutsideClick: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    let tanggalorix = document.getElementById('inputDate').value
-
-                    Swal.fire({
-                        title: "Perhatian!",
-                        html: 'Ini Akan memindahkan Data dari semua afdeling {{$est}} di tanggal ' + tanggalorix + '  ke tanggal yang dipilih: <br><input id="swal-input-date" type="date" class="swal2-input">',
-                        showCancelButton: true,
-                        confirmButtonText: "Pindahkan",
-                        cancelButtonText: "Batal",
-                        showLoaderOnConfirm: true,
-                        allowOutsideClick: false,
-                        preConfirm: () => {
-                            const selectedDate = document.getElementById('swal-input-date').value;
-                            if (!selectedDate) {
-                                Swal.showValidationMessage('Silakan pilih tanggal!');
-                            }
-                            // Handle the selected date with AJAX request
-                            // Replace the code below with your actual logic to handle the selected date with AJAX
-                            return new Promise((resolve) => {
-                                // Simulate AJAX request delay
-                                setTimeout(() => {
-                                    resolve(selectedDate);
-                                }, 1000);
-                            });
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // If user confirms, show a success message
-
-                            // console.log(getest);
-
-                            var tanggalori = document.getElementById('inputDate').value
-                            var tanggalset = result.value
-                            var type = 'sidakmtb'
-                            // console.log(tanggal);
-                            var _token = $('input[name="_token"]').val();
-                            $.ajax({
-                                url: "{{ route('changedatadate') }}",
-                                method: "post",
-                                data: {
-                                    tglreal: tanggalori,
-                                    tgledit: tanggalset,
-                                    est: getest,
-                                    type: type,
-                                    _token: _token
-                                },
-                                success: function(result) {
-                                    // Check if data was successfully updated
-                                    if (result && result.message === 'Data berhasil diupdate') {
-                                        Swal.fire({
-                                            title: 'Success',
-                                            text: 'Data berhasil diupdate',
-                                            icon: 'success',
-                                            allowOutsideClick: false // Prevents clicking outside the modal to close it
-                                        }).then((result) => {
-                                            if (result.isConfirmed) {
-                                                location.reload(); // Reload the page
-                                            }
-                                        });
-                                    } else {
-                                        Swal.fire('Error', 'Gagal mengupdate data', 'error');
-                                    }
-                                },
-                                error: function() {
-                                    Swal.fire('Error', 'Gagal menghubungi server', 'error');
-                                }
-                            });
-
-                        } else {
-                            // If user cancels, show a message
-                            Swal.fire("Pemilihan tanggal dibatalkan!", "", "info");
-                        }
-                    });
-                }
-            });
-        }
-
-        // Attach click event listener to the button
-        document.getElementById("moveDataButton").addEventListener("click", selectDate);
-    </script>
+            // Attach click event listener to the button
+            document.getElementById("moveDataButton").addEventListener("click", selectDate);
+        </script>
 
 </x-layout.app>

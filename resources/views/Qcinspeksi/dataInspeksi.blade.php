@@ -45,20 +45,20 @@
 
 
     @endphp
+
     <tr>
-        {{--
-            <td> <a href="dataDetail/{{$key}}/{{$key2}}/{{$tanggal}}/{{$regional}}"> {{$key2}}</a></td>
-        --}}
+
         @if ($item1['afd'] === 'wil')
-        <td style="background-color: {{ $color }}">WIL-{{ $item1['est'] }}</td>
+        <td style="background-color: {{ $color }};">WIL-{{ $item1['est'] }}</td>
 
         @else
-        <td style="background-color: {{ $color }}">{{ $item1['est'] }}</td>
+        <td style="background-color: {{ $color }}; position: sticky; top: 0; z-index: 2; left: 0;">{{ $item1['est'] }}</td>
         @endif
 
         @if ($item1['afd'] != 'est' && $item1['afd'] != 'wil')
-
-        <td> <a href="dataDetail/{{$item1['est']}}/{{$item1['afd']}}/{{$bulan}}/{{$reg}}"> {{$item1['afd']}}</a></td>
+        <td style="position: sticky; top: 0; z-index: 2; left: 0; background-color: white;padding-left: 25px;text-align:center">
+            <a href="dataDetail/{{$item1['est']}}/{{$item1['afd']}}/{{$bulan}}/{{$reg}}"> {{$item1['afd']}}</a>
+        </td>
         @else
         <td style="background-color: {{ $color }}">{{$item1['afd']}} </td>
         @endif

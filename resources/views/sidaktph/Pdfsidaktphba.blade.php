@@ -11,45 +11,51 @@
 </head>
 
 <style>
-      .stamp {
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: center;
-                            align-items: center;
-                            width: 70%;
-                            height: 130px;
-                            margin-left: 15%;
-                            border: 2px dashed gray; /* Change border style here */
-                            border-radius: 20px; /* Adjust border-radius for slightly rounded corners */
-                            transform: rotate(-10deg);
-                            overflow: hidden; /* Ensure stamp-text stays inside the border */
-                        }
-                        
-                        .stamp-logo {
-                            width: 50px; /* Adjust logo size */
-                            height: 50px;
-                            margin-top: 4px;
-                            object-fit: contain;
-                            z-index: 1;
-                        }
-                        
-                        .stamp-text {
-                            text-align: center;
-                            font-size: 16px;
-                            font-weight: bold;
-                            margin: 0;
-                            z-index: 2; /* Ensure stamp-text appears above the logo */
-                        }
-                        
-                        /* Details styles */
-                        .details {
-                            margin-top: 20px;
-                            padding: 10px;
-                            background-color: #f0f0f0;
-                            border-radius: 5px;
-                            font-size: 14px;
-                        }
-.my-table {
+    .stamp {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 70%;
+        height: 130px;
+        margin-left: 15%;
+        border: 2px dashed gray;
+        /* Change border style here */
+        border-radius: 20px;
+        /* Adjust border-radius for slightly rounded corners */
+        transform: rotate(-10deg);
+        overflow: hidden;
+        /* Ensure stamp-text stays inside the border */
+    }
+
+    .stamp-logo {
+        width: 50px;
+        /* Adjust logo size */
+        height: 50px;
+        margin-top: 4px;
+        object-fit: contain;
+        z-index: 1;
+    }
+
+    .stamp-text {
+        text-align: center;
+        font-size: 16px;
+        font-weight: bold;
+        margin: 0;
+        z-index: 2;
+        /* Ensure stamp-text appears above the logo */
+    }
+
+    /* Details styles */
+    .details {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .my-table {
         width: 100%;
         table-layout: fixed;
         border-collapse: collapse;
@@ -433,14 +439,13 @@
                     </tr>
                     <tr>
                         <th colspan="6" class="text-center">Dibuat</th>
-                        <th colspan="2" class="text-center">Diterima</th>
-                        <th colspan="4" class="text-center">Diketahui</th>
+                        <th colspan="6" class="text-center">Diketahui</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         @php
-                            $totalpetugas= count($data['finalpetugas']);
+                        $totalpetugas= count($data['finalpetugas']);
                         @endphp
                         @if ($totalpetugas == 1)
                         <td colspan="6" style="vertical-align: bottom;text-align:center;padding-top:10px">
@@ -524,59 +529,41 @@
                             </div>
                         </td>
                         @endif
-                        
+
                         @if ($data['statusdata']['status'] === 'not_approved')
-                        <td colspan="2" style="vertical-align: bottom; text-align: center">Asisten Tidak Terverifikasi Secara Digital</td>
-                        <td colspan="4" style="vertical-align: bottom; text-align: center">Manajer/Askep Tidak Terverifikasi Secara Digital</td>
+                        <td colspan="6" style="vertical-align: bottom; text-align: center">Manajer/Askep Tidak Terverifikasi Secara Digital</td>
                         @else
-                        <td colspan="2" style="vertical-align: bottom; text-align: center">
-                            @if ($data['statusdata']['nama_asisten'] != null)
-                                <div class="stamp-container">
-                                    <div class="stamp">
-                                        <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
-                                        <div class="stamp-text">APPROVED</div>
-                                        <div class="stamp-text">{{$data['statusdata']['approve_asisten']}}</div>
-                                    </div>
-                                    <div class="details">
-                                        <div>{{$data['statusdata']['nama_asisten']}}</div>
-                                        <div>Asisten {{$data['statusdata']['detail_asisten']}} <span>{{$data['statusdata']['lok_asisten']}}</span> </div>
-                                    </div>
-                                </div> 
-                            @else
-                                Asisten Tidak Terverifikasi Secara Digital
-                            @endif
-                        </td>
-                        <td colspan="4" style="vertical-align: bottom; text-align: center">
+                        <td colspan="6" style="vertical-align: bottom; text-align: center">
                             @if ($data['statusdata']['nama_askep'] != null)
-                                <div class="stamp-container">
-                                    <div class="stamp">
-                                        <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
-                                        <div class="stamp-text">APPROVED</div>
-                                        <div class="stamp-text">{{$data['statusdata']['approve_askep']}}</div>
-                                    </div>
-                                    <div class="details">
-                                        <div>{{$data['statusdata']['nama_askep']}}</div>
-                                        <div>Askep  {{$data['statusdata']['detail_askep']}} <span>{{$data['statusdata']['lok_askep']}}</span> </div>
-                                    </div>
+                            <div class="stamp-container">
+                                <div class="stamp">
+                                    <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
+                                    <div class="stamp-text">APPROVED</div>
+                                    <div class="stamp-text">{{$data['statusdata']['approve_askep']}}</div>
                                 </div>
+                                <div class="details">
+                                    <div>{{$data['statusdata']['nama_askep']}}</div>
+                                    <div>Askep {{$data['statusdata']['detail_askep']}} <span>{{$data['statusdata']['lok_askep']}}</span> </div>
+                                </div>
+                            </div>
                             @elseif($data['statusdata']['nama_maneger'] != null)
-                                <div class="stamp-container">
-                                    <div class="stamp">
-                                        <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
-                                        <div class="stamp-text">APPROVED</div>
-                                        <div class="stamp-text">{{$data['statusdata']['approve_maneger']}}</div>
-                                    </div>
-                                    <div class="details">
-                                        <div>{{$data['statusdata']['nama_maneger']}}</div>
-                                        <div>Manager {{$data['statusdata']['detail_manager']}} <span>{{$data['statusdata']['lok_manager']}}</span> </div>
-                                    </div>
+                            <div class="stamp-container">
+                                <div class="stamp">
+                                    <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
+                                    <div class="stamp-text">APPROVED</div>
+                                    <div class="stamp-text">{{$data['statusdata']['approve_maneger']}}</div>
                                 </div>
+                                <div class="details">
+                                    <div>{{$data['statusdata']['nama_maneger']}}</div>
+                                    <div>Manager {{$data['statusdata']['detail_manager']}} <span>{{$data['statusdata']['lok_manager']}}</span> </div>
+                                </div>
+                            </div>
                             @else
-                                Maneger/Askep Tidak Terverifikasi Secara Digital
+                            Maneger/Askep Tidak Terverifikasi Secara Digital
                             @endif
-                            
+
                         </td>
-                        @endif   
+                        @endif
                     </tr>
                 </tbody>
             </table>
