@@ -940,7 +940,7 @@
                             {
                                 // -1 targets the last column
                                 title: 'Actions',
-                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager'),
+                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager') && departemen === 'QC',
                                 render: function(data, type, row, meta) {
                                     var buttons =
                                         '<button class="edit-btn">Edit</button>' +

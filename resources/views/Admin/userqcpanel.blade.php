@@ -22,6 +22,23 @@
                     </div>
                 </div>
             </div>
+
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <h1 style="text-align: center;">List Manager Estate</h1>
+                        <table class="table table-striped table-bordered" id="user_manager">
+                            <thead>
+                                <!-- Table header content -->
+                            </thead>
+                            <tbody>
+                                <!-- Table body content will be dynamically generated -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
 
 
@@ -45,6 +62,9 @@
             };
             if ($.fn.DataTable.isDataTable('#user_qc')) {
                 $('#user_qc').DataTable().destroy();
+            }
+            if ($.fn.DataTable.isDataTable('#user_manager')) {
+                $('#user_manager').DataTable().destroy();
             }
             // Send the data to your controller using Ajax
             $.ajax({
@@ -96,11 +116,11 @@
                             {
                                 // -1 targets the last column
                                 title: 'Actions',
-                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager' ||  (currentUserName === 'Admin' && departemen ==='QC')),
+                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager' || (currentUserName === 'Admin' && departemen === 'QC')),
                                 render: function(data, type, row, meta) {
                                     var buttons =
-                                        '<button class="edit-btn">Edit</button>' +
-                                        '<button class="delete-btn">Delete</button>';
+                                        '<button  class="btn btn-primary"><span><i class="bi bi-pencil"></i></span>Edit</button>' +
+                                        '<button class="btn btn-danger"><span><i class="bi bi-trash3"></i></span>Delete</button>';
                                     return buttons;
                                 }
                             }
@@ -110,20 +130,75 @@
 
                     // Populate DataTable with data
                     listQC.clear().rows.add(parseResult['list_qc']).draw();
+                    var list_emg = $('#user_manager').DataTable({
+                        columns: [{
+                                title: 'ID',
+                                data: 'user_id',
+                            },
+                            {
+                                title: 'Email',
+                                data: 'email',
+                            },
+                            {
+                                title: 'Password',
+                                data: 'password',
+                            },
+                            {
+                                title: 'Nama lengkap',
+                                data: 'nama_lengkap',
+                            },
+                            {
+                                title: 'Departemen',
+                                data: 'departemen',
+                            },
+                            {
+                                title: 'Afdeling ',
+                                data: 'afdeling',
+                            },
+                            {
+                                title: 'Nomor Handphone',
+                                data: 'no_hp',
+                            },
+                            {
+                                title: 'Lokasi Kerja',
+                                data: 'lokasi_kerja',
+                            },
+
+                            {
+                                title: 'Jabatan',
+                                data: 'jabatan',
+                            },
+
+                            {
+                                // -1 targets the last column
+                                title: 'Actions',
+                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager' || (currentUserName === 'Admin' && departemen === 'QC')),
+                                render: function(data, type, row, meta) {
+                                    var buttons =
+                                        '<button  class="btn btn-primary"><span><i class="bi bi-pencil"></i></span>Edit</button>'
+                                    return buttons;
+                                }
+                            }
+                        ],
+
+                    });
+
+                    // Populate DataTable with data
+                    list_emg.clear().rows.add(parseResult['list_gm']).draw();
 
 
-                    $('#user_qc').on('click', '.edit-btn', function() {
+                    $('#user_qc').on('click', '.btn.btn-primary', function() {
                         var rowData = listQC.row($(this).closest('tr')).data();
                         var rowIndex = listQC.row($(this).closest('tr')).index();
                         editqc(rowData);
                     });
+                    $('#user_manager').on('click', '.btn.btn-primary', function() {
+                        var rowData = list_emg.row($(this).closest('tr')).data();
+                        editqc(rowData);
+                    });
+
 
                     function editqc(rowData) {
-
-                        // selectedRowIndex = id;
-
-
-                        // var rowData = listQC.row(id).data();
 
                         console.log(rowData);
                         var emailValue = rowData.email;
@@ -159,8 +234,8 @@
                             Swal.fire({
                                 title: 'Masukan Password',
                                 input: 'password',
-                                inputLabel: 'Password Minimal 10 huruf ',
-                                inputValue: '',
+                                inputLabel: 'Password Maksimal 10 huruf ',
+                                inputValue: passwordValue,
                                 inputAttributes: {
                                     maxlength: 10,
                                     autocapitalize: 'off',
@@ -232,6 +307,7 @@
                                                     Asisten: 'Asisten',
                                                     Admin: 'Admin',
                                                     Askep: 'Askep',
+                                                    Manager: 'Manager',
                                                     Kosong: 'Tidak Ada'
                                                 },
                                             },
@@ -263,7 +339,7 @@
                                                 },
                                                 success: function(response) {
 
-                                                    Swal.fire('Disimpan!', 'User QC sudah di update!.', 'success');
+                                                    Swal.fire('Disimpan!', 'User  sudah di update!.', 'success');
                                                     setTimeout(function() {
                                                         location.reload();
                                                     }, 3000); // 3000 milliseconds = 3 seconds
@@ -284,7 +360,7 @@
                         });
                     }
 
-                    $('#user_qc').on('click', '.delete-btn', function() {
+                    $('#user_qc').on('click', '.btn.btn-danger', function() {
                         var rowIndex = listQC.row($(this).closest('tr')).data();
                         deleteqc(rowIndex);
                     });

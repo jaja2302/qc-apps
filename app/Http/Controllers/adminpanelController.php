@@ -37,10 +37,17 @@ class adminpanelController extends Controller
             ->where('departemen', '=', 'QC')
             ->get();
 
+        $lokexclaide = ['SULUNG RANCH', 'DEPT IT', 'QC', 'AGROSERVICES', 'MILL'];
+        $list_gm = DB::table('pengguna')
+            ->select('*')
+            ->whereNotIn('pengguna.departemen', $lokexclaide)
+            ->where('jabatan', 'manager')
+            ->get();
+
         $arrView = array();
         $arrView['list_qc'] =  $list_qc;
+        $arrView['list_gm'] =  $list_gm;
 
-        // dd($sidak_tph);
         echo json_encode($arrView);
         exit();
     }
