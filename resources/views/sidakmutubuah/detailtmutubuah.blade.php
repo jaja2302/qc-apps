@@ -1399,15 +1399,7 @@
                         //parsing result ke json untuk dalam estate
                         var parseResult = JSON.parse(result)
                         var afdResult = Object.entries(parseResult['sidak_buah'])
-                        // var EstTotal = Object.entries(parseResult['total_buah'])
-
-                        // console.log(arrEst1);
-                        // var arrEst1 = afdResult
-                        // var tbody1 = document.getElementById('data_tahunTab');
-
-                        // console.log(arrEst1);
-                        // Assuming `arrEst1` is your array of data
-
+                        var rekapestate = parseResult['total_buah_estate']
                         var tbody1 = document.getElementById('data_tahunTab');
                         afdResult.forEach((outerArray) => {
                             const key = outerArray[0];
@@ -1503,6 +1495,94 @@
 
                             });
                         });
+
+
+                        const tr = document.createElement('tr');
+                        // console.log(rowData['estate']);
+                        // console.log(rekapestate);
+                        let item1 = rekapestate['estate']
+                        let item2 = rekapestate['est']
+                        let item3 = rekapestate['petugas']
+                        let item4 = rekapestate['Jumlah_janjang']
+                        // mentah
+                        let item5 = rekapestate['tnp_brd']
+                        let item6 = rekapestate['persenTNP_brd']
+                        let item7 = rekapestate['krg_brd']
+                        let item8 = rekapestate['persenKRG_brd']
+                        let item9 = rekapestate['total_jjg']
+                        let item10 = rekapestate['persen_totalJjg']
+                        let item11 = rekapestate['skor_total']
+                        // masak 
+                        let item12 = rekapestate['jjg_matang']
+                        let item13 = rekapestate['persen_jjgMtang']
+                        let item14 = rekapestate['skor_jjgMatang']
+                        // lewat matang 
+                        let item15 = rekapestate['lewat_matang']
+                        let item16 = rekapestate['persen_lwtMtng']
+                        let item17 = rekapestate['skor_lewatMTng']
+                        //janjang kosong
+                        let item18 = rekapestate['janjang_kosong']
+                        let item19 = rekapestate['persen_kosong']
+                        let item20 = rekapestate['skor_kosong']
+                        // tidak standar vcut 
+                        let item21 = rekapestate['vcut']
+                        let item22 = rekapestate['vcut_persen']
+                        let item23 = rekapestate['vcut_skor']
+                        // abnormal 
+                        let item24 = rekapestate['abnormal']
+                        let item25 = rekapestate['abnormal_persen']
+                        // rat dmg
+                        let item26 = rekapestate['rat_dmg']
+                        let item27 = rekapestate['rd_persen']
+                        // penggunaan  karung
+                        let item28 = rekapestate['TPH']
+                        let item29 = rekapestate['persen_krg']
+                        let item30 = rekapestate['skor_kr']
+                        // all skor 
+                        let item31 = rekapestate['All_skor']
+                        let item32 = rekapestate['kategori']
+                        const items = [];
+                        for (let i = 1; i <= 32; i++) {
+                            items.push(eval(`item${i}`));
+                        }
+
+                        items.forEach((item, index) => {
+                            const itemElement = document.createElement('td');
+                            itemElement.classList.add('text-center');
+                            itemElement.innerText = item;
+
+                            if (index === 31) {
+                                // Apply background color based on the value of item32
+                                if (item === 'SATISFACTORY') {
+                                    itemElement.style.backgroundColor = '#fffc04';
+                                } else if (item === 'EXCELLENT') {
+                                    itemElement.style.backgroundColor = '#5874c4';
+                                } else if (item === 'GOOD') {
+                                    itemElement.style.backgroundColor = '#10fc2c';
+                                } else if (item === 'POOR') {
+                                    itemElement.style.backgroundColor = '#ff0404';
+                                } else if (item === 'FAIR') {
+                                    itemElement.style.backgroundColor = '#ffa404';
+                                }
+                            }
+                            if (item1 === 'TOTAL') {
+                                if (item32 === 'SATISFACTORY') {
+                                    itemElement.style.backgroundColor = '#fffc04';
+                                } else if (item32 === 'EXCELLENT') {
+                                    itemElement.style.backgroundColor = '#5874c4';
+                                } else if (item32 === 'GOOD') {
+                                    itemElement.style.backgroundColor = '#10fc2c';
+                                } else if (item32 === 'POOR') {
+                                    itemElement.style.backgroundColor = '#ff0404';
+                                } else if (item32 === 'FAIR') {
+                                    itemElement.style.backgroundColor = '#ffa404';
+                                }
+                            }
+
+                            tr.appendChild(itemElement);
+                        });
+
+                        tbody1.appendChild(tr);
                     }
                 })
             }

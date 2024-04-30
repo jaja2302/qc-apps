@@ -2194,10 +2194,10 @@
             });
         }
 
-        function enableExcelDownloadButton() {
-            const downloadExcelButton = document.getElementById('download-excel-button');
-            downloadExcelButton.disabled = false;
-        }
+        // function enableExcelDownloadButton() {
+        //     const downloadExcelButton = document.getElementById('download-excel-button');
+        //     downloadExcelButton.disabled = false;
+        // }
 
 
         // end bagian untuk map 
@@ -2225,7 +2225,7 @@
                 selectedDate.textContent = inputDate.value;
                 tglPDF.value = inputDate.value;
                 downloadButton.disabled = false;
-                enableExcelDownloadButton();
+                // enableExcelDownloadButton();
 
                 if (currentUserName === 'Askep' || currentUserName === 'Manager') {
                     document.getElementById('moveDataButton').disabled = false;
@@ -4619,7 +4619,7 @@
                                         value = element[1]['pokok_panen'] ?? 0 // Accessing the 'luas_ha' value
                                         break;
                                     case 4:
-                                        value = element[1]['akp'] ?? 0 // Accessing the 'luas_ha' value
+                                        value = element[1]['akp_real'] ?? element[1]['akp'] // Accessing the 'luas_ha' value
                                         break;
                                     case 5:
                                         value = element[1]['p_ma'] ?? 0 // Accessing the 'luas_ha' value

@@ -7107,16 +7107,84 @@ class mutubuahController extends Controller
 
         // dd($sidakblok);
         // dd($sidakblok, $total_buah);
-
-
-        // dd($sidak_buah, $total_buah);
+        $estatedata = [];
+        $blok = 0;
+        $jjg_sample = 0;
+        $tnpBRD = 0;
+        $krgBRD = 0;
+        $abr = 0;
+        $overripe = 0;
+        $empty = 0;
+        $vcut = 0;
+        $rd = 0;
+        $sum_kr = 0;
+        foreach ($sidakafd as $key => $value) {
+            $jjg_sample += $value['Jumlah_janjang'];
+            $tnpBRD += $value['tnp_brd'];
+            $krgBRD += $value['krg_brd'];
+            $abr += $value['abnormal'];
+            $overripe += $value['lewat_matang'];
+            $empty += $value['janjang_kosong'];
+            $vcut += $value['vcut'];
+            $rd += $value['rat_dmg'];
+            $sum_kr += $value['karung'];
+            $blok += $value['blok'];
+        }
+        $dataBLok = $blok;
+        if ($sum_kr != 0) {
+            $total_kr = round($sum_kr / $dataBLok, 3);
+        } else {
+            $total_kr = 0;
+        }
+        $per_kr = round($total_kr * 100, 3);
+        $skor_total = round((($tnpBRD + $krgBRD) / ($jjg_sample - $abr)) * 100, 3);
+        $skor_jjgMSk = round(($jjg_sample - ($tnpBRD + $krgBRD + $overripe + $empty + $abr)) / ($jjg_sample - $abr) * 100, 3);
+        $skor_lewatMTng =  round(($overripe / ($jjg_sample - $abr)) * 100, 3);
+        $skor_jjgKosong =  round(($empty / ($jjg_sample - $abr)) * 100, 3);
+        $skor_vcut =   round(($vcut / $jjg_sample) * 100, 3);
+        $allSkor = sidak_brdTotal($skor_total) +  sidak_matangSKOR($skor_jjgMSk) +  sidak_lwtMatang($skor_lewatMTng) + sidak_jjgKosong($skor_jjgKosong) + sidak_tangkaiP($skor_vcut) + sidak_PengBRD($per_kr);
+        $estatedata['Jumlah_janjang'] = $jjg_sample;
+        $estatedata['blok'] = $dataBLok;
+        $estatedata['estate'] = 'TOTAL';
+        $estatedata['est'] = 'Estate';
+        $estatedata['petugas'] = '-';
+        $estatedata['tnp_brd'] = $tnpBRD;
+        $estatedata['krg_brd'] = $krgBRD;
+        $estatedata['persenTNP_brd'] = round(($tnpBRD / ($jjg_sample - $abr)) * 100, 3);
+        $estatedata['persenKRG_brd'] = round(($krgBRD / ($jjg_sample - $abr)) * 100, 3);
+        $estatedata['total_jjg'] = $tnpBRD + $krgBRD;
+        $estatedata['persen_totalJjg'] = $skor_total;
+        $estatedata['skor_total'] = sidak_brdTotal($skor_total);
+        $estatedata['jjg_matang'] = $jjg_sample - ($tnpBRD + $krgBRD + $overripe + $empty + $abr);
+        $estatedata['persen_jjgMtang'] = $skor_jjgMSk;
+        $estatedata['skor_jjgMatang'] = sidak_matangSKOR($skor_jjgMSk);
+        $estatedata['lewat_matang'] = $overripe;
+        $estatedata['persen_lwtMtng'] =  $skor_lewatMTng;
+        $estatedata['skor_lewatMTng'] = sidak_lwtMatang($skor_lewatMTng);
+        $estatedata['janjang_kosong'] = $empty;
+        $estatedata['persen_kosong'] = $skor_jjgKosong;
+        $estatedata['skor_kosong'] = sidak_jjgKosong($skor_jjgKosong);
+        $estatedata['vcut'] = $vcut;
+        $estatedata['karung'] = $sum_kr;
+        $estatedata['vcut_persen'] = $skor_vcut;
+        $estatedata['vcut_skor'] = sidak_tangkaiP($skor_vcut);
+        $estatedata['abnormal'] = $abr;
+        $estatedata['abnormal_persen'] = round(($abr / $jjg_sample) * 100, 3);
+        $estatedata['rat_dmg'] = $rd;
+        $estatedata['rd_persen'] = round(($rd / $jjg_sample) * 100, 3);
+        $estatedata['TPH'] = $total_kr;
+        $estatedata['persen_krg'] = $per_kr;
+        $estatedata['skor_kr'] = sidak_PengBRD($per_kr);
+        $estatedata['All_skor'] = $allSkor;
+        $estatedata['kategori'] = sidak_akhir($allSkor);
+        // dd($final, $estatedata);
         $arrView = array();
-
         $arrView['est'] =  $est;
         $arrView['afd'] =  $afd;
         $arrView['tanggal'] =  $date;
         $arrView['sidak_buah'] =  $final;
         $arrView['total_buah'] =  $sidakafd;
+        $arrView['total_buah_estate'] =  $estatedata;
 
         echo json_encode($arrView); //di decode ke dalam bentuk json dalam vaiavel arrview yang dapat menampung banyak isi array
         exit();

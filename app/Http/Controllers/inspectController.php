@@ -10282,7 +10282,7 @@ class inspectController extends Controller
             ->where('datetime', 'like', '%' . $date . '%')
             ->where('mutu_ancak_new.estate', $est)
             ->where('mutu_ancak_new.afdeling', $afd)
-
+            ->orderBy('kemandoran', 'asc')
             ->get();
         $ancakM = $ancakM->groupBy(['kemandoran']);
         $ancakM = json_decode($ancakM, true);
@@ -10294,7 +10294,7 @@ class inspectController extends Controller
             ->where('datetime', 'like', '%' . $date . '%')
             ->where('mutu_buah.estate', $est)
             ->where('mutu_buah.afdeling', $afd)
-
+            ->orderBy('kemandoran', 'asc')
             ->get();
         $buahM = $buahM->groupBy(['kemandoran']);
         $buahM = json_decode($buahM, true);
@@ -10304,7 +10304,7 @@ class inspectController extends Controller
             ->where('datetime', 'like', '%' . $date . '%')
             ->where('mutu_transport.estate', $est)
             ->where('mutu_transport.afdeling', $afd)
-
+            ->orderBy('kemandoran', 'asc')
             ->get();
         $transM = $transM->groupBy(['kemandoran']);
         $transM = json_decode($transM, true);
@@ -10315,6 +10315,7 @@ class inspectController extends Controller
             ->select("mutu_ancak_new.*", DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%Y") as tahun'))
             ->where('datetime', 'like', '%' . $date . '%')
             ->where('mutu_ancak_new.estate', $est)
+            ->orderBy('kemandoran', 'asc')
             ->where('mutu_ancak_new.afdeling', $afd)
 
             ->get();
@@ -10325,8 +10326,8 @@ class inspectController extends Controller
             ->select("mutu_transport.*", DB::raw('DATE_FORMAT(mutu_transport.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(mutu_transport.datetime, "%Y") as tahun'))
             ->where('datetime', 'like', '%' . $date . '%')
             ->where('mutu_transport.estate', $est)
+            ->orderBy('kemandoran', 'asc')
             ->where('mutu_transport.afdeling', $afd)
-
             ->get();
         $transM2 = $transM2->groupBy(['kemandoran', 'blok']);
         $transM2 = json_decode($transM2, true);
@@ -10334,7 +10335,7 @@ class inspectController extends Controller
         // dd($ancakM2);
         // end reg 2 
 
-        // dd($transM2);
+        // dd($ancakM);
         $ancakx = array();
         $countx  = 0;
         foreach ($ancakM as $key => $value) {
@@ -10418,7 +10419,7 @@ class inspectController extends Controller
             if ($reg == 2 || $reg == '2') {
                 $ancakx[$key]['akp_real'] = round((($jml_jjg_panen + $tot_jjg) / $jumPokok * 100), 2);
             } else {
-                $ancakx[$key]['akp_real'] = count_percent($jml_jjg_panen, $jumPokok);
+                $ancakx[$key]['akp_real'] = round(($jml_jjg_panen / $jumPokok * 100), 2);
             }
 
             $ancakx[$key]['p_ma'] = $jml_brtp;
@@ -10497,95 +10498,6 @@ class inspectController extends Controller
         }
 
 
-        // if ($reg == 2 || $reg == '2') {
-
-        //     // $ancak_status = $ancak[''];
-        //     foreach ($transM as $key => $value) {
-        //         $sum_bt = 0;
-        //         $sum_Restan = 0;
-        //         $tph_sample = 0;
-        //         $listBlokPerAfd = array();
-        //         foreach ($value as $key2 => $value2) {
-        //             // if (!in_array($value3['estate'] . ' ' . $value3['afdeling'] . ' ' . $value3['blok'], $listBlokPerAfd)) {
-        //             $listBlokPerAfd[] = $value2['estate'] . ' ' . $value2['afdeling'] . ' ' . $value2['blok'];
-        //             // }
-        //             $sum_Restan += $value2['rst'];
-        //             $tph_sample = count($listBlokPerAfd);
-        //             $sum_bt += $value2['bt'];
-        //             // dd($value2);
-        //         }
-
-        //         $panenKey = 0;
-
-        //         if (isset($ancak[$key]['status_panen'])) {
-        //             $transportx[$key]['status_panen'] = $ancak[$key]['status_panen'];
-        //             $panenKey = $ancak[$key]['status_panen'];
-        //             $transportx[$key]['status_panentrans'] = $value2['status_panen'];
-        //             $transportx[$key]['status_panenAncak'] = $ancak[$key]['status_panen'];
-        //         }
-        //         $LuasKey = 0;
-        //         if (isset($ancak[$key]['luas_blok'])) {
-        //             $transportx[$key]['luas_blok'] = $ancak[$key]['luas_blok'];
-        //             $LuasKey = $ancak[$key]['luas_blok'];
-        //         }
-
-        //         if (isset($panenKey) && $panenKey <= 3 && isset($ancak[$key]['luas_blok'])) {
-        //             $transportx[$key]['tph_sample'] = round($LuasKey * 1.3);
-        //         } else {
-        //             $transportx[$key]['tph_sample'] = $tph_sample;
-        //         }
-
-
-        //         $transportx[$key]['reg'] = $reg;
-        //         $transportx[$key]['status_panen'] = $value2['status_panen'];
-        //         $transportx[$key]['tph_sampleTrans'] = $tph_sample;
-        //         $transportx[$key]['estate'] = $value2['estate'];
-        //         $transportx[$key]['afdeling'] = $value2['afdeling'];
-        //         $transportx[$key]['bt_total'] = $sum_bt;
-        //         $transportx[$key]['restan_total'] = $sum_Restan;
-        //         $transportx[$key]['skor'] = ($tph_sample != 0) ? round($sum_bt / $tph_sample, 2) : 0;
-        //         $transportx[$key]['skor_restan'] = ($tph_sample != 0) ? round($sum_Restan / $tph_sample, 2) : 0;
-        //     }
-        //     // Add this code after your existing foreach loop
-
-
-        //     $transReg2 = array();
-        //     $tph_sample = 0;
-        //     foreach ($transport as $key => $value) {
-        //         # code...
-        //         $tph_sample += $value['tph_sample'];
-        //         // dd($value);
-        //     }
-        //     if (isset($value['estate'])) {
-        //         if (!isset($transReg2[$value['estate']])) {
-        //             $transReg2[$value['estate']] = [];
-        //         }
-
-        //         if (!isset($transReg2[$value['estate']][$value['afdeling']])) {
-        //             $transReg2[$value['estate']][$value['afdeling']] = [];
-        //         }
-
-        //         $transReg2[$value['estate']][$value['afdeling']]['tph_sample'] = $tph_sample;
-        //     }
-
-
-        //     foreach ($ancak as $key => $value) {
-        //         if (!array_key_exists($key, $transport)) {
-        //             $transport[$key]['status_panen'] = $value['status_panen'];
-        //             $transport[$key]['luas_blok'] = $value['luas_blok'];
-
-        //             if ($value['status_panen'] <= 3) {
-        //                 $transport[$key]['tph_sample'] = round($value['luas_blok'] * 1.3, 2);
-        //             } else {
-        //                 $transport[$key]['tph_sample'] = $value['status_panen'];
-        //             }
-        //             $transport[$key]['bt_total'] = 0;
-        //             $transport[$key]['restan_total'] = 0;
-        //             $transport[$key]['skor'] = 0;
-        //             $transport[$key]['skor_restan'] = 0;
-        //         }
-        //     }
-        // }
 
         $mutuBuahx = array();
         foreach ($buahM as $key => $value) {
@@ -10849,7 +10761,7 @@ class inspectController extends Controller
         }
 
 
-
+        // dd($resultKemandoran);
 
         // dd($tot_mntol, $resultKemandoran);
 
