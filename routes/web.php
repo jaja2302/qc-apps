@@ -20,6 +20,7 @@ use App\Http\Controllers\incpectcomponent\pdfgenerateController;
 use App\Http\Controllers\incpectcomponent\makemapsController;
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\RekapController;
+use App\Http\Controllers\GradingController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -229,4 +230,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/update/{id}/{lokasi_kerja}', [UserQCController::class, 'update'])->name('update');
     Route::post('/delete/{id}', [UserQCController::class, 'destroy'])->name('delete');
     Route::post('/excelsidaktph', [SidaktphController::class, 'excelsidaktph'])->name('excelsidaktph');
+
+    Route::get('/gradingdahsboard', [GradingController::class, 'index'])->name('gradingdahsboard');
 });
