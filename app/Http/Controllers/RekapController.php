@@ -16652,9 +16652,9 @@ class RekapController extends Controller
             'est' => $regrom,
             'jab' => 'RH',
             'nama' => $names,
-            'total' => round($afdscore3 / $arrdiv3, 1),
-            // 'skor' => ($reg_devskor != 0) ? round($reg_finalskor / $reg_devskor, 3) : 0
-            'skor' => round($afdscore3 / $arrdiv3, 1),
+            'total' => $arrdiv3 != 0 ? round($afdscore3 / $arrdiv3, 1) : 0,
+            'skor' => $arrdiv3 != 0 ? round($afdscore3 / $arrdiv3, 1) : 0,
+
         );
 
         // dd($rhEstate);
