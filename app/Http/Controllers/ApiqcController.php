@@ -252,6 +252,7 @@ class ApiqcController extends Controller
     {
         $estate = $request->input('est');
         $datetime = $request->input('datetime');
+        $id = $request->input('id');
 
         if (!$estate || !$datetime) {
             return response()->json(['error' => 'Invalid data provided.'], 400);
@@ -260,9 +261,8 @@ class ApiqcController extends Controller
         try {
             DB::beginTransaction();
 
-            $newdata = new historycron();
-            $newdata->datetime = $datetime;
-            $newdata->estate = $estate;
+            $newdata = Historycron::find($id);
+            $newdata->last_update = $datetime;
             $newdata->save();
 
             DB::commit();
@@ -279,46 +279,83 @@ class ApiqcController extends Controller
         }
     }
 
+    // public function checkcronjob()
+    // {
+    //     $time = Carbon::now('Asia/Jakarta');
+    //     $hours = $time->format('H:i:s');
+    //     $ymd = $time->format('Y-m-d H:i:s');
+
+    //     $startTime = Carbon::createFromTime(6, 0, 0)->format('H:i:s');
+    //     $yearmonth = $time->format('Y-m-d') . ' ' . $startTime;
+
+    //     // Query to get data between 06:00:00 and the current time
+    //     $getdatacron = DB::connection('mysql2')->table('crontab')
+    //         ->select('*')
+    //         ->whereBetween('datetime', [$startTime, $hours])
+    //         ->get();
+
+    //     $gethistorycron = DB::connection('mysql2')->table('cron_history')
+    //         ->select('*')
+    //         ->whereBetween('datetime', [$yearmonth, $ymd])
+    //         ->get();
+
+    //     $cronfail = [];
+    //     foreach ($getdatacron as $value) {
+    //         $foundInHistory = false;
+    //         foreach ($gethistorycron as $value1) {
+    //             if ($value->estate == $value1->estate) {
+    //                 $foundInHistory = true;
+    //                 break; // Exit the inner loop if found in history
+    //             }
+    //         }
+    //         if (!$foundInHistory) {
+    //             $cronfail[] = $value; // Add to cronfail if not found in history
+    //         }
+    //     }
+
+    //     return response()->json([
+    //         'time' => $ymd,
+    //         'hours' => $hours,
+    //         'cronfail' => $cronfail,
+    //         'crondata' => $getdatacron,
+    //         'cronhistory' => $gethistorycron,
+    //     ], 200);
+    // }
+
     public function checkcronjob()
     {
-        $time = Carbon::now('Asia/Jakarta'); // Get the current time in GMT+7 (Asia/Jakarta time zone)
+        $time = Carbon::now('Asia/Jakarta');
         $hours = $time->format('H:i:s');
-        $ymd = $time->format('Y-m-d H:i:s');
-
+        $datetimeNow = Carbon::now();
         $startTime = Carbon::createFromTime(6, 0, 0)->format('H:i:s');
-        $yearmonth = $time->format('Y-m-d') . ' ' . $startTime;
-
         // Query to get data between 06:00:00 and the current time
         $getdatacron = DB::connection('mysql2')->table('crontab')
             ->select('*')
-            ->whereBetween('datetime', [$startTime, $hours])
+            ->whereBetween('triger_time', [$startTime, $hours])
             ->get();
 
-        $gethistorycron = DB::connection('mysql2')->table('cron_history')
-            ->select('*')
-            ->whereBetween('datetime', [$yearmonth, $ymd])
-            ->get();
 
-        $cronfail = [];
-        foreach ($getdatacron as $value) {
-            $foundInHistory = false;
-            foreach ($gethistorycron as $value1) {
-                if ($value->estate == $value1->estate) {
-                    $foundInHistory = true;
-                    break; // Exit the inner loop if found in history
+        $filteredData = collect([]);
+
+        foreach ($getdatacron as $item) {
+            if ($item->last_update === null) {
+                $filteredData->push($item); // Include items with null last_update
+            } else {
+                // Convert last_update to Carbon instance for comparison
+                $lastUpdate = Carbon::parse($item->last_update);
+
+                // Check if last_update is not today or is less than the trigger time today
+                if (!$lastUpdate->isToday() || $lastUpdate->lt($datetimeNow->startOfDay()->addHours($item->triger_time))) {
+                    $filteredData->push($item);
                 }
-            }
-            if (!$foundInHistory) {
-                $cronfail[] = $value; // Add to cronfail if not found in history
             }
         }
 
+
+
         return response()->json([
-            'time' => $ymd,
-            'hours' => $hours,
-            'cronfail' => $cronfail,
+            'cronfail' => $filteredData,
             'crondata' => $getdatacron,
-            'cronhistory' => $gethistorycron,
         ], 200);
     }
 }
