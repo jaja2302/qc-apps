@@ -1809,20 +1809,20 @@
         var regTph = $("#regDataTph").val();
         var dateTph = $("#dateDataTph").val();
         var _token = $('input[name="_token"]').val();
-        if ($.fn.DataTable.isDataTable('#newweek1')) {
-          $('#newweek1').DataTable().destroy();
+        if ($$.fn.DataTable.isDataTable('#newweek1')) {
+          $$('#newweek1').DataTable().destroy();
         }
-        if ($.fn.DataTable.isDataTable('#newweek2')) {
-          $('#newweek2').DataTable().destroy();
+        if ($$.fn.DataTable.isDataTable('#newweek2')) {
+          $$('#newweek2').DataTable().destroy();
         }
-        if ($.fn.DataTable.isDataTable('#newweek3')) {
-          $('#newweek3').DataTable().destroy();
+        if ($$.fn.DataTable.isDataTable('#newweek3')) {
+          $$('#newweek3').DataTable().destroy();
         }
-        if ($.fn.DataTable.isDataTable('#newweek4')) {
-          $('#newweek4').DataTable().destroy();
+        if ($$.fn.DataTable.isDataTable('#newweek4')) {
+          $$('#newweek4').DataTable().destroy();
         }
-        if ($.fn.DataTable.isDataTable('#newweek5')) {
-          $('#newweek5').DataTable().destroy();
+        if ($$.fn.DataTable.isDataTable('#newweek5')) {
+          $$('#newweek5').DataTable().destroy();
         }
         $.ajax({
           url: "{{ route('changeDataTph') }}",
@@ -1839,7 +1839,7 @@
 
 
 
-            var datatableweek1 = $('#newweek1').DataTable({
+            var datatableweek1 = $$('#newweek1').DataTable({
               columns: [{
                   data: 'est'
                 },
@@ -2234,7 +2234,7 @@
             });
             datatableweek1.clear().rows.add(parseResult['week1']).draw();
 
-            var datatableweek2 = $('#newweek2').DataTable({
+            var datatableweek2 = $$('#newweek2').DataTable({
               columns: [{
                   data: 'est'
                 },
@@ -2629,7 +2629,7 @@
             datatableweek2.clear().rows.add(parseResult['week2']).draw();
 
 
-            var datatableweek3 = $('#newweek3').DataTable({
+            var datatableweek3 = $$('#newweek3').DataTable({
 
               columns: [{
                   data: 'est'
@@ -3024,7 +3024,7 @@
             });
             datatableweek3.clear().rows.add(parseResult['week3']).draw();
 
-            var datatableweek4 = $('#newweek4').DataTable({
+            var datatableweek4 = $$('#newweek4').DataTable({
 
               columns: [{
                   data: 'est'
@@ -3418,7 +3418,7 @@
             });
             datatableweek4.clear().rows.add(parseResult['week4']).draw();
 
-            var datatableweek5 = $('#newweek5').DataTable({
+            var datatableweek5 = $$('#newweek5').DataTable({
 
               columns: [{
                   data: 'est'

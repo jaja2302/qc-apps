@@ -827,8 +827,8 @@
             // $('#tab1').empty()
 
 
-            if ($.fn.DataTable.isDataTable('#new_Sidak')) {
-                $('#new_Sidak').DataTable().destroy();
+            if ($$.fn.DataTable.isDataTable('#new_Sidak')) {
+                $$('#new_Sidak').DataTable().destroy();
             }
             var tanggal = ''
             var est = ''
@@ -860,7 +860,7 @@
 
 
                     // new sida 
-                    var sidakTPhNEw = $('#new_Sidak').DataTable({
+                    var sidakTPhNEw = $$('#new_Sidak').DataTable({
                         columns: [{
                                 title: 'ID',
                                 data: 'id',

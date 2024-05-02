@@ -1,21 +1,20 @@
-// import './bootstrap';
-import $ from "jquery";
-window.$ = $;
+import './bootstrap';
+// import $ from "jquery";
+// window.$data = $;
+
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import 'sweetalert2/src/sweetalert2.scss'
 import 'leaflet-arrowheads';
 import 'leaflet-polylinedecorator';
 import 'leaflet-rotatedmarker';
-
-import DataTable from 'datatables.net-bs5';
-
-import DateTime from 'datatables.net-datetime';
 import 'datatables.net-fixedcolumns-bs5';
 import 'datatables.net-fixedheader-bs5';
 import html2canvas from 'html2canvas';
 window.html2canvas = html2canvas;
-
-
+import jQuery from "jquery";
+import DataTable from 'datatables.net-bs5';
+window.DataTable = DataTable;
+window.$$ = jQuery;
 // helper 
 window.captureTableScreenshot = (tableId, fileName) => {
     Swal.fire({

@@ -279,48 +279,6 @@ class ApiqcController extends Controller
         }
     }
 
-    // public function checkcronjob()
-    // {
-    //     $time = Carbon::now('Asia/Jakarta');
-    //     $hours = $time->format('H:i:s');
-    //     $ymd = $time->format('Y-m-d H:i:s');
-
-    //     $startTime = Carbon::createFromTime(6, 0, 0)->format('H:i:s');
-    //     $yearmonth = $time->format('Y-m-d') . ' ' . $startTime;
-
-    //     // Query to get data between 06:00:00 and the current time
-    //     $getdatacron = DB::connection('mysql2')->table('crontab')
-    //         ->select('*')
-    //         ->whereBetween('datetime', [$startTime, $hours])
-    //         ->get();
-
-    //     $gethistorycron = DB::connection('mysql2')->table('cron_history')
-    //         ->select('*')
-    //         ->whereBetween('datetime', [$yearmonth, $ymd])
-    //         ->get();
-
-    //     $cronfail = [];
-    //     foreach ($getdatacron as $value) {
-    //         $foundInHistory = false;
-    //         foreach ($gethistorycron as $value1) {
-    //             if ($value->estate == $value1->estate) {
-    //                 $foundInHistory = true;
-    //                 break; // Exit the inner loop if found in history
-    //             }
-    //         }
-    //         if (!$foundInHistory) {
-    //             $cronfail[] = $value; // Add to cronfail if not found in history
-    //         }
-    //     }
-
-    //     return response()->json([
-    //         'time' => $ymd,
-    //         'hours' => $hours,
-    //         'cronfail' => $cronfail,
-    //         'crondata' => $getdatacron,
-    //         'cronhistory' => $gethistorycron,
-    //     ], 200);
-    // }
 
     public function checkcronjob()
     {
@@ -331,6 +289,7 @@ class ApiqcController extends Controller
         // Query to get data between 06:00:00 and the current time
         $getdatacron = DB::connection('mysql2')->table('crontab')
             ->select('*')
+            ->where('status', 1)
             ->whereBetween('triger_time', [$startTime, $hours])
             ->get();
 

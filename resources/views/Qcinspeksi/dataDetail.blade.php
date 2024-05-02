@@ -2270,14 +2270,14 @@
             lottieAnimation.play(); // Start the Lottie animation
             lottieContainer.style.display = 'block'; // Display the Lottie container
 
-            if ($.fn.DataTable.isDataTable('#mutuAncakTable')) {
-                $('#mutuAncakTable').DataTable().destroy();
+            if ($$.fn.DataTable.isDataTable('#mutuAncakTable')) {
+                $$('#mutuAncakTable').DataTable().destroy();
             }
-            if ($.fn.DataTable.isDataTable('#mutuBuahable')) {
-                $('#mutuBuahable').DataTable().destroy();
+            if ($$.fn.DataTable.isDataTable('#mutuBuahable')) {
+                $$('#mutuBuahable').DataTable().destroy();
             }
-            if ($.fn.DataTable.isDataTable('#mutuTransportable')) {
-                $('#mutuTransportable').DataTable().destroy();
+            if ($$.fn.DataTable.isDataTable('#mutuTransportable')) {
+                $$('#mutuTransportable').DataTable().destroy();
             }
             var Tanggal = document.getElementById('inputDate').value;
             var est = document.getElementById('est').value;
@@ -2573,7 +2573,7 @@
                     });
 
 
-                    var dataTableAncakTest = $('#mutuAncakTable').DataTable({
+                    var dataTableAncakTest = $$('#mutuAncakTable').DataTable({
                         columns: [{
                                 title: 'ID',
                                 data: 'id'
@@ -2951,7 +2951,7 @@
                     });
 
 
-                    var dataTablesBuah = $('#mutuBuahable').DataTable({
+                    var dataTablesBuah = $$('#mutuBuahable').DataTable({
                         columns: [{
                                 title: 'ID',
                                 data: 'id'
@@ -3272,7 +3272,7 @@
                         // $('#editModal').modal('hide');
                     });
 
-                    var dataTablesTrans = $('#mutuTransportable').DataTable({
+                    var dataTablesTrans = $$('#mutuTransportable').DataTable({
                         columns: [{
                                 title: 'ID',
                                 data: 'id'
