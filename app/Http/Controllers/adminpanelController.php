@@ -20,16 +20,6 @@ class adminpanelController extends Controller
         $nama = $request->input('user_name');
         $lokasi = $request->input('lok');
 
-        // $lokasi = 'Regional IV';
-
-
-        $queryEste = DB::connection('mysql2')->table('estate')
-            ->select('estate.*')
-            ->join('wil', 'wil.id', '=', 'estate.wil')
-            ->join('reg', 'reg.id', '=', 'wil.regional')
-            ->where('reg.nama', $lokasi)
-            ->get();
-
 
         $list_qc = DB::table('pengguna')
             ->select('pengguna.*')
@@ -37,16 +27,23 @@ class adminpanelController extends Controller
             ->where('departemen', '=', 'QC')
             ->get();
 
-        $lokexclaide = ['SULUNG RANCH', 'DEPT IT', 'QC', 'AGROSERVICES', 'MILL'];
+        $lokexclaide = ['SULUNG RANCH', 'DEPT IT', 'QC', 'AGROSERVICES', 'MILL', 'Hortikultura', 'Perkebunan'];
         $list_gm = DB::table('pengguna')
             ->select('*')
             ->whereNotIn('pengguna.departemen', $lokexclaide)
             ->where('jabatan', 'manager')
             ->get();
 
+        $list_asisten = DB::table('pengguna')
+            ->select('*')
+            ->whereNotIn('pengguna.departemen', $lokexclaide)
+            ->whereIn('jabatan', ['Asisten', 'Asisten Afdeling'])
+            ->get();
+        // dd($list_asisten);
         $arrView = array();
         $arrView['list_qc'] =  $list_qc;
         $arrView['list_gm'] =  $list_gm;
+        $arrView['list_asisten'] =  $list_asisten;
 
         echo json_encode($arrView);
         exit();

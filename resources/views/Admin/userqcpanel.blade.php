@@ -39,6 +39,22 @@
                     </div>
                 </div>
             </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <h1 style="text-align: center;">List Asisten Estate</h1>
+                        <table class="table table-striped table-bordered" id="user_asisten">
+                            <thead>
+                                <!-- Table header content -->
+                            </thead>
+                            <tbody>
+                                <!-- Table body content will be dynamically generated -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
 
 
@@ -196,7 +212,65 @@
                         var rowData = list_emg.row($(this).closest('tr')).data();
                         editqc(rowData);
                     });
+                    var list_asisten = $$('#user_asisten').DataTable({
+                        columns: [{
+                                title: 'ID',
+                                data: 'user_id',
+                            },
+                            {
+                                title: 'Email',
+                                data: 'email',
+                            },
+                            {
+                                title: 'Password',
+                                data: 'password',
+                            },
+                            {
+                                title: 'Nama lengkap',
+                                data: 'nama_lengkap',
+                            },
+                            {
+                                title: 'Departemen',
+                                data: 'departemen',
+                            },
+                            {
+                                title: 'Afdeling ',
+                                data: 'afdeling',
+                            },
+                            {
+                                title: 'Nomor Handphone',
+                                data: 'no_hp',
+                            },
+                            {
+                                title: 'Lokasi Kerja',
+                                data: 'lokasi_kerja',
+                            },
 
+                            {
+                                title: 'Jabatan',
+                                data: 'jabatan',
+                            },
+
+                            {
+                                // -1 targets the last column
+                                title: 'Actions',
+                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager' || (currentUserName === 'Admin' && departemen === 'QC')),
+                                render: function(data, type, row, meta) {
+                                    var buttons =
+                                        '<button  class="btn btn-primary"><span><i class="bi bi-pencil"></i></span>Edit</button>'
+                                    return buttons;
+                                }
+                            }
+                        ],
+
+                    });
+
+                    list_asisten.clear().rows.add(parseResult['list_asisten']).draw();
+
+                    $('#user_asisten').on('click', '.btn.btn-primary', function() {
+                        var rowData = list_asisten.row($(this).closest('tr')).data();
+                        editqc(rowData);
+                    });
 
                     function editqc(rowData) {
 
