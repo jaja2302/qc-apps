@@ -72,6 +72,8 @@ class adminpanelController extends Controller
                 $newjbtan = '';
                 if ($jabatan == 'Kosong') {
                     $newjbtan = '';
+                } elseif ($jabatan == 'Asisafd') {
+                    $newjbtan = 'Asisten Afdeling';
                 } else {
                     $newjbtan = $jabatan;
                 }

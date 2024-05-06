@@ -382,6 +382,7 @@
                                                     Admin: 'Admin',
                                                     Askep: 'Askep',
                                                     Manager: 'Manager',
+                                                    Asisafd: 'Asisten Afdeling',
                                                     Kosong: 'Tidak Ada'
                                                 },
                                             },
