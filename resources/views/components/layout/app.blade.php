@@ -240,28 +240,17 @@
                 var defaultClass = 'bg-light';
 
                 navLinks.forEach(function(link) {
-                    // Check if any URL segment matches the current URL
-                    var found = Object.keys(urlClassMapping).find(function(segment) {
-                        return currentUrl.endsWith(segment) && link.href.endsWith(segment);
-                    });
+                    // Check if link.href and currentUrl are defined and not null
+                    if (link.href && currentUrl) {
+                        // Check if any URL segment matches the current URL
+                        var found = Object.keys(urlClassMapping).find(function(segment) {
+                            // Check if link.href and currentUrl ends with the segment
+                            return link.href.endsWith(segment) && currentUrl.endsWith(segment);
+                        });
 
-                    // Assign the class based on the match or default class
-                    link.classList.add(found ? urlClassMapping[found] : defaultClass);
-                });
-
-
-            });
-            document.addEventListener('DOMContentLoaded', function() {
-                var lottieElements = document.querySelectorAll('.lottie-animation');
-                lottieElements.forEach(function(element) {
-                    var animationPath = element.getAttribute('data-animation-path');
-                    lottie.loadAnimation({
-                        container: element,
-                        renderer: 'svg',
-                        loop: true,
-                        autoplay: true,
-                        path: animationPath
-                    });
+                        // Assign the class based on the match or default class
+                        link.classList.add(found ? urlClassMapping[found] : defaultClass);
+                    }
                 });
             });
         </script>

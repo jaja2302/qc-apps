@@ -5033,10 +5033,13 @@ class SidaktphController extends Controller
     {
         $regional = $request->get('reg');
         $tahun = $request->get('year');
+        $start_date = $request->get('start_date');
+        $end_date = $request->get('end_date');
 
 
 
 
+        // dd($regional, $tahun, $start_date, $end_date);
         // dd($tahun, $regional);
         $queryAsisten = DB::connection('mysql2')->table('asisten_qc')
             ->select('asisten_qc.*')
@@ -5069,39 +5072,14 @@ class SidaktphController extends Controller
         // dd($defafd);
 
         $chunkSize = 1000;
-
-        // Overview:
-        // The CASE statement is like a series of if-else conditions used within SQL queries.
-
-        // Breakdown:
-        // WHEN status = '' THEN 1:
-
-        // If status is an empty string, set statuspanen as 1.
-        // WHEN status = '0' THEN 1:
-
-        // If status is '0', also set statuspanen as 1.
-        // WHEN LOCATE('H+', status) > 0 THEN ... and WHEN LOCATE('>H+', status) > 0 THEN ...:
-
-        // If status contains 'H+' or '>H+', the subsequent SUBSTRING_INDEX extracts the portion after these substrings (e.g., 'H+11' -> '11').
-        // If the extracted number is greater than 8, it sets statuspanen to 8; otherwise, it uses the extracted number.
-        // WHEN status REGEXP '^[0-9]+$' AND status > 8 THEN '8':
-
-        // If status contains only digits (0-9) and is greater than 8, it directly sets statuspanen to 8.
-        // WHEN LENGTH(status) > 1 AND status NOT LIKE '%H+%' AND status NOT LIKE '%>H+%' AND LOCATE(',', status) > 0 THEN SUBSTRING_INDEX(status, ',', 1):
-
-        // If the length of status is greater than 1 and doesn't contain 'H+' or '>H+', but has a comma, it extracts the portion before the comma as statuspanen.
-        // ELSE status:
-
-        // If none of the conditions match, it sets statuspanen as the original status value.
-        // Overall Purpose:
-        // This construction aims to provide a specific value for statuspanen based on different patterns and conditions observed in the status column, ensuring it's properly processed and normalized for further usage within the query result.
-        DB::connection('mysql2')->table('sidak_tph')
-            ->select(
-                "sidak_tph.*",
-                DB::raw('DATE_FORMAT(sidak_tph.datetime, "%M") as bulan'),
-                DB::raw('DATE_FORMAT(sidak_tph.datetime, "%Y") as tahun'),
-                DB::raw('DATE_FORMAT(sidak_tph.datetime, "%Y-%m-%d") as tanggal'),
-                DB::raw("
+        if ($tahun != null) {
+            DB::connection('mysql2')->table('sidak_tph')
+                ->select(
+                    "sidak_tph.*",
+                    DB::raw('DATE_FORMAT(sidak_tph.datetime, "%M") as bulan'),
+                    DB::raw('DATE_FORMAT(sidak_tph.datetime, "%Y") as tahun'),
+                    DB::raw('DATE_FORMAT(sidak_tph.datetime, "%Y-%m-%d") as tanggal'),
+                    DB::raw("
                 CASE 
                 WHEN status = '' THEN 1
                 WHEN status = '0' THEN 1
@@ -5115,30 +5093,79 @@ class SidaktphController extends Controller
                 WHEN LENGTH(status) > 1 AND status NOT LIKE '%H+%' AND status NOT LIKE '%>H+%' AND LOCATE(',', status) > 0 THEN SUBSTRING_INDEX(status, ',', 1)
                 ELSE status
             END AS statuspanen")
-            )
+                )
 
-            ->join('estate', 'estate.est', '=', 'sidak_tph.est')
-            ->join('wil', 'wil.id', '=', 'estate.wil')
-            ->where('wil.regional', $regional)
-            ->where('estate.emp', '!=', 1)
-            ->whereYear('datetime', $tahun)
-            ->orderBy('afd', 'asc')
-            ->orderBy('datetime', 'asc')
-            ->chunk($chunkSize, function ($results) use (&$datatph) {
-                foreach ($results as $result) {
-                    // Grouping logic here, if needed
-                    $datatph[] = $result;
-                    // Adjust this according to your grouping requirements
-                }
-            });
+                ->join('estate', 'estate.est', '=', 'sidak_tph.est')
+                ->join('wil', 'wil.id', '=', 'estate.wil')
+                ->where('wil.regional', $regional)
+                ->where('estate.emp', '!=', 1)
+                // ->whereBetween(DB::raw('DATE_FORMAT(datetime, "%Y-%m")'), ["$start_date", "$end_date"])
+                ->whereYear('datetime', $tahun)
+                ->orderBy('afd', 'asc')
+                ->orderBy('datetime', 'asc')
+                ->chunk($chunkSize, function ($results) use (&$datatph) {
+                    foreach ($results as $result) {
+                        // Grouping logic here, if needed
+                        $datatph[] = $result;
+                        // Adjust this according to your grouping requirements
+                    }
+                });
 
 
-        $datatph = collect($datatph)->groupBy(['est', 'afd', 'bulan', 'tanggal', 'statuspanen', 'blok']);
-        $ancakFA = json_decode($datatph, true);
+            $datatph = collect($datatph)->groupBy(['est', 'afd', 'bulan', 'tanggal', 'statuspanen', 'blok']);
+            $ancakFA = json_decode($datatph, true);
+            $year = $tahun;
+        } else {
+            DB::connection('mysql2')->table('sidak_tph')
+                ->select(
+                    "sidak_tph.*",
+                    DB::raw('DATE_FORMAT(sidak_tph.datetime, "%M") as bulan'),
+                    DB::raw('DATE_FORMAT(sidak_tph.datetime, "%Y") as tahun'),
+                    DB::raw('DATE_FORMAT(sidak_tph.datetime, "%Y-%m-%d") as tanggal'),
+                    DB::raw("
+                CASE 
+                WHEN status = '' THEN 1
+                WHEN status = '0' THEN 1
+                WHEN LOCATE('>H+', status) > 0 THEN '8'
+                WHEN LOCATE('H+', status) > 0 THEN 
+                    CASE 
+                        WHEN SUBSTRING_INDEX(SUBSTRING_INDEX(status, 'H+', -1), ' ', 1) > 8 THEN '8'
+                        ELSE SUBSTRING_INDEX(SUBSTRING_INDEX(status, 'H+', -1), ' ', 1)
+                    END
+                WHEN status REGEXP '^[0-9]+$' AND status > 8 THEN '8'
+                WHEN LENGTH(status) > 1 AND status NOT LIKE '%H+%' AND status NOT LIKE '%>H+%' AND LOCATE(',', status) > 0 THEN SUBSTRING_INDEX(status, ',', 1)
+                ELSE status
+            END AS statuspanen")
+                )
 
-        // dd($queryEste);
+                ->join('estate', 'estate.est', '=', 'sidak_tph.est')
+                ->join('wil', 'wil.id', '=', 'estate.wil')
+                ->where('wil.regional', $regional)
+                ->where('estate.emp', '!=', 1)
+                ->whereBetween(DB::raw('DATE_FORMAT(datetime, "%Y-%m")'), ["$start_date", "$end_date"])
+                // ->whereYear('datetime', $tahun)
+                ->orderBy('afd', 'asc')
+                ->orderBy('datetime', 'asc')
+                ->chunk($chunkSize, function ($results) use (&$datatph) {
+                    foreach ($results as $result) {
+                        // Grouping logic here, if needed
+                        $datatph[] = $result;
+                        // Adjust this according to your grouping requirements
+                    }
+                });
 
-        $year = $tahun;
+
+            $datatph = collect($datatph)->groupBy(['est', 'afd', 'bulan', 'tanggal', 'statuspanen', 'blok']);
+            $ancakFA = json_decode($datatph, true);
+            $year = date('Y', strtotime($start_date));
+        }
+
+
+
+        // dd($ancakFA, $start_date, $end_date);
+
+
+        // dd($year);
 
         if ($regional == 3) {
             $months = [];
@@ -5452,6 +5479,7 @@ class SidaktphController extends Controller
                 }
 
                 $newSidak[$key][$key1]['deviden'] = $devidenmonth;
+                $newSidak[$key][$key1]['deviden'] = ($v2check5 > 0) ? 1 : 0;
                 if ($v2check4 == 0) {
                     $newSidak[$key][$key1]['total_score'] = 0;
                 } else {
@@ -5476,8 +5504,7 @@ class SidaktphController extends Controller
             } else if ($devest == 0 && $v2check6 == 0) {
                 $todest = 0;
             }
-
-            $newSidak[$key]['deviden'] = $devest;
+            $newSidak[$key]['deviden'] = ($v2check6 > 0) ? 1 : 0;
             if ($v2check4 == 0) {
                 $newSidak[$key]['total_score'] = 0;
             } else {
@@ -5487,9 +5514,11 @@ class SidaktphController extends Controller
             $newSidak[$key]['total_janjang'] = $totskor_janjang6;
             $newSidak[$key]['est'] = $key;
             $newSidak[$key]['afd'] = $key1;
+            $newSidak[$key]['tot_estAFd6'] = $tot_estAFd6;
+            $newSidak[$key]['devest'] = $devest;
             $newSidak[$key]['v2check6'] = $v2check6;
         }
-        // dd($newSidak['BGE']['OA']);
+        // dd($newSidak);
         // dd($);
 
         // dd($newSidak['SJE']['OL']);
@@ -5502,8 +5531,11 @@ class SidaktphController extends Controller
                 $totjjg = 0;
                 $v2check5 = 0;
                 foreach ($value2 as $key3 => $value3) {
+                    $datas = [];
                     foreach ($newSidak as $keysidak => $valsidak) {
                         if ($key2 == $keysidak) {
+
+
                             foreach ($valsidak as $keysidak1 => $valsidak1) {
                                 if ($keysidak1 == $key3) {
                                     // Key exists, assign values
@@ -5519,15 +5551,26 @@ class SidaktphController extends Controller
                                     $newsidakend[$key][$key2][$key3]['total_janjang'] = $total_janjang;
                                     $newsidakend[$key][$key2][$key3]['v2check4'] = $v2check4;
 
-                                    $divest += $deviden;
+
                                     $scoreest += $totalscore;
                                     $totbrd += $totalbrd;
                                     $totjjg += $total_janjang;
                                     $v2check5 += $v2check4;
+                                    $divest += $deviden;
+
+                                    if ($v2check4 != 0) {
+                                        $newdiff = 1;
+                                    } else {
+                                        $newdiff = 0;
+                                    }
                                 }
                             }
+
+                            // $datas[] = $newdiff;
                         }
                     }
+
+                    // dd($divest);
                     // If key not found, set default values
                     if (!isset($newsidakend[$key][$key2][$key3])) {
                         $newsidakend[$key][$key2][$key3]['deviden'] = 0;
@@ -5543,6 +5586,8 @@ class SidaktphController extends Controller
                 $newsidakend[$key][$key2]['score_estate'] = ($divest !== 0) ? round($scoreest / $divest, 2) : 0;
                 $newsidakend[$key][$key2]['totbrd'] = $totbrd;
                 $newsidakend[$key][$key2]['totjjg'] = $totjjg;
+                $newsidakend[$key][$key2]['scoreest'] = $scoreest;
+                $newsidakend[$key][$key2]['divest'] = $divest;
             }
         }
 
@@ -5708,7 +5753,8 @@ class SidaktphController extends Controller
             }
             $dividen = array_sum($divest);
 
-            $total = round($skor / $dividen, 2);
+            $total = $dividen != 0 ? round($skor / $dividen, 2) : 0;
+
 
             $newsidakend[$key]['check'] = $totalvhcek;
             $newsidakend[$key]['div'] = $dividen;
@@ -5788,7 +5834,7 @@ class SidaktphController extends Controller
                 'bgcolor' => '#FFF176'
             ];
         }
-        // dd($data, $newsidakend);
+        // dd($data);
         $rhdata =  [
             'total_score' => $newsidakend['skor'] ?? 0,
             'est' => $newsidakend['newkey'],
@@ -5798,7 +5844,7 @@ class SidaktphController extends Controller
         ];
         unset($data[3]['PT.MUA']);
 
-        // dd($newsidakendmua);
+        // dd($data);
 
         $arr = array();
         $arr['newsidakend'] = $data;

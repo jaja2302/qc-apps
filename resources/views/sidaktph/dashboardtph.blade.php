@@ -1225,28 +1225,52 @@
               <h5><b>REKAPITULASI RANKING NILAI SIDAK PEMERIKSAAN TPH</b></h5>
             </div>
 
-            <div class="d-flex justify-content-end mt-3 mb-2 ml-3 mr-3" style="padding-top: 20px;">
-              <div class="row w-100">
-                <div class="col-md-2 offset-md-8">
-                  {{csrf_field()}}
-                  <select class="form-control" name="regionalSidakYear" id="regionalSidakYear">
-                    @foreach($option_reg as $key => $item)
-                    <option value="{{ $item['id'] }}">{{ $item['nama'] }}</option>
-                    @endforeach
-                  </select>
-                </div>
+            <div class="container">
+              <div class="row align-items-center">
+                <div class="col-md-8 offset-md-2">
+                  <div class="form-group"> {{ csrf_field() }}
+                    <select class="form-control" name="regionalSidakYear" id="regionalSidakYear">
+                      @foreach($option_reg as $key => $item)
+                      <option value="{{ $item['id'] }}">{{ $item['nama'] }}</option>
+                      @endforeach
+                    </select>
+                  </div>
 
-                <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
-                  {{ csrf_field() }}
-                  <select class="form-control" name="inputYear" id="inputYear">
-                    @foreach ($optYear as $value)
-                    <option value="{{ $value }}">{{ $value }}</option>
-                    @endforeach
-                  </select>
+                  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">By Year</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">By Month</button>
+                    </li>
+                  </ul>
 
+                  <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                      {{ csrf_field() }}
+                      <select class="form-control" name="inputYear" id="inputYear">
+                        @foreach ($optYear as $value)
+                        <option value="{{ $value }}">{{ $value }}</option>
+                        @endforeach
+                      </select>
+                    </div>
+                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+
+                      <div class="form-group">
+                        <label for="start_date">Start Date:</label>
+                        <input type="month" class="form-control datepicker" id="start_date" name="start_date" autocomplete="off">
+                      </div>
+                      <div class="form-group">
+                        <label for="end_date">End Date:</label>
+                        <input type="month" class="form-control datepicker" id="end_date" name="end_date" autocomplete="off">
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <button class="btn btn-primary mb-3 float-end" id="btnShowYear">Show</button>
                 </div>
               </div>
-              <button class="btn btn-primary mb-3 ml-3" id="btnShowYear">Show</button>
             </div>
 
             <div id="tablesContainer">
@@ -1707,6 +1731,7 @@
         $('#tbody3Month').empty()
         $('#plasmaMonth').empty()
         $('#tbodySkorRHMonth').empty()
+        console.log('button clicked');
         Swal.fire({
           title: 'Loading',
           html: '<span class="loading-text">Mohon Tunggu...</span>',
@@ -1725,6 +1750,8 @@
         $('#tbody2Year').empty()
         $('#tbody3Year').empty()
         $('#tbodySkorRHYear').empty()
+
+        // console.log('button clicked');
         Swal.fire({
           title: 'Loading',
           html: '<span class="loading-text">Mohon Tunggu...</span>',
@@ -5098,17 +5125,48 @@
         }
         element.style.color = "black";
       }
+      document.addEventListener('click', function(event) {
+        if (event.target.matches('#pills-home-tab')) {
+          enableFields(true); // Enable year fields
+        } else if (event.target.matches('#pills-profile-tab')) {
+          enableFields(false); // Enable month fields
+        }
+      });
+
+      function enableFields(isYear) {
+        document.getElementById('inputYear').disabled = !isYear;
+        document.getElementById('start_date').disabled = isYear;
+        document.getElementById('end_date').disabled = isYear;
+      }
 
       function getDataTphYear() {
         changeClassYear()
-        var _token = $('input[name="_token"]').val();
-        var yearSidak = document.getElementById('inputYear').value
-        var regSidak = document.getElementById('regionalSidakYear').value
+        if (document.getElementById('inputYear').disabled) {
+          var _token = $('input[name="_token"]').val();
+          var start_date = document.getElementById('start_date').value;
+          var end_date = document.getElementById('end_date').value;
+          var regSidak = document.getElementById('regionalSidakYear').value;
+
+          // Use the start_date and end_date values here
+          console.log('Start Date:', start_date);
+          console.log('End Date:', end_date);
+        } else {
+          // Year tab is selected, handle year-related logic here
+          var _token = $('input[name="_token"]').val();
+          var yearSidak = document.getElementById('inputYear').value;
+          var regSidak = document.getElementById('regionalSidakYear').value;
+
+          // Use the yearSidak and regSidak values here
+          console.log('Year:', yearSidak);
+          console.log('Region:', regSidak);
+        }
         $.ajax({
           url: "{{ route('getBtTphYear') }}",
           method: "get",
           data: {
             year: yearSidak,
+            start_date: start_date,
+            end_date: end_date,
             reg: regSidak,
             _token: _token
           },
