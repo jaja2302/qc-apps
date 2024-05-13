@@ -4184,7 +4184,6 @@ class emplacementsController extends Controller
         // Step 2: Create a unique list of petugas names
         $uniquePetugas = array_unique($allPetugas);
         $unique = array_unique($allAfd);
-        $uniqueDate = array_unique($allDate);
 
 
         // dd($mergedArray);
@@ -4200,7 +4199,7 @@ class emplacementsController extends Controller
                         if ($value4['est'] == $key && $value4['afd'] == $key1) {
                             $header[$key4]['est'] = $value3['est'];
                             $header[$key4]['afd'] = $value3['afd'];
-                            $header[$key4]['petugas'] = $combinedPetugas; // Use the combined petugas
+                            $header[$key4]['petugas'] = $combinedPetugas;
                             $header[$key4]['date'] = $value3['date'];
                             $header[$key4]['foto_temuan'] = $value4['foto_temuan'];
                         }
@@ -4208,6 +4207,15 @@ class emplacementsController extends Controller
                 }
             }
         }
+
+        // Sort $header by "afd" key in ascending order
+        $afdValues = array_column($header, 'afd');
+        array_multisort($afdValues, SORT_ASC, $header);
+
+        // Now $header is sorted by "afd" in ascending order
+
+
+        // dd($header);
 
         $arrayMerge2 = [];
         // dd($header);

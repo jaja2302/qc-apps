@@ -5148,8 +5148,8 @@
           var regSidak = document.getElementById('regionalSidakYear').value;
 
           // Use the start_date and end_date values here
-          console.log('Start Date:', start_date);
-          console.log('End Date:', end_date);
+          // console.log('Start Date:', start_date);
+          // console.log('End Date:', end_date);
         } else {
           // Year tab is selected, handle year-related logic here
           var _token = $('input[name="_token"]').val();
@@ -5157,8 +5157,8 @@
           var regSidak = document.getElementById('regionalSidakYear').value;
 
           // Use the yearSidak and regSidak values here
-          console.log('Year:', yearSidak);
-          console.log('Region:', regSidak);
+          // console.log('Year:', yearSidak);
+          // console.log('Region:', regSidak);
         }
         $.ajax({
           url: "{{ route('getBtTphYear') }}",

@@ -10895,18 +10895,18 @@ class inspectController extends Controller
         $tanggal_approve = $request->input('tanggal_approve');
         $departemen = $request->input('departemen');
         $lokasikerja = $request->input('lokasikerja');
-        // dd($action, $nama, $jabatan);
+        // dd($Tanggal, $est, $afd,$menu,$jabatan,$nama,$action,$tanggal_approve,$departemen,$lokasikerja);
         try {
             DB::beginTransaction();
-
-            // Retrieve current verification status
             $currentStatus = DB::connection('mysql2')->table('verification')
-                ->where([
-                    'est' => $est,
-                    'afd' => $afd,
-                    'datetime' => $Tanggal,
-                    'menu' => $menu,
-                ])->first();
+                ->select("verification.*")
+                ->where('datetime', 'like', '%' . $Tanggal . '%')
+                ->where('est', $est)
+                ->where('afd', $afd)
+                ->where('menu', $menu)
+                ->first();
+
+            // dd($currentStatus);
 
             $verifby_askep = $jabatan === 'Askep' ? 1 : 0;
             $verifby_manager = $jabatan === 'Manager' ? 1 : 0;
@@ -10942,11 +10942,12 @@ class inspectController extends Controller
                 }
 
                 DB::connection('mysql2')->table('verification')->insert($data);
-
+                dd('case1');
 
                 DB::commit();
                 return response()->json('success', 200);
             } else {
+                // dd($jabatan);
                 if ($jabatan === 'Askep') {
                     DB::connection('mysql2')->table('verification')->where('id', $currentStatus->id)->update([
                         'verifby_askep' => $verifby_askep,
@@ -10955,7 +10956,7 @@ class inspectController extends Controller
                         'approve_askep' => $tanggal_approve,
                         'lok_askep' => $lokasikerja,
                     ]);
-                } else if ($jabatan === 'Asisten') {
+                } else if ($jabatan === 'Asisten' || $jabatan === 'Asisten Afdeling') {
                     DB::connection('mysql2')->table('verification')->where('id', $currentStatus->id)->update([
                         'verifby_asisten' => $verifby_asisten,
                         'detail_asisten' => $departemen,
@@ -10972,17 +10973,17 @@ class inspectController extends Controller
                         'lok_manager' => $lokasikerja,
                     ]);
                 } else {
-                    // Handle other cases or return an error response
+                    //  dd('case2');
                     DB::rollback();
                     return response()->json('error', 400);
                 }
-
+                // dd('case3');
                 DB::commit();
                 return response()->json('success', 200);
             }
         } catch (\Throwable $th) {
             DB::rollback();
-            return response()->json($th->getMessage(), 500);
+            return response()->json(['error' => $th->getMessage()], 500);
         }
     }
 }

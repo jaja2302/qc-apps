@@ -7908,11 +7908,13 @@ class mutubuahController extends Controller
 
         foreach ($datas as $key => $value) {
             if (!empty($value->lat)) {
+                // dd($value);
                 $time = date('H:i:s', strtotime($value->datetime));
 
                 $plotTitik[] = '[' . $value->lon . ',' . $value->lat . ']';
                 $plotMarker[$inc]['latln'] = '[' . $value->lat . ',' . $value->lon . ']';
                 $plotMarker[$inc]['bmt'] = $value->bmt;
+                $plotMarker[$inc]['jumlah_jjg'] = $value->jumlah_jjg;
                 $plotMarker[$inc]['bmk'] = $value->bmk;
                 $plotMarker[$inc]['id'] = $value->id;
                 $plotMarker[$inc]['overripe'] = $value->overripe;
@@ -8219,7 +8221,7 @@ class mutubuahController extends Controller
             }
         }
 
-        // dd($pkLatLn, $messageResponse);
+        // dd($plotMarker);
 
         $plot['plot'] = $plotTitik;
         $plot['marker'] = $plotMarker;

@@ -1851,6 +1851,7 @@
                             });
 
                             var popupContent = `<strong>Jam Sidak: </strong>${markerResult[i][1]['time']}<br/>`;
+                            popupContent += `<strong>Janjang Sampel: </strong>${markerResult[i][1]['jumlah_jjg']}<br/>`;
                             popupContent += `<strong>Mentah: </strong>${markerResult[i][1]['bmt']}<br/>`;
                             popupContent += `<strong>Matang: </strong>${markerResult[i][1]['bmk']}<br/>`;
                             popupContent += `<strong>Lewat Matang: </strong>${markerResult[i][1]['overripe']}<br/>`;
