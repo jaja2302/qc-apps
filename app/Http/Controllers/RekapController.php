@@ -66,7 +66,7 @@ class RekapController extends Controller
             ->where('estate.emp', '!=', 1)
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->get();
         $queryEste = json_decode($queryEste, true);
 
@@ -78,7 +78,7 @@ class RekapController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             // ->where('estate.emp', '!=', 1)
-            ->whereIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereIn('estate.est', ['SRE', 'LDE'])
             ->get('est');
         $muaest = json_decode($muaest, true);
 
@@ -3471,7 +3471,6 @@ class RekapController extends Controller
                         $totalpelepah_s = 0;
                         $check_input = 'kosong';
                         $nilai_input = 0;
-                        // dd($value2['SKE']);
                         $check1 = count($value2);
                         foreach ($value2 as $key3 => $value3) if (is_array($value3)) {
                             if (!in_array($value3['estate'] . ' ' . $value3['afdeling'] . ' ' . $value3['blok'], $listBlokPerAfd)) {
@@ -5062,7 +5061,7 @@ class RekapController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->get();
         $queryEste = json_decode($queryEste, true);
 
@@ -5072,7 +5071,7 @@ class RekapController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->get();
         $defafd = $defafd->groupBy(['wil', 'est', 'afdnama']);
         $defafd = json_decode($defafd, true);
@@ -5080,7 +5079,7 @@ class RekapController extends Controller
             ->select('afdeling.*', 'estate.*', 'afdeling.nama as afdnama')
             ->join('estate', 'estate.id', '=', 'afdeling.estate')
             ->join('wil', 'wil.id', '=', 'estate.wil')
-            ->whereIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereIn('estate.est', ['SRE', 'LDE'])
             ->get();
         $defafdmua = $defafdmua->groupBy(['wil', 'est', 'est']);
         $defafdmua = json_decode($defafdmua, true);
@@ -5093,7 +5092,7 @@ class RekapController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             // ->where('estate.emp', '!=', 1)
-            ->whereIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereIn('estate.est', ['SRE', 'LDE'])
             ->get('est');
         $muaest = json_decode($muaest, true);
 
@@ -9540,7 +9539,7 @@ class RekapController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->get();
         $queryEste = json_decode($queryEste, true);
 
@@ -9550,7 +9549,7 @@ class RekapController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             // ->where('estate.emp', '!=', 1)
-            ->whereIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereIn('estate.est', ['SRE', 'LDE'])
             ->get('est');
         $muaest = json_decode($muaest, true);
 
@@ -13147,7 +13146,7 @@ class RekapController extends Controller
                         $totalpelepah_s = 0;
                         $check_input = 'kosong';
                         $nilai_input = 0;
-                        // dd($value2['SKE']);
+
                         $check1 = count($value2);
                         foreach ($value2 as $key3 => $value3) if (is_array($value3)) {
                             if (!in_array($value3['estate'] . ' ' . $value3['afdeling'] . ' ' . $value3['blok'], $listBlokPerAfd)) {
@@ -14351,7 +14350,7 @@ class RekapController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->get();
         $queryEste = json_decode($queryEste, true);
 
@@ -14370,7 +14369,7 @@ class RekapController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             // ->where('estate.emp', '!=', 1)
-            ->whereIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereIn('estate.est', ['SRE', 'LDE'])
             ->get('est');
         $muaest = json_decode($muaest, true);
 
@@ -15334,7 +15333,7 @@ class RekapController extends Controller
         $queryEste = DB::connection('mysql2')
             ->table('estate')
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->whereIn('wil', $queryReg2)
             ->get();
         $queryEste = $queryEste->groupBy(function ($item) {
@@ -15346,7 +15345,7 @@ class RekapController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regSidak)
             // ->where('estate.emp', '!=', 1)
-            ->whereIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereIn('estate.est', ['SRE', 'LDE'])
             ->get('est');
         $muaest = json_decode($muaest, true);
         $afdmua = DB::connection('mysql2')->table('afdeling')
@@ -15365,7 +15364,7 @@ class RekapController extends Controller
             ->Table('afdeling')
             ->select('afdeling.id', 'afdeling.nama', 'estate.est') //buat mengambil data di estate db dan willayah db
             ->join('estate', 'estate.id', '=', 'afdeling.estate') //kemudian di join untuk mengambil est perwilayah
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE', 'CWS1'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE', 'CWS1'])
             ->get();
 
         $queryAfd = json_decode($queryAfd, true);
@@ -15598,7 +15597,7 @@ class RekapController extends Controller
             ->select('estate.*')
             ->where('estate.emp', '!=', 1)
             ->join('wil', 'wil.id', '=', 'estate.wil')
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->where('wil.regional', $regSidak)
             ->get();
         $queryEstereg = json_decode($queryEstereg, true);
@@ -16682,7 +16681,7 @@ class RekapController extends Controller
             ->where('estate.emp', '!=', 1)
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
-            // ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            // ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->get();
         $queryEste = json_decode($queryEste, true);
 
@@ -16694,7 +16693,7 @@ class RekapController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             // ->where('estate.emp', '!=', 1)
-            // ->whereIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            // ->whereIn('estate.est', ['SRE', 'LDE'])
             ->get('est');
         $muaest = json_decode($muaest, true);
 
@@ -16740,7 +16739,7 @@ class RekapController extends Controller
             foreach ($queryAfd as $afd) {
                 // dd($est);
                 if ($est['est'] == $afd['est']) {
-                    if ($est['est'] === 'LDE' || $est['est'] === 'SRE' || $est['est'] === 'SKE') {
+                    if ($est['est'] === 'LDE' || $est['est'] === 'SRE') {
                         $defaultNew[$est['est']][$afd['est']]['null'] = 0;
                     } else {
                         $defaultNew[$est['est']][$afd['nama']]['null'] = 0;
@@ -16846,7 +16845,7 @@ class RekapController extends Controller
         foreach ($queryEste as $est) {
             foreach ($queryAfd as $afd) {
                 if ($est['est'] == $afd['est']) {
-                    if ($est['est'] === 'LDE' || $est['est'] === 'SRE' || $est['est'] === 'SKE') {
+                    if ($est['est'] === 'LDE' || $est['est'] === 'SRE') {
                         $defaultMTbuah[$est['est']][$afd['est']]['null'] = 0;
                     } else {
                         $defaultMTbuah[$est['est']][$afd['nama']]['null'] = 0;
@@ -17218,7 +17217,7 @@ class RekapController extends Controller
                 $bhtm3_oanenWil += $bhtm3EST;
                 $pelepah_swil += $pelepah_sEST;
 
-                if ($key1 === 'LDE' || $key1 === 'SRE' || $key1 === 'SKE') {
+                if ($key1 === 'LDE' || $key1 === 'SRE') {
 
                     $data[] = $janjang_panenEst;
                 }
@@ -18045,7 +18044,7 @@ class RekapController extends Controller
             foreach ($queryAfd as $afd) {
                 // dd($afd);
                 if ($est['est'] == $afd['est']) {
-                    if ($est['est'] === 'LDE' || $est['est'] === 'SRE' || $est['est'] === 'SKE') {
+                    if ($est['est'] === 'LDE' || $est['est'] === 'SRE') {
                         $defaultMtTrans[$est['est']][$afd['est']]['null'] = 0;
                     } else {
                         $defaultMtTrans[$est['est']][$afd['nama']]['null'] = 0;
@@ -18345,9 +18344,6 @@ class RekapController extends Controller
         }
         // dd($rekap[3]);
 
-        // dd($rekap[3]['SKE']);
-
-
 
         foreach ($rekap as $key => $value) {
             foreach ($value as $key1 => $value1) {
@@ -18390,7 +18386,6 @@ class RekapController extends Controller
             $muaarray = [
                 'SRE' => $rekap[3]['SRE']['estate'] ?? [],
                 'LDE' => $rekap[3]['LDE']['estate'] ?? [],
-                'SKE' => $rekap[3]['SKE']['estate'] ?? [],
             ];
 
 

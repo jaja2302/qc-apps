@@ -24,7 +24,7 @@ class SidaktphController extends Controller
     {
         $queryEst = DB::connection('mysql2')->table('estate')->whereIn('wil', [1, 2, 3])
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['LDE', 'SRE', 'SKE'])
+            ->whereNotIn('estate.est', ['LDE', 'SRE'])
             ->pluck('est');
 
         $queryEst[] = 'PT.MUA';
@@ -483,7 +483,7 @@ class SidaktphController extends Controller
         foreach ($queryEstereg as $est) {
             foreach ($qrafd as $afd) {
                 if ($est['est'] == $afd['est']) {
-                    if (in_array($est['est'], ['LDE', 'SRE', 'SKE'])) {
+                    if (in_array($est['est'], ['LDE', 'SRE'])) {
                         $defaultWeek[$est['est']][$afd['est']] = 0;
                     } else {
                         $defaultWeek[$est['est']][$afd['nama']] = 0;
@@ -944,25 +944,6 @@ class SidaktphController extends Controller
             $newSidak[$key]['afdeling'] = $devest;
         }
 
-        // if ($regional == 1) {
-        //     $datamua['PT.MUA'] = [
-        //         $newSidak['SRE'],
-        //         $newSidak['LDE'],
-        //         $newSidak['SKE'],
-        //     ];
-        //     $sidakmua = [];
-        //     foreach ($datamua as $key => $value) {
-        //         $devmuxax = 0;
-        //         foreach ($value as $key1 => $value1) {
-
-        //             // dd($value1);
-        //             $devmuxax += $value1['dividen'];
-        //         }
-
-        //         $sidakmua[$key]['avg'] = $devmuxax;
-        //     }
-        // }
-        // dd($newSidak, $sidakmua);
 
         $week1 = []; // Initialize the new array
         foreach ($newSidak as $key => $value) {
@@ -1957,7 +1938,7 @@ class SidaktphController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->get();
         $queryEste = json_decode($queryEste, true);
 
@@ -1967,7 +1948,7 @@ class SidaktphController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             // ->where('estate.emp', '!=', 1)
-            ->whereIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereIn('estate.est', ['SRE', 'LDE'])
             ->get('est');
         $muaest = json_decode($muaest, true);
 
@@ -3055,7 +3036,7 @@ class SidaktphController extends Controller
         $queryEste = DB::connection('mysql2')
             ->table('estate')
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->whereIn('wil', $queryReg2)
             ->get();
         $queryEste = $queryEste->groupBy(function ($item) {
@@ -3067,7 +3048,7 @@ class SidaktphController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regSidak)
             // ->where('estate.emp', '!=', 1)
-            ->whereIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereIn('estate.est', ['SRE', 'LDE'])
             ->get('est');
         $muaest = json_decode($muaest, true);
         $afdmua = DB::connection('mysql2')->table('afdeling')
@@ -3086,7 +3067,7 @@ class SidaktphController extends Controller
             ->Table('afdeling')
             ->select('afdeling.id', 'afdeling.nama', 'estate.est') //buat mengambil data di estate db dan willayah db
             ->join('estate', 'estate.id', '=', 'afdeling.estate') //kemudian di join untuk mengambil est perwilayah
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE', 'CWS1'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE', 'CWS1'])
             ->get();
 
         $queryAfd = json_decode($queryAfd, true);
@@ -3319,7 +3300,7 @@ class SidaktphController extends Controller
             ->select('estate.*')
             ->where('estate.emp', '!=', 1)
             ->join('wil', 'wil.id', '=', 'estate.wil')
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->where('wil.regional', $regSidak)
             ->get();
         $queryEstereg = json_decode($queryEstereg, true);
@@ -5051,7 +5032,7 @@ class SidaktphController extends Controller
             ->select('afdeling.*', 'estate.*', 'afdeling.nama as afdnama')
             ->join('estate', 'estate.id', '=', 'afdeling.estate')
             ->join('wil', 'wil.id', '=', 'estate.wil')
-            ->whereIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereIn('estate.est', ['SRE', 'LDE'])
             ->get();
         $defafdmua = $defafdmua->groupBy(['wil', 'est', 'est']);
         $defafdmua = json_decode($defafdmua, true);
@@ -5062,7 +5043,7 @@ class SidaktphController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->get();
         $defafd = $defafd->groupBy(['wil', 'est', 'afdnama']);
         $defafd = json_decode($defafd, true);
@@ -5874,7 +5855,7 @@ class SidaktphController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regData)
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->get();
         $queryEste = json_decode($queryEste, true);
 
@@ -7914,7 +7895,7 @@ class SidaktphController extends Controller
         foreach ($queryEstereg as $est) {
             foreach ($qrafd as $afd) {
                 if ($est['est'] == $afd['est']) {
-                    if (in_array($est['est'], ['LDE', 'SRE', 'SKE'])) {
+                    if (in_array($est['est'], ['LDE', 'SRE'])) {
                         $defaultWeek[$est['est']][$afd['est']] = 0;
                     } else {
                         $defaultWeek[$est['est']][$afd['nama']] = 0;
@@ -8374,160 +8355,7 @@ class SidaktphController extends Controller
             $newSidak[$key]['dividen'] = $new_dvdAfdest;
             $newSidak[$key]['afdeling'] = $devest;
         }
-        // dd($newSidak);
-        // if ($regional == 1) {
 
-        //     // Initialize arrays
-        //     $lde = [];
-        //     $sre = [];
-        //     $ske = [];
-
-        //     // Iterate over $newSidak
-        //     foreach ($newSidak as $key => $value) {
-        //         // Check if the current key is 'LDE', 'SRE', or 'SKE'
-        //         if ($key === 'LDE' || $key === 'SRE' || $key === 'SKE') {
-        //             // Iterate over nested arrays
-        //             foreach ($value as $key1 => $value1) if (is_array($value1)) {
-        //                 foreach ($value1 as $key2 => $value2) if (is_array($value2)) {
-        //                     foreach ($value2 as $key3 => $value3) if (is_array($value3)) {
-        //                         // Assign values to respective arrays based on the key
-        //                         ${strtolower($key)}[$key1][$key2][$key3] = [
-        //                             "tphx" => $value3['tphx'],
-        //                             "jalan" => $value3['jalan'],
-        //                             "bin" => $value3['bin'],
-        //                             "karung" => $value3['karung'],
-        //                             "tot_brd" => $value3['tot_brd'],
-        //                             "buah" => $value3['buah'],
-        //                             "restan" => $value3['restan'],
-        //                             "skor_brd" => $value3['skor_brd'],
-        //                             "skor_janjang" => $value3['skor_janjang'],
-        //                             "tod_jjg" => $value3['tod_jjg'],
-        //                             "v2check2" => $value3['v2check2'],
-        //                         ];
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-
-        //     // Assign arrays to $datamua
-        //     foreach ($lde as $key => $outerValue) {
-        //         foreach ($outerValue as $key1 => $middleValue) {
-        //             foreach ($middleValue as $key2 => $innerValue) {
-        //                 foreach ($sre as $srekey => $sreval) {
-        //                     foreach ($ske as $skekey => $skeval) {
-        //                         if (
-        //                             isset($sreval[$key1][$key2]) &&
-        //                             isset($skeval[$key1][$key2])
-        //                         ) {
-        //                             $ptmua['PT.MUA'][$key1][$key2]['tphx'] = $skeval[$key1][$key2]['tphx'] + $sreval[$key1][$key2]['tphx'] + $innerValue['tphx'];
-        //                             $ptmua['PT.MUA'][$key1][$key2]['jalan'] = $skeval[$key1][$key2]['jalan'] + $sreval[$key1][$key2]['jalan'] + $innerValue['jalan'];
-        //                             $ptmua['PT.MUA'][$key1][$key2]['bin'] = $skeval[$key1][$key2]['bin'] + $sreval[$key1][$key2]['bin'] + $innerValue['bin'];
-        //                             $ptmua['PT.MUA'][$key1][$key2]['karung'] = $skeval[$key1][$key2]['karung'] + $sreval[$key1][$key2]['karung'] + $innerValue['karung'];
-        //                             $ptmua['PT.MUA'][$key1][$key2]['tot_brd'] = $skeval[$key1][$key2]['tot_brd'] + $sreval[$key1][$key2]['tot_brd'] + $innerValue['tot_brd'];
-        //                             $ptmua['PT.MUA'][$key1][$key2]['buah'] = $skeval[$key1][$key2]['buah'] + $sreval[$key1][$key2]['buah'] + $innerValue['buah'];
-        //                             $ptmua['PT.MUA'][$key1][$key2]['restan'] = $skeval[$key1][$key2]['restan'] + $sreval[$key1][$key2]['restan'] + $innerValue['restan'];
-        //                             $ptmua['PT.MUA'][$key1][$key2]['skor_brd'] = $skeval[$key1][$key2]['skor_brd'] + $sreval[$key1][$key2]['skor_brd'] + $innerValue['skor_brd'];
-        //                             $ptmua['PT.MUA'][$key1][$key2]['skor_janjang'] = $skeval[$key1][$key2]['skor_janjang'] + $sreval[$key1][$key2]['skor_janjang'] + $innerValue['skor_janjang'];
-        //                             $ptmua['PT.MUA'][$key1][$key2]['tod_jjg'] = $skeval[$key1][$key2]['tod_jjg'] + $sreval[$key1][$key2]['tod_jjg'] + $innerValue['tod_jjg'];
-        //                             $ptmua['PT.MUA'][$key1][$key2]['v2check2'] = $skeval[$key1][$key2]['v2check2'] + $sreval[$key1][$key2]['v2check2'] + $innerValue['v2check2'];
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-
-        //     // dd($ptmua);
-
-        //     foreach ($ptmua as $key => $value) {
-        //         foreach ($value as $key1 => $value1) {
-        //             foreach ($value1 as $key2 => $value2) {
-
-        //                 $total_estkors = $value2['skor_brd'] + $value2['skor_janjang'];
-        //                 $v2check3 = $value2['v2check2'];
-        //                 if ($total_estkors != 0) {
-
-        //                     $checkscore = 100 - ($total_estkors);
-
-        //                     if ($checkscore < 0) {
-        //                         $newscore = 0;
-        //                         $ptmua[$key][$key1]['mines'] = 'ada';
-        //                     } else {
-        //                         $newscore = $checkscore;
-        //                         $ptmua[$key][$key1]['mines'] = 'tidak';
-        //                     }
-
-        //                     $ptmua[$key][$key1]['all_score'] = $newscore;
-        //                     $ptmua[$key][$key1]['check_data'] = 'ada';
-
-        //                     $total_skoreafd = $newscore;
-        //                     $newpembagi = 1;
-        //                 } else if ($v2check3 != 0) {
-        //                     $checkscore = 100 - ($total_estkors);
-
-        //                     if ($checkscore < 0) {
-        //                         $newscore = 0;
-        //                         $ptmua[$key][$key1]['mines'] = 'ada';
-        //                     } else {
-        //                         $newscore = $checkscore;
-        //                         $ptmua[$key][$key1]['mines'] = 'tidak';
-        //                     }
-        //                     $ptmua[$key][$key1]['all_score'] = 100 - ($total_estkors);
-        //                     $ptmua[$key][$key1]['check_data'] = 'ada';
-
-        //                     $total_skoreafd = $newscore;
-
-        //                     $newpembagi = 1;
-        //                 } else {
-        //                     $ptmua[$key][$key1]['all_score'] = 0;
-        //                     $ptmua[$key][$key1]['check_data'] = 'null';
-        //                     $total_skoreafd = 0;
-        //                     $newpembagi = 0;
-        //                 }
-        //                 // $ptmua[$key][$key1]['all_score'] = 100 - ($total_estkors);
-        //                 $ptmua[$key][$key1]['total_brd'] = $value2['tot_brd'];
-        //                 $ptmua[$key][$key1]['total_brdSkor'] = $value2['skor_brd'];
-        //                 $ptmua[$key][$key1]['total_janjang'] = $value2['tod_jjg'];
-        //                 $ptmua[$key][$key1]['total_janjangSkor'] = $value2['skor_janjang'];
-        //                 $ptmua[$key][$key1]['total_skor'] = $total_skoreafd;
-        //                 $ptmua[$key][$key1]['janjang_brd'] = $value2['skor_brd'] + $value2['skor_janjang'];
-        //                 $ptmua[$key][$key1]['v2check3'] = $v2check3;
-        //                 $ptmua[$key][$key1]['newpembagi'] = $newpembagi;
-
-        //                 $totskor_brd1 += $totskor_brd;
-        //                 $totskor_janjang1 += $totskor_janjang;
-        //                 $total_skoreest += $total_skoreafd;
-        //                 $newpembagi1 += $newpembagi;
-        //             }
-
-
-
-        //             $ptmua[$key]['deviden'] = 1;
-        //             $ptmua[$key]['total_skorest'] = 0;
-        //             $ptmua[$key]['score_estate'] = 99;
-        //             $ptmua[$key]['asisten'] = 0;
-        //             $ptmua[$key]['estate'] = 0;
-        //             $ptmua[$key]['new_deviden'] = 0;
-        //             $ptmua[$key]['afd'] = 0;
-        //             $ptmua[$key]['devidenest'] = 0;
-        //             $ptmua[$key]['afdeling'] = 0;
-        //         }
-
-        //         $ptmua['total_skorest'] = 69;
-        //         $ptmua['score_estate'] = 69;
-        //         $ptmua['asisten'] = 0;
-        //         $ptmua['estate'] = 0;
-        //         $ptmua['afd'] = 0;
-        //         $ptmua['dividen'] = 1;
-        //         $ptmua['afdeling'] = 1;
-        //     }
-        //     // dd($ptmua);
-        //     // foreach ($datamua as $key => $ptmua) {
-        //     unset($newSidak['LDE'], $newSidak['SKE'], $newSidak['SRE']);
-        //     $newSidak['PT.MUA'] = $ptmua;
-        // }
-        // dd($newSidak['KNE'], $ptmua);
 
         $week1 = []; // Initialize the new array
         foreach ($newSidak as $key => $value) {
@@ -9630,7 +9458,7 @@ class SidaktphController extends Controller
         foreach ($queryEstereg as $est) {
             foreach ($qrafd as $afd) {
                 if ($est['est'] == $afd['est']) {
-                    if (in_array($est['est'], ['LDE', 'SRE', 'SKE'])) {
+                    if (in_array($est['est'], ['LDE', 'SRE'])) {
                         $defaultWeek[$est['est']][$afd['est']] = 0;
                     } else {
                         $defaultWeek[$est['est']][$afd['nama']] = 0;

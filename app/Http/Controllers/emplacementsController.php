@@ -92,7 +92,7 @@ class emplacementsController extends Controller
             ->select('estate.*')
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE', 'SRS', 'TC', 'SR', 'SLM', 'SGM', 'SKM', 'SYM', 'NBM', 'Plasma3'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SRS', 'TC', 'SR', 'SLM', 'SGM', 'SKM', 'SYM', 'NBM', 'Plasma3'])
             ->get();
         $queryEste = json_decode($queryEste, true);
 
@@ -1033,7 +1033,7 @@ class emplacementsController extends Controller
             ->select('estate.*')
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE', 'Plasma3'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE', 'Plasma3'])
             ->get();
         $queryEste = json_decode($queryEste, true);
 
@@ -1055,7 +1055,7 @@ class emplacementsController extends Controller
         $est_emp = json_decode($est_emp, true);
 
         $filteredArray = array_filter($est_emp, function ($item) {
-            $excludedEstValues = ['LDE', 'SRE', 'SKE'];
+            $excludedEstValues = ['LDE', 'SRE'];
             return !in_array($item['nama'], $excludedEstValues);
         });
 

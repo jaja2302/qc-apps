@@ -163,7 +163,7 @@ class mutubuahController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->get();
         $queryEste = json_decode($queryEste, true);
         $muaest = DB::connection('mysql2')->table('estate')
@@ -172,7 +172,7 @@ class mutubuahController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             // ->where('estate.emp', '!=', 1)
-            ->whereIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereIn('estate.est', ['SRE', 'LDE'])
             ->get('est');
         $muaest = json_decode($muaest, true);
         // dd($queryEste);
@@ -183,7 +183,7 @@ class mutubuahController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->pluck('est');
         $estev2 = json_decode($estev2, true);
 
@@ -1715,7 +1715,7 @@ class mutubuahController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $RegData)
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->get();
         $queryEste = json_decode($queryEste, true);
 
@@ -1726,7 +1726,7 @@ class mutubuahController extends Controller
             ->where('wil.regional', $RegData)
 
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->pluck('est');
         $estev2 = json_decode($estev2, true);
 
@@ -1736,7 +1736,7 @@ class mutubuahController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $RegData)
             // ->where('estate.emp', '!=', 1)
-            ->whereIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereIn('estate.est', ['SRE', 'LDE'])
             ->get('est');
         $muaest = json_decode($muaest, true);
 
@@ -3239,7 +3239,7 @@ class mutubuahController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $reg)
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->get();
         $queryEste = json_decode($queryEste, true);
 
@@ -3553,7 +3553,7 @@ class mutubuahController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $reg)
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->pluck('est');
         $queryEste = json_decode($queryEste, true);
         // $estatex = DB::connection('mysql2')->table('estate')
@@ -3780,7 +3780,7 @@ class mutubuahController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->get();
         $queryEste = json_decode($queryEste, true);
 
@@ -3799,7 +3799,7 @@ class mutubuahController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             // ->where('estate.emp', '!=', 1)
-            ->whereIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereIn('estate.est', ['SRE', 'LDE'])
             ->get('est');
         $muaest = json_decode($muaest, true);
 
@@ -4757,7 +4757,7 @@ class mutubuahController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->get();
         $queryEste = json_decode($queryEste, true);
 
@@ -4776,7 +4776,7 @@ class mutubuahController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             // ->where('estate.emp', '!=', 1)
-            ->whereIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereIn('estate.est', ['SRE', 'LDE'])
             ->get('est');
         $muaest = json_decode($muaest, true);
 
@@ -4789,7 +4789,7 @@ class mutubuahController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->pluck('est');
         $estev2 = json_decode($estev2, true);
 
@@ -6815,7 +6815,7 @@ class mutubuahController extends Controller
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $request->get('regional'))
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->orderBy('estate.id', 'asc')
             ->get();
         $queryEstate = json_decode($queryEstate, true);
@@ -8094,7 +8094,7 @@ class mutubuahController extends Controller
             ->where('estate.est', $est)
             // ->where('afdeling.nama', $afd)
             ->where('estate.emp', '!=', 1)
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE'])
             ->get();
         $estateQuery = json_decode($estateQuery, true);
 

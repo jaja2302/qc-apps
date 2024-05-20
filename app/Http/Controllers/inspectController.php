@@ -701,7 +701,6 @@ class inspectController extends Controller
             ->where('estate.emp', '!=', 1)
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
-            // ->whereNotIn('estate.est', ['SRE', 'LDE', 'SKE'])
             ->get();
         $queryEste = json_decode($queryEste, true);
 
@@ -712,8 +711,6 @@ class inspectController extends Controller
             ->where('estate.emp', '!=', 1)
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('wil.regional', $regional)
-            // ->where('estate.emp', '!=', 1)
-            // ->whereIn('estate.est', ['SRE', 'LDE', 'SKE'])
             ->get('est');
         $muaest = json_decode($muaest, true);
 
@@ -759,7 +756,7 @@ class inspectController extends Controller
             foreach ($queryAfd as $afd) {
                 // dd($est);
                 if ($est['est'] == $afd['est']) {
-                    if ($est['est'] === 'LDE' || $est['est'] === 'SRE' || $est['est'] === 'SKE') {
+                    if ($est['est'] === 'LDE' || $est['est'] === 'SRE') {
                         $defaultNew[$est['est']][$afd['est']]['null'] = 0;
                     } else {
                         $defaultNew[$est['est']][$afd['nama']]['null'] = 0;
@@ -865,7 +862,7 @@ class inspectController extends Controller
         foreach ($queryEste as $est) {
             foreach ($queryAfd as $afd) {
                 if ($est['est'] == $afd['est']) {
-                    if ($est['est'] === 'LDE' || $est['est'] === 'SRE' || $est['est'] === 'SKE') {
+                    if ($est['est'] === 'LDE' || $est['est'] === 'SRE') {
                         $defaultMTbuah[$est['est']][$afd['est']]['null'] = 0;
                     } else {
                         $defaultMTbuah[$est['est']][$afd['nama']]['null'] = 0;
@@ -1216,7 +1213,7 @@ class inspectController extends Controller
                 $bhtm3_oanenWil += $bhtm3EST;
                 $pelepah_swil += $pelepah_sEST;
 
-                if ($key1 === 'LDE' || $key1 === 'SRE' || $key1 === 'SKE') {
+                if ($key1 === 'LDE' || $key1 === 'SRE') {
 
                     $data[] = $janjang_panenEst;
                 }
@@ -2035,7 +2032,7 @@ class inspectController extends Controller
             foreach ($queryAfd as $afd) {
                 // dd($afd);
                 if ($est['est'] == $afd['est']) {
-                    if ($est['est'] === 'LDE' || $est['est'] === 'SRE' || $est['est'] === 'SKE') {
+                    if ($est['est'] === 'LDE' || $est['est'] === 'SRE') {
                         $defaultMtTrans[$est['est']][$afd['est']]['null'] = 0;
                     } else {
                         $defaultMtTrans[$est['est']][$afd['nama']]['null'] = 0;
@@ -2333,10 +2330,6 @@ class inspectController extends Controller
                 'mututrans' => '-----------------------------------'
             ];
         }
-        // dd($rekap[5]);
-
-        // dd($rekap[3]['SKE']);
-
 
 
         foreach ($rekap as $key => $value) {
@@ -2380,7 +2373,6 @@ class inspectController extends Controller
             $muaarray = [
                 'SRE' => $rekap[3]['SRE']['estate'] ?? [],
                 'LDE' => $rekap[3]['LDE']['estate'] ?? [],
-                'SKE' => $rekap[3]['SKE']['estate'] ?? [],
             ];
 
 
@@ -6252,7 +6244,7 @@ class inspectController extends Controller
             )
             // ->whereBetween('mutu_ancak_new.datetime', ['2023-04-06', '2023-04-12'])
             ->whereBetween('mutu_ancak_new.datetime', [$startDate, $endDate])
-            ->whereIn('estate', ['LDE', 'SKE', 'SRE'])
+            ->whereIn('estate', ['LDE', 'SRE'])
             ->get();
 
         $ptmuaAncak = $ptmuaAncak->groupBy(['estate', 'afdeling']);
@@ -6267,7 +6259,7 @@ class inspectController extends Controller
             )
             // ->whereBetween('mutu_buah.datetime', ['2023-04-06', '2023-04-12'])
             ->whereBetween('mutu_buah.datetime', [$startDate, $endDate])
-            ->whereIn('estate', ['LDE', 'SKE', 'SRE'])
+            ->whereIn('estate', ['LDE', 'SRE'])
             ->get();
 
         $ptMuaBuah = $ptMuaBuah->groupBy(['estate', 'afdeling']);
@@ -6281,7 +6273,7 @@ class inspectController extends Controller
             )
             // ->whereBetween('mutu_transport.datetime', ['2023-04-06', '2023-04-12'])
             ->whereBetween('mutu_transport.datetime', [$startDate, $endDate])
-            ->whereIn('estate', ['LDE', 'SKE', 'SRE'])
+            ->whereIn('estate', ['LDE', 'SRE'])
             ->get();
 
         $ptMuaTrans = $ptMuaTrans->groupBy(['estate', 'afdeling']);
@@ -6720,8 +6712,6 @@ class inspectController extends Controller
         $mtAncakMua['skor_brd'] = skor_buah_Ma($sumPerBHWil);
         $mtAncakMua['skor_ps'] = skor_palepah_ma($perPiWil);
         $mtAncakMua['skor_akhir'] = $totalWil;
-        // dd($mtAncakMua);
-        // const sum_pokok_sample = array["SKE"]["pokok_sample"] + array["LDE"]["pokok_sample"];
 
         $mtBuahMua = array();
         $jum_haWil = 0;
@@ -7368,12 +7358,6 @@ class inspectController extends Controller
                                                 } else {
                                                     $RekapWIlTabel[$key]['TotalSkorWil'] = $value['skor_akhir'] + $buah['TOTAL_SKOR'] + $trans['totalSkor'];
                                                 }
-
-
-
-                                                // if ($key1 === 'SKE' || $key1 === 'LDE' || $key1 === 'SRE') {
-                                                //     unset($RekapWIlTabel[$key][$key1]['OA']['TotalSkorEST']);
-                                                // }
                                             }
                                     }
                                 }
@@ -7893,7 +7877,7 @@ class inspectController extends Controller
         }
 
 
-        $keysToRemove = ["SRE", "LDE", "SKE"];
+        $keysToRemove = ["SRE", "LDE"];
         $filteredBuah = [];
 
         foreach ($arrBuahBTT as $key => $value) {
