@@ -1233,7 +1233,7 @@ class RekapController extends Controller
                     }
 
                     if ($totalpelepah_s != 0) {
-                        $perPl = round(($totalpelepah_s / $totalPokok) * 100, 3);
+                        $perPl = ($totalpelepah_s / $totalPokok) * 100;
                     } else {
                         $perPl = 0;
                     }
@@ -3518,7 +3518,7 @@ class RekapController extends Controller
                         }
 
                         if ($totalpelepah_s != 0) {
-                            $perPl = round(($totalpelepah_s / $totalPokok) * 100, 3);
+                            $perPl = ($totalpelepah_s / $totalPokok) * 100;
                         } else {
                             $perPl = 0;
                         }
@@ -6144,7 +6144,7 @@ class RekapController extends Controller
                     }
 
                     if ($totalpelepah_s != 0) {
-                        $perPl = round(($totalpelepah_s / $totalPokok) * 100, 3);
+                        $perPl = ($totalpelepah_s / $totalPokok) * 100;
                     } else {
                         $perPl = 0;
                     }
@@ -8224,7 +8224,7 @@ class RekapController extends Controller
                         }
 
                         if ($totalpelepah_s != 0) {
-                            $perPl = round(($totalpelepah_s / $totalPokok) * 100, 3);
+                            $perPl = ($totalpelepah_s / $totalPokok) * 100;
                         } else {
                             $perPl = 0;
                         }
@@ -10628,7 +10628,7 @@ class RekapController extends Controller
                     }
 
                     if ($totalpelepah_s != 0) {
-                        $perPl = round(($totalpelepah_s / $totalPokok) * 100, 3);
+                        $perPl = ($totalpelepah_s / $totalPokok) * 100;
                     } else {
                         $perPl = 0;
                     }
@@ -13194,7 +13194,7 @@ class RekapController extends Controller
                         }
 
                         if ($totalpelepah_s != 0) {
-                            $perPl = round(($totalpelepah_s / $totalPokok) * 100, 3);
+                            $perPl = ($totalpelepah_s / $totalPokok) * 100;
                         } else {
                             $perPl = 0;
                         }
@@ -16999,7 +16999,7 @@ class RekapController extends Controller
                     }
 
                     if ($totalpelepah_s != 0) {
-                        $perPl = round(($totalpelepah_s / $totalPokok) * 100, 3);
+                        $perPl = ($totalpelepah_s / $totalPokok) * 100;
                     } else {
                         $perPl = 0;
                     }
@@ -18462,7 +18462,7 @@ class RekapController extends Controller
                 $sumPerBH = 0;
             }
             if ($palepah_pokokcak != 0) {
-                $perPl = round(($palepah_pokokcak / $pokok_samplecak) * 100, 3);
+                $perPl = ($palepah_pokokcak / $pokok_samplecak) * 100;
             } else {
                 $perPl = 0;
             }
@@ -18693,7 +18693,7 @@ class RekapController extends Controller
             $sumPerBH = 0;
         }
         if ($palepah_pokokcak != 0) {
-            $perPl = round(($palepah_pokokcak / $pokok_samplecak) * 100, 3);
+            $perPl = ($palepah_pokokcak / $pokok_samplecak) * 100;
         } else {
             $perPl = 0;
         }

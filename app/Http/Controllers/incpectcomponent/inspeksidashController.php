@@ -350,7 +350,7 @@ class inspeksidashController extends Controller
                     }
 
                     if ($totalpelepah_s != 0) {
-                        $perPl = round(($totalpelepah_s / $totalPokok) * 100, 3);
+                        $perPl = ($totalpelepah_s / $totalPokok) * 100;
                     } else {
                         $perPl = 0;
                     }
@@ -1811,7 +1811,7 @@ class inspeksidashController extends Controller
                 $sumPerBH = 0;
             }
             if ($palepah_pokokcak != 0) {
-                $perPl = round(($palepah_pokokcak / $pokok_samplecak) * 100, 3);
+                $perPl = $palepah_pokokcak / $pokok_samplecak * 100;
             } else {
                 $perPl = 0;
             }
@@ -2042,7 +2042,7 @@ class inspeksidashController extends Controller
             $sumPerBH = 0;
         }
         if ($palepah_pokokcak != 0) {
-            $perPl = round(($palepah_pokokcak / $pokok_samplecak) * 100, 3);
+            $perPl = ($palepah_pokokcak / $pokok_samplecak) * 100;
         } else {
             $perPl = 0;
         }
@@ -3912,7 +3912,7 @@ class inspeksidashController extends Controller
                     }
 
                     if ($totalpelepah_s != 0) {
-                        $perPl = round(($totalpelepah_s / $totalPokok) * 100, 2);
+                        $perPl = ($totalpelepah_s / $totalPokok) * 100;
                     } else {
                         $perPl = 0;
                     }
@@ -4035,7 +4035,7 @@ class inspeksidashController extends Controller
                 }
 
                 if ($sum_pelepah != 0) {
-                    $perPl = round(($sum_pelepah / $sum_pokok) * 100, 2);
+                    $perPl = ($sum_pelepah / $sum_pokok) * 100;
                 } else {
                     $perPl = 0;
                 }
@@ -4128,7 +4128,7 @@ class inspeksidashController extends Controller
             }
 
             if ($sum_pelepah != 0) {
-                $perPl = round(($sum_pelepah / $sum_Pokok) * 100, 2);
+                $perPl = ($sum_pelepah / $sum_Pokok) * 100;
             } else {
                 $perPl = 0;
             }
@@ -4299,7 +4299,7 @@ class inspeksidashController extends Controller
                             }
 
                             if ($totalpelepah_s != 0) {
-                                $perPl = round(($totalpelepah_s / $totalPokok) * 100, 2);
+                                $perPl = ($totalpelepah_s / $totalPokok) * 100;
                             } else {
                                 $perPl = 0;
                             }
@@ -4428,7 +4428,7 @@ class inspeksidashController extends Controller
                         }
 
                         if ($palepah_pokok != 0) {
-                            $perPl = round(($palepah_pokok / $pokok_sample) * 100, 2);
+                            $perPl = ($palepah_pokok / $pokok_sample) * 100;
                         } else {
                             $perPl = 0;
                         }
@@ -4538,8 +4538,7 @@ class inspeksidashController extends Controller
 
 
                     if ($palepah_pokok != 0) {
-                        $perPl = round(($palepah_pokok / $pokok_sample) * 100, 2);
-                    } else {
+                        $perPl = ($palepah_pokok / $pokok_sample) * 100;
                         $perPl = 0;
                     }
                     $nonZeroValues = array_filter([$p_panen, $k_panen, $tgl_panen, $bmts, $bhtm1, $bhtm2, $bhtm3]);
@@ -4659,7 +4658,7 @@ class inspeksidashController extends Controller
                 }
 
                 if ($palepah_pokok != 0) {
-                    $perPl = round(($palepah_pokok / $pokok_sample) * 100, 2);
+                    $perPl = ($palepah_pokok / $pokok_sample) * 100;
                 } else {
                     $perPl = 0;
                 }
@@ -4855,7 +4854,7 @@ class inspeksidashController extends Controller
                     }
 
                     if ($totalpelepah_s != 0) {
-                        $perPl = round(($totalpelepah_s / $totalPokok) * 100, 2);
+                        $perPl = ($totalpelepah_s / $totalPokok) * 100;
                     } else {
                         $perPl = 0;
                     }
@@ -4975,7 +4974,7 @@ class inspeksidashController extends Controller
                 }
 
                 if ($pokok_sample != 0) {
-                    $perPl = round(($palepah_pokok / $pokok_sample) * 100, 2);
+                    $perPl = ($palepah_pokok / $pokok_sample) * 100;
                 } else {
                     $perPl = 0;
                 }
@@ -5074,7 +5073,7 @@ class inspeksidashController extends Controller
             }
 
             if ($pokok_sample != 0) {
-                $perPl = round(($palepah_pokok / $pokok_sample) * 100, 2);
+                $perPl = ($palepah_pokok / $pokok_sample) * 100;
             } else {
                 $perPl = 0;
             }
@@ -5183,7 +5182,7 @@ class inspeksidashController extends Controller
         }
 
         if ($pokok_sample != 0) {
-            $perPl = round(($palepah_pokok / $pokok_sample) * 100, 2);
+            $perPl = ($palepah_pokok / $pokok_sample) * 100;
         } else {
             $perPl = 0;
         }
@@ -7573,7 +7572,7 @@ class inspeksidashController extends Controller
                     }
 
                     if ($totalpelepah_s != 0) {
-                        $perPl = round(($totalpelepah_s / $totalPokok) * 100, 2);
+                        $perPl = ($totalpelepah_s / $totalPokok) * 100;
                     } else {
                         $perPl = 0;
                     }
@@ -7699,7 +7698,7 @@ class inspeksidashController extends Controller
                 }
 
                 if ($sum_pelepah != 0) {
-                    $perPl = round(($sum_pelepah / $sum_pokok) * 100, 2);
+                    $perPl = ($sum_pelepah / $sum_pokok) * 100;
                 } else {
                     $perPl = 0;
                 }
@@ -8508,7 +8507,7 @@ class inspeksidashController extends Controller
                     }
 
                     if ($totalpelepah_s != 0) {
-                        $perPl = round(($totalpelepah_s / $totalPokok) * 100, 2);
+                        $perPl = ($totalpelepah_s / $totalPokok) * 100;
                     } else {
                         $perPl = 0;
                     }
@@ -9343,7 +9342,7 @@ class inspeksidashController extends Controller
                 }
 
                 if ($totalpelepah_s != 0) {
-                    $perPl = round(($totalpelepah_s / $totalPokok) * 100, 2);
+                    $perPl = ($totalpelepah_s / $totalPokok) * 100;
                 } else {
                     $perPl = 0;
                 }
@@ -11138,7 +11137,7 @@ class inspeksidashController extends Controller
                     }
 
                     if ($totalpelepah_s != 0) {
-                        $perPl = round(($totalpelepah_s / $totalPokok) * 100, 2);
+                        $perPl = ($totalpelepah_s / $totalPokok) * 100;
                     } else {
                         $perPl = 0;
                     }
@@ -11231,7 +11230,7 @@ class inspeksidashController extends Controller
                 }
 
                 if ($sum_pelepah != 0) {
-                    $perPl = round(($sum_pelepah / $sum_pokok) * 100, 2);
+                    $perPl = ($sum_pelepah / $sum_pokok) * 100;
                 } else {
                     $perPl = 0;
                 }
