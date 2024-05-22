@@ -2805,7 +2805,7 @@ class inspectController extends Controller
         $dataReg['total_buahcak'] = $totalSkorBuah;
         $dataReg['TOTAL_SKORbh'] = $totalSkorBuah;
         $dataReg['check_databh'] = 'ada';
-        // dd($rekap[3]['BGE']);
+        // dd($rekap);
         return view('Qcinspeksi.dataInspeksi', ['data' => $rekap, 'reg' => $regional, 'bulan' => $bulan, 'datareg' => $dataReg]);
     }
 
@@ -3078,7 +3078,7 @@ class inspectController extends Controller
             ->orderBy('date', 'asc')
             ->get();
 
-        $TransportDates = DB::connection('mysql2')->table('mutu_transport')
+        $transportDates = DB::connection('mysql2')->table('mutu_transport')
             ->select(DB::raw('DATE(mutu_transport.datetime) as date'))
             ->where('mutu_transport.estate', $est)
             ->where('mutu_transport.afdeling', $afd)
@@ -3088,47 +3088,30 @@ class inspectController extends Controller
             ->orderBy('date', 'asc')
             ->get();
 
+        // Combine and get unique dates
+        $allDates = collect([$ancakDates, $buahDates, $transportDates])
+            ->collapse() // Merge all collections into one
+            ->pluck('date') // Extract the date values
+            ->unique() // Get unique dates
+            ->sort() // Sort the dates
+            ->values(); // Reindex the collection
+
+        // Optionally, convert the collection to an array
+        $uniqueDates = $allDates->toArray();
 
 
-        $ancakDatesArray = $ancakDates->pluck('date')->toArray();
-        $buahDatesArray = $buahDates->pluck('date')->toArray();
-        $TransportDatesArray = $TransportDates->pluck('date')->toArray();
 
-        $commonDates = collect([]);
-        foreach ($ancakDatesArray as $date) {
-            if (in_array($date, $buahDatesArray) && in_array($date, $TransportDatesArray)) {
-                $commonDates->push((object) ['date' => $date]);
-            }
-        }
 
         $arrView = array();
-        $arrView['commonDates'] = $commonDates;
+
         $arrView['ancakDates'] = $ancakDates;
         $arrView['buahDates'] = $buahDates;
-        $arrView['TransportDates'] = $TransportDates;
+        $arrView['dates_option'] = $uniqueDates;
         $arrView['est'] =  $est;
         $arrView['afd'] =  $afd;
         $arrView['reg'] =  $reg;
         $arrView['tanggal'] =  $date;
         json_encode($arrView);
-        // dd($dataTable);
-        // if ($request->ajax()) {
-        //     $data = mutu_ancak::select('*')
-        //         ->where('estate', $request->est)
-        //         ->where('afdeling', $request->afd)
-        //         ->get();
-
-        //     return Datatables::of($data)
-        //         ->addIndexColumn()
-        //         ->addColumn('action', function ($row) {
-        //             $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm">Edit</a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm">Delete</a>';
-        //             return $actionBtn;
-        //         })
-        //         ->rawColumns(['action'])
-        //         ->make(true);
-        // }
-
-        // return $dataTable->render('Qcinspeksi.dataDetail', $arrView);
         return view('Qcinspeksi.dataDetail', $arrView);
     }
 
@@ -10681,7 +10664,7 @@ class inspectController extends Controller
                 'pokok_sample' => $totsample,
                 'luas_ha' => $totha,
                 'pokok_panen' => $totpanen,
-                'akp' => $akp,
+                'akp' => round($akp, 2),
                 'p_ma' => $p_ma,
                 'k_ma' => $k_ma,
                 'gl_ma' => $gl_ma,

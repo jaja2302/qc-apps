@@ -412,35 +412,13 @@
 
                                 <div class="form-group">
                                     <select class="form-control mb-2 mr-sm-2" name="date" id="inputDate">
-                                        <option value="" disabled selected hidden>Pilih tanggal</option>
-                                        <optgroup label=" Mutu Ancak">
-                                            @foreach($ancakDates as $ancakDate)
-                                            <option value="{{ $ancakDate->date }}" {{ $ancakDate->date === $tanggal ?
-                                            'selected' : '' }}>{{ $ancakDate->date }}</option>
-                                            @endforeach
-                                        </optgroup>
-                                        <optgroup label="Mutu Buah">
-                                            @foreach($buahDates as $buah)
-                                            <option value="{{ $buah->date }}" {{ $buah->date === $tanggal ? 'selected' : ''
-                                            }}>{{ $buah->date }}</option>
-                                            @endforeach
-                                        </optgroup>
-                                        <optgroup label="Mutu Transport">
-                                            @foreach($TransportDates as $TransportDate)
-                                            <option value="{{ $TransportDate->date }}" {{ $TransportDate->date === $tanggal
-                                            ? 'selected' : '' }}>{{ $TransportDate->date }}</option>
-                                            @endforeach
-                                        </optgroup>
-                                        <optgroup label="Mutu all">
-                                            @foreach($commonDates as $common)
-                                            <option value="{{ $common->date }}" {{ $common->date === $tanggal ? 'selected' :
-                                            '' }}>{{ $common->date }}</option>
-                                            @endforeach
-                                        </optgroup>
+                                        @foreach($dates_option as $common)
+                                        <option value="{{$common}}">{{$common}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
 
-                                <button type="button" class="ml-2 btn btn-primary mb-2" id="show-button" disabled>Show</button>
+                                <button type="button" class="ml-2 btn btn-primary mb-2" id="show-button">Show</button>
 
                             </div>
                         </form>

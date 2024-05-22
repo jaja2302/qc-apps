@@ -944,133 +944,186 @@
                 </div>
 
                 <style>
-                    .tableFixHead {
-                        overflow: auto;
-                        height: 700px;
+                    .table-wrapper {
+                        overflow-x: auto;
+                        overflow-y: auto;
+                        max-height: 600px;
                     }
 
-                    .sticky-header {
+                    .my-table {
+                        width: 100%;
+                        font-size: 0.8rem;
+                        border-collapse: collapse;
+                    }
+
+                    .my-table th,
+                    .my-table td {
+                        padding: 5px;
+                        text-align: center;
+                        border: 1px solid #ccc;
+                    }
+
+                    .my-table thead {
+                        background-color: #f2f2f2;
+                    }
+
+
+
+                    .my-table tbody tr:nth-child(even) {
+                        background-color: #f8f8f8;
+                    }
+
+                    .my-table tbody tr:hover {
+                        background-color: #eaeaea;
+                    }
+
+
+                    .center {
+                        display: flex;
+                        justify-content: center;
+                    }
+
+                    .my-table thead th.sticky {
+                        position: -webkit-sticky;
                         position: sticky;
                         top: 0;
-                        background: #eee;
-                        z-index: 99;
+                        z-index: 10;
+                        background-color: inherit;
                     }
 
-                    th {
-                        background: #eee;
+                    .my-table thead th.sticky-sub {
+                        position: -webkit-sticky;
+                        position: sticky;
+                        top: 30px;
+                        /* Adjust this value based on the height of the first row in the header */
+                        z-index: 10;
+                        background-color: inherit;
+                    }
+
+                    .my-table thead th.sticky-third-row {
+                        position: -webkit-sticky;
+                        position: sticky;
+                        top: 90px;
+                        /* Adjust this value based on the total height of the first two rows in the header */
+                        z-index: 10;
+                        background-color: inherit;
+                    }
+
+                    .my-table thead th.sticky-second-row {
+                        position: -webkit-sticky;
+                        position: sticky;
+                        top: 60px;
+                        z-index: 10;
+                        background-color: inherit;
+                    }
+
+                    .my-table tbody td.sticky-cell {
+                        position: -webkit-sticky;
+                        position: sticky;
+                        z-index: 5;
+                        background-color: white;
                     }
                 </style>
 
-                <div class="tableFixHead">
-                    <table class="table table-striped table-bordered ">
-                        <thead>
-                            <tr>
-                                <th class="align-middle" rowspan="3">Est</th>
-                                <th class="align-middle" rowspan="3">Afd</th>
-                                <th class="sticky-header align-middle" colspan="4" rowspan="2">DATA BLOK
-                                    SAMPEL</th>
-                                <th class="sticky-header align-middle" colspan="17">Mutu Ancak (MA)</th>
-                                <th class="sticky-header align-middle" colspan="8">Mutu Transport (MT)</th>
-                                <th class="sticky-header align-middle" colspan="21">Mutu Buah (MB)</th>
-                                <th class="sticky-header align-middle" rowspan="3">All Skor</th>
-                                <th class="sticky-header align-middle" rowspan="3">Kategori</th>
-                            </tr>
-                            <tr>
-                                {{-- Table Mutu Ancak --}}
-                                <th class="sticky-header align-middle" colspan="6">Brondolan Tinggal
-                                </th>
-                                <th class="sticky-header align-middle" colspan="7">Buah Tinggal</th>
-                                <th class="sticky-header align-middle" colspan="3">Pelepah Sengkleh</th>
-                                <th class="sticky-header align-middle" rowspan="2">Total Skor</th>
+                <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark">
+                    <div class="table-wrapper">
+                        <table class="my-table">
+                            <thead>
+                                <tr>
+                                    <th rowspan="3" class="sticky" style="background-color: #883c0c;">EST</th>
+                                    <th rowspan="3" class="sticky" style="background-color: #883c0c;">AFD.</th>
+                                    <th colspan="4" rowspan="2" class="sticky" style="background-color: #883c0c;">DATA BLOK SAMPEL</th>
+                                    <th colspan="17" class="sticky" style="background-color: #96be25;">Mutu Ancak (MA)</th>
+                                    <th colspan="8" class="sticky" style="background-color: #25a5be;">Mutu Transport (MT)</th>
+                                    <th colspan="22" class="sticky" style="background-color: #be4d25;">Mutu Buah (MB)</th>
+                                    <th rowspan="3" class="sticky" style="background-color: #883c0c;">Kategori</th>
+                                    <th rowspan="3" class="sticky" style="background-color: #883c0c;">Total Skor</th>
+                                    <th rowspan="3" class="sticky" style="background-color: #883c0c;">Skor</th>
 
-                                <th class="sticky-header align-middle" rowspan="2">TPH Sampel</th>
-                                <th class="sticky-header align-middle" colspan="3">Brd Tinggal</th>
-                                <th class="sticky-header align-middle" colspan="3">Buah Tinggal</th>
-                                <th class="sticky-header align-middle" rowspan="2">Total Skor</th>
+                                </tr>
+                                <tr>
+                                    <th class="sticky-sub" colspan="6" style="background-color: #96be25; white-space: nowrap;">Brondolan Tinggal</th>
+                                    <th class="sticky-sub" colspan="7" style="background-color: #96be25; white-space: nowrap;">Buah Tinggal</th>
+                                    <th class="sticky-sub" colspan="3" style="background-color: #96be25; white-space: nowrap;">Pelepah Sengkleh</th>
+                                    <th class="sticky-sub" rowspan="2" style="background-color: #96be25; white-space: nowrap;">Total Skor</th>
+                                    <th class="sticky-sub" rowspan="2" style="background-color: #25a5be; white-space: nowrap;">TPH Sampel</th>
+                                    <th class="sticky-sub" colspan="3" style="background-color: #25a5be; white-space: nowrap;">Brd Tinggal</th>
+                                    <th class="sticky-sub" colspan="3" style="background-color: #25a5be; white-space: nowrap;">Buah Tinggal</th>
+                                    <th class="sticky-sub" rowspan="2" style="background-color: #25a5be; white-space: nowrap;">Total Skor</th>
+                                    <th class="sticky-sub" rowspan="2" style="background-color: #be4d25; white-space: nowrap;">TPH Sampel</th>
+                                    <th class="sticky-sub" rowspan="2" style="background-color: #be4d25; white-space: nowrap;">Total Janjang Sampel</th>
+                                    <th class="sticky-sub" colspan="3" style="background-color: #be4d25; white-space: nowrap;">Mentah (A)</th>
+                                    <th class="sticky-sub" colspan="3" style="background-color: #be4d25; white-space: nowrap;">Matang (N)</th>
+                                    <th class="sticky-sub" colspan="3" style="background-color: #be4d25; white-space: nowrap;">Lewat Matang (O)</th>
+                                    <th class="sticky-sub" colspan="3" style="background-color: #be4d25; white-space: nowrap;">Janjang Kosong (E)</th>
+                                    <th class="sticky-sub" colspan="3" style="background-color: #be4d25; white-space: nowrap;">Tidak Standar V-Cut</th>
+                                    <th class="sticky-sub" colspan="2" style="background-color: #be4d25; white-space: nowrap;">Abnormal</th>
+                                    <th class="sticky-sub" colspan="3" style="background-color: #be4d25; white-space: nowrap;">Penggunaan Karung Brondolan</th>
+                                </tr>
+                                <tr>
+                                    <th class="sticky-second-row" style="background-color: #ffc404;">Jumlah Pokok Sampel</th>
+                                    <th class="sticky-second-row" style="background-color: #ffc404;">Luas Ha Sampel</th>
+                                    <th class="sticky-second-row" style="background-color: #ffc404;">Jumlah Jjg Panen</th>
+                                    <th class="sticky-second-row" style="background-color: #ffc404;">AKP Realisasi</th>
+                                    <th class="sticky-second-row" style="background-color: #96be25;">P</th>
+                                    <th class="sticky-second-row" style="background-color: #96be25;">K</th>
+                                    <th class="sticky-second-row" style="background-color: #96be25;">GL</th>
+                                    <th class="sticky-second-row" style="background-color: #96be25;">Total Brd</th>
+                                    <th class="sticky-second-row" style="background-color: #96be25;">Brd/JJG</th>
+                                    <th class="sticky-second-row" style="background-color: #96be25;">Skor</th>
+                                    <th class="sticky-second-row" style="background-color: #96be25;">S</th>
+                                    <th class="sticky-second-row" style="background-color: #96be25;">M1</th>
+                                    <th class="sticky-second-row" style="background-color: #96be25;">M2</th>
+                                    <th class="sticky-second-row" style="background-color: #96be25;">M3</th>
+                                    <th class="sticky-second-row" style="background-color: #96be25;">Total JJG</th>
+                                    <th class="sticky-second-row" style="background-color: #96be25;">%</th>
+                                    <th class="sticky-second-row" style="background-color: #96be25;">Skor</th>
+                                    <th class="sticky-second-row" style="background-color: #96be25;">Pokok </th>
+                                    <th class="sticky-second-row" style="background-color: #96be25;">%</th>
+                                    <th class="sticky-second-row" style="background-color: #96be25;">Skor</th>
 
-                                {{-- Table Mutu Buah --}}
-                                <th class="sticky-header align-middle" rowspan="2">TPH Sampel</th>
-                                <th class="sticky-header align-middle" rowspan="2">Total Janjang
-                                    Sampel</th>
-                                <th class="sticky-header align-middle" colspan="3">Mentah (A)</th>
-                                <th class="sticky-header align-middle" colspan="3">Matang (N)</th>
-                                <th class="sticky-header align-middle" colspan="3">Lewat Matang
-                                    (O)</th>
-                                <th class="sticky-header align-middle" colspan="3">Janjang Kosong
-                                    (E)</th>
-                                <th class="sticky-header align-middle" colspan="3">Tidak Standar
-                                    V-Cut</th>
-                                <th class="sticky-header align-middle" colspan="2">Abnormal</th>
-                                <th class="sticky-header align-middle" colspan="3">Penggunaan
-                                    Karung Brondolan</th>
-                                <th class="sticky-header align-middle" rowspan="2">Total Skor</th>
-                            </tr>
-                            <tr>
-                                {{-- Table Mutu Ancak --}}
-                                <th class="sticky-header align-middle">Jumlah Pokok Sampel</th>
-                                <th class="sticky-header align-middle">Luas Ha Sampel</th>
-                                <th class="sticky-header align-middle">Jumlah Jjg Panen</th>
-                                <th class="sticky-header align-middle">AKP Realisasi</th>
-                                <th class="sticky-header align-middle">P</th>
-                                <th class="sticky-header align-middle">K</th>
-                                <th class="sticky-header align-middle">GL</th>
-                                <th class="sticky-header align-middle">Total Brd</th>
-                                <th class="sticky-header align-middle">Brd/JJG</th>
-                                <th class="sticky-header align-middle">Skor</th>
-                                <th class="sticky-header align-middle">S</th>
-                                <th class="sticky-header align-middle">M1</th>
-                                <th class="sticky-header align-middle">M2</th>
-                                <th class="sticky-header align-middle">M3</th>
-                                <th class="sticky-header align-middle">Total JJG</th>
-                                <th class="sticky-header align-middle">%</th>
-                                <th class="sticky-header align-middle">Skor</th>
-                                <th class="sticky-header align-middle">Pokok </th>
-                                <th class="sticky-header align-middle">%</th>
-                                <th class="sticky-header align-middle">Skor</th>
+                                    <th class="sticky-second-row" style="background-color: #25a5be;">Butir</th>
+                                    <th class="sticky-second-row" style="background-color: #25a5be;">Butir/TPH</th>
+                                    <th class="sticky-second-row" style="background-color: #25a5be;">Skor</th>
+                                    <th class="sticky-second-row" style="background-color: #25a5be;">Jjg</th>
+                                    <th class="sticky-second-row" style="background-color: #25a5be;">Jjg/TPH</th>
+                                    <th class="sticky-second-row" style="background-color: #25a5be;">Skor</th>
+                                    {{-- table mutu Buah --}}
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">Jjg</th>
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">%</th>
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">Skor</th>
 
-                                <th class="sticky-header align-middle">Butir</th>
-                                <th class="sticky-header align-middle">Butir/TPH</th>
-                                <th class="sticky-header align-middle">Skor</th>
-                                <th class="sticky-header align-middle">Jjg</th>
-                                <th class="sticky-header align-middle">Jjg/TPH</th>
-                                <th class="sticky-header align-middle">Skor</th>
-                                {{-- table mutu Buah --}}
-                                <th class="sticky-header align-middle">Jjg</th>
-                                <th class="sticky-header align-middle">%</th>
-                                <th class="sticky-header align-middle">Skor</th>
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">Jjg</th>
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">%</th>
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">Skor</th>
 
-                                <th class="sticky-header align-middle">Jjg</th>
-                                <th class="sticky-header align-middle">%</th>
-                                <th class="sticky-header align-middle">Skor</th>
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">Jjg</th>
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">%</th>
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">Skor</th>
 
-                                <th class="sticky-header align-middle">Jjg</th>
-                                <th class="sticky-header align-middle">%</th>
-                                <th class="sticky-header align-middle">Skor</th>
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">Jjg</th>
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">%</th>
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">Skor</th>
 
-                                <th class="sticky-header align-middle">Jjg</th>
-                                <th class="sticky-header align-middle">%</th>
-                                <th class="sticky-header align-middle">Skor</th>
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">Jjg</th>
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">%</th>
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">Skor</th>
 
-                                <th class="sticky-header align-middle">Jjg</th>
-                                <th class="sticky-header align-middle">%</th>
-                                <th class="sticky-header align-middle">Skor</th>
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">Jjg</th>
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">%</th>
 
-                                <th class="sticky-header align-middle">Jjg</th>
-                                <th class="sticky-header align-middle">%</th>
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">Ya</th>
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">%</th>
+                                    <th class="sticky-second-row" style="background-color: #be4d25;">Skor</th>
+                                </tr>
 
-                                <th class="sticky-header align-middle">Ya</th>
-                                <th class="sticky-header align-middle">%</th>
-                                <th class="sticky-header align-middle">Skor</th>
-                            </tr>
-                        </thead>
+                            </thead>
+                            <tbody id="dataInspeksi">
 
-                        <tbody id="dataInspeksi">
-                            <!-- <td>PLE</td>
-                        <td>OG</td> -->
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-
             </div>
 
             <div class="tab-pane fade" id="nav-issue" role="tabpanel" aria-labelledby="nav-issue-tab">
