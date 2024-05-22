@@ -21,6 +21,7 @@ use App\Http\Controllers\incpectcomponent\makemapsController;
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\RekapController;
 use App\Http\Controllers\GradingController;
+use Illuminate\Support\Facades\Artisan;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,9 +37,7 @@ use App\Http\Controllers\GradingController;
 //     return view('welcome');
 // });
 
-// Route::get('/linkstorage', function () {
-//     Artisan::call('storage:link');
-// });
+
 
 Route::get('/', [LoginController::class, 'index'])->name('logina');
 Route::post('/', [loginController::class, 'authenticate'])->name('login');
@@ -46,6 +45,9 @@ Route::post('logout', [loginController::class, 'logout'])->name('logout');
 Route::get('/gettaksasi/{query}', [taksasiController::class, 'dashboard']);
 Route::middleware(['auth'])->group(function () {
     Route::get('/index', [unitController::class, 'index']);
+    Route::get('/linkstorage', function () {
+        Artisan::call('storage:link');
+    });
     Route::get('/dashboard', [unitController::class, 'dashboard'])->name('dashboard');
     Route::get('/dashboard_gudang', [unitController::class, 'dashboard_gudang'])->name('dashboard_gudang');
     Route::get('/dashboardtph', [SidaktphController::class, 'index'])->name('dashboardtph');

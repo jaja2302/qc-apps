@@ -11,6 +11,7 @@ use App\Models\Regional;
 use App\Models\Wilayah;
 use App\Models\historycron;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 
 class ApiqcController extends Controller
 {
@@ -316,5 +317,57 @@ class ApiqcController extends Controller
             'cronfail' => $filteredData,
             'crondata' => $getdatacron,
         ], 200);
+    }
+    public function sendwamaintence(): JsonResponse
+    {
+        $check = DB::table('message_info')
+            ->select('*')
+            ->where('aplikasi', 'Maintence')
+            ->where('status_sending', 0)
+            ->get();
+
+        $responseArray = [];
+
+        foreach ($check as $value) {
+            $data = json_decode($value->data, true); // Decode JSON to array
+
+            $responseArray[] = [
+                'id' => [$value->id],
+                'data' => [$data],
+                'message' => 'Data retrieved successfully.'
+            ];
+        }
+
+        return response()->json($responseArray, 200);
+    }
+
+
+
+    public function changestatusmaintence(Request $request): JsonResponse
+    {
+        // Check if the record exists
+        $exists = DB::table('message_info')
+            ->where('id', $request->input('id'))
+            ->exists();
+
+        if ($exists) {
+            // If the record exists, update it
+            DB::table('message_info')
+                ->where('id', $request->input('id'))
+                ->update([
+                    'status_sending' => 1
+                ]);
+
+            // Add the code to send WhatsApp message here if needed
+
+            return response()->json([
+                'message' => 'Status updated successfully.'
+            ], 200); // 200 OK
+        } else {
+            // If the record does not exist, return a message
+            return response()->json([
+                'message' => 'No pending messages found.'
+            ], 404); // 404 Not Found
+        }
     }
 }

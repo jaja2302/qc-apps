@@ -47,7 +47,7 @@ class LoginController extends Controller
         }
 
         // Redirect the user to the intended route after successful login
-        return redirect()->intended(route('rekap'));
+        return redirect()->intended(route('dashboard_inspeksi'));
     }
 
 

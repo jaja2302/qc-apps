@@ -70,16 +70,12 @@
             <div class="sidebar">
                 <nav class="" style="height: 100%">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" style="height: 100%">
-                        <li class="nav-item">
-                            <a href="{{ asset('/rekap') }}" class="nav-link">
-                                <div class="nav-icon lottie-animation" data-animation-path="{{ asset('img/ALLREKAP.json') }}"></div>
-                                <p>ALL SKOR PANEN </p>
-                            </a>
-                        </li>
+
                         <li class="nav-item">
                             <a href="{{ asset('/dashboard_inspeksi') }}" class="nav-link">
                                 <div class="nav-icon lottie-animation" data-animation-path="https://assets10.lottiefiles.com/packages/lf20_w4hwxwuq.json"></div>
-                                <p>PANEN REGULAR</p>
+                                <p style="font-size: 15px;">PANEN REGULAR</p>
+
                             </a>
                         </li>
 
@@ -89,7 +85,7 @@
                                 <div class="nav-icon lottie-animation" data-animation-path="https://assets10.lottiefiles.com/packages/lf20_Lpuvp7YT5K.json">
                                 </div>
 
-                                <p>
+                                <p style="font-size: 15px;">
                                     SIDAK MUTU TRANSPORT
                                 </p>
                             </a>
@@ -99,16 +95,22 @@
                                 <div class="nav-icon lottie-animation" data-animation-path="https://assets1.lottiefiles.com/packages/lf20_bENSfZ37DY.json">
                                 </div>
 
-                                <p>
+                                <p style="font-size: 15px;">
                                     SIDAK MUTU BUAH
 
                                 </p>
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ asset('/rekap') }}" class="nav-link">
+                                <div class="nav-icon lottie-animation" data-animation-path="{{ asset('img/ALLREKAP.json') }}"></div>
+                                <p style="font-size: 15px;">ALL SKOR PANEN </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ asset('/dashboard_gudang') }}" class="nav-link">
                                 <div class="nav-icon lottie-animation" data-animation-path="https://assets9.lottiefiles.com/temp/lf20_vBnbOW.json"></div>
-                                <p>
+                                <p style="font-size: 15px;">
                                     GUDANG
 
                                 </p>
@@ -124,7 +126,7 @@
                                 <div class="nav-icon lottie-animation" data-animation-path="{{ asset('img/homejson.json') }}">
                                 </div>
 
-                                <p>
+                                <p style="font-size: 15px;">
                                     PERUMAHAN
 
                                 </p>
@@ -137,7 +139,7 @@
                                 <div class="nav-icon lottie-animation" data-animation-path="{{ asset('img/mill.json') }}">
                                 </div>
 
-                                <p>
+                                <p style="font-size: 15px;">
                                     Grading MIll
                                 </p>
                             </a>
@@ -147,7 +149,7 @@
                         <li class="nav-item">
                             <a href="{{ asset('/dashboardabsensi') }}" class="nav-link">
                                 <div class="nav-icon lottie-animation" data-animation-path="https://lottie.host/237bc051-94b1-45d6-89da-3144341616a8/i4uJsopUfQ.json"></div>
-                                <p>Absensi QC</p>
+                                <p style="font-size: 15px;">Absensi QC</p>
                             </a>
                         </li>
                         @endif
@@ -156,7 +158,7 @@
                         <li class="nav-item">
                             <a href="{{ asset('/userqcpanel') }}" class="nav-link">
                                 <div class="nav-icon lottie-animation" data-animation-path="{{ asset('img/homejson.json') }}"></div>
-                                <p>Management User QC</p>
+                                <p style="font-size: 15px;">Management User QC</p>
                             </a>
                         </li>
                         @endif
@@ -171,7 +173,7 @@
 
                                     <div class="nav-icon lottie-animation" data-animation-path="https://assets9.lottiefiles.com/packages/lf20_8y92hieq.json">
                                     </div>
-                                    <p>
+                                    <p style="font-size: 15px;">
                                         User QC
                                     </p>
                                 </a>
@@ -180,7 +182,7 @@
                             <li class="nav-item">
                                 <a href="{{ route('logout') }}" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <i class="nav-icon fa fa-sign-out-alt"></i>
-                                    <p>
+                                    <p style="font-size: 15px;">
                                         Logout
                                     </p>
                                 </a>
