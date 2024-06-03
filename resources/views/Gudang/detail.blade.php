@@ -265,7 +265,7 @@
                                         </td>
                                         <td colspan="2" class="text-center my-cell">{{ $data->komentar_kesesuaian_ppro }}
                                         </td>
-                                        <td colspan="2" class="text-center my-cell"> 
+                                        <td colspan="2" class="text-center my-cell">
                                             {{ $data->barang_nonstok == 5 ? 'Tidak ada barang non-stock'
                                         : ($data->barang_nonstok == 0 ? 'Ada barang non-stock' : '') }}
                                         </td>
@@ -517,34 +517,38 @@
 
                                     </tr>
                                     <tr>
-                                        <td colspan="2" class="text-center my-cell"> 
+                                        <td colspan="2" class="text-center my-cell">
                                             {{-- {{
                                         $data->barang_nonstok == 5 ? 'Ya Barang Non-Stock' :
                                         ($data->barang_nonstok == 0 ? 'Tidak Ada Barang Non-Stock' : '')
                                         }} --}}
-                                        {{ $data->komentar_barang_nonstok }}
+                                            {{ $data->komentar_barang_nonstok }}
                                         </td>
                                         <td colspan="2" class="text-center my-cell">{{ $data->komentar_mr_ditandatangani }}
                                         </td>
                                         <td colspan="2" class="text-center my-cell">{{ $data->komentar_kebersihan_gudang }}
                                         </td>
                                     </tr>
-                                 
+
 
                                     @if ($data->foto_kebersihan_gudang_count > 2 )
                                     <tr class="table-primary">
 
                                         <th class="my-cell text-center" colspan="2">7. BUKU INSPEKSI KTU</th>
                                         <th class="my-cell text-center" colspan="2">Dokumentasi Lainnya</th>
+                                        @if (isset($data->foto_kebersihan_gudang_4))
                                         <th class="my-cell text-center" colspan="2">Dokumentasi Lainnya</th>
+                                        @endif
                                     </tr>
                                     <tr>
                                         <td class="my-cell">HASIL</td>
                                         <td class="my-cell" style="text-align: center;">FOTO</td>
                                         <td class="my-cell">HASIL</td>
-                                        <td class="my-cell" style="text-align: center;">FOTO</td>
+                                        <td class="my-cell" style="text-align: center;">FOTO</td>\
+                                        @if (isset($data->foto_kebersihan_gudang_4))
                                         <td class="my-cell">HASIL</td>
                                         <td class="my-cell" style="text-align: center;">FOTO</td>
+                                        @endif
                                     </tr>
                                     <tr>
                                         <td class="my-cell" rowspan="2">
@@ -564,13 +568,13 @@
                                         @else
                                         <td><img src="{{asset('noimage.png')}}" style="weight:75pt;height:150pt"></td>
                                         @endif
-
+                                        @if (isset($data->foto_kebersihan_gudang_4))
                                         <td class="my-cell" rowspan="2"> {{$kondisigd}} </td>
                                         </td>
-                                        @if ($data->foto_kebersihan_gudang_4)
+
                                         <td class="my-cell col-md-4"><img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/inspeksi_gudang/{{$data->foto_kebersihan_gudang_4}}" class="img-fluid modal-image"></td>
                                         @else
-                                        <td><img src="{{asset('noimage.png')}}" style="weight:75pt;height:150pt"></td>
+                                        <td></td>
                                         @endif
                                     </tr>
                                     <tr>

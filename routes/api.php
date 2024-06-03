@@ -25,4 +25,9 @@ Route::get('/getdatacron', [ApiqcController::class, 'getdatacron']);
 Route::post('/recordcronjob', [ApiqcController::class, 'recordcronjob']);
 Route::get('/checkcronjob', [ApiqcController::class, 'checkcronjob']);
 Route::get('/sendwamaintence', [ApiqcController::class, 'sendwamaintence']);
+
 Route::post('/changestatusmaintence', [ApiqcController::class, 'changestatusmaintence']);
+Route::post('/getnamaatasan', [ApiqcController::class, 'getnamaatasan']);
+Route::get('/getunitdata', [ApiqcController::class, 'get_unit_bagian']);
+Route::post('/getuserinfo', [ApiqcController::class, 'getuserinfo']);
+Route::post('/formdataizin', [ApiqcController::class, 'form_data_ijin']);

@@ -439,7 +439,7 @@
                                         $data->barang_nonstok == 5 ? 'Ya Barang Non-Stock' :
                                         ($data->barang_nonstok == 0 ? 'Tidak Ada Barang Non-Stock' : '')
                                         }} --}}
-                {{ $data->komentar_barang_nonstok }}
+                    {{ $data->komentar_barang_nonstok }}
                 </td>
                 <td colspan="2" class="text-center my-cell" style="border-bottom:1px solid black">{{
                     $data->komentar_mr_ditandatangani }}
@@ -454,7 +454,10 @@
 
                 <th class="my-cell text-center" colspan="2">7. BUKU INSPEKSI KTU</th>
                 <th class="my-cell text-center" colspan="2">Dokumentasi Lainnya</th>
+                @if (isset($data->foto_kebersihan_gudang_4))
+
                 <th class="my-cell text-center" colspan="2">Dokumentasi Lainnya</th>
+                @endif
             </tr>
             <tr>
                 <td class="my-cell">HASIL</td>
@@ -463,12 +466,12 @@
                 <!-- GUDANG  -->
                 <td class="my-cell">HASIL</td>
                 <td class="my-cell" style="text-align: center;">FOTO</td>
-
+                @if (isset($data->foto_kebersihan_gudang_4))
 
                 <td class="my-cell">HASIL</td>
                 <td class="my-cell" style="text-align: center;">FOTO</td>
 
-
+                @endif
             </tr>
             <tr>
                 <td class="my-cell" rowspan="2">
@@ -489,13 +492,13 @@
                 @else
                 <td><img src="{{asset('noimage.png')}}" style="weight:75pt;height:150pt"></td>
                 @endif
-
+                @if (isset($data->foto_kebersihan_gudang_4))
                 <td class="my-cell" rowspan="2">{{$kondisigd}}</td>
                 </td>
-                @if (isset($data->foto_kebersihan_gudang_4))
+
                 <td class="my-cell col-md-4"><img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/inspeksi_gudang/{{$data->foto_kebersihan_gudang_4}}" class="img-fluid modal-image"></td>
                 @else
-                <td><img src="{{asset('noimage.png')}}" style="weight:75pt;height:150pt"></td>
+                <td></td>
                 @endif
             </tr>
             <tr>
@@ -524,8 +527,11 @@
                 </td>
                 <td colspan="2" class="text-center my-cell">Dokumentasi Lainnya
                 </td>
+                @if (isset($data->foto_kebersihan_gudang_4))
+
                 <td colspan="2" class="text-center my-cell">Dokumentasi Lainnya
                 </td>
+                @endif
 
             </tr>
 

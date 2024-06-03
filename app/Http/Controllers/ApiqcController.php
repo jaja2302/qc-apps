@@ -7,9 +7,12 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Afdeling;
 use App\Models\Blok;
 use App\Models\Estate;
+use App\Models\Formijin;
 use App\Models\Regional;
 use App\Models\Wilayah;
 use App\Models\historycron;
+use App\Models\Ijinkebun;
+use App\Models\Pengguna;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 
@@ -368,6 +371,160 @@ class ApiqcController extends Controller
             return response()->json([
                 'message' => 'No pending messages found.'
             ], 404); // 404 Not Found
+        }
+    }
+
+
+    public function getnamaatasan(Request $request): JsonResponse
+    {
+        // Retrieve the 'nama' input from the request
+        $nama = $request->input('nama');
+
+        // Validate the 'nama' input
+        if (is_null($nama) || trim($nama) === '') {
+            return response()->json(['message' => 'Please input a nama'], 400);
+        }
+
+        // Use the 'like' operator correctly in your query
+        $data = Pengguna::where('nama_lengkap', 'like', '%' . $nama . '%')
+            ->whereIn('jabatan', ['Manager', 'General Manager', 'Asisten', 'Askep', 'Regional Head'])
+            ->get()
+            ->toArray();
+
+        $result = array();
+        foreach ($data as $key => $value) {
+            // Assuming you want to use $key as the ID since user_id is not available in the pluck result
+            $result[$key] = [
+                'id' => $value['user_id'], // Use $key as the ID
+                'nama' => $value['nama_lengkap'],
+                'departemen' => $value['departemen'],
+            ];
+        }
+
+        // Check if any data is found
+        if (!empty($result)) {
+            return response()->json(['data' => $result], 200);
+        } else {
+            return response()->json(['message' => 'Nama Atasan tidak ditemukan'], 404);
+        }
+    }
+
+    public function getuserinfo(Request $request): JsonResponse
+    {
+        // Retrieve the 'nama' input from the request
+        $nama = $request->input('nama');
+
+
+        // Validate the 'nama' input
+        if (is_null($nama) || trim($nama) === '') {
+            return response()->json(['message' => 'Please input a nama'], 400);
+        }
+
+        // Use the 'like' operator correctly in your query
+        $data = Pengguna::where('nama_lengkap', 'like', '%' . $nama . '%')
+            ->get()
+            ->toArray();
+
+        $result = array();
+        foreach ($data as $key => $value) {
+            // Assuming you want to use $key as the ID since user_id is not available in the pluck result
+            $result[$key] = [
+                'id' => $value['user_id'], // Use $key as the ID
+                'nama' => $value['nama_lengkap'],
+                'departemen' => $value['departemen'],
+            ];
+        }
+
+        // Check if any data is found
+        if (!empty($result)) {
+            return response()->json(['data' => $result], 200);
+        } else {
+            return response()->json(['message' => 'Nama User tidak ditemukan'], 404);
+        }
+    }
+    public function get_unit_bagian(): JsonResponse
+    {
+        $data = Ijinkebun::query()->get();
+        $result = [];
+        foreach ($data as $key => $value) {
+            $result[] = [
+                'id' => $value['id'],
+                'nama_unit' => $value['nama'],
+            ];
+        }
+        // dd($data);
+        if (!empty($result)) {
+            return response()->json(['data' => $result], 200);
+        } else {
+            return response()->json(['message' => 'Unit Tidak Tersedia ditemukan'], 404);
+        }
+    }
+
+    public function form_data_ijin(Request $request)
+    {
+        if ($request->input('type') === 'check_user') {
+            $existingRequest = Formijin::where('user_id', $request->input('name'))->where('status', 'waiting approval')->first();
+
+            if ($existingRequest) {
+                return response()->json(['error_validasi' => 'Permintaan izin Anda saat ini masih menunggu persetujuan. Mohon tunggu hingga permintaan terakhir Anda pada tanggal: ' . $existingRequest['tanggal_keluar'] . ' disetujui oleh atasan.'], 200);
+            } else {
+                return response()->json(['succes' => 'pass'], 200);
+            }
+        } else {
+            try {
+
+                // Parse the input dates to Carbon instances
+                $carbon_tanggal_keluar = Carbon::createFromFormat('d-m-Y', $request->input('pergi'));
+                $carbon_tanggal_kembali = Carbon::createFromFormat('d-m-Y', $request->input('kembali'));
+
+                // Check if tanggal_kembali is before tanggal_keluar
+                if ($carbon_tanggal_kembali->lessThan($carbon_tanggal_keluar)) {
+                    return response()->json(['error_validasi' => 'Tanggal kembali tidak bisa sebelum tanggal keluar'], 200);
+                }
+
+                // Format the dates to datetime format for storing in the database
+                $tanggal_keluar = $carbon_tanggal_keluar->format('Y-m-d H:i:s');
+                $tanggal_kembali = $carbon_tanggal_kembali->format('Y-m-d H:i:s');
+
+                // Prepare the data for insertion
+                $data = [
+                    'user_id' => $request->input('name'),
+                    'unit_id' => $request->input('unit_kerja'),
+                    'tanggal_keluar' => $tanggal_keluar,
+                    'tanggal_kembali' => $tanggal_kembali,
+                    'lokasi_tujuan' => $request->input('tujuan'),
+                    'keperluan' => $request->input('keperluan'),
+                    'atasan_1' => $request->input('atasan_satu'),
+                    'atasan_2' => $request->input('atasan_dua'),
+                    'no_hp' => $request->input('no_hp'),
+                ];
+
+                // Check if the user already has a pending request
+
+
+                // Check if the atasan fields are the same
+                if ($request->input('atasan_satu') === $request->input('atasan_dua')) {
+                    return response()->json(['error_validasi' => 'Nama Atasan satu dan Atasan dua tidak boleh sama'], 200);
+                }
+
+                DB::beginTransaction();
+
+                // Insert the new data
+                $newdata = Formijin::create($data);
+                $newdata->save();
+
+                DB::commit();
+
+                return response()->json(['success' => true], 200);
+            } catch (\Throwable $th) {
+                DB::rollBack();
+
+                if ($th instanceof \Illuminate\Database\QueryException) {
+                    return response()->json(['error' => $th->getMessage()], 500);
+                }
+
+                return response()->json(['error' => 'An error occurred while saving data. Please try again.'], 500);
+            }
         }
     }
 }
