@@ -474,17 +474,43 @@ class ApiqcController extends Controller
             try {
 
                 // Parse the input dates to Carbon instances
+                $today = Carbon::now();
                 $carbon_tanggal_keluar = Carbon::createFromFormat('d-m-Y', $request->input('pergi'));
                 $carbon_tanggal_kembali = Carbon::createFromFormat('d-m-Y', $request->input('kembali'));
+
+                // Check if tanggal_kembali is before tanggal_keluar
+                if ($carbon_tanggal_keluar->lessThan($today)) {
+                    return response()->json(['error_validasi' => 'Tanggal keluar tidak boleh di masa lalu'], 200);
+                }
+
+                // Check if tanggal_kembali is in the past
+                if ($carbon_tanggal_kembali->lessThan($today)) {
+                    return response()->json(['error_validasi' => 'Tanggal kembali tidak boleh di masa lalu'], 200);
+                }
+
+                // Check if tanggal_keluar and tanggal_kembali are the same
+                if ($carbon_tanggal_keluar->equalTo($carbon_tanggal_kembali)) {
+                    return response()->json(['error_validasi' => 'Tanggal keluar dan tanggal kembali tidak boleh sama'], 200);
+                }
 
                 // Check if tanggal_kembali is before tanggal_keluar
                 if ($carbon_tanggal_kembali->lessThan($carbon_tanggal_keluar)) {
                     return response()->json(['error_validasi' => 'Tanggal kembali tidak bisa sebelum tanggal keluar'], 200);
                 }
 
+                // Check if tanggal_keluar is more than 7 days from today
+                if ($carbon_tanggal_keluar->greaterThan($today->copy()->addDays(7))) {
+                    return response()->json(['error_validasi' => 'Tanggal keluar harus dalam 1 minggu dari sekarang'], 200);
+                }
+
+                // Check if tanggal_kembali is more than 30 days after tanggal_keluar
+                if ($carbon_tanggal_kembali->greaterThan($carbon_tanggal_keluar->copy()->addDays(30))) {
+                    return response()->json(['error_validasi' => 'Tanggal kembali tidak boleh lebih dari 30 hari setelah tanggal keluar'], 200);
+                }
                 // Format the dates to datetime format for storing in the database
                 $tanggal_keluar = $carbon_tanggal_keluar->format('Y-m-d H:i:s');
                 $tanggal_kembali = $carbon_tanggal_kembali->format('Y-m-d H:i:s');
+
 
                 // Prepare the data for insertion
                 $data = [
@@ -523,7 +549,7 @@ class ApiqcController extends Controller
                     return response()->json(['error' => $th->getMessage()], 500);
                 }
 
-                return response()->json(['error' => 'An error occurred while saving data. Please try again.'], 500);
+                return response()->json(['error' => $th], 500);
             }
         }
     }
