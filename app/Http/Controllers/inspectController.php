@@ -967,15 +967,18 @@ class inspectController extends Controller
                     $totalbhtm2_panen = 0;
                     $totalbhtm3_oanen = 0;
                     $totalpelepah_s = 0;
-
+                    $sph = 0;
                     $check_input = 'kosong';
-                    $nilai_input = 0;
+                    $listBlok = array();
+                    $jml_blok = 0;
                     foreach ($value2 as $key3 => $value3) if (is_array($value3)) {
-                        if (!in_array($value3['estate'] . ' ' . $value3['afdeling'] . ' ' . $value3['blok'], $listBlokPerAfd)) {
-                            $listBlokPerAfd[] = $value3['estate'] . ' ' . $value3['afdeling'] . ' ' . $value3['blok'];
+                        if (!in_array($value3['estate'] . ' ' . $value3['afdeling'] . ' ' . $value3['blok'], $listBlok)) {
+                            if ($value3['sph'] != 0) {
+                                $listBlok[] = $value3['estate'] . ' ' . $value3['afdeling'] . ' ' . $value3['blok'];
+                                $sph += $value3['sph'];
+                            }
                         }
-                        $jum_ha = count($listBlokPerAfd);
-
+                        $jml_blok = count($listBlok);
                         $totalPokok += $value3["sample"];
                         $totalPanen +=  $value3["jjg"];
                         $totalP_panen += $value3["brtp"];
@@ -991,7 +994,8 @@ class inspectController extends Controller
                         $check_input = $value3["jenis_input"];
                         $nilai_input = $value3["skor_akhir"];
                     }
-
+                    $jml_sph = $jml_blok == 0 ? $sph : ($sph / $jml_blok);
+                    $luas_ha = ($jml_sph != 0) ? round(($totalPokok / $jml_sph), 2) : 0;
 
                     if ($totalPokok != 0) {
                         $akp = round(($totalPanen / $totalPokok) * 100, 1);
@@ -1041,7 +1045,7 @@ class inspectController extends Controller
                     $ttlSkorMA =  skor_buah_Ma($sumPerBH) + skor_brd_ma($brdPerjjg) + skor_palepah_ma($perPl);
 
                     $rekap[$key][$key1][$key2]['pokok_samplecak'] = $totalPokok;
-                    $rekap[$key][$key1][$key2]['ha_samplecak'] = $jum_ha;
+                    $rekap[$key][$key1][$key2]['ha_samplecak'] = $luas_ha;
                     $rekap[$key][$key1][$key2]['jumlah_panencak'] = $totalPanen;
                     $rekap[$key][$key1][$key2]['akp_rlcak'] = $akp;
                     $rekap[$key][$key1][$key2]['pcak'] = $totalP_panen;
@@ -1072,7 +1076,7 @@ class inspectController extends Controller
 
                     $pokok_panenEst += $totalPokok;
 
-                    $jum_haEst += $jum_ha;
+                    $jum_haEst += $luas_ha;
                     $janjang_panenEst += $totalPanen;
 
                     $p_panenEst += $totalP_panen;
