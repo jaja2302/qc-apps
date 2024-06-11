@@ -8,6 +8,7 @@ use App\Models\Afdeling;
 use App\Models\Blok;
 use App\Models\Estate;
 use App\Models\Formijin;
+use App\Models\Gradingmill;
 use App\Models\Regional;
 use App\Models\Wilayah;
 use App\Models\historycron;
@@ -463,13 +464,52 @@ class ApiqcController extends Controller
     public function form_data_ijin(Request $request)
     {
         if ($request->input('type') === 'check_user') {
-            $existingRequest = Formijin::where('user_id', $request->input('name'))->where('status', 'waiting approval')->first();
+            $user_id = $request->input('name');
+            $no_hp = $request->input('no_hp');
+            $whatsappNumber = strstr($no_hp, '@', true);
+            if (strpos($whatsappNumber, '08') === 0) {
+                $whatsappNumber = '62' . substr($whatsappNumber, 1);
+            }
+
+
+            // return response()->json(['error_validasi' => $no_hp], 200);
+
+            $existingRequest = Formijin::where('user_id', $user_id)
+                ->where('status', '!=', 4)
+                ->first();
 
             if ($existingRequest) {
-                return response()->json(['error_validasi' => 'Permintaan izin Anda saat ini masih menunggu persetujuan. Mohon tunggu hingga permintaan terakhir Anda pada tanggal: ' . $existingRequest['tanggal_keluar'] . ' disetujui oleh atasan.'], 200);
-            } else {
-                return response()->json(['succes' => 'pass'], 200);
+                return response()->json([
+                    'error_validasi' => 'Permintaan izin Anda saat ini masih menunggu persetujuan. Mohon tunggu hingga permintaan terakhir Anda pada tanggal: ' . $existingRequest['tanggal_keluar'] . ' disetujui oleh atasan.'
+                ], 200);
             }
+
+            $user_nomor_hp = Pengguna::where('user_id', $user_id)->pluck('no_hp')->first();
+
+            // Standardize the user phone number from the database
+            if (strpos($user_nomor_hp, '08') === 0) {
+                $user_nomor_hp = '62' . substr($user_nomor_hp, 1);
+            }
+
+            // Standardize the extracted number for the case when it's already in 62 format
+            if (strpos($user_nomor_hp, '62') === 0 && strpos($user_nomor_hp, '620') !== 0) {
+                $user_nomor_hp = '62' . ltrim(substr($user_nomor_hp, 2), '0');
+            }
+
+            // Compare the standardized phone numbers
+            if ($user_nomor_hp !== $whatsappNumber) {
+                return response()->json([
+                    'error_validasi' => 'Nomor Whatsapp yang anda daftarkan berbeda dengan di database! HARAP PILIH NAMA USER YANG SESUAI!'
+                ], 200);
+            }
+
+            if ($user_nomor_hp == null) {
+                return response()->json([
+                    'error_validasi' => 'Nomor Hp Anda belum terdaftar di database. Silahkan Hubungi Admin Devisi anda untuk mendaftarkan nomor handphone'
+                ], 200);
+            }
+
+            return response()->json(['success' => 'pass'], 200);
         } else {
             try {
 
@@ -529,9 +569,9 @@ class ApiqcController extends Controller
 
 
                 // Check if the atasan fields are the same
-                if ($request->input('atasan_satu') === $request->input('atasan_dua')) {
-                    return response()->json(['error_validasi' => 'Nama Atasan satu dan Atasan dua tidak boleh sama'], 200);
-                }
+                // if ($request->input('atasan_satu') === $request->input('atasan_dua')) {
+                //     return response()->json(['error_validasi' => 'Nama Atasan satu dan Atasan dua tidak boleh sama'], 200);
+                // }
 
                 DB::beginTransaction();
 
@@ -551,6 +591,137 @@ class ApiqcController extends Controller
 
                 return response()->json(['error' => $th], 500);
             }
+        }
+    }
+
+    public function get_data_mill(): JsonResponse
+    {
+        $data = Gradingmill::query()->where('status_bot', 0)->get();
+
+        $result = [];
+        if (!empty($data)) {
+            foreach ($data as $key => $value) {
+                // Remove square brackets and split the string into an array
+                $cleaned_string = str_replace(['[', ']'], '', $value['foto_temuan']);
+                $foto = explode(',', $cleaned_string);
+
+                // Trim spaces from each element in the array
+                $foto = array_map('trim', $foto);
+                $jumlah_janjang_grading = $value['jjg_grading'];
+                $jumlah_janjang_spb = $value['jjg_spb'];
+
+
+                $brondol_0 = $value['unripe_tanpa_brondol'];
+                $brondol_less = $value['unripe_kurang_brondol'];
+
+                $overripe = $value['overripe'];
+                $empty_bunch = $value['empty'];
+                $rotten_bunch = $value['rotten'];
+                $abnormal = $value['abn_partheno'] + $value['abn_hard'] + $value['abn_sakit'] +  $value['abn_kastrasi'];
+
+                $loose_fruit_kg = $value['loose_fruit'];
+                $dirt_kg = $value['dirt'];
+                $unripe = $brondol_0 + $brondol_less;
+                $ripeness = $value['jjg_grading'] - ($value['overripe'] + $value['empty'] + $value['rotten'] + $abnormal + $unripe);
+
+                // Calculate percentages
+                $percentage_ripeness = ($ripeness / $jumlah_janjang_grading) * 100;
+                $percentage_unripe = ($unripe / $jumlah_janjang_grading) * 100;
+                $percentage_brondol_0 = ($brondol_0 / $jumlah_janjang_grading) * 100;
+                $percentage_brondol_less = ($brondol_less / $jumlah_janjang_grading) * 100;
+                $percentage_overripe = ($overripe / $jumlah_janjang_grading) * 100;
+                $percentage_empty_bunch = ($empty_bunch / $jumlah_janjang_grading) * 100;
+                // Rotten bunch and abnormal are missing, set to zero
+                $percentage_rotten_bunch = ($rotten_bunch / $jumlah_janjang_grading) * 100;
+                $percentage_abnormal = ($abnormal / $jumlah_janjang_grading) * 100;
+                // Assume loose fruit and dirt percentages are given as a part of total weight
+                $total_weight_kg = 140 + 107; // Example total weight for calculation
+                $percentage_loose_fruit = ($loose_fruit_kg / $total_weight_kg) * 100;
+                $percentage_dirt = ($dirt_kg / $total_weight_kg) * 100;
+
+                // Calculate selisih janjang and percentage
+                $jumlah_selisih_janjang = $jumlah_janjang_grading - $jumlah_janjang_spb;
+                $percentage_selisih_janjang = ($jumlah_selisih_janjang / $jumlah_janjang_spb) * 100;
+
+                // Output results
+
+                $result[] = [
+                    'id' => $value['id'],
+                    'estate' => $value['estate'],
+                    'afdeling' => $value['afdeling'],
+                    'jjg_grading' => $value['jjg_grading'],
+                    'no_plat' => $value['no_plat'],
+                    'jjg_spb' => $value['jjg_spb'],
+                    'jjg_selisih' => $jumlah_selisih_janjang,
+                    'persentase_selisih' => round($percentage_selisih_janjang),
+                    'Ripeness' => $ripeness,
+                    'percentase_ripenes' => round($percentage_ripeness, 2),
+                    'Unripe' => $unripe,
+                    'persenstase_unripe' => round($percentage_unripe, 2),
+                    'nol_brondol' => $brondol_0,
+                    'persentase_nol_brondol' => round($percentage_brondol_0, 2),
+                    'kurang_brondol' => $brondol_less,
+                    'persentase_brondol' => round($percentage_brondol_less, 2),
+                    'nomor_pemanen' => $value['no_pemanen'],
+                    'unripe_tanda_x' => 1,
+                    'Overripe' => $overripe,
+                    'persentase_overripe' => round($percentage_overripe, 2),
+                    'empty_bunch' => $empty_bunch,
+                    'persentase_empty_bunch' => round($percentage_empty_bunch, 2),
+                    'rotten_bunch' => $rotten_bunch,
+                    'persentase_rotten_bunce' => round($percentage_rotten_bunch, 2),
+                    'Abnormal' => $abnormal,
+                    'persentase_abnormal' =>    round($percentage_abnormal, 2),
+                    'loose_fruit' => $loose_fruit_kg,
+                    'persentase_lose_fruit' => round($percentage_loose_fruit, 2),
+                    'Dirt' => $dirt_kg,
+                    'persentase' => round($percentage_dirt, 2),
+                    'foto' => $foto,
+                ];
+            }
+            // dd($data, $result);
+            // $result now contains the processed data
+
+            return response()->json([
+                'status' => '200',
+                'data' => $result
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 'kosong',
+                'data' => 'kosong'
+            ], 200);
+        }
+
+        // dd($result);
+    }
+
+
+    public function get_data_mill_update(Request $request): JsonResponse
+    {
+        // Get the single 'id' input
+        $id = $request->input('id');
+
+        // Check if the record exists
+        $exists = Gradingmill::query()->where('id', $id)->exists();
+
+        if ($exists) {
+            // If the record exists, update it
+            Gradingmill::where('id', $id)
+                ->update([
+                    'status_bot' => 1
+                ]);
+
+            // Add the code to send WhatsApp message here if needed
+
+            return response()->json([
+                'message' => 'Status updated successfully.'
+            ], 200); // 200 OK
+        } else {
+            // If the record does not exist, return a message
+            return response()->json([
+                'message' => 'No pending messages found.'
+            ], 404); // 404 Not Found
         }
     }
 }

@@ -6781,6 +6781,7 @@
                             }]
                         },
                     });
+                    console.log(mths);
                     GraphBhmth.updateSeries([{
                         name: est,
                         data: mths
