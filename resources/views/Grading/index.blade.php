@@ -43,7 +43,7 @@
                                 </select>
                             </div>
                             <div class="col-auto">
-                                <button type="button" class="btn btn-primary">Show</button>
+                                <button type="button" class="btn btn-primary" id="rekapregional">Show</button>
                             </div>
                             <div class="col-auto">
                                 <button type="button" class="btn btn-primary">Excel</button>
@@ -550,4 +550,19 @@
             </div>
         </div>
     </div>
+
+    <script type="module">
+        document.getElementById('btnShow').onclick = function() {
+            Swal.fire({
+                title: 'Loading',
+                html: '<span class="loading-text">Mohon Tunggu...</span>',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            getAFD();
+        }
+    </script>
 </x-layout.app>

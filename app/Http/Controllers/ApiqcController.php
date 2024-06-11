@@ -619,8 +619,8 @@ class ApiqcController extends Controller
                 $rotten_bunch = $value['rotten'];
                 $abnormal = $value['abn_partheno'] + $value['abn_hard'] + $value['abn_sakit'] +  $value['abn_kastrasi'];
 
-                $loose_fruit_kg = $value['loose_fruit'];
-                $dirt_kg = $value['dirt'];
+                $loose_fruit_kg = round(($value['loose_fruit'] / $value['tonase']) * 100, 2);
+                $dirt_kg = round(($value['dirt']  / $value['tonase']) * 100, 2);
                 $unripe = $brondol_0 + $brondol_less;
                 $ripeness = $value['jjg_grading'] - ($value['overripe'] + $value['empty'] + $value['rotten'] + $abnormal + $unripe);
 
@@ -635,13 +635,36 @@ class ApiqcController extends Controller
                 $percentage_rotten_bunch = ($rotten_bunch / $jumlah_janjang_grading) * 100;
                 $percentage_abnormal = ($abnormal / $jumlah_janjang_grading) * 100;
                 // Assume loose fruit and dirt percentages are given as a part of total weight
-                $total_weight_kg = 140 + 107; // Example total weight for calculation
-                $percentage_loose_fruit = ($loose_fruit_kg / $total_weight_kg) * 100;
-                $percentage_dirt = ($dirt_kg / $total_weight_kg) * 100;
 
                 // Calculate selisih janjang and percentage
                 $jumlah_selisih_janjang = $jumlah_janjang_grading - $jumlah_janjang_spb;
                 $percentage_selisih_janjang = ($jumlah_selisih_janjang / $jumlah_janjang_spb) * 100;
+                $no_pemanen = json_decode($value['no_pemanen'], true);
+
+                $tanpaBrondol = [];
+                $datakurang_brondol = [];
+                // dd($no_pemanen);
+                foreach ($no_pemanen as $keys1 => $values1) {
+                    $get_pemanen = isset($values1['a']) ? $values1['a'] : (isset($values1['noPemanen']) ? $values1['noPemanen'] : null);
+                    $get_kurangBrondol = isset($values1['b']) ? $values1['b'] : (isset($values1['kurangBrondol']) ? $values1['kurangBrondol'] : 0);
+                    $get_tanpaBrondol = isset($values1['c']) ? $values1['c'] : (isset($values1['tanpaBrondol']) ? $values1['tanpaBrondol'] : 0);
+                    if ($get_kurangBrondol != 0) {
+                        $datakurang_brondol['kurangBrondol_list'][] = [
+                            'no_pemanen' => ($get_pemanen == 999) ? 'x' : $get_pemanen,
+                            'kurangBrondol' => $get_kurangBrondol,
+                        ];
+                    }
+                    if ($get_kurangBrondol != 0) {
+                        $tanpaBrondol['tanpaBrondol_list'][] = [
+                            'no_pemanen' => ($get_pemanen == 999) ? 'x' : $get_pemanen,
+                            'tanpaBrondol' => $get_tanpaBrondol,
+                        ];
+                    }
+                }
+
+                // dd($datakurang_brondol, $tanpaBrondol);
+
+
 
                 // Output results
 
@@ -662,8 +685,8 @@ class ApiqcController extends Controller
                     'persentase_nol_brondol' => round($percentage_brondol_0, 2),
                     'kurang_brondol' => $brondol_less,
                     'persentase_brondol' => round($percentage_brondol_less, 2),
-                    'nomor_pemanen' => $value['no_pemanen'],
-                    'unripe_tanda_x' => 1,
+                    'nomor_pemanen' => 'a',
+                    'unripe_tanda_x' => 'a',
                     'Overripe' => $overripe,
                     'persentase_overripe' => round($percentage_overripe, 2),
                     'empty_bunch' => $empty_bunch,
@@ -672,11 +695,13 @@ class ApiqcController extends Controller
                     'persentase_rotten_bunce' => round($percentage_rotten_bunch, 2),
                     'Abnormal' => $abnormal,
                     'persentase_abnormal' =>    round($percentage_abnormal, 2),
-                    'loose_fruit' => $loose_fruit_kg,
-                    'persentase_lose_fruit' => round($percentage_loose_fruit, 2),
-                    'Dirt' => $dirt_kg,
-                    'persentase' => round($percentage_dirt, 2),
+                    'loose_fruit' => $value['loose_fruit'],
+                    'persentase_lose_fruit' => $loose_fruit_kg,
+                    'Dirt' => $value['dirt'],
+                    'persentase' => $dirt_kg,
                     'foto' => $foto,
+                    'pemanen_list_tanpabrondol' => $tanpaBrondol,
+                    'pemanen_list_kurangbrondol' => $datakurang_brondol,
                 ];
             }
             // dd($data, $result);
