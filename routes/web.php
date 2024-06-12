@@ -235,4 +235,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/gradingdahsboard', [GradingController::class, 'index'])->name('gradingdahsboard');
     Route::get('/gradingregional', [GradingController::class, 'rekapregional'])->name('gradingregional');
+    Route::get('/gradingrekapmill', [GradingController::class, 'gradingrekapmill'])->name('gradingrekapmill');
+    Route::get('/getrekapperhari', [GradingController::class, 'getrekapperhari'])->name('getrekapperhari');
+    Route::get('/getrekapperafdeling', [GradingController::class, 'getrekapperafdeling'])->name('getrekapperafdeling');
 });
