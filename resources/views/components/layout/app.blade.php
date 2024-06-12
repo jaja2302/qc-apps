@@ -133,7 +133,7 @@
                             </a>
                         </li>
 
-                        @if (strpos(session('departemen'), 'Programmer') !== false)
+                        <!-- @if (strpos(session('departemen'), 'Programmer') !== false) -->
                         <li class="nav-item">
                             <a href="{{ asset('/gradingdahsboard') }}" class="nav-link">
                                 <div class="nav-icon lottie-animation" data-animation-path="{{ asset('img/mill.json') }}">
@@ -144,7 +144,7 @@
                                 </p>
                             </a>
                         </li>
-                        @endif
+                        <!-- @endif -->
                         @if (strpos(session('departemen'), 'QC') !== false)
                         <li class="nav-item">
                             <a href="{{ asset('/dashboardabsensi') }}" class="nav-link">
