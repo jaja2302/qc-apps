@@ -234,4 +234,5 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/excelsidaktph', [SidaktphController::class, 'excelsidaktph'])->name('excelsidaktph');
 
     Route::get('/gradingdahsboard', [GradingController::class, 'index'])->name('gradingdahsboard');
+    Route::get('/gradingregional', [GradingController::class, 'rekapregional'])->name('gradingregional');
 });

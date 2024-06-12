@@ -14,11 +14,15 @@ class Estate extends Model
 
     public function wilayah()
     {
-        return $this->belongsTo(Wilayah::class,);
+        return $this->belongsTo(Wilayah::class, 'wil', 'id');
     }
 
     public function afdeling()
     {
         return $this->hasMany(Afdeling::class, 'estate');
+    }
+    public function Grading()
+    {
+        return $this->hasMany(Gradingmill::class, 'estate', 'est');
     }
 }

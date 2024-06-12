@@ -2275,7 +2275,7 @@ class inspeksidashController extends Controller
         foreach ($dataestate as $key => $value) {
             foreach ($value as $key1 => $value1) {
                 foreach ($value1 as $key2 => $value2['estate']) {
-                    // dd($value1);
+                    // dd($key1);
                     if ($value2['estate']['check_datacak'] != 'kosong') {
                         $skor_akhircak = $value2['estate']['skor_akhircak'];
                     } else {
@@ -2298,6 +2298,15 @@ class inspeksidashController extends Controller
                         $tableestate[$key][$key1]['data'] = 'kosong';
                     }
 
+                    if ($key1 === 'PT.MUA') {
+                        foreach ($queryAsisten as $keycs => $casx) {
+                            if ($casx['est'] === 'PT.MUA' && $casx['afd'] === 'EM') {
+                                $namagm = $casx['nama'];
+                            }
+                        }
+                    } else {
+                        $namagm = $value2['estate']['namaGM'];
+                    }
                     // $skor_akhircak = $value2['estate']['skor_akhircak'];
                     // $TOTAL_SKORbh = $value2['estate']['TOTAL_SKORbh'];
                     // $totalSkortrans = $value2['estate']['totalSkortrans'];
@@ -2305,11 +2314,11 @@ class inspeksidashController extends Controller
                     $tableestate[$key][$key1]['total_skor_string'] = $skor_akhircak . '+' . $TOTAL_SKORbh . '+' . $totalSkortrans;
                     $tableestate[$key][$key1]['est'] = $value2['estate']['est'];
                     $tableestate[$key][$key1]['afd'] = $value2['estate']['afd'];
-                    $tableestate[$key][$key1]['nama'] = $value2['estate']['namaGM'] ?? '-';
+                    $tableestate[$key][$key1]['nama'] = $namagm;
                 }
             }
         }
-        // dd($dataestate, $tableestate);
+        // dd($tableestate);
         $tablewil = array();
         foreach ($datawil as $key => $value) {
             $skor_akhircak = $value['skor_akhircak'];

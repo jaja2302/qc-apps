@@ -16,4 +16,9 @@ class Gradingmill extends Model
         'status_bot',
     ];
     public $timestamps = false;
+
+    public function Estate()
+    {
+        return $this->belongsTo(Estate::class, 'estate', 'est');
+    }
 }

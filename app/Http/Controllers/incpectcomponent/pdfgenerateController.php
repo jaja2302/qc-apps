@@ -229,7 +229,7 @@ class pdfgenerateController extends Controller
         unset($estateData, $categoryData);
         // dd($mergedArrays);
 
-        $pdf = pdf::loadview('cetakFI', [
+        $pdf = pdf::loadview('Qcinspeksi.cetakFI', [
             'id' => $id,
             'date' => $tgl,
             'est' => $est,

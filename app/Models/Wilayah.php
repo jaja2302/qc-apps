@@ -14,7 +14,7 @@ class Wilayah extends Model
 
     public function regional()
     {
-        return $this->belongsTo(Regional::class);
+        return $this->belongsTo(Regional::class, 'regional', 'id');
     }
 
     public function estate()
