@@ -16,6 +16,9 @@ use App\Models\Ijinkebun;
 use App\Models\Pengguna;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Barryvdh\DomPDF\Facade\Pdf;
+use DateTime;
+use Illuminate\Support\Facades\Storage;
 
 class ApiqcController extends Controller
 {
@@ -595,7 +598,7 @@ class ApiqcController extends Controller
         }
     }
 
-    public function get_data_mill(): JsonResponse
+    public function get_data_mill()
     {
         $data = Gradingmill::query()->where('status_bot', 0)->get();
 
@@ -635,8 +638,7 @@ class ApiqcController extends Controller
                 // Rotten bunch and abnormal are missing, set to zero
                 $percentage_rotten_bunch = ($rotten_bunch / $jumlah_janjang_grading) * 100;
                 $percentage_abnormal = ($abnormal / $jumlah_janjang_grading) * 100;
-                // Assume loose fruit and dirt percentages are given as a part of total weight
-
+                $percentage_tangkai_panjang = ($value['tangkai_panjang'] / $jumlah_janjang_grading) * 100;
                 // Calculate selisih janjang and percentage
                 $jumlah_selisih_janjang = $jumlah_janjang_grading - $jumlah_janjang_spb;
                 $percentage_selisih_janjang = ($jumlah_selisih_janjang / $jumlah_janjang_spb) * 100;
@@ -662,20 +664,58 @@ class ApiqcController extends Controller
                         ];
                     }
                 }
+                // dd($datakurang_brondol);
+                if ($datakurang_brondol == []) {
+                    $resultKurangBrondol = '-';
+                } else {
+                    $resultKurangBrondol = implode(',', array_map(function ($item) {
+                        return $item['no_pemanen'] . '(' . $item['kurangBrondol'] . ')';
+                    }, $datakurang_brondol['kurangBrondol_list']));
+                }
 
-                // dd($datakurang_brondol, $tanpaBrondol);
+                if ($tanpaBrondol == []) {
+                    $resultTanpaBrondol = '-';
+                } else {
+                    $resultTanpaBrondol = implode(',', array_map(function ($item) {
+                        return $item['no_pemanen'] . '(' . $item['tanpaBrondol'] . ')';
+                    }, $tanpaBrondol['tanpaBrondol_list']));
+                }
 
+                Carbon::setLocale('id');
 
+                // Original datetime string
+                $datetime = $value['datetime'];
 
-                // Output results
+                // Create a Carbon instance
+                $date = Carbon::parse($datetime);
+
+                // Format the date
+                $dayOfWeek = $date->isoFormat('dddd'); // Get the day of the week in Indonesian
+                $formattedDate = $dayOfWeek . ', ' . $date->format('d-m-Y');
+                $list_blok = str_replace(['[', ']'], '', $value['blok']);
 
                 $result[] = [
                     'id' => $value['id'],
                     'estate' => $value['estate'],
                     'afdeling' => $value['afdeling'],
+                    'mill' => $value['mill'],
+                    'Tanggal' => $formattedDate,
+                    'list_blok' => $list_blok,
+                    'waktu_grading' => $date->format('d-m-Y'),
                     'jjg_grading' => $value['jjg_grading'],
                     'no_plat' => $value['no_plat'],
+                    'supir' => '-',
                     'jjg_spb' => $value['jjg_spb'],
+                    'tonase' => $value['tonase'],
+                    'abn_partheno' => $value['abn_partheno'],
+                    'abn_partheno_percen' => round(($value['abn_partheno'] / $jumlah_janjang_grading) * 100, 2),
+                    'abn_hard' => $value['abn_hard'],
+                    'abn_hard_percen' => round(($value['abn_hard'] / $jumlah_janjang_grading) * 100, 2),
+                    'abn_sakit' =>  $value['abn_sakit'],
+                    'abn_sakit_percen' => round(($value['abn_sakit'] / $jumlah_janjang_grading) * 100, 2),
+                    'abn_kastrasi' =>  $value['abn_kastrasi'],
+                    'abn_kastrasi_percen' => round(($value['abn_kastrasi'] / $jumlah_janjang_grading) * 100, 2),
+                    'bjr' => round($value['jjg_spb'] / $value['tonase'], 2),
                     'jjg_selisih' => $jumlah_selisih_janjang,
                     'persentase_selisih' => round($percentage_selisih_janjang),
                     'Ripeness' => $ripeness,
@@ -701,16 +741,29 @@ class ApiqcController extends Controller
                     'Dirt' => $value['dirt'],
                     'persentase' => $dirt_kg,
                     'foto' => $foto,
+                    'stalk' =>    $value['tangkai_panjang'],
+                    'persentase_stalk' => round($percentage_tangkai_panjang, 2),
                     'pemanen_list_tanpabrondol' => $tanpaBrondol,
                     'pemanen_list_kurangbrondol' => $datakurang_brondol,
+                    'resultKurangBrondol' => $resultKurangBrondol,
+                    'resultTanpaBrondol' => $resultTanpaBrondol,
                 ];
             }
-            // dd($data, $result);
-            // $result now contains the processed data
+            $pdf = pdf::loadView('Grading.pdfgrading_api', ['data' => $result]);
+
+            // Set the paper size to A4 and orientation to portrait
+            $pdf->setPaper('A4', 'portrait');
+
+            // Generate a unique name for the PDF file
+            $pdfName = 'document_' . time() . '.pdf';
+
+            // Save the PDF to the public storage
+            Storage::disk('public')->put($pdfName, $pdf->output());
 
             return response()->json([
                 'status' => '200',
-                'data' => $result
+                'data' => $result,
+                'pdf' => $pdfName
             ], 200);
         } else {
             return response()->json([
