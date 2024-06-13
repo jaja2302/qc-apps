@@ -499,6 +499,11 @@ class GradingController extends Controller
                     $overripe = $value['overripe'];
                     $empty_bunch = $value['empty'];
                     $rotten_bunch = $value['rotten'];
+                    $tangkai_panjang = $value['tangkai_panjang'];
+                    $vcuts = $value['vcut'];
+                    $kelass_a = $value['kelas_a'];
+                    $kelass_b = $value['kelas_b'];
+                    $kelass_c = $value['kelas_c'];
                     $abnormal = $value['abn_partheno'] + $value['abn_hard'] + $value['abn_sakit'] +  $value['abn_kastrasi'];
 
                     $loose_fruit_kg = round(($value['loose_fruit'] / $value['tonase']) * 100, 2);
@@ -516,6 +521,11 @@ class GradingController extends Controller
                     // Rotten bunch and abnormal are missing, set to zero
                     $percentage_rotten_bunch = ($rotten_bunch / $jumlah_janjang_grading) * 100;
                     $percentage_abnormal = ($abnormal / $jumlah_janjang_grading) * 100;
+                    $percentage_tangkai_panjang = ($tangkai_panjang / $jumlah_janjang_grading) * 100;
+                    $percentage_vcuts = ($vcuts / $jumlah_janjang_grading) * 100;
+                    $percentage_kelas_a = ($kelass_a / $jumlah_janjang_grading) * 100;
+                    $percentage_kelas_b = ($kelass_b / $jumlah_janjang_grading) * 100;
+                    $percentage_kelas_c = ($kelass_c / $jumlah_janjang_grading) * 100;
                     // Assume loose fruit and dirt percentages are given as a part of total weight
 
                     // Calculate selisih janjang and percentage
@@ -559,7 +569,7 @@ class GradingController extends Controller
                         'jjg_spb' => $value['jjg_spb'],
                         'datetime' => $value['datetime'],
                         'tonase' => $value['tonase'],
-                        'bjr' => '-',
+                        'bjr' => $value['jjg_spb'] / $value['tonase'],
                         'jjg_selisih' => $jumlah_selisih_janjang,
                         'persentase_selisih' => round($percentage_selisih_janjang),
                         'Ripeness' => $ripeness,
@@ -580,10 +590,10 @@ class GradingController extends Controller
                         'persentase_rotten_bunce' => round($percentage_rotten_bunch, 2),
                         'Abnormal' => $abnormal,
                         'persentase_abnormal' =>    round($percentage_abnormal, 2),
-                        'stalk' =>    '-',
-                        'persentase_stalk' =>    '-',
-                        'vcut' =>    '-',
-                        'persentase_vcut' =>    '-',
+                        'stalk' =>    $tangkai_panjang,
+                        'persentase_stalk' => round($percentage_tangkai_panjang, 2),
+                        'vcut' =>    $vcuts,
+                        'persentase_vcut' => round($percentage_vcuts, 2),
                         'loose_fruit' => $value['loose_fruit'],
                         'persentase_lose_fruit' => $loose_fruit_kg,
                         'Dirt' => $value['dirt'],
@@ -591,12 +601,12 @@ class GradingController extends Controller
                         'foto' => $foto,
                         'pemanen_list_tanpabrondol' => $tanpaBrondol,
                         'pemanen_list_kurangbrondol' => $datakurang_brondol,
-                        'kelas_a' => '-',
-                        'persentase_kelas_a' => '-',
-                        'kelas_b' => '-',
-                        'persentase_kelas_b' => '-',
-                        'kelas_c' => '-',
-                        'persentase_kelas_c' => '-',
+                        'kelas_a' => $kelass_a,
+                        'persentase_kelas_a' => round($percentage_kelas_a, 2),
+                        'kelas_b' => $kelass_b,
+                        'persentase_kelas_b' => round($percentage_kelas_b, 2),
+                        'kelas_c' => $kelass_c,
+                        'persentase_kelas_c' => round($percentage_kelas_c, 2),
                     ];
                 }
                 // dd($data, $result);
@@ -678,6 +688,7 @@ class GradingController extends Controller
 
                         $loose_fruit_kg = ($loose_fruit / $tonase) * 100;
                         $dirt_kg = ($dirt  / $tonase) * 100;
+                        $bjr = ($tonase  / $jumlah_janjang_spb) * 100;
 
                         // Calculate percentages
                         $percentage_ripeness = ($ripeness / $jumlah_janjang_grading) * 100;
@@ -703,7 +714,7 @@ class GradingController extends Controller
                             'tonase' => $tonase,
                             'jumlah_janjang_grading' => $jumlah_janjang_grading,
                             'jumlah_janjang_spb' => $jumlah_janjang_spb,
-                            'bjr' => '-',
+                            'bjr' => $bjr,
                             'ripeness' => $ripeness,
                             'percentage_ripeness' => $percentage_ripeness,
                             'unripe' => $unripe,

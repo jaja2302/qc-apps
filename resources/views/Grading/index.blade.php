@@ -24,7 +24,7 @@
                             </div>
                             <div class="col-md">
                                 <select class="form-select mb-2 mb-md-0" name="regional_id" id="regional_select" aria-label="Default select example">
-                                    <option value="">Reg</option>
+
                                     @foreach ($regional as $items)
                                     <option value="{{$items['id']}}">{{$items['nama']}}</option>
                                     @endforeach
@@ -34,7 +34,7 @@
                             {{--<div class="col-md">
                                 <form method="GET" action="{{ route('gradingdahsboard') }}" class="d-flex align-items-center">
                             <select class="form-select mb-2 mb-md-0" name="regional_id" id="regional_select" aria-label="Default select example" onchange="this.form.submit()">
-                                <option value="">Reg</option>
+
                                 @foreach ($regional as $items)
                                 <option value="{{$items['id']}}" {{ $selectedRegionalId == $items['id'] ? 'selected' : '' }}>{{$items['nama']}}</option>
                                 @endforeach
@@ -256,7 +256,7 @@
                         </div>
                         <div class="col-md">
                             <select class="form-select mb-2 mb-md-0" name="regional_id" id="regional_select_mill" aria-label="Default select example">
-                                <option value="">Reg</option>
+
                                 @foreach ($regional as $items)
                                 <option value="{{$items['id']}}">{{$items['nama']}}</option>
                                 @endforeach
@@ -359,7 +359,7 @@
                         </div>
                         <div class="col-md">
                             <select class="form-select mb-2 mb-md-0" name="regional_id" id="rekap_perhari_reg" aria-label="Default select example">
-                                <option value="">Reg</option>
+
                                 @foreach ($regional as $items)
                                 <option value="{{$items['id']}}">{{$items['nama']}}</option>
                                 @endforeach
@@ -388,18 +388,17 @@
                         <tr>
                             <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Estate</th>
                             <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Afdeling</th>
-                            <th style="background-color: #f0ecec;" colspan="7">UNIT SORTASI</th>
+                            <th style="background-color: #f0ecec;" colspan="6">UNIT SORTASI</th>
                             <th style="background-color: #88e48c;" colspan="20">HASIL GRADING</th>
                             <th style="background-color: #f8c4ac;" colspan="6">KELAS JANJANG</th>
                         </tr>
                         <tr>
                             <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">NO POLISI</th>
                             <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">WAKTU GRADING</th>
-                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">TONASE TIMBANGAN</th>
                             <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG SPB</th>
                             <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG GRADING</th>
                             <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">TONASE (KG)</th>
-                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">BJR (KG)</th>
+                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">BJR(KG)</th>
                             <th style="background-color: #88e48c;" colspan="2">RIPENESS</th>
                             <th style="background-color: #88e48c;" colspan="2">UNRIPE</th>
                             <th style="background-color: #88e48c;" colspan="2">OVERRIPE</th>
@@ -463,7 +462,7 @@
                         </div>
                         <div class="col-md">
                             <select class="form-select mb-2 mb-md-0" name="regional_id" id="rekap_perfadeling_reg" aria-label="Default select example">
-                                <option value="">Reg</option>
+
                                 @foreach ($regional as $items)
                                 <option value="{{$items['id']}}">{{$items['nama']}}</option>
                                 @endforeach
@@ -492,12 +491,11 @@
                         <tr>
                             <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Estate</th>
                             <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Afdeling</th>
-                            <th style="background-color: #f0ecec;" colspan="5">UNIT SORTASI</th>
+                            <th style="background-color: #f0ecec;" colspan="4">UNIT SORTASI</th>
                             <th style="background-color: #88e48c;" colspan="20">HASIL GRADING</th>
                             <th style="background-color: #f8c4ac;" colspan="6">KELAS JANJANG</th>
                         </tr>
                         <tr>
-                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">TONASE TIMBANGAN</th>
                             <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG SPB</th>
                             <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG GRADING</th>
                             <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">TONASE (KG)</th>
@@ -903,7 +901,7 @@
                         let itemElements = [];
 
                         // Initialize itemElements array with 'td' elements
-                        for (let index = 0; index < 35; index++) {
+                        for (let index = 0; index < 34; index++) {
                             itemElements[index] = document.createElement('td');
                         }
 
@@ -915,34 +913,33 @@
                         itemElements[4].innerText = value['tonase']
                         itemElements[5].innerText = value['jjg_spb'];
                         itemElements[6].innerText = value['jjg_grading']
-                        itemElements[7].innerText = value['tonase'];
-                        itemElements[8].innerText = value['bjr']
-                        itemElements[9].innerText = value['Ripeness'];
-                        itemElements[10].innerText = value['percentase_ripenes']
-                        itemElements[11].innerText = value['Unripe'];
-                        itemElements[12].innerText = value['persenstase_unripe']
-                        itemElements[13].innerText = value['Overripe'];
-                        itemElements[14].innerText = value['persentase_overripe']
-                        itemElements[15].innerText = value['empty_bunch'];
-                        itemElements[16].innerText = value['persentase_empty_bunch']
-                        itemElements[17].innerText = value['rotten_bunch'];
-                        itemElements[18].innerText = value['persentase_rotten_bunce']
-                        itemElements[19].innerText = value['Abnormal'];
-                        itemElements[20].innerText = value['persentase_abnormal']
-                        itemElements[21].innerText = value['stalk'];
-                        itemElements[22].innerText = value['persentase_stalk']
-                        itemElements[23].innerText = value['vcut'];
-                        itemElements[24].innerText = value['persentase_vcut']
-                        itemElements[25].innerText = value['Dirt'];
-                        itemElements[26].innerText = value['persentase']
-                        itemElements[27].innerText = value['loose_fruit'];
-                        itemElements[28].innerText = value['persentase_lose_fruit']
-                        itemElements[29].innerText = value['kelas_a']
-                        itemElements[30].innerText = value['persentase_kelas_a']
-                        itemElements[31].innerText = value['kelas_b']
-                        itemElements[32].innerText = value['persentase_kelas_b']
-                        itemElements[33].innerText = value['kelas_c']
-                        itemElements[34].innerText = value['persentase_kelas_c']
+                        itemElements[7].innerText = value['bjr'].toFixed(2)
+                        itemElements[8].innerText = value['Ripeness'];
+                        itemElements[9].innerText = value['percentase_ripenes']
+                        itemElements[10].innerText = value['Unripe'];
+                        itemElements[11].innerText = value['persenstase_unripe']
+                        itemElements[12].innerText = value['Overripe'];
+                        itemElements[13].innerText = value['persentase_overripe']
+                        itemElements[14].innerText = value['empty_bunch'];
+                        itemElements[15].innerText = value['persentase_empty_bunch']
+                        itemElements[16].innerText = value['rotten_bunch'];
+                        itemElements[17].innerText = value['persentase_rotten_bunce']
+                        itemElements[18].innerText = value['Abnormal'];
+                        itemElements[19].innerText = value['persentase_abnormal']
+                        itemElements[20].innerText = value['stalk'];
+                        itemElements[21].innerText = value['persentase_stalk']
+                        itemElements[22].innerText = value['vcut'];
+                        itemElements[23].innerText = value['persentase_vcut']
+                        itemElements[24].innerText = value['Dirt'];
+                        itemElements[25].innerText = value['persentase']
+                        itemElements[26].innerText = value['loose_fruit'];
+                        itemElements[27].innerText = value['persentase_lose_fruit']
+                        itemElements[28].innerText = value['kelas_c']
+                        itemElements[29].innerText = value['persentase_kelas_c']
+                        itemElements[30].innerText = value['kelas_b']
+                        itemElements[31].innerText = value['persentase_kelas_b']
+                        itemElements[32].innerText = value['kelas_a']
+                        itemElements[33].innerText = value['persentase_kelas_a']
 
                         // Append each itemElement to the tr
                         itemElements.forEach(itemElement => tr.appendChild(itemElement));
@@ -991,7 +988,7 @@
                             let itemElements = [];
 
                             // Initialize itemElements array with 'td' elements
-                            for (let index = 0; index < 33; index++) {
+                            for (let index = 0; index < 32; index++) {
                                 itemElements[index] = document.createElement('td');
                             }
 
@@ -1001,34 +998,33 @@
                             itemElements[2].innerText = value1['tonase'];
                             itemElements[3].innerText = value1['jumlah_janjang_spb']
                             itemElements[4].innerText = value1['jumlah_janjang_grading'];
-                            itemElements[5].innerText = value1['tonase']
-                            itemElements[6].innerText = value1['bjr'];
-                            itemElements[7].innerText = value1['ripeness']
-                            itemElements[8].innerText = value1['percentage_ripeness'].toFixed(2)
-                            itemElements[9].innerText = value1['unripe']
-                            itemElements[10].innerText = value1['percentage_unripe'].toFixed(2)
-                            itemElements[11].innerText = value1['overripe']
-                            itemElements[12].innerText = value1['percentage_overripe'].toFixed(2)
-                            itemElements[13].innerText = value1['empty_bunch']
-                            itemElements[14].innerText = value1['percentage_empty_bunch'].toFixed(2)
-                            itemElements[15].innerText = value1['rotten_bunch']
-                            itemElements[16].innerText = value1['percentage_rotten_bunch'].toFixed(2)
-                            itemElements[17].innerText = value1['abnormal']
-                            itemElements[18].innerText = value1['percentage_abnormal'].toFixed(2)
-                            itemElements[19].innerText = value1['longstalk']
-                            itemElements[20].innerText = value1['percentage_longstalk'].toFixed(2)
-                            itemElements[21].innerText = value1['vcut']
-                            itemElements[22].innerText = value1['percentage_vcut'].toFixed(2)
-                            itemElements[23].innerText = value1['dirt_kg']
-                            itemElements[24].innerText = value1['percentage_dirt'].toFixed(2)
-                            itemElements[25].innerText = value1['loose_fruit_kg']
-                            itemElements[27].innerText = value1['percentage_loose_fruit'].toFixed(2)
-                            itemElements[27].innerText = value1['kelas_c']
-                            itemElements[28].innerText = value1['percentage_kelas_c'].toFixed(2)
-                            itemElements[29].innerText = value1['kelas_b']
-                            itemElements[30].innerText = value1['percentage_kelas_b'].toFixed(2)
-                            itemElements[31].innerText = value1['kelas_a']
-                            itemElements[32].innerText = value1['percentage_kelas_a'].toFixed(2)
+                            itemElements[5].innerText = value1['bjr'].toFixed(2);
+                            itemElements[6].innerText = value1['ripeness']
+                            itemElements[7].innerText = value1['percentage_ripeness'].toFixed(2)
+                            itemElements[8].innerText = value1['unripe']
+                            itemElements[9].innerText = value1['percentage_unripe'].toFixed(2)
+                            itemElements[10].innerText = value1['overripe']
+                            itemElements[11].innerText = value1['percentage_overripe'].toFixed(2)
+                            itemElements[12].innerText = value1['empty_bunch']
+                            itemElements[13].innerText = value1['percentage_empty_bunch'].toFixed(2)
+                            itemElements[14].innerText = value1['rotten_bunch']
+                            itemElements[15].innerText = value1['percentage_rotten_bunch'].toFixed(2)
+                            itemElements[16].innerText = value1['abnormal']
+                            itemElements[17].innerText = value1['percentage_abnormal'].toFixed(2)
+                            itemElements[18].innerText = value1['longstalk']
+                            itemElements[19].innerText = value1['percentage_longstalk'].toFixed(2)
+                            itemElements[20].innerText = value1['vcut']
+                            itemElements[21].innerText = value1['percentage_vcut'].toFixed(2)
+                            itemElements[22].innerText = value1['dirt_kg']
+                            itemElements[23].innerText = value1['percentage_dirt'].toFixed(2)
+                            itemElements[24].innerText = value1['loose_fruit_kg']
+                            itemElements[25].innerText = value1['percentage_loose_fruit'].toFixed(2)
+                            itemElements[26].innerText = value1['kelas_c']
+                            itemElements[27].innerText = value1['percentage_kelas_c'].toFixed(2)
+                            itemElements[28].innerText = value1['kelas_b']
+                            itemElements[29].innerText = value1['percentage_kelas_b'].toFixed(2)
+                            itemElements[30].innerText = value1['kelas_a']
+                            itemElements[31].innerText = value1['percentage_kelas_a'].toFixed(2)
 
                             // Append each itemElement to the tr
                             itemElements.forEach(itemElement => tr.appendChild(itemElement));

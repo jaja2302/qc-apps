@@ -388,7 +388,7 @@ class ApiqcController extends Controller
 
         // Use the 'like' operator correctly in your query
         $data = Pengguna::where('nama_lengkap', 'like', '%' . $nama . '%')
-            ->whereIn('jabatan', ['Manager', 'General Manager', 'Asisten', 'Askep', 'Regional Head'])
+            ->whereIn('jabatan', ['Asisten Afdeling', 'Manager', 'Askep/Asisten', 'Asisten', 'Askep', 'General Manager', 'Regional Head', 'CEO', 'COO', 'Staff'])
             ->get()
             ->toArray();
 
@@ -551,18 +551,19 @@ class ApiqcController extends Controller
                 $tanggal_keluar = $carbon_tanggal_keluar->format('Y-m-d H:i:s');
                 $tanggal_kembali = $carbon_tanggal_kembali->format('Y-m-d H:i:s');
 
-
+                // return response()->json(['success' => $request->input('unit_kerja')], 200);
                 // Prepare the data for insertion
                 $data = [
                     'user_id' => $request->input('name'),
-                    'unit_id' => $request->input('unit_kerja'),
+                    'list_units_id' => $request->input('unit_kerja'),
                     'tanggal_keluar' => $tanggal_keluar,
                     'tanggal_kembali' => $tanggal_kembali,
                     'lokasi_tujuan' => $request->input('tujuan'),
                     'keperluan' => $request->input('keperluan'),
                     'atasan_1' => $request->input('atasan_satu'),
                     'atasan_2' => $request->input('atasan_dua'),
-                    'no_hp' => $request->input('no_hp'),
+                    'created_at' => $today,
+                    'updated_at' => $today,
                 ];
 
                 // Check if the user already has a pending request
