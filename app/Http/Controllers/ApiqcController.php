@@ -659,13 +659,13 @@ class ApiqcController extends Controller
                     $get_tanpaBrondol = isset($values1['c']) ? $values1['c'] : (isset($values1['tanpaBrondol']) ? $values1['tanpaBrondol'] : 0);
                     if ($get_kurangBrondol != 0) {
                         $datakurang_brondol['kurangBrondol_list'][] = [
-                            'no_pemanen' => ($get_pemanen == 999) ? 'x' : $get_pemanen,
+                            'no_pemanen' => ($get_pemanen == 999) ? 'X' : $get_pemanen,
                             'kurangBrondol' => $get_kurangBrondol,
                         ];
                     }
                     if ($get_kurangBrondol != 0) {
                         $tanpaBrondol['tanpaBrondol_list'][] = [
-                            'no_pemanen' => ($get_pemanen == 999) ? 'x' : $get_pemanen,
+                            'no_pemanen' => ($get_pemanen == 999) ? 'X' : $get_pemanen,
                             'tanpaBrondol' => $get_tanpaBrondol,
                         ];
                     }
@@ -700,7 +700,7 @@ class ApiqcController extends Controller
                 $formattedDate = $dayOfWeek . ', ' . $date->format('d-m-Y');
                 $list_blok = str_replace(['[', ']'], '', $value['blok']);
 
-
+                // dd($value['blok']);
                 $dataakhir = [
                     'id' => $value['id'],
                     'estate' => $value['estate'],
@@ -722,7 +722,7 @@ class ApiqcController extends Controller
                     'abn_sakit_percen' => round(($value['abn_sakit'] / $jumlah_janjang_grading) * 100, 2),
                     'abn_kastrasi' =>  $value['abn_kastrasi'],
                     'abn_kastrasi_percen' => round(($value['abn_kastrasi'] / $jumlah_janjang_grading) * 100, 2),
-                    'bjr' => round($value['jjg_spb'] / $value['tonase'], 2),
+                    'bjr' => round($value['tonase'] / $value['jjg_spb'], 2),
                     'jjg_selisih' => $jumlah_selisih_janjang,
                     'persentase_selisih' => round($percentage_selisih_janjang),
                     'Ripeness' => $ripeness,
@@ -764,6 +764,7 @@ class ApiqcController extends Controller
                     'percentage_kelas_a' => round($persentage_kelas_a, 2),
                     'percentage_kelas_b' => round($persentage_kelas_b, 2),
                     'percentage_kelas_c' =>  round($persentage_kelas_c, 2),
+                    'tanggal_titel' => $date->format('d-M-Y'),
                 ];
                 // dd($dataakhir);
                 $pdf = pdf::loadView('Grading.pdfgrading_api', ['data' => $dataakhir]);
@@ -774,8 +775,8 @@ class ApiqcController extends Controller
                 // Generate a unique name for the PDF file
                 $pdfName = 'document_' . time() . '.pdf';
 
-                return $pdf->stream($pdfName);
-                // Storage::disk('public')->put($pdfName, $pdf->output());
+                // return $pdf->stream($pdfName);
+                Storage::disk('public')->put($pdfName, $pdf->output());
 
 
                 $result[] = [

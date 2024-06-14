@@ -61,33 +61,33 @@
 <body>
 
     <div style="text-align: center;border: 1px solid black;background-color:#D6E6F4;margin-top: 0; padding-top: 0;">
-        <h5>BERITA ACARA GRADING TANDAN BUAH SEGAR DI PKS</h5>
+        <h3>BERITA ACARA GRADING TANDAN BUAH SEGAR DI PKS</h3>
     </div>
-    <p style="text-align: center;">NO:{{$data['id']}}{{$data['mill']}}/QC-BAGTBS/30 Desember 2023</p>
+    <p style="text-align: center;">NO:{{$data['id']}}{{$data['mill']}}/QC-BAGTBS/{{$data['tanggal_titel']}}</p>
 
 
     <p style="margin: 0; padding: 0;">Telah dilakukan grading tandan Buah Segar (TBS) yang di lakukan secara random(sampling) terhadap satu truk dengan data grading sebagai berikut</p>
     <h3 style="margin: 0; padding: 0; text-transform: capitalize;">DATA PKS</h3>
     <p style="margin: 0; padding: 0;">Hari Tanggal <span>: {{$data['Tanggal']}}</span></p>
     <p style="margin: 0; padding: 0;">Lokasi <span>: {{$data['mill']}}</span></p>
-    <p style="margin: 0; padding: 0;">Waktu GRADING <span>: {{$data['waktu_grading']}}</span></p>
+    <p style="margin: 0; padding: 0;">Waktu Grading <span>: {{$data['waktu_grading']}}</span></p>
     <h3 style="margin: 0; padding: 0; text-transform: capitalize;">DATA KEBUN</h3>
 
     <table>
         <tr>
             <td style="text-align: left;border:none;padding: 0;font-size:15px">
-                ESTATE: {{$data['estate']}}<br>
-                AFDELING: {{$data['afdeling']}}<br>
-                BLOK: {{$data['list_blok']}}<br>
-                NO. POLISI: {{$data['no_plat']}}<br>
-                NAMA SUPIR: {{$data['supir']}}<br>
+                Estate: {{$data['estate']}}<br>
+                Afdeling: {{$data['afdeling']}}<br>
+                Blok: {{$data['list_blok']}}<br>
+                No Polisi: {{$data['no_plat']}}<br>
+                Nama Supir: {{$data['supir']}}<br>
             </td>
             <td style="text-align: left;border:none;padding: 0;font-size:15px">
-                JUMLAH TANDAN SPB: {{$data['jjg_spb']}}<br>
-                JUMLAH TANDAN GRADING: {{$data['jjg_grading']}}<br>
-                JUMLAH SEUSAI JANGJANG: {{$data['jjg_selisih']}} ( {{$data['persentase_selisih']}}%)<br>
-                TOTAL TONASE: {{$data['tonase']}}<br>
-                BERAT RATA-RATA TBS (BRR): {{$data['bjr']}} Kg<br>
+                Jumlah Tandan SPB: {{$data['jjg_spb']}}<br>
+                Jumlah Tandan GRADING: {{$data['jjg_grading']}}<br>
+                Jumlah Selisih Janjang: {{ abs($data['jjg_selisih']) }} ({{ abs($data['persentase_selisih']) }}%)<br>
+                Total Tonase: {{$data['tonase']}}<br>
+                Berat Rata-rata TBS (BJR): {{$data['bjr']}} Kg<br>
             </td>
         </tr>
     </table>
@@ -254,7 +254,7 @@
     <div style="page-break-after: always;"></div>
 
     <div style="text-align: center;border: 1px solid black;background-color:#D6E6F4;margin-top: 0; padding-top: 0;">
-        <h5>BERITA ACARA GRADING TANDAN BUAH SEGAR DI PKS</h5>
+        <h3>BERITA ACARA GRADING TANDAN BUAH SEGAR DI PKS</h3>
     </div>
     <div class="table-container">
         <h4>Dokumentasi Hasil Grading</h4>
@@ -294,7 +294,16 @@
             </tr>
             <tr>
                 <td style="height: 15%;width:60%;border:none"></td>
-                <td style="height: 15%;">Created</td>
+                <td style="vertical-align: bottom;text-align:center;padding-top:45px">
+                    <div class="stamp-container">
+                        <div class="stamp">
+                            <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
+                            <div class="stamp-text">Created</div>
+                            <div class="stamp-text">{{$data['Tanggal']}}</div>
+                        </div>
+
+                    </div>
+                </td>
             </tr>
             <tr>
                 <th style="border:none;background-color: white"></th>
