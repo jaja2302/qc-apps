@@ -60,35 +60,34 @@
 
 <body>
 
-    @foreach ($data as $items)
     <div style="text-align: center;border: 1px solid black;background-color:#D6E6F4;margin-top: 0; padding-top: 0;">
         <h5>BERITA ACARA GRADING TANDAN BUAH SEGAR DI PKS</h5>
     </div>
-    <p style="text-align: center;">NO:{{$items['mill']}}/QC-BAGTBS/30 Desember 2023</p>
+    <p style="text-align: center;">NO:{{$data['id']}}{{$data['mill']}}/QC-BAGTBS/30 Desember 2023</p>
 
 
     <p style="margin: 0; padding: 0;">Telah dilakukan grading tandan Buah Segar (TBS) yang di lakukan secara random(sampling) terhadap satu truk dengan data grading sebagai berikut</p>
     <h3 style="margin: 0; padding: 0; text-transform: capitalize;">DATA PKS</h3>
-    <p style="margin: 0; padding: 0;">Hari Tanggal <span>: {{$items['Tanggal']}}</span></p>
-    <p style="margin: 0; padding: 0;">Lokasi <span>: {{$items['mill']}}</span></p>
-    <p style="margin: 0; padding: 0;">Waktu GRADING <span>: {{$items['waktu_grading']}}</span></p>
+    <p style="margin: 0; padding: 0;">Hari Tanggal <span>: {{$data['Tanggal']}}</span></p>
+    <p style="margin: 0; padding: 0;">Lokasi <span>: {{$data['mill']}}</span></p>
+    <p style="margin: 0; padding: 0;">Waktu GRADING <span>: {{$data['waktu_grading']}}</span></p>
     <h3 style="margin: 0; padding: 0; text-transform: capitalize;">DATA KEBUN</h3>
 
     <table>
         <tr>
             <td style="text-align: left;border:none;padding: 0;font-size:15px">
-                ESTATE: {{$items['estate']}}<br>
-                AFDELING: {{$items['afdeling']}}<br>
-                BLOK: {{$items['list_blok']}}<br>
-                NO. POLISI: {{$items['no_plat']}}<br>
-                NAMA SUPIR: {{$items['supir']}}<br>
+                ESTATE: {{$data['estate']}}<br>
+                AFDELING: {{$data['afdeling']}}<br>
+                BLOK: {{$data['list_blok']}}<br>
+                NO. POLISI: {{$data['no_plat']}}<br>
+                NAMA SUPIR: {{$data['supir']}}<br>
             </td>
             <td style="text-align: left;border:none;padding: 0;font-size:15px">
-                JUMLAH TANDAN SPB: {{$items['jjg_spb']}}<br>
-                JUMLAH TANDAN GRADING: {{$items['jjg_grading']}}<br>
-                JUMLAH SEUSAI JANGJANG: {{$items['jjg_selisih']}} ( {{$items['persentase_selisih']}}%)<br>
-                TOTAL TONASE: {{$items['tonase']}}<br>
-                BERAT RATA-RATA TBS (BRR): {{$items['bjr']}} Kg<br>
+                JUMLAH TANDAN SPB: {{$data['jjg_spb']}}<br>
+                JUMLAH TANDAN GRADING: {{$data['jjg_grading']}}<br>
+                JUMLAH SEUSAI JANGJANG: {{$data['jjg_selisih']}} ( {{$data['persentase_selisih']}}%)<br>
+                TOTAL TONASE: {{$data['tonase']}}<br>
+                BERAT RATA-RATA TBS (BRR): {{$data['bjr']}} Kg<br>
             </td>
         </tr>
     </table>
@@ -117,16 +116,16 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{$items['Ripeness']}}</td>
-                <td>{{$items['percentase_ripenes']}}</td>
-                <td>{{$items['Unripe']}}</td>
-                <td>{{$items['persenstase_unripe']}}</td>
-                <td>{{$items['Overripe']}}</td>
-                <td>{{$items['persentase_overripe']}}</td>
-                <td>{{$items['empty_bunch']}}</td>
-                <td>{{$items['persentase_empty_bunch']}}</td>
-                <td>{{$items['rotten_bunch']}}</td>
-                <td>{{$items['persentase_rotten_bunce']}}</td>
+                <td>{{$data['Ripeness']}}</td>
+                <td>{{$data['percentase_ripenes']}}</td>
+                <td>{{$data['Unripe']}}</td>
+                <td>{{$data['persenstase_unripe']}}</td>
+                <td>{{$data['Overripe']}}</td>
+                <td>{{$data['persentase_overripe']}}</td>
+                <td>{{$data['empty_bunch']}}</td>
+                <td>{{$data['persentase_empty_bunch']}}</td>
+                <td>{{$data['rotten_bunch']}}</td>
+                <td>{{$data['persentase_rotten_bunce']}}</td>
             </tr>
         </tbody>
     </table>
@@ -163,18 +162,18 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{$items['abn_partheno']}}</td>
-                <td>{{$items['abn_partheno_percen']}}</td>
-                <td>{{$items['abn_hard']}}</td>
-                <td>{{$items['abn_hard_percen']}}</td>
-                <td>{{$items['abn_sakit']}}</td>
-                <td>{{$items['abn_sakit_percen']}}</td>
-                <td>{{$items['abn_kastrasi']}}</td>
-                <td>{{$items['abn_kastrasi_percen']}}</td>
-                <td>{{$items['loose_fruit']}}</td>
-                <td>{{$items['persentase_lose_fruit']}}</td>
-                <td>{{$items['Dirt']}}</td>
-                <td>{{$items['persentase']}}</td>
+                <td>{{$data['abn_partheno']}}</td>
+                <td>{{$data['abn_partheno_percen']}}</td>
+                <td>{{$data['abn_hard']}}</td>
+                <td>{{$data['abn_hard_percen']}}</td>
+                <td>{{$data['abn_sakit']}}</td>
+                <td>{{$data['abn_sakit_percen']}}</td>
+                <td>{{$data['abn_kastrasi']}}</td>
+                <td>{{$data['abn_kastrasi_percen']}}</td>
+                <td>{{$data['loose_fruit']}}</td>
+                <td>{{$data['persentase_lose_fruit']}}</td>
+                <td>{{$data['Dirt']}}</td>
+                <td>{{$data['persentase']}}</td>
             </tr>
         </tbody>
     </table>
@@ -211,8 +210,8 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{$items['stalk']}}</td>
-                <td>{{$items['persentase_stalk']}}</td>
+                <td>{{$data['stalk']}}</td>
+                <td>{{$data['persentase_stalk']}}</td>
                 <td>92.94</td>
                 <td>18</td>
                 <td>7.06</td>
@@ -240,14 +239,14 @@
             <tr>
                 <td>Tanpa Brondol</td>
                 <td>No.Pemanen(Jumlah)</td>
-                <td style="text-align: left;">{{$items['resultKurangBrondol']}}</td>
-                <td>{{$items['kurang_brondol']}}</td>
+                <td style="text-align: left;">{{$data['resultKurangBrondol']}}</td>
+                <td>{{$data['kurang_brondol']}}</td>
             </tr>
             <tr>
                 <td>Kurang Brondol</td>
                 <td>No.Pemanen(Jumlah)</td>
-                <td style="text-align: left;">{{$items['resultTanpaBrondol']}}</td>
-                <td>{{$items['nol_brondol']}}</td>
+                <td style="text-align: left;">{{$data['resultTanpaBrondol']}}</td>
+                <td>{{$data['nol_brondol']}}</td>
             </tr>
         </tbody>
     </table>
@@ -262,25 +261,25 @@
         <table class="image-table">
             <tr>
                 <td style="border: none;">
-                    <img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/grading_mill/{{$items['foto'][0]}}" alt="Image 1">
+                    <img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/grading_mill/{{$data['foto'][0]}}" alt="Image 1">
                 </td>
                 <td style="border: none;">
-                    @if(isset($items['foto'][1]))
-                    <img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/grading_mill/{{$items['foto'][1]}}" alt="Image 2">
+                    @if(isset($data['foto'][1]))
+                    <img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/grading_mill/{{$data['foto'][1]}}" alt="Image 2">
                     @endif
 
                 </td>
             </tr>
             <tr>
                 <td style="border: none;">
-                    @if(isset($items['foto'][2]))
-                    <img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/grading_mill/{{$items['foto'][2]}}" alt="Image 3">
+                    @if(isset($data['foto'][2]))
+                    <img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/grading_mill/{{$data['foto'][2]}}" alt="Image 3">
                     @endif
 
                 </td>
                 <td style="border: none;">
-                    @if(isset($items['foto'][3]))
-                    <img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/grading_mill/{{$items['foto'][3]}}" alt="Image 4">
+                    @if(isset($data['foto'][3]))
+                    <img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/grading_mill/{{$data['foto'][3]}}" alt="Image 4">
                     @endif
 
                 </td>
@@ -303,8 +302,7 @@
             </tr>
         </table>
     </div>
-    <div style="page-break-after: always;"></div>
-    @endforeach
+
 </body>
 
 </html>

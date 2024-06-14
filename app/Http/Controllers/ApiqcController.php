@@ -694,7 +694,8 @@ class ApiqcController extends Controller
                 $formattedDate = $dayOfWeek . ', ' . $date->format('d-m-Y');
                 $list_blok = str_replace(['[', ']'], '', $value['blok']);
 
-                $result[] = [
+
+                $dataakhir = [
                     'id' => $value['id'],
                     'estate' => $value['estate'],
                     'afdeling' => $value['afdeling'],
@@ -748,22 +749,79 @@ class ApiqcController extends Controller
                     'resultKurangBrondol' => $resultKurangBrondol,
                     'resultTanpaBrondol' => $resultTanpaBrondol,
                 ];
+                // dd($dataakhir);
+                $pdf = pdf::loadView('Grading.pdfgrading_api', ['data' => $dataakhir]);
+
+                // Set the paper size to A4 and orientation to portrait
+                $pdf->setPaper('A4', 'portrait');
+
+                // Generate a unique name for the PDF file
+                $pdfName = 'document_' . time() . '.pdf';
+
+                // Save the PDF to the public storage
+                Storage::disk('public')->put($pdfName, $pdf->output());
+
+
+                $result[] = [
+                    'id' => $value['id'],
+                    'estate' => $value['estate'],
+                    'afdeling' => $value['afdeling'],
+                    'mill' => $value['mill'],
+                    'Tanggal' => $formattedDate,
+                    'list_blok' => $list_blok,
+                    'waktu_grading' => $date->format('d-m-Y'),
+                    'jjg_grading' => $value['jjg_grading'],
+                    'no_plat' => $value['no_plat'],
+                    'supir' => '-',
+                    'jjg_spb' => $value['jjg_spb'],
+                    'tonase' => $value['tonase'],
+                    'abn_partheno' => $value['abn_partheno'],
+                    'abn_partheno_percen' => round(($value['abn_partheno'] / $jumlah_janjang_grading) * 100, 2),
+                    'abn_hard' => $value['abn_hard'],
+                    'abn_hard_percen' => round(($value['abn_hard'] / $jumlah_janjang_grading) * 100, 2),
+                    'abn_sakit' =>  $value['abn_sakit'],
+                    'abn_sakit_percen' => round(($value['abn_sakit'] / $jumlah_janjang_grading) * 100, 2),
+                    'abn_kastrasi' =>  $value['abn_kastrasi'],
+                    'abn_kastrasi_percen' => round(($value['abn_kastrasi'] / $jumlah_janjang_grading) * 100, 2),
+                    'bjr' => round($value['jjg_spb'] / $value['tonase'], 2),
+                    'jjg_selisih' => $jumlah_selisih_janjang,
+                    'persentase_selisih' => round($percentage_selisih_janjang),
+                    'Ripeness' => $ripeness,
+                    'percentase_ripenes' => round($percentage_ripeness, 2),
+                    'Unripe' => $unripe,
+                    'persenstase_unripe' => round($percentage_unripe, 2),
+                    'nol_brondol' => $brondol_0,
+                    'persentase_nol_brondol' => round($percentage_brondol_0, 2),
+                    'kurang_brondol' => $brondol_less,
+                    'persentase_brondol' => round($percentage_brondol_less, 2),
+                    'nomor_pemanen' => 'a',
+                    'unripe_tanda_x' => 'a',
+                    'Overripe' => $overripe,
+                    'persentase_overripe' => round($percentage_overripe, 2),
+                    'empty_bunch' => $empty_bunch,
+                    'persentase_empty_bunch' => round($percentage_empty_bunch, 2),
+                    'rotten_bunch' => $rotten_bunch,
+                    'persentase_rotten_bunce' => round($percentage_rotten_bunch, 2),
+                    'Abnormal' => $abnormal,
+                    'persentase_abnormal' =>    round($percentage_abnormal, 2),
+                    'loose_fruit' => $value['loose_fruit'],
+                    'persentase_lose_fruit' => $loose_fruit_kg,
+                    'Dirt' => $value['dirt'],
+                    'persentase' => $dirt_kg,
+                    'foto' => $foto,
+                    'stalk' =>    $value['tangkai_panjang'],
+                    'persentase_stalk' => round($percentage_tangkai_panjang, 2),
+                    'pemanen_list_tanpabrondol' => $tanpaBrondol,
+                    'pemanen_list_kurangbrondol' => $datakurang_brondol,
+                    'resultKurangBrondol' => $resultKurangBrondol,
+                    'resultTanpaBrondol' => $resultTanpaBrondol,
+                    'filename_pdf' => $pdfName,
+                ];
             }
-            $pdf = pdf::loadView('Grading.pdfgrading_api', ['data' => $result]);
-
-            // Set the paper size to A4 and orientation to portrait
-            $pdf->setPaper('A4', 'portrait');
-
-            // Generate a unique name for the PDF file
-            $pdfName = 'document_' . time() . '.pdf';
-
-            // Save the PDF to the public storage
-            Storage::disk('public')->put($pdfName, $pdf->output());
 
             return response()->json([
                 'status' => '200',
                 'data' => $result,
-                'pdf' => $pdfName
             ], 200);
         } else {
             return response()->json([
