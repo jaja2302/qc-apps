@@ -708,10 +708,10 @@ class ApiqcController extends Controller
                     'mill' => $value['mill'],
                     'Tanggal' => $formattedDate,
                     'list_blok' => $list_blok,
-                    'waktu_grading' => $date->format('d-m-Y'),
+                    'waktu_grading' => $date->format('H:i:s'),
                     'jjg_grading' => $value['jjg_grading'],
                     'no_plat' => $value['no_plat'],
-                    'supir' => '-',
+                    'supir' => $value['driver'],
                     'jjg_spb' => $value['jjg_spb'],
                     'tonase' => $value['tonase'],
                     'abn_partheno' => $value['abn_partheno'],
@@ -724,7 +724,7 @@ class ApiqcController extends Controller
                     'abn_kastrasi_percen' => round(($value['abn_kastrasi'] / $jumlah_janjang_grading) * 100, 2),
                     'bjr' => round($value['tonase'] / $value['jjg_spb'], 2),
                     'jjg_selisih' => $jumlah_selisih_janjang,
-                    'persentase_selisih' => round($percentage_selisih_janjang),
+                    'persentase_selisih' => round($percentage_selisih_janjang, 2),
                     'Ripeness' => $ripeness,
                     'percentase_ripenes' => round($percentage_ripeness, 2),
                     'Unripe' => $unripe,
@@ -755,16 +755,16 @@ class ApiqcController extends Controller
                     'resultKurangBrondol' => $resultKurangBrondol,
                     'resultTanpaBrondol' => $resultTanpaBrondol,
                     'vcut' => $vcut,
-                    'percentage_vcut' => $percentage_vcut,
+                    'percentage_vcut' => round($percentage_vcut, 2),
                     'not_vcut' => $not_vcut,
-                    'percentage_not_vcut' => $percentage_not_vcut,
+                    'percentage_not_vcut' => round($percentage_not_vcut, 2),
                     'kelas_a' => $kelas_a,
                     'kelas_b' => $kelas_b,
                     'kelas_c' => $kelas_c,
                     'percentage_kelas_a' => round($persentage_kelas_a, 2),
                     'percentage_kelas_b' => round($persentage_kelas_b, 2),
                     'percentage_kelas_c' =>  round($persentage_kelas_c, 2),
-                    'tanggal_titel' => $date->format('d-M-Y'),
+                    'tanggal_titel' => $date->format('d M Y'),
                 ];
                 // dd($dataakhir);
                 $pdf = pdf::loadView('Grading.pdfgrading_api', ['data' => $dataakhir]);
@@ -775,8 +775,8 @@ class ApiqcController extends Controller
                 // Generate a unique name for the PDF file
                 $pdfName = 'document_' . time() . '.pdf';
 
-                // return $pdf->stream($pdfName);
-                Storage::disk('public')->put($pdfName, $pdf->output());
+                return $pdf->stream($pdfName);
+                // Storage::disk('public')->put($pdfName, $pdf->output());
 
 
                 $result[] = [

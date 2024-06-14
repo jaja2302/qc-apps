@@ -50,9 +50,9 @@
         }
 
         .image-table img {
-            max-width: 70%;
+            max-width: 100%;
             height: auto;
-            display: block;
+            display: flex;
             margin: 0 auto;
         }
     </style>
@@ -67,32 +67,57 @@
 
 
     <p style="margin: 0; padding: 0;">Telah dilakukan grading tandan Buah Segar (TBS) yang di lakukan secara random(sampling) terhadap satu truk dengan data grading sebagai berikut</p>
-    <h3 style="margin: 0; padding: 0; text-transform: capitalize;">DATA PKS</h3>
-    <p style="margin: 0; padding: 0;">Hari Tanggal <span>: {{$data['Tanggal']}}</span></p>
-    <p style="margin: 0; padding: 0;">Lokasi <span>: {{$data['mill']}}</span></p>
-    <p style="margin: 0; padding: 0;">Waktu Grading <span>: {{$data['waktu_grading']}}</span></p>
-    <h3 style="margin: 0; padding: 0; text-transform: capitalize;">DATA KEBUN</h3>
-
+    <h3 style="margin: 0; padding-top: 10px; text-transform: capitalize;">DATA PKS</h3>
     <table>
         <tr>
-            <td style="text-align: left;border:none;padding: 0;font-size:15px">
-                Estate: {{$data['estate']}}<br>
-                Afdeling: {{$data['afdeling']}}<br>
-                Blok: {{$data['list_blok']}}<br>
-                No Polisi: {{$data['no_plat']}}<br>
-                Nama Supir: {{$data['supir']}}<br>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px;width:15%">
+                Hari Tanggal<br>
+                Lokasi<br>
+                Waktu Grading<br>
             </td>
-            <td style="text-align: left;border:none;padding: 0;font-size:15px">
-                Jumlah Tandan SPB: {{$data['jjg_spb']}}<br>
-                Jumlah Tandan GRADING: {{$data['jjg_grading']}}<br>
-                Jumlah Selisih Janjang: {{ abs($data['jjg_selisih']) }} ({{ abs($data['persentase_selisih']) }}%)<br>
-                Total Tonase: {{$data['tonase']}}<br>
-                Berat Rata-rata TBS (BJR): {{$data['bjr']}} Kg<br>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px;">
+                : {{$data['Tanggal']}}<br>
+                : {{$data['mill']}}<br>
+                : {{$data['waktu_grading']}}<br>
             </td>
         </tr>
     </table>
-    <h4>DATA HASIL GRADING</h4>
-    <table style="font-size: 12px;">
+    <h3 style="margin: 0; padding-top: 10px; text-transform: capitalize;">DATA KEBUN</h3>
+
+    <table style="margin-top: 0; padding-top: 0;">
+        <tr>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">
+                Estate<br>
+                Afdeling<br>
+                Blok<br>
+                No Polisi<br>
+                Nama Supir<br>
+            </td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">
+                : {{$data['estate']}}<br>
+                : {{$data['afdeling']}}<br>
+                : {{$data['list_blok']}}<br>
+                : {{$data['no_plat']}}<br>
+                : {{$data['supir']}}<br>
+            </td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">
+                Jumlah Tandan SPB<br>
+                Jumlah Tandan GRADING<br>
+                Jumlah Selisih Janjang<br>
+                Total Tonase<br>
+                Berat Rata-rata TBS (BJR)<br>
+            </td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">
+                : {{$data['jjg_spb']}}<br>
+                : {{$data['jjg_grading']}}<br>
+                : {{ abs($data['jjg_selisih']) }} ({{ abs($data['persentase_selisih']) }}%)<br>
+                : {{$data['tonase']}}<br>
+                : {{$data['bjr']}} Kg<br>
+            </td>
+        </tr>
+    </table>
+    <h3 style="margin: 0; padding-top: 10px; text-transform: capitalize;">DATA HASIL GRADING</h3>
+    <table style="font-size: 12px;padding-top: 10px;">
         <thead>
             <tr class="header">
                 <th colspan="2">TBS MATANG RIPE</th>
@@ -220,8 +245,8 @@
                 <td>{{$data['percentage_kelas_c']}}</td>
                 <td>{{$data['kelas_b']}}</td>
                 <td>{{$data['percentage_kelas_b']}}</td>
-                <td>{{$data['kelas_c']}}</td>
-                <td>{{$data['percentage_kelas_c']}}</td>
+                <td>{{$data['kelas_a']}}</td>
+                <td>{{$data['percentage_kelas_a']}}</td>
             </tr>
         </tbody>
     </table>
@@ -294,10 +319,10 @@
             </tr>
             <tr>
                 <td style="height: 15%;width:60%;border:none"></td>
-                <td style="vertical-align: bottom;text-align:center;padding-top:45px">
+                <td style="vertical-align: bottom;text-align:center;padding-top:2px">
                     <div class="stamp-container">
                         <div class="stamp">
-                            <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" class="stamp-logo">
+                            <img src="{{ asset('img/CBIpreview.png') }}" alt="Logo" style="height: auto;width:69px">
                             <div class="stamp-text">Created</div>
                             <div class="stamp-text">{{$data['Tanggal']}}</div>
                         </div>
