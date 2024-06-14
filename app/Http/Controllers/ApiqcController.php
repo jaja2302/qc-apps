@@ -613,11 +613,16 @@ class ApiqcController extends Controller
                 $foto = array_map('trim', $foto);
                 $jumlah_janjang_grading = $value['jjg_grading'];
                 $jumlah_janjang_spb = $value['jjg_spb'];
-
-
+                $kelas_a = $value['kelas_a'];
+                $kelas_b = $value['kelas_b'];
+                $kelas_c = $value['kelas_c'];
+                $persentage_kelas_a = ($kelas_a / $jumlah_janjang_grading) * 100;
+                $persentage_kelas_b = ($kelas_b / $jumlah_janjang_grading) * 100;
+                $persentage_kelas_c = ($kelas_c / $jumlah_janjang_grading) * 100;
                 $brondol_0 = $value['unripe_tanpa_brondol'];
                 $brondol_less = $value['unripe_kurang_brondol'];
-
+                $vcut = $value['vcut'];
+                $not_vcut = $jumlah_janjang_grading - $vcut;
                 $overripe = $value['overripe'];
                 $empty_bunch = $value['empty'];
                 $rotten_bunch = $value['rotten'];
@@ -635,7 +640,8 @@ class ApiqcController extends Controller
                 $percentage_brondol_less = ($brondol_less / $jumlah_janjang_grading) * 100;
                 $percentage_overripe = ($overripe / $jumlah_janjang_grading) * 100;
                 $percentage_empty_bunch = ($empty_bunch / $jumlah_janjang_grading) * 100;
-                // Rotten bunch and abnormal are missing, set to zero
+                $percentage_vcut = ($vcut / $jumlah_janjang_grading) * 100;
+                $percentage_not_vcut = ($not_vcut / $jumlah_janjang_grading) * 100;
                 $percentage_rotten_bunch = ($rotten_bunch / $jumlah_janjang_grading) * 100;
                 $percentage_abnormal = ($abnormal / $jumlah_janjang_grading) * 100;
                 $percentage_tangkai_panjang = ($value['tangkai_panjang'] / $jumlah_janjang_grading) * 100;
@@ -748,6 +754,16 @@ class ApiqcController extends Controller
                     'pemanen_list_kurangbrondol' => $datakurang_brondol,
                     'resultKurangBrondol' => $resultKurangBrondol,
                     'resultTanpaBrondol' => $resultTanpaBrondol,
+                    'vcut' => $vcut,
+                    'percentage_vcut' => $percentage_vcut,
+                    'not_vcut' => $not_vcut,
+                    'percentage_not_vcut' => $percentage_not_vcut,
+                    'kelas_a' => $kelas_a,
+                    'kelas_b' => $kelas_b,
+                    'kelas_c' => $kelas_c,
+                    'percentage_kelas_a' => round($persentage_kelas_a, 2),
+                    'percentage_kelas_b' => round($persentage_kelas_b, 2),
+                    'percentage_kelas_c' =>  round($persentage_kelas_c, 2),
                 ];
                 // dd($dataakhir);
                 $pdf = pdf::loadView('Grading.pdfgrading_api', ['data' => $dataakhir]);
@@ -758,8 +774,8 @@ class ApiqcController extends Controller
                 // Generate a unique name for the PDF file
                 $pdfName = 'document_' . time() . '.pdf';
 
-                // Save the PDF to the public storage
-                Storage::disk('public')->put($pdfName, $pdf->output());
+                return $pdf->stream($pdfName);
+                // Storage::disk('public')->put($pdfName, $pdf->output());
 
 
                 $result[] = [

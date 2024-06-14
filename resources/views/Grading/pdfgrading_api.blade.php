@@ -212,16 +212,16 @@
             <tr>
                 <td>{{$data['stalk']}}</td>
                 <td>{{$data['persentase_stalk']}}</td>
-                <td>92.94</td>
-                <td>18</td>
-                <td>7.06</td>
-                <td>218</td>
-                <td>85.49</td>
-                <td>20</td>
-                <td>7.84</td>
-                <td>17</td>
-                <td>6.67</td>
-                <td>6.67</td>
+                <td>{{$data['vcut']}}</td>
+                <td>{{$data['percentage_vcut']}}</td>
+                <td>{{$data['not_vcut']}}</td>
+                <td>{{$data['percentage_not_vcut']}}</td>
+                <td>{{$data['kelas_c']}}</td>
+                <td>{{$data['percentage_kelas_c']}}</td>
+                <td>{{$data['kelas_b']}}</td>
+                <td>{{$data['percentage_kelas_b']}}</td>
+                <td>{{$data['kelas_c']}}</td>
+                <td>{{$data['percentage_kelas_c']}}</td>
             </tr>
         </tbody>
     </table>
