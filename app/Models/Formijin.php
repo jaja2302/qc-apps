@@ -22,6 +22,7 @@ class Formijin extends Model
         'atasan_2',
         'created_at',
         'updated_at',
+        'status_bot',
     ];
 
 

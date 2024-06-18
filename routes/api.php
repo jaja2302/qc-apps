@@ -33,3 +33,5 @@ Route::post('/getuserinfo', [ApiqcController::class, 'getuserinfo']);
 Route::post('/formdataizin', [ApiqcController::class, 'form_data_ijin']);
 Route::get('/getdatamill', [ApiqcController::class, 'get_data_mill']);
 Route::post('/updatedatamill', [ApiqcController::class, 'get_data_mill_update']);
+Route::get('/getnotifijin', [ApiqcController::class, 'getnotif_suratijin']);
+Route::post('/inputiotdata', [ApiqcController::class, 'inputiot_data']);

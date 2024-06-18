@@ -28,7 +28,6 @@
         }
 
 
-
         .highlight {
             background-color: #f9f9f9;
             font-weight: bold;
@@ -83,37 +82,41 @@
         </tr>
     </table>
     <h3 style="margin: 0; padding-top: 10px; text-transform: capitalize;">DATA KEBUN</h3>
-
     <table style="margin-top: 0; padding-top: 0;">
         <tr>
-            <td style="text-align: left;border:none;padding: 0;font-size:15px">
-                Estate<br>
-                Afdeling<br>
-                Blok<br>
-                No Polisi<br>
-                Nama Supir<br>
-            </td>
-            <td style="text-align: left;border:none;padding: 0;font-size:15px">
-                : {{$data['estate']}}<br>
-                : {{$data['afdeling']}}<br>
-                : {{$data['list_blok']}}<br>
-                : {{$data['no_plat']}}<br>
-                : {{$data['supir']}}<br>
-            </td>
-            <td style="text-align: left;border:none;padding: 0;font-size:15px">
-                Jumlah Tandan SPB<br>
-                Jumlah Tandan GRADING<br>
-                Jumlah Selisih Janjang<br>
-                Total Tonase<br>
-                Berat Rata-rata TBS (BJR)<br>
-            </td>
-            <td style="text-align: left;border:none;padding: 0;font-size:15px">
-                : {{$data['jjg_spb']}}<br>
-                : {{$data['jjg_grading']}}<br>
-                : {{ abs($data['jjg_selisih']) }} ({{ abs($data['persentase_selisih']) }}%)<br>
-                : {{$data['tonase']}}<br>
-                : {{$data['bjr']}} Kg<br>
-            </td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px;width:12%">Estate</td>
+            <td style="text-align: right;border:none;padding: 0;font-size:15px">:</td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">{{$data['estate']}}</td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">Jumlah Tandan SPB</td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">: {{$data['jjg_spb']}}</td>
+        </tr>
+        <tr>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">Afdeling</td>
+            <td style="text-align: right;border:none;padding: 0;font-size:15px">:</td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">{{$data['afdeling']}}</td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">Jumlah Tandan GRADING</td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">: {{$data['jjg_grading']}}</td>
+        </tr>
+        <tr>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">Blok</td>
+            <td style="text-align: right;border:none;padding: 0;font-size:15px">:</td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px;width:45%">{{$data['list_blok']}}</td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">Jumlah Selisih Janjang</td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">: {{ abs($data['jjg_selisih']) }} ({{ abs($data['persentase_selisih']) }}%)</td>
+        </tr>
+        <tr>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">No Polisi</td>
+            <td style="text-align: right;border:none;padding: 0;font-size:15px">:</td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">{{$data['no_plat']}}</td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">Total Tonase</td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">: {{$data['tonase']}}</td>
+        </tr>
+        <tr>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">Nama Supir</td>
+            <td style="text-align: right;border:none;padding: 0;font-size:15px">:</td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">{{$data['supir']}}</td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px;width:26%">Berat Rata-rata TBS (BJR)</td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">: {{$data['bjr']}}</td>
         </tr>
     </table>
     <h3 style="margin: 0; padding-top: 10px; text-transform: capitalize;">DATA HASIL GRADING</h3>
@@ -250,31 +253,105 @@
             </tr>
         </tbody>
     </table>
-    <table style="font-size: 12px;padding-top:10px">
+    @php
+    $krg_brd = $data['resultKurangBrondol'];
+    $krg_brd = explode(',', $krg_brd);
+    $newArray = [];
+    $currentPart = [];
+
+    foreach ($krg_brd as $item) {
+    $currentPart[] = $item;
+    if (count($currentPart) == 14) {
+    $newArray[] = implode('.', $currentPart);
+    $currentPart = [];
+    }
+    }
+
+    // Add the remaining part if it's not empty
+    if (!empty($currentPart)) {
+    $newArray[] = implode('.', $currentPart);
+    }
+
+    $new_krg_brd = '-';
+    $fontsize_new_krg_brd = '10px'; // Default font size
+
+    if (count($krg_brd) >= 10) { // Use count() to check array size
+    $new_krg_brd = $newArray;
+    } else {
+    $new_krg_brd = $data['resultKurangBrondol'];
+    }
+
+    $tnp_brd = $data['resultTanpaBrondol'];
+    $tnp_brd = explode(',', $tnp_brd);
+    $newArray_tnp = [];
+    $currentPart_tnp = [];
+
+    foreach ($tnp_brd as $item) {
+    $currentPart_tnp[] = $item;
+    if (count($currentPart_tnp) == 14) {
+    $newArray_tnp[] = implode('.', $currentPart_tnp);
+    $currentPart_tnp = [];
+    }
+    }
+
+    // Add the remaining part if it's not empty
+    if (!empty($currentPart_tnp)) {
+    $newArray_tnp[] = implode('.', $currentPart_tnp);
+    }
+
+    $new_tnp_brd = '-';
+    $fontsize_newArray_tnp = '10px'; // Default font size
+
+    if (count($tnp_brd) >= 10) { // Use count() to check array size
+    $new_tnp_brd = $newArray_tnp;
+    } else {
+    $new_tnp_brd = $data['resultTanpaBrondol'];
+    $fontsize_newArray_tnp = '50px'; // Change font size conditionally
+    }
+    @endphp
+
+    <!-- Your HTML code with corrections -->
+    <table style="font-size: 12px; padding-top: 10px;">
         <thead>
             <tr class="header">
-                <th style="width: 10%;">Jenis Mentah</th>
-                <th style="width: 10%;">Kode</th>
+                <th>Jenis Mentah</th>
+                <th>Kode</th>
                 <th>Rincian</th>
-                <th style="width: 10%;">Total</th>
+                <th>Total</th>
             </tr>
-
         </thead>
         <tbody>
             <tr>
                 <td>Tanpa Brondol</td>
                 <td>No.Pemanen(Jumlah)</td>
-                <td style="text-align: left;">{{$data['resultKurangBrondol']}}</td>
+                <td style="text-align: left; font-size: {{$fontsize_new_krg_brd}}">
+                    @if(is_array($new_krg_brd))
+                    @foreach($new_krg_brd as $dataitems)
+                    {{$dataitems}}<br>
+                    @endforeach
+                    @else
+                    {{$new_krg_brd}}
+                    @endif
+                </td>
                 <td>{{$data['kurang_brondol']}}</td>
             </tr>
             <tr>
                 <td>Kurang Brondol</td>
                 <td>No.Pemanen(Jumlah)</td>
-                <td style="text-align: left;">{{$data['resultTanpaBrondol']}}</td>
+                <td style="text-align: left; font-size: {{$fontsize_newArray_tnp}}">
+                    @if(is_array($new_tnp_brd))
+                    @foreach($new_tnp_brd as $dataitems)
+                    {{$dataitems}}<br>
+                    @endforeach
+                    @else
+                    {{$new_tnp_brd}}
+                    @endif
+                </td>
                 <td>{{$data['nol_brondol']}}</td>
             </tr>
         </tbody>
     </table>
+
 
     <div style="page-break-after: always;"></div>
 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Afdeling;
 use App\Models\Blok;
+use App\Models\Curahhujanbot;
 use App\Models\Estate;
 use App\Models\Formijin;
 use App\Models\Gradingmill;
@@ -657,20 +658,24 @@ class ApiqcController extends Controller
                     $get_pemanen = isset($values1['a']) ? $values1['a'] : (isset($values1['noPemanen']) ? $values1['noPemanen'] : null);
                     $get_kurangBrondol = isset($values1['b']) ? $values1['b'] : (isset($values1['kurangBrondol']) ? $values1['kurangBrondol'] : 0);
                     $get_tanpaBrondol = isset($values1['c']) ? $values1['c'] : (isset($values1['tanpaBrondol']) ? $values1['tanpaBrondol'] : 0);
+
                     if ($get_kurangBrondol != 0) {
                         $datakurang_brondol['kurangBrondol_list'][] = [
                             'no_pemanen' => ($get_pemanen == 999) ? 'X' : $get_pemanen,
                             'kurangBrondol' => $get_kurangBrondol,
                         ];
                     }
-                    if ($get_kurangBrondol != 0) {
+
+                    if ($get_tanpaBrondol != 0) {
                         $tanpaBrondol['tanpaBrondol_list'][] = [
                             'no_pemanen' => ($get_pemanen == 999) ? 'X' : $get_pemanen,
                             'tanpaBrondol' => $get_tanpaBrondol,
                         ];
                     }
                 }
-                // dd($datakurang_brondol);
+
+                // dd($tanpaBrondol);
+
                 if ($datakurang_brondol == []) {
                     $resultKurangBrondol = '-';
                 } else {
@@ -775,10 +780,10 @@ class ApiqcController extends Controller
                 // Generate a unique name for the PDF file
                 $pdfName = 'document_' . time() . '.pdf';
 
-                return $pdf->stream($pdfName);
-                // Storage::disk('public')->put($pdfName, $pdf->output());
+                // return $pdf->stream($pdfName);
+                Storage::disk('public')->put($pdfName, $pdf->output());
 
-
+                // dd($tanpaBrondol);
                 $result[] = [
                     'id' => $value['id'],
                     'estate' => $value['estate'],
@@ -876,6 +881,142 @@ class ApiqcController extends Controller
             return response()->json([
                 'message' => 'No pending messages found.'
             ], 404); // 404 Not Found
+        }
+    }
+    public function getnotif_suratijin()
+    {
+        $data = Formijin::query()->where('status_bot', '!=', '1$1$1')->get();
+        $responseData = [];
+        if (!empty($data)) {
+            foreach ($data as $key => $value) {
+                $status = $value['status_bot'];
+                $status = explode('$', $status);
+                $atasan1 = $status[0];
+                $atasan2 = $status[1];
+                $user = $status[2];
+                $user_id = Pengguna::where('user_id', $value['user_id'])->first();
+                $atasan1_id = Pengguna::where('user_id', $value['atasan_2'])->first();
+                $atasan2_id = Pengguna::where('user_id', $value['atasan_2'])->first();
+                $case = '-';
+
+                if ($atasan1 != 1) {
+                    $case = 'Atasan_1_not_approved';
+                } elseif ($atasan1 == 1 && $atasan2 != 1) {
+                    $case = 'Atasan_2_not_approved';
+                } elseif ($atasan1 == 1 && $atasan2 == 1 && $user != 1) {
+                    $case = 'User_not_sending';
+                }
+
+                if ($case === 'Atasan_1_not_approved') {
+                    // Send notification to Atasan 1 to approve
+                    $responseData[] = [
+                        'id' => $value->id,
+                        'status' => 'approved',
+                        'user_request' => $user_id->nama_lengkap,
+                        'atasan_nama' => $atasan1_id->nama_lengkap,
+                        'no_hp' => $atasan1_id->no_hp,
+                        'tanggal_keluar' =>  Carbon::parse($value['tanggal_keluar'])->format('d-m-Y'),
+                        'tanggal_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('d-m-Y'),
+                        'keperluan' => $value['keperluan'],
+                        'lokasi_tujuan' => $value['lokasi_tujuan'],
+
+                    ];
+                } elseif ($case === 'Atasan_2_not_approved') {
+                    // Send notification to Atasan 2 to approve
+                    $responseData[] = [
+                        'id' => $value->id,
+                        'status' => 'approved',
+                        'user_request' => $user_id->nama_lengkap,
+                        'atasan_nama' => $atasan2_id->nama_lengkap,
+                        'no_hp' => $atasan2_id->no_hp,
+                        'tanggal_keluar' =>  Carbon::parse($value['tanggal_keluar'])->format('d-m-Y'),
+                        'tanggal_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('d-m-Y'),
+                        'keperluan' => $value['keperluan'],
+                        'lokasi_tujuan' => $value['lokasi_tujuan'],
+                    ];
+                } elseif ($case === 'User_not_sending') {
+                    // Send notification to user that ijin got approved
+                    $responseData[] = [
+                        'id' => $value->id,
+                        'status' => 'send_approved'
+                    ];
+                }
+            }
+            // dd($responseData);
+            return response()->json([
+                'status' => '200',
+                'data' => $responseData,
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 'kosong',
+                'data' => 'kosong'
+            ], 200);
+        }
+    }
+
+    public function inputiot_data(Request $request): JsonResponse
+    {
+        $estate = $request->input('estate');
+        $afdeling = $request->input('afdeling');
+        $afdeling_id = $request->input('afdeling_id');
+        $estate_id = $request->input('estate_id');
+        $curahHujan = $request->input('curahHujan');
+        $type = $request->input('type');
+
+        switch ($type) {
+            case 'check_estate':
+                $data = DB::connection('mysql2')->table('estate')
+                    ->select('*', 'afdeling.*', 'afdeling.id as afdeling_id', 'estate.id as est_id')
+                    ->join('afdeling', 'afdeling.estate', '=', 'estate.id')
+                    ->where('est', '=', $estate)
+                    ->get();
+                $data = $data->groupBy(['est', 'nama']);
+
+                // dd($data);
+                $afd = [];
+                foreach ($data as $key => $value) {
+                    $afd = $value;
+                }
+                // dd($afd);
+                if ($data->isNotEmpty()) {
+                    return response()->json(['data' => $afd], 200);
+                } else {
+                    return response()->json(['error_validasi' => 'Est Tidak Tersedia ditemukan'], 404);
+                }
+
+
+                break;
+            case 'input':
+                try {
+                    $dateTime = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
+
+                    $data = [
+                        'Date' => $dateTime,
+                        'Afd' => $request->input('afdeling'),
+                        'Est' => $request->input('estate'),
+                        'CH' => $request->input('curahHujan'),
+                        'afd_id' => $request->input('afdeling_id'),
+                        'est_id' => $request->input('estate_id'),
+                    ];
+
+                    DB::beginTransaction();
+
+                    // Insert the new data
+                    $newdata = Curahhujanbot::create($data);
+                    $newdata->save();
+
+                    DB::commit();
+                    return response()->json(['success' => true], 200);
+                } catch (\Throwable $th) {
+                    DB::rollBack();
+                    return response()->json(['error_validasi' => $th], 404);
+                }
+
+                break;
+            default:
+                return response()->json(['error_validasi' => 'tidak tau'], 404);
+                break;
         }
     }
 }
