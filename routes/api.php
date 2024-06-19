@@ -35,3 +35,4 @@ Route::get('/getdatamill', [ApiqcController::class, 'get_data_mill']);
 Route::post('/updatedatamill', [ApiqcController::class, 'get_data_mill_update']);
 Route::get('/getnotifijin', [ApiqcController::class, 'getnotif_suratijin']);
 Route::post('/inputiotdata', [ApiqcController::class, 'inputiot_data']);
+Route::post('/updatenotifijin', [ApiqcController::class, 'getnotif_suratijin_approved']);

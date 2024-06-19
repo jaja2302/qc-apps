@@ -9,9 +9,7 @@ class Ijinkebun extends Model
 {
     use HasFactory;
 
-    protected $table = 'list_units';
-    protected $connection = 'mysql3';
-
+    protected $table = 'jabatan';
 
     public $timestamps = false;
 }

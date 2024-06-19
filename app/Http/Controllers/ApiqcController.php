@@ -392,7 +392,7 @@ class ApiqcController extends Controller
 
         // Use the 'like' operator correctly in your query
         $data = Pengguna::where('nama_lengkap', 'like', '%' . $nama . '%')
-            ->whereIn('jabatan', ['Asisten Afdeling', 'Manager', 'Askep/Asisten', 'Asisten', 'Askep', 'General Manager', 'Regional Head', 'CEO', 'COO', 'Staff'])
+            ->whereIn('id_jabatan', ['5', '6', '7', '9', '10', '11', '12', '17', '19', '20'])
             ->get()
             ->toArray();
 
@@ -559,7 +559,7 @@ class ApiqcController extends Controller
                 // Prepare the data for insertion
                 $data = [
                     'user_id' => $request->input('name'),
-                    'list_units_id' => $request->input('unit_kerja'),
+                    // 'list_units_id' => $request->input('unit_kerja'),
                     'tanggal_keluar' => $tanggal_keluar,
                     'tanggal_kembali' => $tanggal_kembali,
                     'lokasi_tujuan' => $request->input('tujuan'),
@@ -895,7 +895,7 @@ class ApiqcController extends Controller
                 $atasan2 = $status[1];
                 $user = $status[2];
                 $user_id = Pengguna::where('user_id', $value['user_id'])->first();
-                $atasan1_id = Pengguna::where('user_id', $value['atasan_2'])->first();
+                $atasan1_id = Pengguna::where('user_id', $value['atasan_1'])->first();
                 $atasan2_id = Pengguna::where('user_id', $value['atasan_2'])->first();
                 $case = '-';
 
@@ -910,7 +910,7 @@ class ApiqcController extends Controller
                 if ($case === 'Atasan_1_not_approved') {
                     // Send notification to Atasan 1 to approve
                     $responseData[] = [
-                        'id' => $value->id,
+                        'id' => $value->id . '/' . '1',
                         'status' => 'approved',
                         'user_request' => $user_id->nama_lengkap,
                         'atasan_nama' => $atasan1_id->nama_lengkap,
@@ -924,7 +924,7 @@ class ApiqcController extends Controller
                 } elseif ($case === 'Atasan_2_not_approved') {
                     // Send notification to Atasan 2 to approve
                     $responseData[] = [
-                        'id' => $value->id,
+                        'id' => $value->id . '/' . '2',
                         'status' => 'approved',
                         'user_request' => $user_id->nama_lengkap,
                         'atasan_nama' => $atasan2_id->nama_lengkap,
@@ -938,7 +938,14 @@ class ApiqcController extends Controller
                     // Send notification to user that ijin got approved
                     $responseData[] = [
                         'id' => $value->id,
-                        'status' => 'send_approved'
+                        'id_atasan' => 3,
+                        'status' => 'send_approved',
+                        'no_hp' => $user_id->no_hp,
+                        'user_request' => $user_id->nama_lengkap,
+                        'tanggal_keluar' =>  Carbon::parse($value['tanggal_keluar'])->format('d-m-Y'),
+                        'tanggal_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('d-m-Y'),
+                        'keperluan' => $value['keperluan'],
+                        'lokasi_tujuan' => $value['lokasi_tujuan'],
                     ];
                 }
             }
@@ -952,6 +959,104 @@ class ApiqcController extends Controller
                 'status' => 'kosong',
                 'data' => 'kosong'
             ], 200);
+        }
+    }
+
+    public function getnotif_suratijin_approved(Request $request): JsonResponse
+    {
+        // Get the single 'id' input
+        $id = $request->input('id_data');
+        $id_atasan = $request->input('id_atasan');
+
+        // Check if the record exists
+        $exists = Formijin::query()->where('id', $id)->exists();
+
+        if ($exists) {
+            $data = Formijin::query()->where('id', $id)->first();
+
+            $status = $data['status_bot'];
+            $status = explode('$', $status);
+            $atasan1 = $status[0];
+            $atasan2 = $status[1];
+            $user = $status[2];
+            switch ($id_atasan) {
+                case '1':
+
+                    if ($atasan1 == 1 || $atasan1 === '1') {
+                        return response()->json(['error_validasi' => 'Anda sudah Approval data ini'], 200);
+                    }
+
+                    $newstatus = [
+                        1,
+                        $atasan2,
+                        $user
+                    ];
+
+                    $newstatus = implode('$', $newstatus);
+                    // dd($newstatus);
+                    Formijin::where('id', $id)
+                        ->update([
+                            'status_bot' => $newstatus
+                        ]);
+
+                    // Add the code to send WhatsApp message here if needed
+
+                    return response()->json([
+                        'success' => 'Status updated successfully.'
+                    ], 200); // 200 OK
+                    break;
+                case '2':
+                    if ($atasan2 == 1 || $atasan2 === '1') {
+                        return response()->json(['error_validasi' => 'Anda sudah Approval data ini'], 200);
+                    }
+
+                    $newstatus = [
+                        $atasan1,
+                        1,
+                        $user
+                    ];
+
+                    $newstatus = implode('$', $newstatus);
+                    // dd($newstatus);
+                    Formijin::where('id', $id)
+                        ->update([
+                            'status_bot' => $newstatus
+                        ]);
+
+                    return response()->json([
+                        'message' => 'Status updated successfully.'
+                    ], 200); // 200 OK
+                    break;
+                case '3':
+                    $newstatus = [
+                        $atasan1,
+                        $atasan2,
+                        1
+                    ];
+
+                    $newstatus = implode('$', $newstatus);
+                    // dd($newstatus);
+                    Formijin::where('id', $id)
+                        ->update([
+                            'status_bot' => $newstatus
+                        ]);
+                    return response()->json([
+                        'message' => 'Status updated successfully.'
+                    ], 200); // 200 OK
+                    break;
+                default:
+                    return response()->json([
+                        'message' => 'error.'
+                    ], 200); // 200 OK
+                    break;
+            }
+            // If the record exists, update it
+
+        } else {
+            // If the record does not exist, return a message
+            return response()->json([
+                'message' => 'No pending messages found.'
+            ], 404); // 404 Not Found
         }
     }
 
