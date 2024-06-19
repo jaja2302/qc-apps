@@ -977,3 +977,23 @@ if (!function_exists('sendwhatsapp')) {
         curl_close($curl);
     }
 }
+
+if (!function_exists('formatPhoneNumber')) {
+    function formatPhoneNumber($number)
+    {
+        // Remove any non-numeric characters from the input number
+        $number = preg_replace('/\D/', '', $number);
+
+        // Check if the number starts with '0'
+        if (strpos($number, '0') === 0) {
+            // Replace '0' with '62'
+            return '62' . substr($number, 1);
+        } else if (strpos($number, '8') === 0) {
+            // Replace '0' with '62'
+            return '62' . $number;
+        } else {
+            // If it doesn't start with '0', return as is
+            return $number;
+        }
+    }
+}

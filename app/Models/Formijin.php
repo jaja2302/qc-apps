@@ -22,6 +22,7 @@ class Formijin extends Model
         'created_at',
         'updated_at',
         'catatan',
+        'status',
         'status_bot',
     ];
 
