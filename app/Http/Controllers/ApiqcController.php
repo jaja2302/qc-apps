@@ -553,6 +553,12 @@ class ApiqcController extends Controller
                 if ($carbon_tanggal_kembali->greaterThan($carbon_tanggal_keluar->copy()->addDays(30))) {
                     return response()->json(['error_validasi' => 'Tanggal kembali tidak boleh lebih dari 30 hari setelah tanggal keluar'], 200);
                 }
+
+                if ($request->input('plat_nomor') === 'skip') {
+                    $plat_nomor = null;
+                } else {
+                    $plat_nomor = $request->input('plat_nomor');
+                }
                 // Format the dates to datetime format for storing in the database
                 $tanggal_keluar = $carbon_tanggal_keluar->format('Y-m-d H:i:s');
                 $tanggal_kembali = $carbon_tanggal_kembali->format('Y-m-d H:i:s');
@@ -565,6 +571,8 @@ class ApiqcController extends Controller
                     'tanggal_keluar' => $tanggal_keluar,
                     'tanggal_kembali' => $tanggal_kembali,
                     'lokasi_tujuan' => $request->input('tujuan'),
+                    'plat_nomor' => $plat_nomor,
+                    'kendaraan' => $request->input('kendaraan'),
                     'keperluan' => $request->input('keperluan'),
                     'atasan_1' => $request->input('atasan_satu'),
                     'atasan_2' => $request->input('atasan_dua'),

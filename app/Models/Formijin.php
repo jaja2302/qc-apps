@@ -24,6 +24,8 @@ class Formijin extends Model
         'catatan',
         'status',
         'status_bot',
+        'plat_nomor',
+        'kendaraan',
     ];
 
 
