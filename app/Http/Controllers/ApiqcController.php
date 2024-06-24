@@ -609,6 +609,8 @@ class ApiqcController extends Controller
         }
     }
 
+
+
     public function get_data_mill()
     {
         $data = Gradingmill::query()->where('status_bot', 0)->get();
@@ -848,6 +850,7 @@ class ApiqcController extends Controller
                     'resultKurangBrondol' => $resultKurangBrondol,
                     'resultTanpaBrondol' => $resultTanpaBrondol,
                     'filename_pdf' => $pdfName,
+                    'waktu_grading' => $date->format('H:i:s'),
                 ];
             }
 
@@ -864,6 +867,8 @@ class ApiqcController extends Controller
 
         // dd($result);
     }
+
+
 
 
     public function get_data_mill_update(Request $request): JsonResponse
@@ -893,6 +898,7 @@ class ApiqcController extends Controller
             ], 404); // 404 Not Found
         }
     }
+
     public function getnotif_suratijin()
     {
         $data = Formijin::query()->where('status_bot', '!=', '1$1$1')->get();
@@ -943,6 +949,7 @@ class ApiqcController extends Controller
                         'user_request' => $user_id->nama_lengkap,
                         'atasan_nama' => $atasan2_id->nama_lengkap,
                         'no_hp' => formatPhoneNumber($atasan2_id->no_hp),
+                        'no_hp_user' => formatPhoneNumber($user_id->no_hp),
                         'tanggal_keluar' =>  Carbon::parse($value['tanggal_keluar'])->format('d-m-Y'),
                         'tanggal_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('d-m-Y'),
                         'keperluan' => $value['keperluan'],

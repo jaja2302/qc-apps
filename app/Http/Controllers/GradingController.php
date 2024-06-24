@@ -569,7 +569,7 @@ class GradingController extends Controller
                         'jjg_spb' => $value['jjg_spb'],
                         'datetime' => $value['datetime'],
                         'tonase' => $value['tonase'],
-                        'bjr' => $value['jjg_spb'] / $value['tonase'],
+                        'bjr' => ($value['jjg_spb'] / $value['tonase']) * 100,
                         'jjg_selisih' => $jumlah_selisih_janjang,
                         'persentase_selisih' => round($percentage_selisih_janjang),
                         'Ripeness' => $ripeness,
