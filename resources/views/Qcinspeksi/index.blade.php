@@ -2893,7 +2893,13 @@
                         itemElement3.innerText = item3;
                         itemElement4.innerText = item4;
                         itemElement5.innerText = item5
-                        // itemElement3.style.color === "#609cd4"
+                        let items = [itemElement1, itemElement2, itemElement3, itemElement4, itemElement5];
+
+                        for (let index = 0; index < items.length; index++) {
+                            items[index].style.backgroundColor = '#C7E1AA';
+                            tr.appendChild(items[index]);
+                        }
+
                         setBackgroundColor(itemElement4, item4);
                         tr.style.backgroundColor = "#f0f0f0";
                         tr.appendChild(itemElement1)
@@ -2978,6 +2984,14 @@
                         itemElement3.innerText = item3;
                         itemElement4.innerText = item4;
                         itemElement5.innerText = item5
+
+                        let items = [itemElement1, itemElement2, itemElement3, itemElement4, itemElement5];
+
+                        for (let index = 0; index < items.length; index++) {
+                            items[index].style.backgroundColor = '#C7E1AA';
+                            tr.appendChild(items[index]);
+                        }
+
 
                         setBackgroundColor(itemElement4, item4);
                         tr.style.backgroundColor = "#f0f0f0";
@@ -3065,6 +3079,12 @@
                             itemElement3.innerText = item3;
                             itemElement4.innerText = item4;
                             itemElement5.innerText = item5
+                            let items = [itemElement1, itemElement2, itemElement3, itemElement4, itemElement5];
+
+                            for (let index = 0; index < items.length; index++) {
+                                items[index].style.backgroundColor = '#C7E1AA';
+                                tr.appendChild(items[index]);
+                            }
 
                             setBackgroundColor(itemElement4, item4);
                             tr.style.backgroundColor = "#f0f0f0";

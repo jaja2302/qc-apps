@@ -6819,7 +6819,7 @@ class mutubuahController extends Controller
             ->orderBy('estate.id', 'asc')
             ->get();
         $queryEstate = json_decode($queryEstate, true);
-
+        $dataFinding = [];
         foreach ($queryEstate as $value1) {
             $querySmb = DB::connection('mysql2')->table('sidak_mutu_buah')
                 ->select("sidak_mutu_buah.*")
@@ -6845,7 +6845,7 @@ class mutubuahController extends Controller
                 $dataFinding[$value1['wil']][$key]['total_temuan'] = $tot_temuan;
             }
         }
-
+        // dd($dataFinding);
         $arrView = array();
         $arrView['dataFinding'] = $dataFinding;
         echo json_encode($arrView);

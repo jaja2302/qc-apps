@@ -4614,14 +4614,7 @@
               itemElement2.innerText = item2
               itemElement3.innerText = item3
               itemElement4.innerText = item4
-              /* if (item4 != 0) {
-                  itemElement4.innerHTML = '<a class="detailBa" href="detailSidakTph/' +
-                      element['est'] + '/' + element['afd'] + '/' +
-                      firstWeek + '/' + lastWeek + '">' + element['skor'] +
-                      ' </a>'
-              } else {
-                  itemElement4.innerText = item4
-              } */
+
               itemElement5.innerText = item5
 
               tr.appendChild(itemElement1)

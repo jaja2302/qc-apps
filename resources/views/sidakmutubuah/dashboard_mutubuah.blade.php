@@ -2678,54 +2678,54 @@
 
                     Object.entries(arrEst1).forEach(([estateName, estateData]) => {
                         const tr = document.createElement('tr');
-                        // console.log(estateData);
+
+                        // Set the background color for the entire row
+                        tr.style.backgroundColor = '#C7E1AA';
+
+                        // Data items to be added to the row
                         const dataItems = {
                             item1: estateName,
                             item2: estateData['EM'],
                             item3: estateData['Nama_assist'] || '-',
-                            item4: (estateData['All_skor'] < 0) ? 0 : estateData['All_skor'],
-                            item5: estateData['rankEST'],
+                            item4: estateData['All_skor'] < 0 ? 0 : estateData['All_skor'],
+                            item5: estateData['rankEST']
                         };
 
-                        const rowData = Object.values(dataItems);
+                        // Iterate through the dataItems to create and style table cells
+                        Object.values(dataItems).forEach((item, cellIndex) => {
+                            const cell = document.createElement('td');
+                            cell.textContent = item;
+                            cell.style.backgroundColor = '#C7E1AA';
+                            cell.classList.add('text-center');
 
-                        rowData.forEach((item, cellIndex) => {
-                            const cell = createTableCell(item, "text-center");
+                            // Apply specific styles based on cell content
                             if (cellIndex === 2) {
                                 const item3nama = dataItems.item3;
-                                if (item3nama.trim() === "VACANT") { // Use trim to remove leading/trailing spaces
-                                    cell.style.color = "red";
-                                } else {
-                                    cell.style.color = "black";
-                                }
+                                cell.style.color = item3nama.trim() === "VACANT" ? "red" : "black";
                             }
 
                             if (cellIndex === 3) {
                                 const item4Value = parseFloat(dataItems.item4); // Convert to a number
                                 if (item4Value >= 95) {
                                     cell.style.backgroundColor = "#609cd4";
-                                    cell.style.color = "black";
                                 } else if (item4Value >= 85 && item4Value < 95) {
                                     cell.style.backgroundColor = "#08b454";
-                                    cell.style.color = "black";
                                 } else if (item4Value >= 75 && item4Value < 85) {
                                     cell.style.backgroundColor = "#fffc04";
-                                    cell.style.color = "black";
                                 } else if (item4Value >= 65 && item4Value < 75) {
                                     cell.style.backgroundColor = "#ffc404";
-                                    cell.style.color = "black";
                                 } else {
                                     cell.style.backgroundColor = "red";
-                                    cell.style.color = "black";
                                 }
+                                cell.style.color = "black";
                             }
 
                             tr.appendChild(cell);
                         });
 
                         tbody1.appendChild(tr);
-
                     });
+
                     // Declare variables wil1, wil2, wil3, wil4 before using them
                     var wil1, wil2, wil3, wil4;
 
@@ -2912,7 +2912,7 @@
                                     cell.style.color = "black";
                                 }
                             }
-
+                            cell.style.backgroundColor = '#C7E1AA';
                             if (cellIndex === 3) {
                                 const item4Value = parseFloat(dataItems.item4); // Convert to a number
                                 if (item4Value >= 95) {
@@ -3136,7 +3136,7 @@
                                             cell.style.color = "black";
                                         }
                                     }
-
+                                    cell.style.backgroundColor = '#C7E1AA';
                                     if (cellIndex === 3) {
                                         const item4Value = parseFloat(dataItems.item4); // Convert to a number
                                         if (item4Value >= 95) {
@@ -5913,7 +5913,7 @@
 
             $.ajax({
                 url: "{{ route('findIssueSmb') }}",
-                method: "POST",
+                method: "get",
                 data: {
                     regional: regional,
                     date: date,

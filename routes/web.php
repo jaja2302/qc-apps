@@ -132,7 +132,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/findingIsueTahun', [MutubuahController::class, 'findingIsueTahun'])->name('findingIsueTahun');
     Route::get('/getWeekData', [MutubuahController::class, 'getWeekData'])->name('getWeekData');
     Route::get('/getahun_sbi', [MutubuahController::class, 'getahun_sbi'])->name('getahun_sbi');
-    Route::post('/findIssueSmb', [MutubuahController::class, 'findIssueSmb'])->name('findIssueSmb');
+    Route::get('/findIssueSmb', [MutubuahController::class, 'findIssueSmb'])->name('findIssueSmb');
     Route::get('/cetakFiSmb/{est}/{tgl}', [MutubuahController::class, 'cetakFiSmb'])->name('cetakFiSmb');
 
     Route::get('filtersidaktphrekap', [SidaktphController::class, 'filtersidaktphrekap'])->name('filtersidaktphrekap');
