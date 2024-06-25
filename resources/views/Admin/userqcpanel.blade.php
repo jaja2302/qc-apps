@@ -1,5 +1,17 @@
 <x-layout.app>
     @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Admin')
+    <div class="jumbotron">
+        <h1 class="display-4">Perhatian</h1>
+        <p class="lead">Untuk meningkatkan sistematisasi dan konsistensi sistem, kami mohon agar Anda menggunakan situs web manajemen pengguna yang telah disediakan. Hal ini bertujuan untuk menghindari kesalahan data atau kerusakan.</p>
+        <p>Harap dicatat bahwa halaman ini akan dinonaktifkan dalam waktu dekat. Terima kasih atas perhatian dan kerjasamanya.</p>
+        <hr class="my-4">
+        <p>Kunjungi situs web kami di sini:</p>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="https://management.srs-ssms.com/" target="_blank" role="button">Pelajari lebih lanjut</a>
+        </p>
+    </div>
+
+
     <div class="container-fluid">
 
         <div class="col-sm-12">
@@ -154,10 +166,6 @@
                             {
                                 title: 'Email',
                                 data: 'email',
-                            },
-                            {
-                                title: 'Password',
-                                data: 'password',
                             },
                             {
                                 title: 'Nama lengkap',

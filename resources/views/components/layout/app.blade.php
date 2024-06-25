@@ -143,8 +143,7 @@
                                 </p>
                             </a>
                         </li>
-
-                        @if (strpos(session('departemen'), 'QC') !== false)
+                        @if (auth()->user()->id_departement == '43' || strpos(session('departemen'), 'QC') !== false)
                         <li class="nav-item">
                             <a href="{{ asset('/dashboardabsensi') }}" class="nav-link">
                                 <div class="nav-icon lottie-animation" data-animation-path="https://lottie.host/237bc051-94b1-45d6-89da-3144341616a8/i4uJsopUfQ.json"></div>
@@ -153,7 +152,7 @@
                         </li>
                         @endif
 
-                        @if (strpos(session('departemen'), 'QC') !== false && session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' || session('jabatan') == 'Admin')
+                        @if (strpos(session('departemen'), 'QC') !== false && session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' || session('jabatan') == 'Admin' || auth()->user()->id_departement == '43' && in_array(auth()->user()->id_jabatan, ['10', '15', '20', '4', '5', '6']))
                         <li class="nav-item">
                             <a href="{{ asset('/userqcpanel') }}" class="nav-link">
                                 <div class="nav-icon lottie-animation" data-animation-path="{{ asset('img/homejson.json') }}"></div>
@@ -166,7 +165,7 @@
 
                         <div class="fixed-bottom mb-3" style="position: absolute;">
 
-                            @if (strpos(session('departemen'), 'QC') !== false && session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' || session('jabatan') == 'Admin')
+                            @if (strpos(session('departemen'), 'QC') !== false && session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' || session('jabatan') == 'Admin' || auth()->user()->id_departement == '43' && in_array(auth()->user()->id_jabatan, ['10', '15', '20', '4', '5', '6']))
                             <li class="nav-item">
                                 <a href="{{ route('user.show') }}" class="nav-link">
 
