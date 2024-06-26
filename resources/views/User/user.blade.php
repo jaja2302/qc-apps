@@ -238,7 +238,7 @@
                 }, 500);
 
             }
-            $$('#listAsisten').DataTable();
+            $('#listAsisten').DataTable();
         });
 
         function getUserProfile(user_id) {

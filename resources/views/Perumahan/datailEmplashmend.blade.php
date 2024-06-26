@@ -2432,17 +2432,17 @@
             $('#afd_landscape').empty();
             $('#afd_lingkungan').empty();
 
-            if ($$.fn.DataTable.isDataTable('#tabPerum')) {
-                $$('#tabPerum').DataTable().destroy();
+            if ($.fn.DataTable.isDataTable('#tabPerum')) {
+                $('#tabPerum').DataTable().destroy();
             }
 
-            if ($$.fn.DataTable.isDataTable('#tablangscape')) {
-                $$('#tablangscape').DataTable().destroy();
+            if ($.fn.DataTable.isDataTable('#tablangscape')) {
+                $('#tablangscape').DataTable().destroy();
             }
 
 
-            if ($$.fn.DataTable.isDataTable('#tablingk')) {
-                $$('#tablingk').DataTable().destroy();
+            if ($.fn.DataTable.isDataTable('#tablingk')) {
+                $('#tablingk').DataTable().destroy();
             }
             $.ajax({
                 url: "{{ route('getTemuan') }}",
@@ -2475,7 +2475,7 @@
                     afd_lingkungan(lingkungan_afd);
 
 
-                    var dataPerum = $$('#tabPerum').DataTable({
+                    var dataPerum = $('#tabPerum').DataTable({
                         columns: [{
                                 title: 'ID',
                                 data: 'id'
@@ -2621,7 +2621,7 @@
 
 
 
-                    var dataLcp = $$('#tablangscape').DataTable({
+                    var dataLcp = $('#tablangscape').DataTable({
                         columns: [{
                                 title: 'ID',
                                 data: 'id'
@@ -2748,7 +2748,7 @@
                     });
 
 
-                    var dataLkn = $$('#tablingk').DataTable({
+                    var dataLkn = $('#tablingk').DataTable({
                         columns: [{
                                 title: 'ID',
                                 data: 'id'

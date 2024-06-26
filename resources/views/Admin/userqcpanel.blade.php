@@ -88,11 +88,11 @@
                 user_name: user_name,
                 lok: lok
             };
-            if ($$.fn.DataTable.isDataTable('#user_qc')) {
-                $$('#user_qc').DataTable().destroy();
+            if ($.fn.DataTable.isDataTable('#user_qc')) {
+                $('#user_qc').DataTable().destroy();
             }
-            if ($$.fn.DataTable.isDataTable('#user_manager')) {
-                $$('#user_manager').DataTable().destroy();
+            if ($.fn.DataTable.isDataTable('#user_manager')) {
+                $('#user_manager').DataTable().destroy();
             }
             // Send the data to your controller using Ajax
             $.ajax({
@@ -102,7 +102,7 @@
                 success: function(response) {
 
                     var parseResult = JSON.parse(response);
-                    var listQC = $$('#user_qc').DataTable({
+                    var listQC = $('#user_qc').DataTable({
                         columns: [{
                                 title: 'ID',
                                 data: 'user_id',
@@ -158,7 +158,7 @@
 
                     // Populate DataTable with data
                     listQC.clear().rows.add(parseResult['list_qc']).draw();
-                    var list_emg = $$('#user_manager').DataTable({
+                    var list_emg = $('#user_manager').DataTable({
                         columns: [{
                                 title: 'ID',
                                 data: 'user_id',
@@ -220,7 +220,7 @@
                         var rowData = list_emg.row($(this).closest('tr')).data();
                         editqc(rowData);
                     });
-                    var list_asisten = $$('#user_asisten').DataTable({
+                    var list_asisten = $('#user_asisten').DataTable({
                         columns: [{
                                 title: 'ID',
                                 data: 'user_id',

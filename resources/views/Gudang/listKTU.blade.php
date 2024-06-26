@@ -145,7 +145,7 @@
 
     <script type="module">
         $(document).ready(function() {
-            $$('#listAsisten').DataTable();
+            $('#listAsisten').DataTable();
         });
 
         const regionalDropdown = document.getElementById('regional-dropdown');

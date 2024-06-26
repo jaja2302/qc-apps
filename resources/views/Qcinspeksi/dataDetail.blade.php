@@ -512,51 +512,47 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <h1 style="text-align: center;">Tabel Mutu Ancak</h1>
-                            <table class="table table-striped table-bordered" id="mutuAncakTable">
-                                <thead>
-                                    <!-- Table header content -->
-                                </thead>
-                                <tbody>
-                                    <!-- Table body content will be dynamically generated -->
-                                </tbody>
-                            </table>
-                        </div>
+
+                        <h1 style="text-align: center;">Tabel Mutu Ancak</h1>
+                        <table class="table table-striped table-bordered" id="mutuAncakTable" style="width: 100%;">
+                            <thead>
+                                <!-- Table header content -->
+                            </thead>
+                            <tbody>
+                                <!-- Table body content will be dynamically generated -->
+                            </tbody>
+                        </table>
+
                     </div>
                 </div>
             </div>
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <h1 style="text-align: center;">Tabel Mutu Buah</h1>
-                            <table class="table table-striped table-bordered" id="mutuBuahable">
-                                <thead>
-                                    <!-- Table header content -->
-                                </thead>
-                                <tbody>
-                                    <!-- Table body content will be dynamically generated -->
-                                </tbody>
-                            </table>
-                        </div>
+                        <h1 style="text-align: center;">Tabel Mutu Buah</h1>
+                        <table class="table table-striped table-bordered" id="mutuBuahable" style="width: 100%;">
+                            <thead>
+                                <!-- Table header content -->
+                            </thead>
+                            <tbody>
+                                <!-- Table body content will be dynamically generated -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <h1 style="text-align: center;">Tabel Mutu Transport</h1>
-                            <table class="table table-striped" id="mutuTransportable">
-                                <thead>
-                                    <!-- Table header content -->
-                                </thead>
-                                <tbody>
-                                    <!-- Table body content will be dynamically generated -->
-                                </tbody>
-                            </table>
-                        </div>
+                        <h1 style="text-align: center;">Tabel Mutu Transport</h1>
+                        <table class="table table-striped" id="mutuTransportable" style="width: 100%;">
+                            <thead>
+                                <!-- Table header content -->
+                            </thead>
+                            <tbody>
+                                <!-- Table body content will be dynamically generated -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -2248,14 +2244,14 @@
             lottieAnimation.play(); // Start the Lottie animation
             lottieContainer.style.display = 'block'; // Display the Lottie container
 
-            if ($$.fn.DataTable.isDataTable('#mutuAncakTable')) {
-                $$('#mutuAncakTable').DataTable().destroy();
+            if ($.fn.DataTable.isDataTable('#mutuAncakTable')) {
+                $('#mutuAncakTable').DataTable().destroy();
             }
-            if ($$.fn.DataTable.isDataTable('#mutuBuahable')) {
-                $$('#mutuBuahable').DataTable().destroy();
+            if ($.fn.DataTable.isDataTable('#mutuBuahable')) {
+                $('#mutuBuahable').DataTable().destroy();
             }
-            if ($$.fn.DataTable.isDataTable('#mutuTransportable')) {
-                $$('#mutuTransportable').DataTable().destroy();
+            if ($.fn.DataTable.isDataTable('#mutuTransportable')) {
+                $('#mutuTransportable').DataTable().destroy();
             }
             var Tanggal = document.getElementById('inputDate').value;
             var est = document.getElementById('est').value;
@@ -2549,9 +2545,9 @@
                         modal.hide();
                         // $('#editModal').modal('hide');
                     });
-
-
-                    var dataTableAncakTest = $$('#mutuAncakTable').DataTable({
+                    var dataTableAncakTes = new DataTable('#example', {
+                        fixedHeader: true,
+                        responsive: true,
                         columns: [{
                                 title: 'ID',
                                 data: 'id'
@@ -2709,6 +2705,169 @@
                                 }
                             }
                         ],
+                    });
+
+                    var dataTableAncakTest = $('#mutuAncakTable').DataTable({
+                        columns: [{
+                                title: 'ID',
+                                data: 'id'
+                            },
+                            {
+                                title: 'Estate',
+                                data: 'estate'
+                            },
+                            {
+                                title: 'Afdeling',
+                                data: 'afdeling'
+                            },
+                            {
+                                title: 'Blok',
+                                data: 'blok'
+                            },
+                            {
+                                title: 'petugas',
+                                data: 'petugas'
+                            },
+                            {
+                                title: 'datetime',
+                                data: 'datetime'
+                            },
+                            {
+                                title: 'luas blok',
+                                data: 'luas_blok',
+
+                            },
+                            {
+                                title: 'Sph',
+                                data: 'sph',
+
+                            },
+                            {
+                                title: 'Baris 1',
+                                data: 'br1',
+
+                            },
+                            {
+                                title: 'Baris 2',
+                                data: 'br2',
+
+                            },
+                            {
+                                title: 'Jalur masuk',
+                                data: 'jalur_masuk',
+                            },
+                            {
+                                title: 'Status Panen',
+                                data: 'status_panen',
+                            },
+                            {
+                                title: 'Kemandoran',
+                                data: 'kemandoran',
+                            },
+                            {
+                                title: 'Ancak Pemanen',
+                                data: 'ancak_pemanen',
+                            },
+                            {
+                                title: 'Pokok Panen',
+                                data: 'pokok_panen',
+
+                            },
+                            {
+                                title: 'Pokok Sample',
+                                data: 'sample',
+
+                            },
+                            {
+                                title: 'Janjang Panen',
+                                data: 'jjg',
+
+                            },
+                            {
+                                title: 'Brondolan (P)',
+                                data: 'brtp',
+
+                            },
+                            {
+                                title: 'Brondolan (K)',
+                                data: 'brtk',
+
+                            },
+                            {
+                                title: 'Brondolan (GL)',
+                                data: 'brtgl',
+
+                            },
+                            {
+                                title: 'Buah Tinggal (S)',
+                                data: 'bhts',
+
+                            },
+                            {
+                                title: 'Buah Tinggal (M1)',
+                                data: 'bhtm1',
+
+                            },
+                            {
+                                title: 'Buah Tinggal (M2)',
+                                data: 'bhtm2',
+
+                            },
+                            {
+                                title: 'Buah Tinggal (M3)',
+                                data: 'bhtm3',
+
+                            },
+                            {
+                                title: 'Pelepah Sengkleh',
+                                data: 'ps',
+
+                            },
+                            {
+                                title: 'Frond Stacking',
+                                data: 'sp',
+
+                            },
+                            {
+                                title: 'Piringan Semak',
+                                data: 'piringan_semak',
+
+                            },
+                            {
+                                title: 'Pokok Kuning',
+                                data: 'pokok_kuning',
+
+                            },
+                            {
+                                title: 'Underpruning',
+                                data: 'underpruning',
+
+                            },
+                            {
+                                title: 'Overpruning',
+                                data: 'overpruning',
+
+                            },
+                            {
+                                title: 'Maps',
+                                data: 'app_version',
+
+                            },
+                            {
+                                // -1 targets the last column
+                                title: 'Actions',
+                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager') && departemen === 'QC',
+                                render: function(data, type, row, meta) {
+                                    var buttons =
+                                        '<button class="edit-btn">Edit</button>' +
+                                        '<button class="delete-btn">Delete</button>';
+                                    return buttons;
+                                }
+                            }
+                        ],
+                        scrollCollapse: true,
+                        scroller: true,
+                        scrollY: 800
                     });
 
                     dataTableAncakTest.clear().rows.add(parseResult['mutuAncak']).draw();
@@ -2929,7 +3088,7 @@
                     });
 
 
-                    var dataTablesBuah = $$('#mutuBuahable').DataTable({
+                    var dataTablesBuah = $('#mutuBuahable').DataTable({
                         columns: [{
                                 title: 'ID',
                                 data: 'id'
@@ -3022,6 +3181,9 @@
                                 }
                             }
                         ],
+                        scrollCollapse: true,
+                        scroller: true,
+                        scrollY: 800
                     });
 
 
@@ -3250,7 +3412,7 @@
                         // $('#editModal').modal('hide');
                     });
 
-                    var dataTablesTrans = $$('#mutuTransportable').DataTable({
+                    var dataTablesTrans = $('#mutuTransportable').DataTable({
                         columns: [{
                                 title: 'ID',
                                 data: 'id'
@@ -3321,6 +3483,9 @@
                                 }
                             }
                         ],
+                        scrollCollapse: true,
+                        scroller: true,
+                        scrollY: 800
                     });
 
 

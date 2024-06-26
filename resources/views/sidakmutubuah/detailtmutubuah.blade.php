@@ -950,8 +950,8 @@
                 var afd = document.getElementById('afd').value;
                 var tanggal = document.getElementById('inputDate').value
                 var _token = $('input[name="_token"]').val();
-                if ($$.fn.DataTable.isDataTable('#new_Sidak')) {
-                    $$('#new_Sidak').DataTable().destroy();
+                if ($.fn.DataTable.isDataTable('#new_Sidak')) {
+                    $('#new_Sidak').DataTable().destroy();
                 }
                 $.ajax({
                     url: "{{ route('filterdetialMutubuah') }}",
@@ -965,7 +965,7 @@
                     success: function(result) {
 
                         var parseResult = JSON.parse(result);
-                        let table = $$('#new_Sidak').DataTable({
+                        let table = $('#new_Sidak').DataTable({
                             columns: [{
                                     title: 'ID',
                                     data: 'id',
