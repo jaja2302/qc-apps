@@ -949,7 +949,11 @@
                                 }
                             }
                         ],
-
+                        fixedColumns: true,
+                        paging: false,
+                        scrollCollapse: true,
+                        scrollX: true,
+                        scrollY: 500
                     });
 
                     // Populate DataTable with data

@@ -1069,7 +1069,13 @@
                                     }
                                 }
                             ],
-                            // Add other DataTable options as needed
+                            fixedColumns: {
+                                start: 3
+                            },
+                            paging: false,
+                            scrollCollapse: true,
+                            scrollX: true,
+                            scrollY: 500
                         });
 
                         // $('#closeModalBtn_buah').click(function() {

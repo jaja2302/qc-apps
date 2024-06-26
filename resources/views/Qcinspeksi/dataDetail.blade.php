@@ -2545,167 +2545,7 @@
                         modal.hide();
                         // $('#editModal').modal('hide');
                     });
-                    var dataTableAncakTes = new DataTable('#example', {
-                        fixedHeader: true,
-                        responsive: true,
-                        columns: [{
-                                title: 'ID',
-                                data: 'id'
-                            },
-                            {
-                                title: 'Estate',
-                                data: 'estate'
-                            },
-                            {
-                                title: 'Afdeling',
-                                data: 'afdeling'
-                            },
-                            {
-                                title: 'Blok',
-                                data: 'blok'
-                            },
-                            {
-                                title: 'petugas',
-                                data: 'petugas'
-                            },
-                            {
-                                title: 'datetime',
-                                data: 'datetime'
-                            },
-                            {
-                                title: 'luas blok',
-                                data: 'luas_blok',
 
-                            },
-                            {
-                                title: 'Sph',
-                                data: 'sph',
-
-                            },
-                            {
-                                title: 'Baris 1',
-                                data: 'br1',
-
-                            },
-                            {
-                                title: 'Baris 2',
-                                data: 'br2',
-
-                            },
-                            {
-                                title: 'Jalur masuk',
-                                data: 'jalur_masuk',
-                            },
-                            {
-                                title: 'Status Panen',
-                                data: 'status_panen',
-                            },
-                            {
-                                title: 'Kemandoran',
-                                data: 'kemandoran',
-                            },
-                            {
-                                title: 'Ancak Pemanen',
-                                data: 'ancak_pemanen',
-                            },
-                            {
-                                title: 'Pokok Panen',
-                                data: 'pokok_panen',
-
-                            },
-                            {
-                                title: 'Pokok Sample',
-                                data: 'sample',
-
-                            },
-                            {
-                                title: 'Janjang Panen',
-                                data: 'jjg',
-
-                            },
-                            {
-                                title: 'Brondolan (P)',
-                                data: 'brtp',
-
-                            },
-                            {
-                                title: 'Brondolan (K)',
-                                data: 'brtk',
-
-                            },
-                            {
-                                title: 'Brondolan (GL)',
-                                data: 'brtgl',
-
-                            },
-                            {
-                                title: 'Buah Tinggal (S)',
-                                data: 'bhts',
-
-                            },
-                            {
-                                title: 'Buah Tinggal (M1)',
-                                data: 'bhtm1',
-
-                            },
-                            {
-                                title: 'Buah Tinggal (M2)',
-                                data: 'bhtm2',
-
-                            },
-                            {
-                                title: 'Buah Tinggal (M3)',
-                                data: 'bhtm3',
-
-                            },
-                            {
-                                title: 'Pelepah Sengkleh',
-                                data: 'ps',
-
-                            },
-                            {
-                                title: 'Frond Stacking',
-                                data: 'sp',
-
-                            },
-                            {
-                                title: 'Piringan Semak',
-                                data: 'piringan_semak',
-
-                            },
-                            {
-                                title: 'Pokok Kuning',
-                                data: 'pokok_kuning',
-
-                            },
-                            {
-                                title: 'Underpruning',
-                                data: 'underpruning',
-
-                            },
-                            {
-                                title: 'Overpruning',
-                                data: 'overpruning',
-
-                            },
-                            {
-                                title: 'Maps',
-                                data: 'app_version',
-
-                            },
-                            {
-                                // -1 targets the last column
-                                title: 'Actions',
-                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager') && departemen === 'QC',
-                                render: function(data, type, row, meta) {
-                                    var buttons =
-                                        '<button class="edit-btn">Edit</button>' +
-                                        '<button class="delete-btn">Delete</button>';
-                                    return buttons;
-                                }
-                            }
-                        ],
-                    });
 
                     var dataTableAncakTest = $('#mutuAncakTable').DataTable({
                         columns: [{
@@ -2865,9 +2705,13 @@
                                 }
                             }
                         ],
+                        fixedColumns: {
+                            start: 3
+                        },
+                        paging: false,
                         scrollCollapse: true,
-                        scroller: true,
-                        scrollY: 800
+                        scrollX: true,
+                        scrollY: 500
                     });
 
                     dataTableAncakTest.clear().rows.add(parseResult['mutuAncak']).draw();
@@ -3181,9 +3025,13 @@
                                 }
                             }
                         ],
+                        fixedColumns: {
+                            start: 3
+                        },
+                        paging: false,
                         scrollCollapse: true,
-                        scroller: true,
-                        scrollY: 800
+                        scrollX: true,
+                        scrollY: 500
                     });
 
 
@@ -3483,9 +3331,13 @@
                                 }
                             }
                         ],
+                        fixedColumns: {
+                            start: 3
+                        },
+                        paging: false,
                         scrollCollapse: true,
-                        scroller: true,
-                        scrollY: 800
+                        scrollX: true,
+                        scrollY: 500
                     });
 
 
