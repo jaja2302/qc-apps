@@ -819,7 +819,7 @@ class ApiqcController extends Controller
                     'abn_kastrasi_percen' => round(($value['abn_kastrasi'] / $jumlah_janjang_grading) * 100, 2),
                     'bjr' => round($value['jjg_spb'] / $value['tonase'], 2),
                     'jjg_selisih' => $jumlah_selisih_janjang,
-                    'persentase_selisih' => round($percentage_selisih_janjang),
+                    'persentase_selisih' => round($percentage_selisih_janjang, 2),
                     'Ripeness' => $ripeness,
                     'percentase_ripenes' => round($percentage_ripeness, 2),
                     'Unripe' => $unripe,
@@ -851,6 +851,8 @@ class ApiqcController extends Controller
                     'resultTanpaBrondol' => $resultTanpaBrondol,
                     'filename_pdf' => $pdfName,
                     'waktu_grading' => $date->format('H:i:s'),
+                    'waktu_grading_judul' => $date->format('H:i'),
+                    'tanggal_judul' => $date->format('dmY'),
                 ];
             }
 
@@ -867,6 +869,7 @@ class ApiqcController extends Controller
 
         // dd($result);
     }
+
 
 
 

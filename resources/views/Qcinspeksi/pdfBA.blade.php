@@ -244,7 +244,7 @@
                                 <th colspan="5">Brondolan Tinggal</th>
 
                                 <th colspan="6">Buah Tinggal</th>
-                                <th colspan="2">Pelepah Sengklek</th>
+                                <th colspan="2">Pelepah Sengkleh</th>
                                 <th rowspan="2">TPH Sample</th>
                                 <th colspan="2">Brondolan Tinggal</th>
                                 <th colspan="2">Buah Tinggal</th>
@@ -297,6 +297,7 @@
                             $total_m3 =0;
                             $total_bh =0;
                             $buah_brd =0;
+                            $luasSampelHaNew =0;
                             $total_ps =0;
                             $ps_persen =0;
                             $total_tph =0;
@@ -323,6 +324,7 @@
                                 $total_m3 = 0;
                                 $total_bh = 0;
                                 $brd_jjg =0;
+                                $luasSampelHaNew =0;
                                 $buah_brd = 0;
                                 $total_ps = 0;
                                 $ps_persen=0;
@@ -352,7 +354,7 @@
                                 $total_bh += $mutuAncak['tot_jjg_ma'] ?? 0;
                                 $buah_brd = ($totaljumPanen + $total_bh) != 0 ? round(($total_bh / ($totaljumPanen + $total_bh)) * 100, 2) : 0;
 
-
+                                $luasSampelHaNew = round($totalPokokSample/$data['sph_avg'],2);
                                 $total_ps += $mutuAncak['ps_ma'] ?? 0;
                                 $ps_persen =count_percent($total_ps, $totalPokokSample);
                                 $avg = $data['avg']['average'];
@@ -449,7 +451,7 @@
 
                                     <td>{{$data['sph_avg']}}</td>
                                     <td>{{ $totalPokokSample }}</td>
-                                    <td>{{ isset($TotLuasSam) ? $TotLuasSam : '-' }}</td>
+                                    <td>{{ isset($luasSampelHaNew) ? $luasSampelHaNew : '-' }}</td>
 
                                     <td>{{ isset($persen_sampNew) ? $persen_sampNew : '-' }}</td>
                                     <td>{{ isset($totaljumPanen) ? $totaljumPanen : '-' }}</td>
@@ -666,7 +668,7 @@
                                 <th colspan="5">Brondolan Tinggal</th>
 
                                 <th colspan="6">Buah Tinggal</th>
-                                <th colspan="2">Palepah Sengklek</th>
+                                <th colspan="2">Palepah Sengkleh</th>
                                 <th rowspan="2">TPH Sample</th>
                                 <th colspan="2">Brondolan Tinggal</th>
                                 <th colspan="2">Buah Tinggal</th>
@@ -721,6 +723,7 @@
                             $buah_brd =0;
                             $total_ps =0;
                             $ps_persen =0;
+                            $luasSampelHaNew =0;
                             $total_tph =0;
                             $total_brd =0;
                             $brd_tph =0;
@@ -745,6 +748,7 @@
                                 $total_m3 = 0;
                                 $total_bh = 0;
                                 $brd_jjg =0;
+                                $luasSampelHaNew =0;
                                 $buah_brd = 0;
                                 $total_ps = 0;
                                 $ps_persen=0;
@@ -786,7 +790,7 @@
                                 $persen_sampNew = $luasBloks !=0 ? round ($TotLuasSam / $luasBloks * 100,2) : '-';
 
                                 $TotPersenSam = $avg != 0 ? round(($totalPokokSample / $data['sph_avg']), 2) : '-';
-
+                                $luasSampelHaNew = round($totalPokokSample/$data['sph_avg'],2);
                                 $newtodpersn = round (($TotPersenSam / $TotLuasBlok) * 100,2);
 
                                 }
@@ -883,7 +887,7 @@
                                     <td>{{$data['sph_avg']}}</td>
 
                                     <td>{{ $totalPokokSample }}</td>
-                                    <td>{{$TotLuasSam}}</td>
+                                    <td>{{$luasSampelHaNew}}</td>
                                     <!--<td>oke</td>-->
                                     <td>{{$newtodpersn}}</td>
                                     <td>{{$totaljumPanen}}</td>

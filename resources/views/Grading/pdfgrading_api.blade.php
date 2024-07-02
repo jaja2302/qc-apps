@@ -306,7 +306,7 @@
     $new_tnp_brd = $newArray_tnp;
     } else {
     $new_tnp_brd = $data['resultTanpaBrondol'];
-    $fontsize_newArray_tnp = '50px'; // Change font size conditionally
+    $fontsize_newArray_tnp = '10px'; // Change font size conditionally
     }
     @endphp
 
