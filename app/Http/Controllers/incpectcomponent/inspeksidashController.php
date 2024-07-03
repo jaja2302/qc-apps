@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Session;
 
 require_once(app_path('helpers.php'));
@@ -2407,67 +2408,73 @@ class inspeksidashController extends Controller
 
     public function filterTahun(Request $request)
     {
+        // dd('test');
         $year = $request->input('year');
         $RegData = $request->input('regData');
 
-        $queryAsisten =  DB::connection('mysql2')->Table('asisten_qc')->get();
-        // dd($QueryMTbuahWil);
-        //end query
+        $queryAsisten = DB::connection('mysql2')->table('asisten_qc')->get();
         $queryAsisten = json_decode($queryAsisten, true);
-        // Untuk table perhitungan berdasarkan tahun dashbouard utama
+
         $querySidak = DB::connection('mysql2')->table('mutu_transport')
             ->select("mutu_transport.*")
-            // ->where('datetime', 'like', '%' . $getDate . '%')
-            // ->where('datetime', 'like', '%' . '2023-01' . '%')
             ->get();
         $DataEstate = $querySidak->groupBy(['estate', 'afdeling']);
-        // dd($DataEstate);
         $DataEstate = json_decode($DataEstate, true);
 
-
-        // dd($DataEstate);
-        function fetchDataAndGroupBy($table, $RegData)
+        function fetchDataByMonthAndGroupInChunks($table, $RegData, $year, $month)
         {
             $queryResult = [];
 
-            // Fetch data for the entire year at once
-            $data = DB::connection('mysql2')->table($table)
+            DB::connection('mysql2')->table($table)
                 ->select("{$table}.*", 'estate.*', DB::raw('DATE_FORMAT(' . $table . '.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(' . $table . '.datetime, "%Y") as tahun'))
                 ->join('estate', 'estate.est', '=', "{$table}.estate")
                 ->join('wil', 'wil.id', '=', 'estate.wil')
-                ->where('datetime', 'like', date('Y') . '%')
+                ->where('datetime', 'like', $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '%')
                 ->where('wil.regional', $RegData)
                 ->where('estate.emp', '!=', 1)
                 ->orderBy('estate', 'asc')
                 ->orderBy('afdeling', 'asc')
                 ->orderBy('blok', 'asc')
                 ->orderBy('datetime', 'asc')
-                ->get();
-
-            // Group data by estate and afdeling
-            $groupedData = $data->groupBy(['estate', 'afdeling']);
-            $groupedData = json_decode($groupedData, true);
-            foreach ($groupedData as $key1 => $value) {
-                foreach ($value as $key2 => $value2) {
-                    if (!isset($queryResult[$key1][$key2])) {
-                        $queryResult[$key1][$key2] = [];
+                ->chunk(1000, function (Collection $data) use (&$queryResult) {
+                    $groupedData = $data->groupBy(['estate', 'afdeling']);
+                    $groupedData = json_decode($groupedData, true);
+                    foreach ($groupedData as $estate => $afdelings) {
+                        foreach ($afdelings as $afdeling => $records) {
+                            if (!isset($queryResult[$estate][$afdeling])) {
+                                $queryResult[$estate][$afdeling] = [];
+                            }
+                            $queryResult[$estate][$afdeling] = array_merge($queryResult[$estate][$afdeling], $records);
+                        }
                     }
-                    if (!empty($value2)) {
-                        $queryResult[$key1][$key2] = array_merge($queryResult[$key1][$key2], $value2);
-                    }
-                }
-            }
+                });
 
             return $queryResult;
         }
 
-        // Fetch data for each table
-        // $RegData = 'your_regional_data';  // Replace with actual regional data
-        $querytahun = fetchDataAndGroupBy('mutu_ancak_new', $RegData);
-        $queryMTbuah = fetchDataAndGroupBy('mutu_buah', $RegData);
-        $queryMTtrans = fetchDataAndGroupBy('mutu_transport', $RegData);
+        function fetchDataAndGroupByYearInChunks($table, $RegData, $year)
+        {
+            $finalResult = [];
 
-        // dd($querytahun);
+            for ($month = 1; $month <= 12; $month++) {
+                $monthlyData = fetchDataByMonthAndGroupInChunks($table, $RegData, $year, $month);
+                foreach ($monthlyData as $estate => $afdelings) {
+                    foreach ($afdelings as $afdeling => $data) {
+                        if (!isset($finalResult[$estate][$afdeling])) {
+                            $finalResult[$estate][$afdeling] = [];
+                        }
+                        $finalResult[$estate][$afdeling] = array_merge($finalResult[$estate][$afdeling], $data);
+                    }
+                }
+            }
+
+            return $finalResult;
+        }
+
+        $querytahun = fetchDataAndGroupByYearInChunks('mutu_ancak_new', $RegData, $year);
+        $queryMTbuah = fetchDataAndGroupByYearInChunks('mutu_buah', $RegData, $year);
+        $queryMTtrans = fetchDataAndGroupByYearInChunks('mutu_transport', $RegData, $year);
+        dd($querytahun);
         //afdeling
         $queryAfd = DB::connection('mysql2')->table('afdeling')
             ->select(
