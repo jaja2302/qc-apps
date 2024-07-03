@@ -241,3 +241,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('detailgradingmill/{est}/{afd}/{bulan}', [GradingController::class, 'detailgradingmill'])->name('detailgradingmill');
     Route::post('/exportpdfgrading', [GradingController::class, 'exportpdfgrading'])->name('exportpdfgrading');
 });
+Route::get('/memory-limit', function () {
+    $memoryLimit = ini_get('memory_limit');
+    return response()->json(['memory_limit' => $memoryLimit]);
+});

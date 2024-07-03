@@ -4328,59 +4328,6 @@
                 },
 
             }],
-
-            // annotations: {
-            //     yaxis: [{
-            //             y: 95,
-            //             y2: 100,
-            //             borderColor: '#000',
-            //             fillColor: '#96be25',
-            //             opacity: 0.4,
-            //             label: {
-            //                 text: ' '
-            //             }
-            //         }, {
-            //             y: 85,
-            //             y2: 95,
-            //             borderColor: '#000',
-            //             fillColor: '#78ac44',
-            //             opacity: 0.4,
-            //             label: {
-            //                 text: ''
-            //             }
-            //         }, {
-            //             y: 75,
-            //             y2: 85,
-            //             borderColor: '#000',
-            //             fillColor: '#fffc04',
-            //             opacity: 0.4,
-            //             label: {
-            //                 text: 'Standar QC'
-            //             }
-            //         }, {
-            //             y: 65,
-            //             y2: 75,
-            //             borderColor: '#000',
-            //             fillColor: '#f07c34',
-            //             opacity: 0.4,
-            //             label: {
-            //                 text: ''
-            //             }
-            //         }, {
-            //             y: 0,
-            //             y2: 65,
-            //             borderColor: '#000',
-            //             fillColor: '#ff0404',
-            //             opacity: 0.4,
-
-
-            //             label: {
-            //                 text: ''
-            //             }
-            //         }
-
-            //     ]
-            // },
             xaxis: {
                 categories: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "July", "Agustus", "Sept", "Okt", "Nov", "Dec"]
             }
