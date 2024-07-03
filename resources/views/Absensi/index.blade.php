@@ -19,7 +19,7 @@
                                             <button class="btn btn-primary" id="pdfdownload">Download PDF</button>
 
                                             <!-- Button to trigger modal -->
-                                            @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep')
+                                            @if (can_edit())
                                             <button type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#editModal">
                                                 Edit Data
                                             </button>
@@ -286,6 +286,7 @@
 
     <script type="module">
         var currentUserName = "{{ session('jabatan') }}";
+        const canedit = @json(can_edit());
 
         $(document).ready(function() {
 
@@ -1091,7 +1092,7 @@
                     `;
                         rowContainer.appendChild(card);
 
-                        if (currentUserName === 'Askep' || currentUserName === 'Manager' || currentUserName === 'Asisten') {
+                        if (canedit) {
                             const buttonContainer = document.createElement("div");
                             buttonContainer.classList.add("btn-container");
 

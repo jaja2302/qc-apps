@@ -1001,36 +1001,28 @@ if (!function_exists('formatPhoneNumber')) {
 if (!function_exists('can_edit')) {
     function can_edit()
     {
-        $user_new_jabatan = auth()->user()->id_jabatan;
-        $user_old_jabatan = auth()->user()->jabatan;
-        $user_new_departemen = auth()->user()->id_departement;
-        $user_old_departemen = auth()->user()->departemen;
+        $user = auth()->user();
+        $newJabatan = $user->id_jabatan;
+        $oldJabatan = $user->jabatan;
+        $newDepartemen = $user->id_departement;
+        $oldDepartemen = $user->departemen;
 
-        // return $user_new_jabatan;
-        if ($user_new_jabatan !== null) {
-            $allowed_jabatan = ['6', '7', '15', '5'];
-            $allowd_departemnt = ['43'];
-            if (in_array($user_new_departemen, $allowd_departemnt)) {
-                if (in_array($user_new_jabatan, $allowed_jabatan)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        } else {
-            $allowed_jabatan = ['Askep', 'Manager', 'Asisten', 'Askep/Asisten'];
-            $allowd_departemnt = ['QC', 'Quality Control'];
-            if (in_array($user_old_departemen, $allowd_departemnt)) {
-                if (in_array($user_old_jabatan, $allowed_jabatan)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
+        $allowedJabatan = ['6', '7', '15', '5'];
+        $allowedDepartments = ['43'];
+
+        // Check new department and position
+        if ($newJabatan !== null && in_array($newDepartemen, $allowedDepartments) && in_array($newJabatan, $allowedJabatan)) {
+            return true;
         }
+
+        // Check old department and position
+        $allowedOldJabatan = ['Askep', 'Manager', 'Asisten', 'Askep/Asisten'];
+        $allowedOldDepartments = ['QC', 'Quality Control'];
+
+        if ($newJabatan === null && in_array($oldDepartemen, $allowedOldDepartments) && in_array($oldJabatan, $allowedOldJabatan)) {
+            return true;
+        }
+
+        return false;
     }
 }

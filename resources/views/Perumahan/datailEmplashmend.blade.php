@@ -118,7 +118,7 @@
 
             <div class="d-flex justify-content-end mr-3">
                 <button class="btn btn-primary ms-auto" id="toggleButton">Preview Penilaian</button>
-                @if (session('jabatan') && (session('jabatan') === 'Askep' || session('jabatan') === 'Manager' || session('jabatan') === 'Asisten'))
+                @if (can_edit())
                 <button class="btn btn-primary ms-auto ml-3" id="addnewimg">Tambah Foto Baru</button>
                 @endif
 
@@ -476,6 +476,7 @@
                 }
             });
         });
+        const canedit = @json(can_edit());
 
         var currentUserName = "{{ session('jabatan') }}";
 
@@ -575,7 +576,7 @@
 
                     rowContainer.appendChild(card);
 
-                    if (currentUserName === 'Askep' || currentUserName === 'Manager' || currentUserName === 'Asisten') {
+                    if (canedit) {
                         const buttonContainer = document.createElement("div");
                         buttonContainer.classList.add("btn-container");
 
@@ -898,7 +899,7 @@
 
 
 
-                    if (currentUserName === 'Askep' || currentUserName === 'Manager' || currentUserName === 'Asisten') {
+                    if (canedit) {
                         const buttonContainer = document.createElement("div");
                         buttonContainer.classList.add("btn-container");
 
@@ -1214,7 +1215,7 @@
 
                     rowContainer.appendChild(card);
 
-                    if (currentUserName === 'Askep' || currentUserName === 'Manager' || currentUserName === 'Asisten') {
+                    if (canedit) {
                         const buttonContainer = document.createElement("div");
                         buttonContainer.classList.add("btn-container");
 
@@ -1530,7 +1531,7 @@
                     card.appendChild(cardInner);
                     rowContainer.appendChild(card);
 
-                    if (currentUserName === 'Askep' || currentUserName === 'Manager' || currentUserName === 'Asisten') {
+                    if (canedit) {
                         const buttonContainer = document.createElement("div");
                         buttonContainer.classList.add("btn-container");
 
@@ -1847,7 +1848,7 @@
                     cardInner.appendChild(cardBody);
                     card.appendChild(cardInner);
                     rowContainer.appendChild(card);
-                    if (currentUserName === 'Askep' || currentUserName === 'Manager' || currentUserName === 'Asisten') {
+                    if (canedit) {
                         const buttonContainer = document.createElement("div");
                         buttonContainer.classList.add("btn-container");
 
@@ -2162,7 +2163,7 @@
                     card.appendChild(cardInner);
                     rowContainer.appendChild(card);
 
-                    if (currentUserName === 'Askep' || currentUserName === 'Manager' || currentUserName === 'Asisten') {
+                    if (canedit) {
                         const buttonContainer = document.createElement("div");
                         buttonContainer.classList.add("btn-container");
 
@@ -2939,7 +2940,7 @@
 
         var listafd = @json($listafd);
         var estdetail = @json($est);
-        if (currentUserName === 'Askep' || currentUserName === 'Manager' || currentUserName === 'Asisten') {
+        if (canedit) {
 
             $('#addnewimg').click(function() {
                 console.log('adding new img')

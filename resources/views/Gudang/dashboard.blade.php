@@ -142,8 +142,7 @@
                     </select>
                 </div>
                 <div class="col-md-3 col-12">
-                    @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') ==
-                    'Asisten')
+                    @if (can_edit())
 
                     <a href="{{ route('listktu') }}" class="btn btn-success mr-2">List KTU</a>
                     @endif
