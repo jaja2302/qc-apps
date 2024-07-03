@@ -489,55 +489,180 @@
                         BA PDF
                     </button>
                 </form>
-
-                <!-- <form action="{{ route('pdfBA_excel') }}" method="POST" class="form-inline" style="display: inline;" target="_blank">
-                    {{ csrf_field() }}
-
-                    <input type="hidden" name="estBA_excel" id="estpdf" value="{{$est}}">
-                    <input type="hidden" name="afdBA_excel" id="afdpdf" value="{{$afd}}">
-                    <input type="hidden" name="tglPDF_excel" id="tglPDF_excel" value="{{ $tanggal }}">
-                    <input type="hidden" name="regExcel" id="regExcel" value="{{$reg}}">
-                    <button type="submit" class="download-btn ml-2" id="download-excel-button" disabled>
-                        <div id="lottie-download" style="width: 24px; height: 24px; display: inline-block;"></div> Download
-                        BA Excel
-                    </button>
-                </form> -->
             </div>
         </div>
 
 
         <div class="row">
+            <style>
+                .table-wrapper {
+                    overflow-x: auto;
+                    overflow-y: auto;
+                    max-height: 600px;
+                }
 
+                .my-table {
+                    width: 100%;
+                    font-size: 0.8rem;
+                    border-collapse: collapse;
+                }
+
+                .my-table th,
+                .my-table td {
+                    padding: 5px;
+                    text-align: center;
+                    border: 1px solid #ccc;
+                }
+
+                .my-table thead {
+                    background-color: #f2f2f2;
+                }
+
+
+
+                .my-table tbody tr:nth-child(even) {
+                    background-color: #f8f8f8;
+                }
+
+                .my-table tbody tr:hover {
+                    background-color: #eaeaea;
+                }
+
+
+                .center {
+                    display: flex;
+                    justify-content: center;
+                }
+
+                .my-table thead th.sticky {
+                    position: -webkit-sticky;
+                    position: sticky;
+                    top: 0;
+                    z-index: 10;
+                    background-color: inherit;
+                }
+
+                .my-table thead th.sticky-sub {
+                    position: -webkit-sticky;
+                    position: sticky;
+                    top: 30px;
+                    /* Adjust this value based on the height of the first row in the header */
+                    z-index: 10;
+                    background-color: inherit;
+                }
+
+                .my-table thead th.sticky-third-row {
+                    position: -webkit-sticky;
+                    position: sticky;
+                    top: 90px;
+                    /* Adjust this value based on the total height of the first two rows in the header */
+                    z-index: 10;
+                    background-color: inherit;
+                }
+
+                .my-table thead th.sticky-second-row {
+                    position: -webkit-sticky;
+                    position: sticky;
+                    top: 60px;
+                    z-index: 10;
+                    background-color: inherit;
+                }
+
+                .my-table tbody td.sticky-cell {
+                    position: -webkit-sticky;
+                    position: sticky;
+                    z-index: 5;
+                    background-color: white;
+                }
+            </style>
 
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-
                         <h1 style="text-align: center;">Tabel Mutu Ancak</h1>
-                        <table class="table table-striped table-bordered" id="mutuAncakTable" style="width: 100%;">
-                            <thead>
-                                <!-- Table header content -->
-                            </thead>
-                            <tbody>
-                                <!-- Table body content will be dynamically generated -->
-                            </tbody>
-                        </table>
+                        <div class="table-wrapper">
+                            <table class="my-table" id="mutuAncakTable">
+                                <thead>
+                                    <tr>
+                                        <th class="sticky" style="background-color: white;">ID</th>
+                                        <th class="sticky" style="background-color: white;">Estate.</th>
+                                        <th class="sticky" style="background-color: white;">Afdeling.</th>
+                                        <th class="sticky" style="background-color: white;">Blok.</th>
+                                        <th class="sticky" style="background-color: white;">petugas.</th>
+                                        <th class="sticky" style="background-color: white;">datetime.</th>
+                                        <th class="sticky" style="background-color: white;">luas blok.</th>
+                                        <th class="sticky" style="background-color: white;">Sph.</th>
+                                        <th class="sticky" style="background-color: white;">Baris 1.</th>
+                                        <th class="sticky" style="background-color: white;">Baris 2.</th>
+                                        <th class="sticky" style="background-color: white;">Jalur masuk.</th>
+                                        <th class="sticky" style="background-color: white;">Status Panen.</th>
+                                        <th class="sticky" style="background-color: white;">Kemandoran.</th>
+                                        <th class="sticky" style="background-color: white;">Ancak Pemanen.</th>
+                                        <th class="sticky" style="background-color: white;">Pokok Panen.</th>
+                                        <th class="sticky" style="background-color: white;">Pokok Sample.</th>
+                                        <th class="sticky" style="background-color: white;">Janjang Panen.</th>
+                                        <th class="sticky" style="background-color: white;">Brondolan (P).</th>
+                                        <th class="sticky" style="background-color: white;">Brondolan (K).</th>
+                                        <th class="sticky" style="background-color: white;">Brondolan (GL).</th>
+                                        <th class="sticky" style="background-color: white;">Buah Tinggal (S).</th>
+                                        <th class="sticky" style="background-color: white;">Buah Tinggal (M1)</th>
+                                        <th class="sticky" style="background-color: white;">Buah Tinggal (M2)</th>
+                                        <th class="sticky" style="background-color: white;">Buah Tinggal (M3)</th>
+                                        <th class="sticky" style="background-color: white;">Pelepah Sengkleh</th>
+                                        <th class="sticky" style="background-color: white;">Frond Stacking</th>
+                                        <th class="sticky" style="background-color: white;">Piringan Semak</th>
+                                        <th class="sticky" style="background-color: white;">Pokok Kuning</th>
+                                        <th class="sticky" style="background-color: white;">Underpruning</th>
+                                        <th class="sticky" style="background-color: white;">Overpruning</th>
+                                        <th class="sticky" style="background-color: white;width:fit-content">Maps</th>
+                                        <th class="sticky" style="background-color: white;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
+
+
+
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
                         <h1 style="text-align: center;">Tabel Mutu Buah</h1>
-                        <table class="table table-striped table-bordered" id="mutuBuahable" style="width: 100%;">
-                            <thead>
-                                <!-- Table header content -->
-                            </thead>
-                            <tbody>
-                                <!-- Table body content will be dynamically generated -->
-                            </tbody>
-                        </table>
+                        <div class="table-wrapper">
+                            <table class="my-table" id="mutuBuahable">
+                                <thead>
+                                    <tr>
+                                        <th class="sticky" style="background-color: white;">ID</th>
+                                        <th class="sticky" style="background-color: white;">Estate</th>
+                                        <th class="sticky" style="background-color: white;">Afdeling</th>
+                                        <th class="sticky" style="background-color: white;">TPH Baris</th>
+                                        <th class="sticky" style="background-color: white;">Blok</th>
+                                        <th class="sticky" style="background-color: white;">Status Panen</th>
+                                        <th class="sticky" style="background-color: white;">Petugas</th>
+                                        <th class="sticky" style="background-color: white;">Ancak Pemanen</th>
+                                        <th class="sticky" style="background-color: white;">Kemandoran</th>
+                                        <th class="sticky" style="background-color: white;">Buah Mentah Tanpa Brondol</th>
+                                        <th class="sticky" style="background-color: white;">Buah Mentah Kurang Brondol</th>
+                                        <th class="sticky" style="background-color: white;">Empty Bunch</th>
+                                        <th class="sticky" style="background-color: white;">Jumlah Janjang</th>
+                                        <th class="sticky" style="background-color: white;">Overripe</th>
+                                        <th class="sticky" style="background-color: white;">Abnormal</th>
+                                        <th class="sticky" style="background-color: white;">Tidak Standar V-cut</th>
+                                        <th class="sticky" style="background-color: white;">Alas Brondolan</th>
+                                        <th class="sticky" style="background-color: white;">Akurasi Maps</th>
+                                        <th class="sticky" style="background-color: white;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -545,14 +670,31 @@
                 <div class="card">
                     <div class="card-body">
                         <h1 style="text-align: center;">Tabel Mutu Transport</h1>
-                        <table class="table table-striped" id="mutuTransportable" style="width: 100%;">
-                            <thead>
-                                <!-- Table header content -->
-                            </thead>
-                            <tbody>
-                                <!-- Table body content will be dynamically generated -->
-                            </tbody>
-                        </table>
+                        <div class="table-wrapper">
+                            <table class="my-table" id="mutuTransportable">
+                                <thead>
+                                    <tr>
+                                        <th class="sticky" style="background-color: white;">ID</th>
+                                        <th class="sticky" style="background-color: white;">Estate</th>
+                                        <th class="sticky" style="background-color: white;">Afdeling</th>
+                                        <th class="sticky" style="background-color: white;">TPH Baris</th>
+                                        <th class="sticky" style="background-color: white;">Blok</th>
+                                        <th class="sticky" style="background-color: white;">Status Panen</th>
+                                        <th class="sticky" style="background-color: white;">Petugas</th>
+                                        <th class="sticky" style="background-color: white;">Datetime</th>
+                                        <th class="sticky" style="background-color: white;">Kemandoran</th>
+                                        <th class="sticky" style="background-color: white;">Luas Blok</th>
+                                        <th class="sticky" style="background-color: white;">Brondol di TPH</th>
+                                        <th class="sticky" style="background-color: white;">Buah di TPH</th>
+                                        <th class="sticky" style="background-color: white;">Akurasi Maps</th>
+                                        <th class="sticky" style="background-color: white;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2549,153 +2691,151 @@
 
                     var dataTableAncakTest = $('#mutuAncakTable').DataTable({
                         columns: [{
-                                title: 'ID',
+
                                 data: 'id'
                             },
                             {
-                                title: 'Estate',
+
                                 data: 'estate'
                             },
                             {
-                                title: 'Afdeling',
+
                                 data: 'afdeling'
                             },
                             {
-                                title: 'Blok',
+
                                 data: 'blok'
                             },
                             {
-                                title: 'petugas',
+
                                 data: 'petugas'
                             },
                             {
-                                title: 'datetime',
+
                                 data: 'datetime'
                             },
                             {
-                                title: 'luas blok',
+
                                 data: 'luas_blok',
 
                             },
                             {
-                                title: 'Sph',
+
                                 data: 'sph',
 
                             },
                             {
-                                title: 'Baris 1',
+
                                 data: 'br1',
 
                             },
                             {
-                                title: 'Baris 2',
+
                                 data: 'br2',
 
                             },
                             {
-                                title: 'Jalur masuk',
+
                                 data: 'jalur_masuk',
                             },
                             {
-                                title: 'Status Panen',
+
                                 data: 'status_panen',
                             },
                             {
-                                title: 'Kemandoran',
+
                                 data: 'kemandoran',
                             },
                             {
-                                title: 'Ancak Pemanen',
+
                                 data: 'ancak_pemanen',
                             },
                             {
-                                title: 'Pokok Panen',
+
                                 data: 'pokok_panen',
 
                             },
                             {
-                                title: 'Pokok Sample',
+
                                 data: 'sample',
 
                             },
                             {
-                                title: 'Janjang Panen',
+
                                 data: 'jjg',
 
                             },
                             {
-                                title: 'Brondolan (P)',
+
                                 data: 'brtp',
 
                             },
                             {
-                                title: 'Brondolan (K)',
+
                                 data: 'brtk',
 
                             },
                             {
-                                title: 'Brondolan (GL)',
+
                                 data: 'brtgl',
 
                             },
                             {
-                                title: 'Buah Tinggal (S)',
+
                                 data: 'bhts',
 
                             },
                             {
-                                title: 'Buah Tinggal (M1)',
+
                                 data: 'bhtm1',
 
                             },
                             {
-                                title: 'Buah Tinggal (M2)',
+
                                 data: 'bhtm2',
 
                             },
                             {
-                                title: 'Buah Tinggal (M3)',
+
                                 data: 'bhtm3',
 
                             },
                             {
-                                title: 'Pelepah Sengkleh',
+
                                 data: 'ps',
 
                             },
                             {
-                                title: 'Frond Stacking',
+
                                 data: 'sp',
 
                             },
                             {
-                                title: 'Piringan Semak',
+
                                 data: 'piringan_semak',
 
                             },
                             {
-                                title: 'Pokok Kuning',
+
                                 data: 'pokok_kuning',
 
                             },
                             {
-                                title: 'Underpruning',
+
                                 data: 'underpruning',
 
                             },
                             {
-                                title: 'Overpruning',
+
                                 data: 'overpruning',
 
                             },
                             {
-                                title: 'Maps',
+
                                 data: 'app_version',
 
                             },
                             {
-                                // -1 targets the last column
-                                title: 'Actions',
                                 visible: (currentUserName === 'Askep' || currentUserName === 'Manager') && (departemen === 'QC' || departemen === 'Quality Control'),
                                 render: function(data, type, row, meta) {
                                     var buttons =
@@ -2705,13 +2845,6 @@
                                 }
                             }
                         ],
-                        fixedColumns: {
-                            start: 3
-                        },
-                        paging: false,
-                        scrollCollapse: true,
-                        scrollX: true,
-                        scrollY: 500
                     });
 
                     dataTableAncakTest.clear().rows.add(parseResult['mutuAncak']).draw();
@@ -2934,88 +3067,86 @@
 
                     var dataTablesBuah = $('#mutuBuahable').DataTable({
                         columns: [{
-                                title: 'ID',
+
                                 data: 'id'
                             },
                             {
-                                title: 'Estate',
+
                                 data: 'estate'
                             },
                             {
-                                title: 'Afdeling',
+
                                 data: 'afdeling'
                             },
                             {
-                                title: 'TPH Baris',
+
                                 data: 'tph_baris'
                             },
                             {
-                                title: 'Blok',
+
                                 data: 'blok'
                             },
                             {
-                                title: 'Status Panen',
+
                                 data: 'status_panen'
                             },
                             {
-                                title: 'Petugas',
+
                                 data: 'petugas',
 
                             },
                             {
-                                title: 'Ancak Pemanen',
+
                                 data: 'ancak_pemanen',
 
                             },
                             {
-                                title: 'Kemandoran',
+
                                 data: 'kemandoran',
 
                             },
                             {
-                                title: 'Buah Mentah Tanpa  Brondol',
+
                                 data: 'bmt',
 
                             },
                             {
-                                title: 'Buah Mentah Kurang Brondol',
+
                                 data: 'bmk',
 
                             },
                             {
-                                title: 'Empty Bunch',
+
                                 data: 'empty_bunch',
                             },
                             {
-                                title: 'Jumlah Janjang',
+
                                 data: 'jumlah_jjg',
                             },
                             {
-                                title: 'Overripe',
+
                                 data: 'overripe',
                             },
                             {
-                                title: 'Abnormal',
+
                                 data: 'abnormal',
                             },
                             {
-                                title: 'Tidak Standar V-cut',
+
                                 data: 'vcut',
 
                             },
                             {
-                                title: 'Alas Brondolan',
+
                                 data: 'alas_br',
 
                             },
                             {
-                                title: 'Akurasi Maps',
+
                                 data: 'app_version',
 
                             },
                             {
-                                // -1 targets the last column
-                                title: 'Actions',
                                 visible: (currentUserName === 'Askep' || currentUserName === 'Manager') && (departemen === 'QC' || departemen === 'Quality Control'),
                                 render: function(data, type, row, meta) {
                                     var buttons =
@@ -3025,13 +3156,6 @@
                                 }
                             }
                         ],
-                        fixedColumns: {
-                            start: 3
-                        },
-                        paging: false,
-                        scrollCollapse: true,
-                        scrollX: true,
-                        scrollY: 500
                     });
 
 
@@ -3262,66 +3386,65 @@
 
                     var dataTablesTrans = $('#mutuTransportable').DataTable({
                         columns: [{
-                                title: 'ID',
+
                                 data: 'id'
                             },
                             {
-                                title: 'Estate',
+
                                 data: 'estate'
                             },
                             {
-                                title: 'Afdeling',
+
                                 data: 'afdeling'
                             },
                             {
-                                title: 'TPH Baris',
+
                                 data: 'tph_baris'
                             },
                             {
-                                title: 'Blok',
+
                                 data: 'blok'
                             },
                             {
-                                title: 'Status Panen',
+
                                 data: 'status_panen'
                             },
                             {
-                                title: 'Petugas',
+
                                 data: 'petugas',
 
                             },
                             {
-                                title: 'Datetime',
+
                                 data: 'datetime',
 
                             },
                             {
-                                title: 'Kemandoran',
+
                                 data: 'kemandoran',
 
                             },
                             {
-                                title: 'Luas Blok',
+
                                 data: 'luas_blok',
 
                             },
                             {
-                                title: 'Brondol di TPH',
+
                                 data: 'bt',
 
                             },
                             {
-                                title: 'Buah di TPH',
+
                                 data: 'rst',
                             },
                             {
-                                title: 'Akurasi Maps',
+
                                 data: 'app_version',
 
                             },
                             {
-                                // -1 targets the last column
-                                title: 'Actions',
+
                                 visible: (currentUserName === 'Askep' || currentUserName === 'Manager') && (departemen === 'QC' || departemen === 'Quality Control'),
                                 render: function(data, type, row, meta) {
                                     var buttons =
@@ -3331,13 +3454,6 @@
                                 }
                             }
                         ],
-                        fixedColumns: {
-                            start: 3
-                        },
-                        paging: false,
-                        scrollCollapse: true,
-                        scrollX: true,
-                        scrollY: 500
                     });
 
 
