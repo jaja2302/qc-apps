@@ -14,7 +14,6 @@ import jQuery from "jquery";
 import jszip from 'jszip';
 import pdfmake from 'pdfmake';
 import DataTable from 'datatables.net-dt';
-import Editor from 'datatables.net-editor-dt';
 import 'datatables.net-autofill-dt';
 import 'datatables.net-buttons-dt';
 import 'datatables.net-buttons/js/buttons.colVis.mjs';
@@ -37,7 +36,6 @@ window.$ = jQuery;
 window.DataTable = DataTable;
 window.jszip = jszip;
 window.pdfmake = pdfmake;
-window.Editor = Editor;
 window.DateTime = DateTime;
 // helper 
 window.captureTableScreenshot = (tableId, fileName) => {

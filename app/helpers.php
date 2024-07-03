@@ -997,3 +997,40 @@ if (!function_exists('formatPhoneNumber')) {
         }
     }
 }
+
+if (!function_exists('can_edit')) {
+    function can_edit()
+    {
+        $user_new_jabatan = auth()->user()->id_jabatan;
+        $user_old_jabatan = auth()->user()->jabatan;
+        $user_new_departemen = auth()->user()->id_departement;
+        $user_old_departemen = auth()->user()->departemen;
+
+        // return $user_new_jabatan;
+        if ($user_new_jabatan !== null) {
+            $allowed_jabatan = ['6', '7', '15', '5'];
+            $allowd_departemnt = ['43'];
+            if (in_array($user_new_departemen, $allowd_departemnt)) {
+                if (in_array($user_new_jabatan, $allowed_jabatan)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            $allowed_jabatan = ['Askep', 'Manager', 'Asisten', 'Askep/Asisten'];
+            $allowd_departemnt = ['QC', 'Quality Control'];
+            if (in_array($user_old_departemen, $allowd_departemnt)) {
+                if (in_array($user_old_jabatan, $allowed_jabatan)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+    }
+}

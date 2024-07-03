@@ -459,20 +459,119 @@
             </div>
         </div>
 
+        <style>
+            .table-wrapper {
+                overflow-x: auto;
+                overflow-y: auto;
+                max-height: 600px;
+            }
+
+            .my-table {
+                width: 100%;
+                font-size: 0.8rem;
+                border-collapse: collapse;
+            }
+
+            .my-table th,
+            .my-table td {
+                padding: 5px;
+                text-align: center;
+                border: 1px solid #ccc;
+            }
+
+            .my-table thead {
+                background-color: #f2f2f2;
+            }
+
+
+
+            .my-table tbody tr:nth-child(even) {
+                background-color: #f8f8f8;
+            }
+
+            .my-table tbody tr:hover {
+                background-color: #eaeaea;
+            }
+
+
+            .center {
+                display: flex;
+                justify-content: center;
+            }
+
+            .my-table thead th.sticky {
+                position: -webkit-sticky;
+                position: sticky;
+                top: 0;
+                z-index: 10;
+                background-color: inherit;
+            }
+
+            .my-table thead th.sticky-sub {
+                position: -webkit-sticky;
+                position: sticky;
+                top: 30px;
+                /* Adjust this value based on the height of the first row in the header */
+                z-index: 10;
+                background-color: inherit;
+            }
+
+            .my-table thead th.sticky-third-row {
+                position: -webkit-sticky;
+                position: sticky;
+                top: 90px;
+                /* Adjust this value based on the total height of the first two rows in the header */
+                z-index: 10;
+                background-color: inherit;
+            }
+
+            .my-table thead th.sticky-second-row {
+                position: -webkit-sticky;
+                position: sticky;
+                top: 60px;
+                z-index: 10;
+                background-color: inherit;
+            }
+
+            .my-table tbody td.sticky-cell {
+                position: -webkit-sticky;
+                position: sticky;
+                z-index: 5;
+                background-color: white;
+            }
+        </style>
 
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
                         <h1 style="text-align: center;">Tabel Mutu Transport</h1>
-                        <table class="table table-striped table-bordered" id="new_Sidak">
-                            <thead>
-                                <!-- Table header content -->
-                            </thead>
-                            <tbody>
-                                <!-- Table body content will be dynamically generated -->
-                            </tbody>
-                        </table>
+                        <div class="table-wrapper">
+                            <table class="my-table" id="new_Sidak">
+                                <thead>
+                                    <tr>
+                                        <th class="sticky" style="background-color: white;">ID</th>
+                                        <th class="sticky" style="background-color: white;">Estate</th>
+                                        <th class="sticky" style="background-color: white;">Afdeling</th>
+                                        <th class="sticky" style="background-color: white;">Blok</th>
+                                        <th class="sticky" style="background-color: white;">H+</th>
+                                        <th class="sticky" style="background-color: white;">QC</th>
+                                        <th class="sticky" style="background-color: white;">No TPH</th>
+                                        <th class="sticky" style="background-color: white;">Brondolan Tinggal TPH</th>
+                                        <th class="sticky" style="background-color: white;">Brondolan TInggal di Jalan</th>
+                                        <th class="sticky" style="background-color: white;">Brondolan Tinggal di BIN</th>
+                                        <th class="sticky" style="background-color: white;">Jumlah Karung</th>
+                                        <th class="sticky" style="background-color: white;">Buah Tinggal</th>
+                                        <th class="sticky" style="background-color: white;">Restan Unreported</th>
+                                        <th class="sticky" style="background-color: white;">Maps</th>
+                                        <th class="sticky" style="background-color: white;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -653,6 +752,8 @@
 
 
     <script type="text/javascript">
+        const canedit = @json(can_edit());
+
         var currentUserName = "{{ session('jabatan') }}";
         var user_name = "{{ session('user_name') }}";
         document.addEventListener("DOMContentLoaded", function() {
@@ -862,59 +963,59 @@
                     // new sida 
                     var sidakTPhNEw = $('#new_Sidak').DataTable({
                         columns: [{
-                                title: 'ID',
+
                                 data: 'id',
                             },
                             {
-                                title: 'Estate',
+
                                 data: 'est'
                             },
                             {
-                                title: 'Afdeling',
+
                                 data: 'afd'
                             },
                             {
-                                title: 'Blok',
+
                                 data: 'blok'
                             },
                             {
-                                title: 'H+',
+
                                 data: 'status'
                             },
                             {
-                                title: 'QC',
+
                                 data: 'qc'
                             },
                             {
-                                title: 'No TPH',
+
                                 data: 'no_tph'
                             },
                             {
-                                title: 'Brondolan Tinggal TPH',
+
                                 data: 'bt_tph'
                             },
                             {
-                                title: 'Brondolan TInggal di Jalan',
+
                                 data: 'bt_jalan'
                             },
                             {
-                                title: 'Brondolan Tinggal di BIN',
+
                                 data: 'bt_bin'
                             },
                             {
-                                title: 'Jumlah Karung',
+
                                 data: 'jum_karung'
                             },
                             {
-                                title: 'Buah Tinggal',
+
                                 data: 'buah_tinggal'
                             },
                             {
-                                title: 'Restan Unreported',
+
                                 data: 'restan_unreported'
                             },
                             {
-                                title: 'Maps',
+
                                 data: 'app_version',
                                 render: function(data, type, row, meta) {
                                     var parts = data.split(';'); // Use the 'data' parameter instead of 'dataString'
@@ -938,9 +1039,8 @@
                                 }
                             },
                             {
-                                // -1 targets the last column
-                                title: 'Actions',
-                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager') && departemen === 'QC',
+
+                                visible: canedit,
                                 render: function(data, type, row, meta) {
                                     var buttons =
                                         '<button class="edit-btn">Edit</button>' +
@@ -949,11 +1049,6 @@
                                 }
                             }
                         ],
-                        fixedColumns: true,
-                        paging: false,
-                        scrollCollapse: true,
-                        scrollX: true,
-                        scrollY: 500
                     });
 
                     // Populate DataTable with data

@@ -447,20 +447,122 @@
                 </button>
             </form>
         </div>
+        <style>
+            .table-wrapper {
+                overflow-x: auto;
+                overflow-y: auto;
+                max-height: 600px;
+            }
 
+            .my-table {
+                width: 100%;
+                font-size: 0.8rem;
+                border-collapse: collapse;
+            }
+
+            .my-table th,
+            .my-table td {
+                padding: 5px;
+                text-align: center;
+                border: 1px solid #ccc;
+            }
+
+            .my-table thead {
+                background-color: #f2f2f2;
+            }
+
+
+
+            .my-table tbody tr:nth-child(even) {
+                background-color: #f8f8f8;
+            }
+
+            .my-table tbody tr:hover {
+                background-color: #eaeaea;
+            }
+
+
+            .center {
+                display: flex;
+                justify-content: center;
+            }
+
+            .my-table thead th.sticky {
+                position: -webkit-sticky;
+                position: sticky;
+                top: 0;
+                z-index: 10;
+                background-color: inherit;
+            }
+
+            .my-table thead th.sticky-sub {
+                position: -webkit-sticky;
+                position: sticky;
+                top: 30px;
+                /* Adjust this value based on the height of the first row in the header */
+                z-index: 10;
+                background-color: inherit;
+            }
+
+            .my-table thead th.sticky-third-row {
+                position: -webkit-sticky;
+                position: sticky;
+                top: 90px;
+                /* Adjust this value based on the total height of the first two rows in the header */
+                z-index: 10;
+                background-color: inherit;
+            }
+
+            .my-table thead th.sticky-second-row {
+                position: -webkit-sticky;
+                position: sticky;
+                top: 60px;
+                z-index: 10;
+                background-color: inherit;
+            }
+
+            .my-table tbody td.sticky-cell {
+                position: -webkit-sticky;
+                position: sticky;
+                z-index: 5;
+                background-color: white;
+            }
+        </style>
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
                         <h1 style="text-align: center;">Tabel Mutu Buah</h1>
-                        <table class="table table-striped table-bordered" id="new_Sidak">
-                            <thead>
-                                <!-- Table header content -->
-                            </thead>
-                            <tbody>
-                                <!-- Table body content will be dynamically generated -->
-                            </tbody>
-                        </table>
+                        <div class="table-wrapper">
+                            <table class="my-table" id="new_Sidak">
+                                <thead>
+                                    <tr>
+                                        <th class="sticky" style="background-color: white;">ID</th>
+                                        <th class="sticky" style="background-color: white;">Estate</th>
+                                        <th class="sticky" style="background-color: white;">Afdeling</th>
+                                        <th class="sticky" style="background-color: white;">Blok</th>
+                                        <th class="sticky" style="background-color: white;">Petugas</th>
+                                        <th class="sticky" style="background-color: white;">Waktu</th>
+                                        <th class="sticky" style="background-color: white;">No TPH</th>
+                                        <th class="sticky" style="background-color: white;">Ancak Pemanen</th>
+                                        <th class="sticky" style="background-color: white;">Jumlah Janjang</th>
+                                        <th class="sticky" style="background-color: white;">Buah Mentah</th>
+                                        <th class="sticky" style="background-color: white;">Buah Masak</th>
+                                        <th class="sticky" style="background-color: white;">Buah Lewat Masak</th>
+                                        <th class="sticky" style="background-color: white;">Buah Kosong</th>
+                                        <th class="sticky" style="background-color: white;">Buah Abnormal</th>
+                                        <th class="sticky" style="background-color: white;">Rat Damage</th>
+                                        <th class="sticky" style="background-color: white;">Tidak Vcut</th>
+                                        <th class="sticky" style="background-color: white;">Alas Karung</th>
+                                        <th class="sticky" style="background-color: white;">Maps</th>
+                                        <th class="sticky" style="background-color: white;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -736,6 +838,8 @@
 
 
         <script type="text/javascript">
+            const canedit = @json(can_edit());
+
             $(document).ready(function() {
 
                 // Close modal when the close button is clicked
@@ -883,7 +987,7 @@
                         });
                     } else if (result.isDenied) {
                         // User clicked No
-                        console.log('User declined approval.');
+                        // console.log('User declined approval.');
                     }
                 });
             }
@@ -967,74 +1071,74 @@
                         var parseResult = JSON.parse(result);
                         let table = $('#new_Sidak').DataTable({
                             columns: [{
-                                    title: 'ID',
+
                                     data: 'id',
                                 },
                                 {
-                                    title: 'Estate',
+
                                     data: 'estate'
                                 },
                                 {
-                                    title: 'Afdeling',
+
                                     data: 'afdeling'
                                 },
                                 {
-                                    title: 'Blok',
+
                                     data: 'blok'
                                 },
                                 {
-                                    title: 'Petugas',
+
                                     data: 'petugas'
                                 },
                                 {
-                                    title: 'Waktu',
+
                                     data: 'datetime'
                                 },
                                 {
-                                    title: 'TPH Baris',
+
                                     data: 'tph_baris'
                                 },
                                 {
-                                    title: 'Ancak Pemanen',
+
                                     data: 'ancak_pemanen'
                                 },
                                 {
-                                    title: 'Jumlah Janjang',
+
                                     data: 'jumlah_jjg'
                                 }, {
-                                    title: 'Buah Mentah',
+
                                     data: 'bmt'
                                 },
                                 {
-                                    title: 'Buah Masak',
+
                                     data: 'bmk'
                                 },
                                 {
-                                    title: 'Buah Lewat Masak',
+
                                     data: 'overripe'
                                 },
                                 {
-                                    title: 'Buah Kosong',
+
                                     data: 'empty_bunch'
                                 },
                                 {
-                                    title: 'Buah Abnormal',
+
                                     data: 'abnormal'
                                 },
                                 {
-                                    title: 'Rat Damage',
+
                                     data: 'rd'
                                 },
                                 {
-                                    title: 'Tidak Vcut',
+
                                     data: 'vcut'
                                 },
                                 {
-                                    title: 'Alas Karung',
+
                                     data: 'alas_br'
                                 },
                                 {
-                                    title: 'Maps',
+
                                     data: 'app_version',
                                     render: function(data, type, row, meta) {
                                         var parts = data.split(';'); // Use the 'data' parameter instead of 'dataString'
@@ -1059,8 +1163,8 @@
                                 },
 
                                 {
-                                    title: 'Actions',
-                                    visible: (currentUserName === 'Askep' || currentUserName === 'Manager') && departemen === 'QC',
+
+                                    visible: canedit,
                                     render: function(data, type, row, meta) {
                                         var buttons =
                                             '<button class="edit-btn">Edit</button>' +
@@ -1069,13 +1173,6 @@
                                     }
                                 }
                             ],
-                            fixedColumns: {
-                                start: 3
-                            },
-                            paging: false,
-                            scrollCollapse: true,
-                            scrollX: true,
-                            scrollY: 500
                         });
 
                         // $('#closeModalBtn_buah').click(function() {

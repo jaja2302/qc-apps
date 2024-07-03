@@ -1574,7 +1574,11 @@
 
 
     <script type="text/javascript">
-        // var $j = jQuery.noConflict();
+        //constvar $j = jQuery.noConflict();
+        const canedit = @json(can_edit());
+
+        // console.log(canedit);
+
         document.addEventListener("DOMContentLoaded", function() {
             const inputDate = document.getElementById("inputDate");
 
@@ -2836,7 +2840,7 @@
 
                             },
                             {
-                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager') && (departemen === 'QC' || departemen === 'Quality Control'),
+                                visible: canedit,
                                 render: function(data, type, row, meta) {
                                     var buttons =
                                         '<button class="edit-btn">Edit</button>' +
@@ -3147,7 +3151,7 @@
 
                             },
                             {
-                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager') && (departemen === 'QC' || departemen === 'Quality Control'),
+                                visible: canedit,
                                 render: function(data, type, row, meta) {
                                     var buttons =
                                         '<button class="edit-btn">Edit</button>' +
@@ -3445,7 +3449,7 @@
                             },
                             {
 
-                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager') && (departemen === 'QC' || departemen === 'Quality Control'),
+                                visible: canedit,
                                 render: function(data, type, row, meta) {
                                     var buttons =
                                         '<button class="edit-btn">Edit</button>' +
