@@ -19,6 +19,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 require_once(app_path('helpers.php'));
@@ -870,10 +871,6 @@ class ApiqcController extends Controller
         // dd($result);
     }
 
-
-
-
-
     public function get_data_mill_update(Request $request): JsonResponse
     {
         // Get the single 'id' input
@@ -1215,6 +1212,126 @@ class ApiqcController extends Controller
             default:
                 return response()->json(['error_validasi' => 'tidak tau'], 404);
                 break;
+        }
+    }
+
+    public function getmsgsmartlabs()
+    {
+        $data = DB::connection('mysql5')
+            ->table('send_msg')
+            ->select('*')
+            ->get();
+
+        $data = json_decode($data, true);
+
+        if (!empty($data)) {
+            $filteredData = collect($data)->filter(function ($item) {
+                return strpos($item['penerima'], '62') === 0;
+            });
+
+            if ($filteredData->isNotEmpty()) {
+                return response()->json([
+                    'status' => '200',
+                    'data' => $filteredData->values(),
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => '200',
+                    'data' => 'kosong',
+                ], 200);
+            }
+        } else {
+            return response()->json([
+                'status' => '200',
+                'data' => 'kosong',
+            ], 200);
+        }
+    }
+
+    public function deletemsgsmartlabs(Request $request)
+    {
+        $id = $request->input('id');
+
+        if ($id != null) {
+            $data = DB::connection('mysql5')
+                ->table('send_msg')
+                ->where('id', $id)
+                ->delete();
+
+            return response()->json([
+                'status' => '200',
+                'data' => 'deleted',
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => '400',
+                'error' => 'Invalid ID provided',
+            ], 400);
+        }
+    }
+
+    public function updatestatusbot(Request $request)
+    {
+        $request->validate([
+            'pc_id' => 'required|string|max:50',
+            'status' => 'required|string|max:10'
+        ]);
+
+        $pc_id = $request->input('pc_id');
+        $status = $request->input('status');
+        $time = Carbon::now('Asia/Jakarta');
+
+        try {
+            $record = DB::connection('mysql2')->table('pc_status')->where('pc_id', $pc_id)->first();
+
+            if ($record) {
+                // Record exists, update it
+                DB::connection('mysql2')
+                    ->table('pc_status')
+                    ->where('pc_id', $pc_id)
+                    ->update(['status' => $status, 'last_update' => $time]);
+                return response()->json(['message' => 'Record updated successfully'], 200);
+            } else {
+                // Record doesn't exist, insert a new one
+                DB::connection('mysql2')
+                    ->table('pc_status')
+                    ->insert(['pc_id' => $pc_id, 'status' => $status, 'last_update' => $time]);
+                return response()->json(['message' => 'Record inserted successfully'], 201);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error updating record: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function checkPcStatus()
+    {
+        $threshold = Carbon::now('Asia/Jakarta')->subHour()->format('Y-m-d H:i:s');
+        $pcs = DB::connection('mysql2')->table('pc_status')->where('last_update', '<', $threshold)->get();
+
+        if ($pcs->isEmpty()) {
+            return response()->json(['message' => 'All PCs are online']);
+        }
+
+        foreach ($pcs as $pc) {
+            $this->sendTelegramNotification($pc->pc_id);
+        }
+
+        return response()->json(['message' => 'Notifications sent']);
+    }
+
+    protected function sendTelegramNotification($pc_id)
+    {
+        $botApiToken = '5428994980:AAFdHrlniyG8UqKZfXw-Cvz_MzjftW5KObY';
+        $channelId = '-1001316663954';
+        $text = "PC HO Tidak Online";
+
+        $response = Http::get("https://api.telegram.org/bot{$botApiToken}/sendMessage", [
+            'chat_id' => $channelId,
+            'text' => $text,
+        ]);
+
+        if ($response->failed()) {
+            dd('error');
         }
     }
 }

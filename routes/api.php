@@ -36,3 +36,7 @@ Route::post('/updatedatamill', [ApiqcController::class, 'get_data_mill_update'])
 Route::get('/getnotifijin', [ApiqcController::class, 'getnotif_suratijin']);
 Route::post('/inputiotdata', [ApiqcController::class, 'inputiot_data']);
 Route::post('/updatenotifijin', [ApiqcController::class, 'getnotif_suratijin_approved']);
+Route::get('/getmsgsmartlabs', [ApiqcController::class, 'getmsgsmartlabs']);
+Route::post('/deletemsgsmartlabs', [ApiqcController::class, 'deletemsgsmartlabs']);
+Route::post('/updatestatusbot', [ApiqcController::class, 'updatestatusbot']);
+Route::get('/checkPcStatus', [ApiqcController::class, 'checkPcStatus']);

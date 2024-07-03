@@ -2696,7 +2696,7 @@
                             {
                                 // -1 targets the last column
                                 title: 'Actions',
-                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager') && departemen === 'QC',
+                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager') && (departemen === 'QC' || departemen === 'Quality Control'),
                                 render: function(data, type, row, meta) {
                                     var buttons =
                                         '<button class="edit-btn">Edit</button>' +
@@ -3016,7 +3016,7 @@
                             {
                                 // -1 targets the last column
                                 title: 'Actions',
-                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager') && departemen === 'QC',
+                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager') && (departemen === 'QC' || departemen === 'Quality Control'),
                                 render: function(data, type, row, meta) {
                                     var buttons =
                                         '<button class="edit-btn">Edit</button>' +
@@ -3322,7 +3322,7 @@
                             {
                                 // -1 targets the last column
                                 title: 'Actions',
-                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager') && departemen === 'QC',
+                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager') && (departemen === 'QC' || departemen === 'Quality Control'),
                                 render: function(data, type, row, meta) {
                                     var buttons =
                                         '<button class="edit-btn">Edit</button>' +
