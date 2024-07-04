@@ -907,9 +907,14 @@ class inspectController extends Controller
                 }
             }
         }
+        // dd($bulan);
 
-
-
+        $QueryPengurangan = DB::connection('mysql2')->table('list_estate_nilai')
+            ->select('*')
+            ->where('date', $bulan)
+            ->get();
+        $QueryPengurangan = json_decode($QueryPengurangan, true);
+        // dd($QueryPengurangan);
 
         // dd($mtancakWIltab1);
         $rekap = [];
@@ -1168,6 +1173,19 @@ class inspectController extends Controller
                     // $rekap[$key][$key1]['skor_brd'] = $skor_brd = 0;
                     // $rekap[$key][$key1]['skor_ps'] = $skor_ps = 0;
                 }
+                // dd($key1);
+                $pengurangan = 0;
+                $penambahan = 0;
+                foreach ($QueryPengurangan as $num => $vals) {
+                    if ($vals['est'] === $key1) {
+                        if ($vals['tipe'] === 'minus') {
+                            $pengurangan = $vals['nilai'];
+                        } else {
+                            $penambahan = $vals['nilai'];
+                        }
+                    }
+                }
+
 
                 // $totalSkorEst = $skor_bh + $skor_brd + $skor_ps;
 
@@ -1198,6 +1216,8 @@ class inspectController extends Controller
                     'check_datacak' => $check_data,
                     'est' => $key1,
                     'afd' => 'est',
+                    'pengurangan' => $pengurangan,
+                    'penambahan' => $penambahan,
                     'mutuancak' => '-----------------------------------'
                 ];
 
@@ -2890,7 +2910,16 @@ class inspectController extends Controller
         }
 
         $optionREg = json_decode($optionREg, true);
-        //  dd($optionREg);
+
+        $estateoption = DB::connection('mysql2')
+            ->table('estate')
+            ->select('*')
+            ->where('estate.emp', '!=', 1)
+            ->join('wil', 'wil.id', '=', 'estate.wil')
+            ->where('wil.regional', 2)
+            ->get();
+        $estateoption = json_decode($estateoption, true);
+        // dd($estateoption);
         // dd($dataSkor_ancak, $dataSkor_trans, $dataSkor_ancak);
         return view('Qcinspeksi.index', [
             'arrHeader' => $arrHeader,
@@ -2898,11 +2927,10 @@ class inspectController extends Controller
             'arrHeaderTrd' => $arrHeaderTrd,
             'arrHeaderReg' => $arrHeaderReg,
             'groupedArray' => $groupedArray,
-
             'listEstate' => $listEst,
-
             'datefilter' => $years,
-            'option_reg' => $optionREg
+            'option_reg' => $optionREg,
+            'estateoption' => $estateoption,
         ]);
     }
 

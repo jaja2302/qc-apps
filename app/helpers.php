@@ -1,6 +1,8 @@
 <?php
 // Important functions
 
+use Illuminate\Support\Facades\DB;
+
 if (!function_exists('count_percent')) {
     function count_percent($skor1, $skor2)
     {
@@ -1024,5 +1026,75 @@ if (!function_exists('can_edit')) {
         }
 
         return false;
+    }
+}
+
+
+if (!function_exists('fetchDataByMonthAndGroupInChunks')) {
+    function fetchDataByMonthAndGroupInChunks($table, $RegData, $year, $month)
+    {
+        $queryResult = [];
+
+        DB::connection('mysql2')->table($table)
+            ->select("{$table}.*", 'estate.*', DB::raw('DATE_FORMAT(' . $table . '.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(' . $table . '.datetime, "%Y") as tahun'))
+            ->join('estate', 'estate.est', '=', "{$table}.estate")
+            ->join('wil', 'wil.id', '=', 'estate.wil')
+            ->where('datetime', 'like', $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '%')
+            ->where('wil.regional', $RegData)
+            ->where('estate.emp', '!=', 1)
+            ->orderBy('estate', 'asc')
+            ->orderBy('afdeling', 'asc')
+            ->orderBy('blok', 'asc')
+            ->orderBy('datetime', 'asc')
+            ->chunk(1000, function ($data) use (&$queryResult) {
+                $groupedData = $data->groupBy(['estate', 'afdeling', 'bulan']);
+                foreach ($groupedData as $estate => $afdelings) {
+                    foreach ($afdelings as $afdeling => $bulanData) {
+                        foreach ($bulanData as $bulan => $records) {
+                            if (!isset($queryResult[$estate])) {
+                                $queryResult[$estate] = [];
+                            }
+                            if (!isset($queryResult[$estate][$afdeling])) {
+                                $queryResult[$estate][$afdeling] = [];
+                            }
+                            if (!isset($queryResult[$estate][$afdeling][$bulan])) {
+                                $queryResult[$estate][$afdeling][$bulan] = [];
+                            }
+                            $queryResult[$estate][$afdeling][$bulan] = array_merge($queryResult[$estate][$afdeling][$bulan], $records->toArray());
+                        }
+                    }
+                }
+            });
+
+        return $queryResult;
+    }
+}
+
+if (!function_exists('fetchDataAndGroupByYearInChunks')) {
+    function fetchDataAndGroupByYearInChunks($table, $RegData, $year)
+    {
+        $finalResult = [];
+
+        for ($month = 1; $month <= 12; $month++) {
+            $monthlyData = fetchDataByMonthAndGroupInChunks($table, $RegData, $year, $month);
+            foreach ($monthlyData as $estate => $afdelings) {
+                if (!isset($finalResult[$estate])) {
+                    $finalResult[$estate] = [];
+                }
+                foreach ($afdelings as $afdeling => $bulanData) {
+                    if (!isset($finalResult[$estate][$afdeling])) {
+                        $finalResult[$estate][$afdeling] = [];
+                    }
+                    foreach ($bulanData as $bulan => $data) {
+                        if (!isset($finalResult[$estate][$afdeling][$bulan])) {
+                            $finalResult[$estate][$afdeling][$bulan] = [];
+                        }
+                        $finalResult[$estate][$afdeling][$bulan] = array_merge($finalResult[$estate][$afdeling][$bulan], $data);
+                    }
+                }
+            }
+        }
+
+        return $finalResult;
     }
 }

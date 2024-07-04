@@ -15,10 +15,13 @@
 
 
     $allskor = 0;
-
+    $pengurang = isset($item1['pengurangan']) ? $item1['pengurangan'] : 0;
+    $penambah = isset($item1['penambahan']) ? $item1['penambahan'] : 0;
 
     if($item1['check_databh'] === 'ada' || $item1['check_datacak'] === 'ada' || $item1['check_datatrans'] === 'ada'){
-    $allskor = $item1['skor_akhircak'] + $item1['totalSkortrans'] + $item1['TOTAL_SKORbh'];
+
+
+    $allskor = ($item1['skor_akhircak'] + $item1['totalSkortrans'] + $item1['TOTAL_SKORbh']) - $pengurang + $penambah;
 
     if ($allskor >= 95) {
     $newktg = "EXCELLENT";
@@ -119,7 +122,16 @@
         <td style="background-color: {{ $color }}">{{$item1['check_databh'] === 'ada' ||  $item1['check_datacak'] === 'ada'   ||  $item1['check_datatrans'] === 'ada'? $item1['skor_krbh'] : '-'}}</td>
         <td style="background-color: {{ $color }}">{{$item1['check_databh'] === 'ada' ||  $item1['check_datacak'] === 'ada'   ||  $item1['check_datatrans'] === 'ada'? $item1['TOTAL_SKORbh'] : '-'}}</td>
 
-        <td style="background-color: {{ $color }}">{{$allskor}}</td>
+        <td style="background-color: {{ $color }}">
+            {{$allskor}}
+            @if ($pengurang != 0 && $item1['afd'] === 'est' && $penambah == 0)
+            <span style="color: red;">(-{{ $pengurang }})</span>
+            @elseif ($penambah != 0 && $item1['afd'] === 'est')
+            <span style="color: green;">(+{{ $penambah }})</span>
+            @endif
+
+
+        </td>
         <td style="background-color: {{ $color2 }}" data-b-a-s="medium" data-a-h="center">{{$newktg}}</td>
     </tr>
 
