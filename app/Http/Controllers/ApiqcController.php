@@ -796,6 +796,12 @@ class ApiqcController extends Controller
                 // return $pdf->stream($pdfName);
                 Storage::disk('public')->put($pdfName, $pdf->output());
 
+                $getadds = explode(';', $value['app_version']);
+
+                $appvers = $getadds[0] ?? '-';
+                $os_version = $getadds[1] ?? '-';
+                $phone_version = $getadds[2] ?? '-';
+
                 // dd($tanpaBrondol);
                 $result[] = [
                     'id' => $value['id'],
@@ -854,6 +860,9 @@ class ApiqcController extends Controller
                     'waktu_grading' => $date->format('H:i:s'),
                     'waktu_grading_judul' => $date->format('H:i'),
                     'tanggal_judul' => $date->format('dmY'),
+                    'appvers' => $appvers,
+                    'os_version' => $os_version,
+                    'phone_version' => $phone_version,
                 ];
             }
 

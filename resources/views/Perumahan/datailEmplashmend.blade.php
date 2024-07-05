@@ -2513,7 +2513,7 @@
                             {
                                 // -1 targets the last column
                                 title: 'Aksi',
-                                visible: (currentUserName === 'Askep' || currentUserName === 'Asisten' || currentUserName === 'Manager'),
+                                visible: canedit,
                                 render: function(data, type, row, meta) {
                                     var buttons =
                                         '<button class="edit-btn">Edit Nilai</button>'
@@ -2651,7 +2651,7 @@
                             {
                                 // -1 targets the last column
                                 title: 'Aksi',
-                                visible: (currentUserName === 'Askep' || currentUserName === 'Asisten' || currentUserName === 'Manager'),
+                                visible: canedit,
                                 render: function(data, type, row, meta) {
                                     var buttons =
                                         '<button class="edit-btn">Edit Nilai</button>'
@@ -2778,7 +2778,7 @@
                             {
                                 // -1 targets the last column
                                 title: 'Aksi',
-                                visible: (currentUserName === 'Askep' || currentUserName === 'Asisten' || currentUserName === 'Manager'),
+                                visible: canedit,
                                 render: function(data, type, row, meta) {
                                     var buttons =
                                         '<button class="edit-btn">Edit Nilai</button>'

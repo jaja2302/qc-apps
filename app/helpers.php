@@ -1036,16 +1036,16 @@ if (!function_exists('fetchDataByMonthAndGroupInChunks')) {
         $queryResult = [];
 
         DB::connection('mysql2')->table($table)
-            ->select("{$table}.*", 'estate.*', DB::raw('DATE_FORMAT(' . $table . '.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(' . $table . '.datetime, "%Y") as tahun'))
+            ->select("{$table}.*", 'estate.*', DB::raw('DATE_FORMAT(' . $table . '.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(' . $table . '.datetime, "%Y") as tahun'), DB::raw('DATE_FORMAT(' . $table . '.datetime, "%Y-%m-%d") as date'))
             ->join('estate', 'estate.est', '=', "{$table}.estate")
             ->join('wil', 'wil.id', '=', 'estate.wil')
             ->where('datetime', 'like', $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '%')
             ->where('wil.regional', $RegData)
             ->where('estate.emp', '!=', 1)
-            ->orderBy('estate', 'asc')
-            ->orderBy('afdeling', 'asc')
-            ->orderBy('blok', 'asc')
-            ->orderBy('datetime', 'asc')
+            ->orderBy('estate', 'DESC')
+            ->orderBy('afdeling', 'DESC')
+            ->orderBy('blok', 'DESC')
+            ->orderBy('datetime', 'DESC')
             ->chunk(1000, function ($data) use (&$queryResult) {
                 $groupedData = $data->groupBy(['estate', 'afdeling', 'bulan']);
                 foreach ($groupedData as $estate => $afdelings) {

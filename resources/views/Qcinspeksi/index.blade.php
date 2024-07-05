@@ -3522,764 +3522,332 @@
 
                     var parseResult = JSON.parse(result)
                     //list estate
-                    //untuk tabel pertahun
-                    //   var FinalTahun = Object.entries(parseResult['FinalTahun'])
 
-                    var list_tabel = Object.entries(parseResult['FinalTahun'])
-                    var total_tahun = Object.entries(parseResult['Final_end'])
-                    var rekap_bulan = Object.entries(parseResult['RekapBulan'])
-                    var rekap_tahun = Object.entries(parseResult['RekapTahun'])
-                    var rekap_bulanwil = Object.entries(parseResult['RekapBulanwil'])
-                    // console.log(rekap_bulanwil);
-                    var rekap_tahunwil = Object.entries(parseResult['RekapTahunwil'])
-                    var RekapBulanReg = Object.entries(parseResult['RekapBulanReg'])
-                    var RekapTahunReg = Object.entries(parseResult['RekapTahunReg'])
-                    var RekapBulanAFD = Object.entries(parseResult['RekapBulanAFD'])
-                    var RekapTahunAFD = Object.entries(parseResult['RekapTahunAFD'])
-                    var chart_brdTH = Object.entries(parseResult['chart_brdTAHUN'])
-                    var chart_bhTH = Object.entries(parseResult['chart_buahTAHUN'])
-                    var chart_brdWIl = Object.entries(parseResult['chartbrdWilTH'])
-                    var chart_bhWil = Object.entries(parseResult['chartBhwilTH'])
-                    var list_will = Object.entries(parseResult['list_estate'])
-                    var estateEST = Object.entries(parseResult['estateEST'])
-                    var RekapBulanPlasma = Object.entries(parseResult['RekapBulanPlasma'])
-                    var regInpt = regData
-                    // console.log(RekapBulanPlasma);
+                    var resultreg = Object.entries(parseResult['resultreg'])
+                    var resultwil = Object.entries(parseResult['resultwil'])
+                    var resultestate = Object.entries(parseResult['resultestate'])
+                    var resultafdeling = Object.entries(parseResult['resultafdeling'])
+                    console.log(resultafdeling);
+                    var trekap2 = document.getElementById('tb_tahun');
+                    var trekapwil = document.getElementById('tablewil');
+                    var trekapafd = document.getElementById('rekapAFD');
 
-                    var nama_asisten = Object.entries(parseResult['asisten'])
-                    const assistants = nama_asisten;
+                    let inc = 1;
+                    resultestate.forEach(item => {
+                        let item1 = inc++;
+                        let item2 = item[0];
+                        let item3 = '-';
+                        let item4 = '-';
+                        let item5 = item[1].January.estate.ancak.skor_akhircak + item[1].January.estate.buah.TOTAL_SKORbh + item[1].January.estate.trans.totalSkortrans
+                        let item6 = item[1].February.estate.ancak.skor_akhircak + item[1].February.estate.buah.TOTAL_SKORbh + item[1].February.estate.trans.totalSkortrans
+                        let item7 = item[1].March.estate.ancak.skor_akhircak + item[1].March.estate.buah.TOTAL_SKORbh + item[1].March.estate.trans.totalSkortrans
+                        let item8 = item[1].April.estate.ancak.skor_akhircak + item[1].April.estate.buah.TOTAL_SKORbh + item[1].April.estate.trans.totalSkortrans
+                        let item9 = item[1].May.estate.ancak.skor_akhircak + item[1].May.estate.buah.TOTAL_SKORbh + item[1].May.estate.trans.totalSkortrans
+                        let item10 = item[1].June.estate.ancak.skor_akhircak + item[1].June.estate.buah.TOTAL_SKORbh + item[1].June.estate.trans.totalSkortrans
+                        let item11 = item[1].July.estate.ancak.skor_akhircak + item[1].July.estate.buah.TOTAL_SKORbh + item[1].July.estate.trans.totalSkortrans
+                        let item12 = item[1].August.estate.ancak.skor_akhircak + item[1].August.estate.buah.TOTAL_SKORbh + item[1].August.estate.trans.totalSkortrans
+                        let item13 = item[1].September.estate.ancak.skor_akhircak + item[1].September.estate.buah.TOTAL_SKORbh + item[1].September.estate.trans.totalSkortrans
+                        let item14 = item[1].October.estate.ancak.skor_akhircak + item[1].October.estate.buah.TOTAL_SKORbh + item[1].October.estate.trans.totalSkortrans
+                        let item15 = item[1].November.estate.ancak.skor_akhircak + item[1].November.estate.buah.TOTAL_SKORbh + item[1].November.estate.trans.totalSkortrans
+                        let item16 = item[1].December.estate.ancak.skor_akhircak + item[1].December.estate.buah.TOTAL_SKORbh + item[1].December.estate.trans.totalSkortrans
 
-                    const filteredAssistants = assistants.map((assistant) => ({
-                        est: assistant[1].est,
-                        afd: assistant[1].afd,
-                        nama: assistant[1].nama,
-                    }));
+                        // Create table row and cell for each 'key'
+                        let tr = document.createElement('tr');
+                        let itemElement1 = document.createElement('td');
+                        let itemElement2 = document.createElement('td');
+                        let itemElement3 = document.createElement('td');
+                        let itemElement4 = document.createElement('td');
+                        let itemElement5 = document.createElement('td');
+                        let itemElement6 = document.createElement('td');
+                        let itemElement7 = document.createElement('td');
+                        let itemElement8 = document.createElement('td');
+                        let itemElement9 = document.createElement('td');
+                        let itemElement10 = document.createElement('td');
+                        let itemElement11 = document.createElement('td');
+                        let itemElement12 = document.createElement('td');
+                        let itemElement13 = document.createElement('td');
+                        let itemElement14 = document.createElement('td');
+                        let itemElement15 = document.createElement('td');
+                        let itemElement16 = document.createElement('td');
 
 
 
-                    // console.log(RekapTahunReg);
+                        itemElement1.classList.add("text-center");
+                        itemElement1.innerText = item1
+                        itemElement2.innerText = item2
+                        itemElement3.innerText = item3
+                        itemElement4.innerText = item4
+                        itemElement5.innerText = item5
+                        itemElement6.innerText = item6
+                        itemElement7.innerText = item7
+                        itemElement8.innerText = item8
+                        itemElement9.innerText = item9
+                        itemElement10.innerText = item10
+                        itemElement11.innerText = item11
+                        itemElement12.innerText = item12
+                        itemElement13.innerText = item13
+                        itemElement14.innerText = item14
+                        itemElement15.innerText = item15
+                        itemElement16.innerText = item16
 
 
-                    var bttEST = '[';
-                    chart_brdTH.forEach(element => {
-                        bttEST += '"' + element.toString().split(',')[1] + '",';
+                        setBackgroundColor(itemElement5, item5);
+                        setBackgroundColor(itemElement6, item6);
+                        setBackgroundColor(itemElement7, item7);
+                        setBackgroundColor(itemElement8, item8);
+                        setBackgroundColor(itemElement9, item9);
+                        setBackgroundColor(itemElement10, item10);
+                        setBackgroundColor(itemElement11, item11);
+                        setBackgroundColor(itemElement12, item12);
+                        setBackgroundColor(itemElement13, item13);
+                        setBackgroundColor(itemElement14, item14);
+                        setBackgroundColor(itemElement15, item15);
+                        setBackgroundColor(itemElement16, item16);
+
+                        tr.appendChild(itemElement1)
+                        tr.appendChild(itemElement2)
+                        tr.appendChild(itemElement3)
+                        tr.appendChild(itemElement4)
+                        tr.appendChild(itemElement5)
+                        tr.appendChild(itemElement6)
+                        tr.appendChild(itemElement7)
+                        tr.appendChild(itemElement8)
+                        tr.appendChild(itemElement9)
+                        tr.appendChild(itemElement10)
+                        tr.appendChild(itemElement11)
+                        tr.appendChild(itemElement12)
+                        tr.appendChild(itemElement13)
+                        tr.appendChild(itemElement14)
+                        tr.appendChild(itemElement15)
+                        tr.appendChild(itemElement16)
+                        // Append the row to the table
+                        trekap2.appendChild(tr);
                     });
-                    bttEST = bttEST.substring(0, bttEST.length - 1);
-                    bttEST += ']';
+                    let incs = 1;
+                    resultwil.forEach(item => {
+                        let item1 = incs++;
+                        let item2 = 'Wil-' + ' ' + item[0];
+                        let item3 = '-';
+                        let item4 = '-';
+                        let item5 = item[1].January.wil.ancak.skor_akhircak + item[1].January.wil.buah.TOTAL_SKORbh + item[1].January.wil.trans.totalSkortrans
+                        let item6 = item[1].February.wil.ancak.skor_akhircak + item[1].February.wil.buah.TOTAL_SKORbh + item[1].February.wil.trans.totalSkortrans
+                        let item7 = item[1].March.wil.ancak.skor_akhircak + item[1].March.wil.buah.TOTAL_SKORbh + item[1].March.wil.trans.totalSkortrans
+                        let item8 = item[1].April.wil.ancak.skor_akhircak + item[1].April.wil.buah.TOTAL_SKORbh + item[1].April.wil.trans.totalSkortrans
+                        let item9 = item[1].May.wil.ancak.skor_akhircak + item[1].May.wil.buah.TOTAL_SKORbh + item[1].May.wil.trans.totalSkortrans
+                        let item10 = item[1].June.wil.ancak.skor_akhircak + item[1].June.wil.buah.TOTAL_SKORbh + item[1].June.wil.trans.totalSkortrans
+                        let item11 = item[1].July.wil.ancak.skor_akhircak + item[1].July.wil.buah.TOTAL_SKORbh + item[1].July.wil.trans.totalSkortrans
+                        let item12 = item[1].August.wil.ancak.skor_akhircak + item[1].August.wil.buah.TOTAL_SKORbh + item[1].August.wil.trans.totalSkortrans
+                        let item13 = item[1].September.wil.ancak.skor_akhircak + item[1].September.wil.buah.TOTAL_SKORbh + item[1].September.wil.trans.totalSkortrans
+                        let item14 = item[1].October.wil.ancak.skor_akhircak + item[1].October.wil.buah.TOTAL_SKORbh + item[1].October.wil.trans.totalSkortrans
+                        let item15 = item[1].November.wil.ancak.skor_akhircak + item[1].November.wil.buah.TOTAL_SKORbh + item[1].November.wil.trans.totalSkortrans
+                        let item16 = item[1].December.wil.ancak.skor_akhircak + item[1].December.wil.buah.TOTAL_SKORbh + item[1].December.wil.trans.totalSkortrans
 
-                    var bhEST = '[';
-                    chart_bhTH.forEach(element => {
-                        bhEST += '"' + element.toString().split(',')[1] + '",';
+                        // Create table row and cell for each 'key'
+                        let tr = document.createElement('tr');
+                        let itemElement1 = document.createElement('td');
+                        let itemElement2 = document.createElement('td');
+                        let itemElement3 = document.createElement('td');
+                        let itemElement4 = document.createElement('td');
+                        let itemElement5 = document.createElement('td');
+                        let itemElement6 = document.createElement('td');
+                        let itemElement7 = document.createElement('td');
+                        let itemElement8 = document.createElement('td');
+                        let itemElement9 = document.createElement('td');
+                        let itemElement10 = document.createElement('td');
+                        let itemElement11 = document.createElement('td');
+                        let itemElement12 = document.createElement('td');
+                        let itemElement13 = document.createElement('td');
+                        let itemElement14 = document.createElement('td');
+                        let itemElement15 = document.createElement('td');
+                        let itemElement16 = document.createElement('td');
+
+
+
+                        itemElement1.classList.add("text-center");
+                        itemElement1.innerText = item1
+                        itemElement2.innerText = item2
+                        itemElement3.innerText = item3
+                        itemElement4.innerText = item4
+                        itemElement5.innerText = item5
+                        itemElement6.innerText = item6
+                        itemElement7.innerText = item7
+                        itemElement8.innerText = item8
+                        itemElement9.innerText = item9
+                        itemElement10.innerText = item10
+                        itemElement11.innerText = item11
+                        itemElement12.innerText = item12
+                        itemElement13.innerText = item13
+                        itemElement14.innerText = item14
+                        itemElement15.innerText = item15
+                        itemElement16.innerText = item16
+
+                        setBackgroundColor(itemElement5, item5);
+                        setBackgroundColor(itemElement6, item6);
+                        setBackgroundColor(itemElement7, item7);
+                        setBackgroundColor(itemElement8, item8);
+                        setBackgroundColor(itemElement9, item9);
+                        setBackgroundColor(itemElement10, item10);
+                        setBackgroundColor(itemElement11, item11);
+                        setBackgroundColor(itemElement12, item12);
+                        setBackgroundColor(itemElement13, item13);
+                        setBackgroundColor(itemElement14, item14);
+                        setBackgroundColor(itemElement15, item15);
+                        setBackgroundColor(itemElement16, item16);
+
+
+                        tr.appendChild(itemElement1)
+                        tr.appendChild(itemElement2)
+                        tr.appendChild(itemElement3)
+                        tr.appendChild(itemElement4)
+                        tr.appendChild(itemElement5)
+                        tr.appendChild(itemElement6)
+                        tr.appendChild(itemElement7)
+                        tr.appendChild(itemElement8)
+                        tr.appendChild(itemElement9)
+                        tr.appendChild(itemElement10)
+                        tr.appendChild(itemElement11)
+                        tr.appendChild(itemElement12)
+                        tr.appendChild(itemElement13)
+                        tr.appendChild(itemElement14)
+                        tr.appendChild(itemElement15)
+                        tr.appendChild(itemElement16)
+                        // Append the row to the table
+                        trekapwil.appendChild(tr);
                     });
-                    bhEST = bhEST.substring(0, bhEST.length - 1);
-                    bhEST += ']';
+                    resultafdeling.forEach((estate) => {
+                        let estateName = estate[0];
+                        let afdelings = estate[1];
 
-                    var brdWil = '[';
-                    chart_brdWIl.forEach(element => {
-                        brdWil += '"' + element.toString().split(',')[1] + '",';
-                    });
-                    brdWil = brdWil.substring(0, brdWil.length - 1);
-                    brdWil += ']';
+                        // Loop through each afdeling in the estate
+                        Object.keys(afdelings).forEach((afdelingKey) => {
+                            let afdeling = afdelings[afdelingKey];
 
-                    var bhWil = '[';
-                    chart_bhWil.forEach(element => {
-                        bhWil += '"' + element.toString().split(',')[1] + '",';
-                    });
-                    bhWil = bhWil.substring(0, bhWil.length - 1);
-                    bhWil += ']';
+                            // Loop through each month in the afdeling
+                            Object.keys(afdeling).forEach((monthKey) => {
+                                let monthData = afdeling[monthKey];
 
+                                let item1 = inc++;
+                                let item2 = estateName;
+                                let item3 = afdelingKey;
+                                let item4 = afdeling.January.TOTAL_SKORbh;
 
-                    var wilayah = '['
-                    list_will.forEach(element => {
-                        wilayah += '"' + element + '",'
-                    });
-                    wilayah = wilayah.substring(0, wilayah.length - 1);
-                    wilayah += ']'
 
+                                // Create table row and cell for each 'key'
+                                let tr = document.createElement('tr');
+                                let itemElement1 = document.createElement('td');
+                                let itemElement2 = document.createElement('td');
+                                let itemElement3 = document.createElement('td');
+                                let itemElement4 = document.createElement('td');
+                                let itemElement5 = document.createElement('td');
 
+                                itemElement1.classList.add("text-center");
+                                itemElement1.innerText = item1;
+                                itemElement2.innerText = item2;
+                                itemElement3.innerText = item3;
+                                itemElement4.innerText = item4;
 
-                    var estate = JSON.parse(wilayah)
-                    var bttEst = JSON.parse(bttEST)
-                    var bhEST = JSON.parse(bhEST)
 
-                    var brdWil = JSON.parse(brdWil)
-                    var bhWil = JSON.parse(bhWil)
+                                setBackgroundColor(itemElement5, monthData);
 
-                    //untuk table
-                    var arrbodywil = rekap_bulan;
+                                tr.appendChild(itemElement1);
+                                tr.appendChild(itemElement2);
+                                tr.appendChild(itemElement3);
+                                tr.appendChild(itemElement4);
 
-                    var yearStr = year.toString();
-                    var totalBody = rekap_tahun;
 
-                    const arr = estate
-
-
-                    let formatEst;
-
-                    if (regInpt === '1') {
-                        formatEst = Array.from(arr, (item, index) => {
-                                const value = item.split(',')[1];
-                                return {
-                                    index,
-                                    value
-                                };
-                            })
-                            .filter((item) => item.index < 13 || item.index > 15)
-                            .map((item) => item.value);
-
-                        formatEst.push("PT.MUA");
-                    } else {
-
-                        formatEst = Array.from(arr, (item, index) => {
-                                const value = item.split(',')[1];
-                                return {
-                                    index,
-                                    value
-                                };
-                            })
-                            .map((item) => item.value);
-                    }
-
-                    const arrEst = estateEST;
-                    const est = arrEst.map((item) => item.slice(1)); // remove the first element of each array
-
-                    // console.log(arrbodywil);
-
-                    const array = est
-
-                    const estAndNamaValues = array.map(([{
-                        est,
-                        nama
-                    }]) => ({
-                        est,
-                        nama
-                    }));
-
-                    var tbody1 = document.getElementById('tb_tahun');
-
-                    arrbodywil.forEach((element, index) => {
-
-                        var tr = document.createElement('tr');
-                        let namaEst = {
-                            "KNE": "Samuel M. Sidabutar",
-                            "PLE": "Hamdani",
-                            "RDE": "Muhammad Rizaldi",
-                            "SLE": "Wahyu Binarko",
-                            "BKE": "Andri J. A. Engkang",
-                            "KDE": "Ahmad Seno Aji",
-                            "RGE": "Angga Putera Perdana",
-                            "SGE": "Jurianto",
-                            "BGE": "Prawito",
-                            "NBE": "Larmaya Aji Pamungkas",
-                            "SYE": "Dedi Yusdarty",
-                            "UPE": "M. Rasyid Fauzirin"
-                        }
-
-
-
-                        let item1 = index + 1;
-                        let item3 = element[0];
-                        let item2 = '-';
-
-                        // // Iterate over estAndNamaValues to get the corresponding nama value
-                        for (let i = 0; i < estAndNamaValues.length; i++) {
-                            if (estAndNamaValues[i].est === item3) {
-                                item2 = estAndNamaValues[i].nama;
-                                break;
-                            }
-                        }
-                        let item4;
-
-                        filteredAssistants.forEach((element, index) => {
-                            const assistantEstate = element['est'];
-                            const assistantAfd = element['afd'];
-                            // console.log(assistantEstate)
-
-                            if (assistantEstate === item3 && assistantAfd == 'EM') {
-                                item4 = element['nama'];
-                            }
-                        });
-
-                        if (item4 === undefined) {
-                            item4 = '-';
-                        } else if (item4 === 'Budi Saputra') {
-                            item4 = 'SEPTIAN ADHI P';
-                        }
-                        // let item2 = slangEst[item3];
-                        // // <!-- let item4 = namaEst[item3];
-                        // if (item4 === undefined) {
-                        //     item4 = '-';
-                        // } -->
-
-                        let item5 = element[1].January.bulan_skor;
-                        let item6 = element[1].February.bulan_skor;
-                        let item7 = element[1].March.bulan_skor;
-                        let item8 = element[1].April.bulan_skor;
-                        let item9 = element[1].May.bulan_skor;
-                        let item10 = element[1].June.bulan_skor;
-                        let item11 = element[1].July.bulan_skor;
-                        let item12 = element[1].August.bulan_skor;
-                        let item13 = element[1].September.bulan_skor;
-                        let item14 = element[1].October.bulan_skor;
-                        let item15 = element[1].November.bulan_skor;
-                        let item16 = element[1].December.bulan_skor;
-
-                        // Find the skor_tahun for the current element
-                        let item17;
-                        for (var i = 0; i < totalBody.length; i++) {
-                            if (totalBody[i][0] == item3) {
-                                item17 = totalBody[i][1]['tahun_skor'];
-                                break;
-                            }
-                        }
-
-                        let items = [item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item12, item13, item14, item15, item16, item17];
-
-                        let column = 0;
-                        items.forEach(item => {
-                            let td = document.createElement('td');
-                            if (column >= 4) {
-                                if (item >= 95) {
-                                    td.style.backgroundColor = "#0804fc";
-                                } else if (item >= 85 && item < 95) {
-                                    td.style.backgroundColor = "#08b454";
-                                } else if (item >= 75 && item < 85) {
-                                    td.style.backgroundColor = "#fffc04";
-                                } else if (item >= 65 && item < 75) {
-                                    td.style.backgroundColor = "#ffc404";
-                                } else if (item == 0) {
-                                    td.style.backgroundColor = "white";
-                                } else {
-                                    td.style.backgroundColor = "red";
-                                }
-                            }
-                            column++;
-
-                            td.innerText = item;
-                            tr.appendChild(td);
-                        });
-
-                        tbody1.appendChild(tr);
-                        var header = document.getElementById('th_year');
-                        header.innerText = yearStr;
-                    });
-
-
-                    //bagian untuk table perwil
-
-
-                    // var yearStr = year.toString();
-                    var arrwil = rekap_bulanwil;
-                    // console.log(rekap_tahunwil);
-                    var totalBodywil = rekap_tahunwil;
-
-                    var tbody2 = document.getElementById('tablewil');
-
-                    arrwil.forEach((element, index) => {
-                        var tr = document.createElement('tr')
-                        let angka = element[0];
-                        if (angka === '1') {
-                            angka = 'I';
-                        } else if (angka === '2') {
-                            angka = 'II';
-                        } else if (angka === '3') {
-                            angka = 'III';
-                        } else if (angka === '4') {
-                            angka = 'IV';
-                        } else if (angka === '5') {
-                            angka = 'V';
-                        } else if (angka === '6') {
-                            angka = 'VI';
-                        } else if (angka === '7') {
-                            angka = 'VII';
-                        } else if (angka === '8') {
-                            angka = 'VIII';
-                        } else if (angka === '10') {
-                            angka = 'IX';
-                        } else if (angka === '11') {
-                            angka = 'X';
-                        }
-
-                        let item2 = '-';
-                        let item1 = angka;
-                        let wilKe = 'WIL-' + angka;
-                        filteredAssistants.forEach((data, j) => {
-                            if (wilKe == data['est'] && data['afd'] == 'GM') {
-                                item2 = data['nama']
-                            }
-                        });
-
-                        let item3 = element[1].January.skor_bulanTotal;
-                        let item4 = element[1].February.skor_bulanTotal;
-                        let item5 = element[1].March.skor_bulanTotal;
-                        let item6 = element[1].April.skor_bulanTotal;
-                        let item7 = element[1].May.skor_bulanTotal;
-                        let item8 = element[1].June.skor_bulanTotal;
-                        let item9 = element[1].July.skor_bulanTotal;
-                        let item10 = element[1].August.skor_bulanTotal;
-                        let item11 = element[1].September.skor_bulanTotal;
-                        let item12 = element[1].October.skor_bulanTotal;
-                        let item13 = element[1].November.skor_bulanTotal;
-                        let item14 = element[1].December.skor_bulanTotal;
-
-                        let tahunskor = [];
-                        for (var i = 0; i < totalBodywil.length; i++) {
-                            if (totalBodywil[i][0] == element[0]) {
-                                tahunskor.push(totalBodywil[i][1]['tahun_skorwil']);
-                                break;
-                            }
-
-                        }
-
-                        let item15 = tahunskor;
-
-                        let items = [item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item12, item13, item14, item15];
-
-                        // Create a td element with colspan="3" for the first three items
-                        let td1 = document.createElement('td');
-                        td1.colSpan = "3";
-                        td1.innerText = item1;
-                        tr.appendChild(td1);
-
-                        let column = 1; // Start column after the first three items
-                        for (let i = 1; i < items.length; i++) {
-                            let item = items[i];
-                            let td = document.createElement('td');
-                            if (column >= 2) {
-                                if (item >= 95) {
-                                    td.style.backgroundColor = "#0804fc";
-                                } else if (item >= 85 && item < 95) {
-                                    td.style.backgroundColor = "#08b454";
-                                } else if (item >= 75 && item < 85) {
-                                    td.style.backgroundColor = "#fffc04";
-                                } else if (item >= 65 && item < 75) {
-                                    td.style.backgroundColor = "#ffc404";
-                                } else if (item == 0) {
-                                    td.style.backgroundColor = "white";
-                                } else {
-                                    td.style.backgroundColor = "red";
-                                }
-                            }
-                            column++;
-                            td.innerText = item;
-                            tr.appendChild(td);
-                        }
-
-                        tbody2.appendChild(tr)
-                        var header = document.getElementById('th_years');
-                        header.innerText = yearStr;
-                    });
-
-                    var plasmaWil = RekapBulanPlasma;
-                    // console.log(plasmaWil);
-
-
-                    // if (regInpt === '1') {
-                    var plasma = document.getElementById('tablewil');
-
-                    plasmaWil.forEach((element, index) => {
-                        var tr = document.createElement('tr')
-
-                        let item1 = element[0];
-                        let item2 = '-';
-                        filteredAssistants.forEach((data, j) => {
-                            if (item1 == data['est'] && data['afd'] == 'GM') {
-                                item2 = data['nama']
-                            }
-                        });
-
-                        let item3 = element[1].January.Bulan;
-                        let item4 = element[1].February.Bulan;
-                        let item5 = element[1].March.Bulan;
-                        let item6 = element[1].April.Bulan;
-                        let item7 = element[1].May.Bulan;
-                        let item8 = element[1].June.Bulan;
-                        let item9 = element[1].July.Bulan;
-                        let item10 = element[1].August.Bulan;
-                        let item11 = element[1].September.Bulan;
-                        let item12 = element[1].October.Bulan;
-                        let item13 = element[1].November.Bulan;
-                        let item14 = element[1].December.Bulan;
-
-                        let item15 = element[1].Tahun;
-
-                        let items = [item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item12, item13, item14, item15];
-
-                        // Create a td element with colspan="3" for the first three items
-                        let td1 = document.createElement('td');
-                        td1.colSpan = "3";
-                        td1.innerText = item1;
-                        tr.appendChild(td1);
-
-                        let column = 1; // Start column after the first three items
-                        for (let i = 1; i < items.length; i++) {
-                            let item = items[i];
-                            let td = document.createElement('td');
-                            if (column >= 2) {
-                                if (item >= 95) {
-                                    td.style.backgroundColor = "#0804fc";
-                                } else if (item >= 85 && item < 95) {
-                                    td.style.backgroundColor = "#08b454";
-                                } else if (item >= 75 && item < 85) {
-                                    td.style.backgroundColor = "#fffc04";
-                                } else if (item >= 65 && item < 75) {
-                                    td.style.backgroundColor = "#ffc404";
-                                } else if (item == 0) {
-                                    td.style.backgroundColor = "white";
-                                } else {
-                                    td.style.backgroundColor = "red";
-                                }
-                            }
-                            column++;
-                            td.innerText = item;
-                            tr.appendChild(td);
-                        }
-
-                        plasma.appendChild(tr)
-
-                    });
-
-                    // }
-
-                    // console.log(RekapBulanReg);
-
-                    //table untuk regional 1
-                    var regbln = RekapBulanReg;
-                    var regthn = RekapTahunReg;
-                    // console.log(regbln);
-
-                    var tbody3 = document.getElementById('reg');
-
-
-                    let regWil = '';
-                    let regW = '';
-
-
-                    if (regInpt === '1') {
-                        regW = 'I'
-                    } else if (regInpt === '2') {
-                        regW = 'II'
-                    } else if (regInpt === '3') {
-                        regW = 'III'
-                    } else if (regInpt === '4') {
-                        regW = 'IV'
-                    } else if (regInpt === '5') {
-                        regW = 'V'
-                    } else if (regInpt === '6') {
-                        regW = 'VI'
-                    } else if (regInpt === '7') {
-                        regW = 'VIII'
-                    } else if (regInpt === '8') {
-                        regW = 'VIII'
-                    } else if (regInpt === '10') {
-                        regW = 'IX'
-                    } else if (regInpt === '11') {
-                        regW = 'X'
-                    }
-                    var tr = document.createElement('tr');
-
-                    let item1 = regW
-                    let regKe = 'REG-' + regW
-                    let item2 = '-';
-                    filteredAssistants.forEach((data, j) => {
-                        if (regKe == data['est'] && data['afd'] == 'RH') {
-                            item2 = data['nama']
-                        }
-                    });
-                    let item3 = regbln[0][1].skor_bulanTotal;
-                    let item4 = regbln[1][1].skor_bulanTotal;
-                    let item5 = regbln[2][1].skor_bulanTotal;
-                    let item6 = regbln[3][1].skor_bulanTotal;
-                    let item7 = regbln[4][1].skor_bulanTotal;
-                    let item8 = regbln[5][1].skor_bulanTotal;
-                    let item9 = regbln[6][1].skor_bulanTotal;
-                    let item10 = regbln[7][1].skor_bulanTotal;
-                    let item11 = regbln[8][1].skor_bulanTotal;
-                    let item12 = regbln[9][1].skor_bulanTotal;
-                    let item13 = regbln[10][1].skor_bulanTotal;
-                    let item14 = regbln[11][1].skor_bulanTotal;
-                    let item15 = regthn[0][1].tahun_skorwil;
-
-                    let items = [item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item12, item13, item14, item15];
-
-                    let td1 = document.createElement('td');
-                    td1.colSpan = "3";
-                    td1.innerText = item1;
-                    tr.appendChild(td1);
-
-                    let column = 1; // Start column after the first three items
-                    for (let j = 1; j < items.length; j++) {
-                        let item = items[j];
-                        let td = document.createElement('td');
-                        if (column >= 2) {
-                            if (item >= 95) {
-                                td.style.backgroundColor = "#0804fc";
-                            } else if (item >= 85 && item < 95) {
-                                td.style.backgroundColor = "#08b454";
-                            } else if (item >= 75 && item < 85) {
-                                td.style.backgroundColor = "#fffc04";
-                            } else if (item >= 65 && item < 75) {
-                                td.style.backgroundColor = "#ffc404";
-                            } else if (item == 0) {
-                                td.style.backgroundColor = "white";
-                            } else {
-                                td.style.backgroundColor = "red";
-                            }
-                        }
-                        column++;
-                        td.innerText = item;
-                        tr.appendChild(td);
-                    }
-
-                    tbody3.appendChild(tr);
-
-                    ///table untuk rekap perafd
-                    var arrAFD = RekapBulanAFD;
-                    // console.log(arrAFD);
-
-                    var arrAFDTH = RekapTahunAFD;
-                    //   console.log(arrAFDTH)
-
-                    var tbody4 = document.getElementById('rekapAFD');
-                    let currentIndex = 1;
-
-
-
-                    // console.log(assist[0][1])
-                    arrAFD.forEach((element, index) => {
-                        let estate = element[0];
-                        let namaAFD = Object.keys(element[1].January);
-                        namaAFD.forEach((asisten) => {
-                            var tr = document.createElement('tr');
-                            let item0 = '-';
-                            let item1 = estate;
-                            let item2 = asisten;
-                            let item3;
-
-                            filteredAssistants.forEach((element, index) => {
-                                const assistantEstate = element['est'];
-                                const assistantAfd = element['afd'];
-                                // console.log(assistantEstate)
-
-                                if (assistantEstate === item1 && assistantAfd === item2) {
-                                    item3 = element['nama'];
-                                }
+                                trekapafd.appendChild(tr);
                             });
-
-                            if (item3 === undefined) {
-                                item3 = '-';
-                            }
-
-                            let item4 = element[1].January[asisten].bulan_afd;
-                            let item5 = element[1].February[asisten].bulan_afd;
-                            let item6 = element[1].March[asisten].bulan_afd;
-                            let item7 = element[1]?.April?.asisten?.bulan_afd ?? '-';
-                            let item8 = element[1].May?.[asisten]?.bulan_afd;
-                            let item9 = element[1].June?.[asisten]?.bulan_afd;
-                            let item10 = element[1].July?.[asisten]?.bulan_afd;
-                            let item11 = element[1].August?.[asisten]?.bulan_afd;
-                            let item12 = element[1].September?.[asisten]?.bulan_afd;
-                            let item13 = element[1].October?.[asisten]?.bulan_afd;
-                            let item14 = element[1].November?.[asisten]?.bulan_afd;
-                            let item15 = element[1].December?.[asisten]?.bulan_afd;
-
-                            // let item17 = arrAFDTH[0][1].OA.tahun_skorwil;
-                            let item16;
-                            for (var i = 0; i < arrAFDTH.length; i++) {
-                                if (arrAFDTH[i][0] == item1) {
-                                    item16 = arrAFDTH[i][1][item2]['tahun_skorwil'];
-                                    break;
-                                }
-                            }
-
-                            let items = [item0, item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item12, item13, item14, item15, item16];
-
-                            let column = 1; // Start column after the first three items
-                            for (let j = 0; j < items.length; j++) {
-                                let item = items[j];
-                                let td = document.createElement('td');
-                                if (column >= 5) {
-                                    if (item >= 95) {
-                                        td.style.backgroundColor = "#0804fc";
-                                    } else if (item >= 85 && item < 95) {
-                                        td.style.backgroundColor = "#08b454";
-                                    } else if (item >= 75 && item < 85) {
-                                        td.style.backgroundColor = "#fffc04";
-                                    } else if (item >= 65 && item < 75) {
-                                        td.style.backgroundColor = "#ffc404";
-                                    } else if (item === 0) {
-                                        td.style.backgroundColor = "white";
-                                    } else {
-                                        td.style.backgroundColor = "red";
-                                    }
-                                }
-                                column++;
-                                td.innerText = item;
-                                tr.appendChild(td);
-                            }
-
-                            tbody4.appendChild(tr);
                         });
                     });
 
-                    const sorting = document.getElementById('rekapAFD');
-
-                    if (sorting) {
-                        // Convert the table rows to an array for sorting
-                        const rows = Array.from(sorting.rows);
-
-                        // Sort the rows based on the values in the 16th column
-                        rows.sort((row1, row2) => {
-                            const value1 = parseInt(row1.cells[16].textContent);
-                            const value2 = parseInt(row2.cells[16].textContent);
-                            return value2 - value1;
-                        });
-
-                        // Remove the existing rows from the table body
-                        while (sorting.firstChild) {
-                            sorting.removeChild(sorting.firstChild);
-                        }
-
-                        // Add the sorted rows back to the table body
-                        rows.forEach((row) => {
-                            sorting.appendChild(row);
-                        });
-                    } else {
-                        console.error("Element with id 'rekapAFD' not found");
-                    }
-
-                    const index = document.getElementById('rekapAFD');
-                    if (index) {
-                        const rows = Array.from(index.rows);
-                        let i = 1;
-                        rows.forEach(row => {
-                            row.cells[0].textContent = i;
-                            i++;
-                        });
-                    }
+                    var theadreg = document.getElementById('reg');
+                    let item1 = '='
+                    let item2 = 'RH'
+                    let item3 = '-'
+                    let item4 = '-'
+                    let item5 = resultreg[0][1].ancak.skor_akhircak + resultreg[0][1].buah.TOTAL_SKORbh + resultreg[0][1].trans.totalSkortrans
+                    let item6 = resultreg[1][1].ancak.skor_akhircak + resultreg[1][1].buah.TOTAL_SKORbh + resultreg[1][1].trans.totalSkortrans
+                    let item7 = resultreg[2][1].ancak.skor_akhircak + resultreg[2][1].buah.TOTAL_SKORbh + resultreg[2][1].trans.totalSkortrans
+                    let item8 = resultreg[3][1].ancak.skor_akhircak + resultreg[3][1].buah.TOTAL_SKORbh + resultreg[3][1].trans.totalSkortrans
+                    let item9 = resultreg[4][1].ancak.skor_akhircak + resultreg[4][1].buah.TOTAL_SKORbh + resultreg[4][1].trans.totalSkortrans
+                    let item10 = resultreg[5][1].ancak.skor_akhircak + resultreg[5][1].buah.TOTAL_SKORbh + resultreg[5][1].trans.totalSkortrans
+                    let item11 = resultreg[6][1].ancak.skor_akhircak + resultreg[6][1].buah.TOTAL_SKORbh + resultreg[6][1].trans.totalSkortrans
+                    let item12 = resultreg[7][1].ancak.skor_akhircak + resultreg[7][1].buah.TOTAL_SKORbh + resultreg[7][1].trans.totalSkortrans
+                    let item13 = resultreg[8][1].ancak.skor_akhircak + resultreg[8][1].buah.TOTAL_SKORbh + resultreg[8][1].trans.totalSkortrans
+                    let item14 = resultreg[9][1].ancak.skor_akhircak + resultreg[9][1].buah.TOTAL_SKORbh + resultreg[9][1].trans.totalSkortrans
+                    let item15 = resultreg[10][1].ancak.skor_akhircak + resultreg[10][1].buah.TOTAL_SKORbh + resultreg[10][1].trans.totalSkortrans
+                    let item16 = resultreg[11][1].ancak.skor_akhircak + resultreg[11][1].buah.TOTAL_SKORbh + resultreg[11][1].trans.totalSkortrans
 
 
-                    //   end rekap table afd
-                    //endtable
-
-                    let colors = '';
-
-
-                    if (regInpt === '1') {
-                        colors = ['#00FF00',
-                            '#00FF00',
-                            '#00FF00',
-                            '#00FF00',
-                            '#3063EC',
-                            '#3063EC',
-                            '#3063EC',
-                            '#3063EC',
-                            '#FF8D1A',
-                            '#FF8D1A',
-                            '#FF8D1A',
-                            '#FF8D1A',
-                            '#00ffff'
-                        ]
-
-                    } else if (regInpt === '2') {
-                        colors = ['#00FF00',
-                            '#00FF00',
-                            '#00FF00',
-                            '#00FF00',
-                            '#3063EC',
-                            '#3063EC',
-                            '#3063EC',
-                            '#00ffff',
-                            '#00ffff'
-                        ]
-
-
-                    } else if (regInpt === '3') {
-                        colors = ['#00FF00',
-                            '#00FF00',
-                            '#00FF00',
-                            '#00FF00',
-                            '#3063EC',
-                            '#3063EC',
-                            '#3063EC',
-                            '#3063EC',
-                        ]
-                    } else if (regInpt === '4') {
-                        colors = ['#00FF00',
-                            '#00FF00',
-                            '#00FF00',
-                            '#3063EC',
-                            '#3063EC',
-
-                        ]
-                    }
+                    var tr = document.createElement('tr');
+                    let itemElement1 = document.createElement('td');
+                    let itemElement2 = document.createElement('td');
+                    let itemElement3 = document.createElement('td');
+                    let itemElement4 = document.createElement('td');
+                    let itemElement5 = document.createElement('td');
+                    let itemElement6 = document.createElement('td');
+                    let itemElement7 = document.createElement('td');
+                    let itemElement8 = document.createElement('td');
+                    let itemElement9 = document.createElement('td');
+                    let itemElement10 = document.createElement('td');
+                    let itemElement11 = document.createElement('td');
+                    let itemElement12 = document.createElement('td');
+                    let itemElement13 = document.createElement('td');
+                    let itemElement14 = document.createElement('td');
+                    let itemElement15 = document.createElement('td');
+                    let itemElement16 = document.createElement('td');
 
 
 
-                    //chart table untuk pertahun
-                    chartGrainYear.updateSeries([{
-                        name: 'butir/jjg panen',
-                        data: bttEst
-                    }])
-                    chartGrainYear.updateOptions({
-                        xaxis: {
-                            categories: formatEst
-                        },
-                        colors: colors // Set the colors directly, no need for an object
-                    })
+                    itemElement1.classList.add("text-center");
+                    itemElement1.innerText = item1
+                    itemElement2.innerText = item2
+                    itemElement3.innerText = item3
+                    itemElement4.innerText = item4
+                    itemElement5.innerText = item5
+                    itemElement6.innerText = item6
+                    itemElement7.innerText = item7
+                    itemElement8.innerText = item8
+                    itemElement9.innerText = item9
+                    itemElement10.innerText = item10
+                    itemElement11.innerText = item11
+                    itemElement12.innerText = item12
+                    itemElement13.innerText = item13
+                    itemElement14.innerText = item14
+                    itemElement15.innerText = item15
+                    itemElement16.innerText = item16
 
-                    chartFruitYear.updateSeries([{
-                        name: '% buah tinggal',
-                        data: bhEST
-                    }])
-                    chartFruitYear.updateOptions({
-                        xaxis: {
-                            categories: formatEst
-                        },
-                        colors: colors // Set the colors directly, no need for an object
-                    })
+                    setBackgroundColor(itemElement5, item5);
+                    setBackgroundColor(itemElement6, item6);
+                    setBackgroundColor(itemElement7, item7);
+                    setBackgroundColor(itemElement8, item8);
+                    setBackgroundColor(itemElement9, item9);
+                    setBackgroundColor(itemElement10, item10);
+                    setBackgroundColor(itemElement11, item11);
+                    setBackgroundColor(itemElement12, item12);
+                    setBackgroundColor(itemElement13, item13);
+                    setBackgroundColor(itemElement14, item14);
+                    setBackgroundColor(itemElement15, item15);
+                    setBackgroundColor(itemElement16, item16);
 
+                    tr.appendChild(itemElement1)
+                    tr.appendChild(itemElement2)
+                    tr.appendChild(itemElement3)
+                    tr.appendChild(itemElement4)
+                    tr.appendChild(itemElement5)
+                    tr.appendChild(itemElement6)
+                    tr.appendChild(itemElement7)
+                    tr.appendChild(itemElement8)
+                    tr.appendChild(itemElement9)
+                    tr.appendChild(itemElement10)
+                    tr.appendChild(itemElement11)
+                    tr.appendChild(itemElement12)
+                    tr.appendChild(itemElement13)
+                    tr.appendChild(itemElement14)
+                    tr.appendChild(itemElement15)
+                    tr.appendChild(itemElement16)
+                    theadreg.appendChild(tr);
 
-                    let wilayahReg = '';
-
-
-                    if (regInpt === '1') {
-                        wilayahReg = ['WIL I', 'WIL II', 'WIL III']
-
-                    } else if (regInpt === '2') {
-                        wilayahReg = ['WIL IV', 'WIL V', 'WIL VI']
-
-                    } else if (regInpt === '3') {
-                        wilayahReg = ['WIL VII', 'WIL VIII']
-
-                    } else if (regInpt === '4') {
-                        wilayahReg = ['WIL IX', 'WIL X']
-
-                    }
-                    chartGrainWilYear.updateSeries([{
-                        name: 'butir/jjg panen',
-                        data: brdWil
-                    }])
-
-                    chartGrainWilYear.updateOptions({
-                        xaxis: {
-                            categories: wilayahReg
-                        }
-                    })
-
-                    chartFruitWilYear.updateSeries([{
-                        name: '% buah tinggal',
-                        data: bhWil
-                    }])
-
-                    chartFruitWilYear.updateOptions({
-                        xaxis: {
-                            categories: wilayahReg
-                        }
-                    })
-
-
-                    //endchart
                 }
             });
         }

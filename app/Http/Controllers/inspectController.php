@@ -1955,7 +1955,7 @@ class inspectController extends Controller
             }
         }
 
-
+        // dd($ancakRegss2);
         $transNewdata = array();
         foreach ($dataMTTransRegs2 as $key => $value) {
             foreach ($value as $key1 => $value1) {
@@ -2829,7 +2829,7 @@ class inspectController extends Controller
         $dataReg['total_buahcak'] = $totalSkorBuah;
         $dataReg['TOTAL_SKORbh'] = $totalSkorBuah;
         $dataReg['check_databh'] = 'ada';
-        // dd($rekap);
+        // dd($transNewdata);
         return view('Qcinspeksi.dataInspeksi', ['data' => $rekap, 'reg' => $regional, 'bulan' => $bulan, 'datareg' => $dataReg]);
     }
 
