@@ -712,7 +712,11 @@ class ApiqcController extends Controller
 
                 // Create a Carbon instance
                 $date = Carbon::parse($datetime);
+                $getadds = explode(';', $value['app_version']);
 
+                $appvers = $getadds[0] ?? '-';
+                $os_version = $getadds[1] ?? '-';
+                $phone_version = $getadds[2] ?? '-';
                 // Format the date
                 $dayOfWeek = $date->isoFormat('dddd'); // Get the day of the week in Indonesian
                 $formattedDate = $dayOfWeek . ', ' . $date->format('d-m-Y');
@@ -783,6 +787,9 @@ class ApiqcController extends Controller
                     'percentage_kelas_b' => round($persentage_kelas_b, 2),
                     'percentage_kelas_c' =>  round($persentage_kelas_c, 2),
                     'tanggal_titel' => $date->format('d M Y'),
+                    'appvers' => $appvers,
+                    'os_version' => $os_version,
+                    'phone_version' => $phone_version,
                 ];
                 // dd($dataakhir);
                 $pdf = pdf::loadView('Grading.pdfgrading_api', ['data' => $dataakhir]);
@@ -796,11 +803,7 @@ class ApiqcController extends Controller
                 // return $pdf->stream($pdfName);
                 Storage::disk('public')->put($pdfName, $pdf->output());
 
-                $getadds = explode(';', $value['app_version']);
 
-                $appvers = $getadds[0] ?? '-';
-                $os_version = $getadds[1] ?? '-';
-                $phone_version = $getadds[2] ?? '-';
 
                 // dd($tanpaBrondol);
                 $result[] = [

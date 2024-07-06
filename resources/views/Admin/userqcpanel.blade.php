@@ -1,5 +1,5 @@
 <x-layout.app>
-    @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Admin')
+    @if (strpos(session('departemen'), 'QC') !== false && session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' || session('jabatan') == 'Admin' || auth()->user()->id_departement == '43' && in_array(auth()->user()->id_jabatan, ['10', '15', '20', '4', '5', '6']))
     <div class="jumbotron">
         <h1 class="display-4">Perhatian</h1>
         <p class="lead">Untuk meningkatkan sistematisasi dan konsistensi sistem, kami mohon agar Anda menggunakan situs web manajemen pengguna yang telah disediakan. Hal ini bertujuan untuk menghindari kesalahan data atau kerusakan.</p>

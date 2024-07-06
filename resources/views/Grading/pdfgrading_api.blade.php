@@ -118,6 +118,13 @@
             <td style="text-align: left;border:none;padding: 0;font-size:15px;width:26%">Berat Rata-rata TBS (BJR)</td>
             <td style="text-align: left;border:none;padding: 0;font-size:15px">: {{$data['bjr']}}</td>
         </tr>
+        <tr>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">App Versi</td>
+            <td style="text-align: right;border:none;padding: 0;font-size:15px">:</td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">{{$data['appvers']}}</td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px;width:26%">Merek HP</td>
+            <td style="text-align: left;border:none;padding: 0;font-size:15px">: {{$data['phone_version']}}</td>
+        </tr>
     </table>
     <h3 style="margin: 0; padding-top: 10px; text-transform: capitalize;">DATA HASIL GRADING</h3>
     <table style="font-size: 12px;padding-top: 10px;">

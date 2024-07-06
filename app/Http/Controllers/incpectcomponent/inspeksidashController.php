@@ -3986,6 +3986,8 @@ class inspeksidashController extends Controller
         unset($resultafdeling['ancak']);
         unset($resultafdeling['buah']);
         unset($resultafdeling['trans']);
+        unset($resultafdeling['wil']);
+
         // dd($transNewdata[2]['January'][4]);
 
         // dd($defaultAncak, $defaultbuah, $defaulttrans);
@@ -5596,6 +5598,7 @@ class inspeksidashController extends Controller
         $nilai = $request->input('nilai');
         $type = $request->input('type');
 
+        // dd($date, $estate, $nilai, $type);
         if ($type === 'true') {
             try {
                 // Check if a record with the same 'type', 'estate', and 'date' already exists

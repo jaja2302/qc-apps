@@ -931,6 +931,58 @@
                             <div class="col-auto">
                                 <button class="btn btn-primary" id="showDataIns">Show</button>
                             </div>
+                            @if (auth()->user()->lokasi_kerja === 'Regional II' && auth()->user()->id_departement == '43' && in_array(auth()->user()->id_jabatan, ['10', '15', '20', '4', '5', '6']) )
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    Edit Nilai
+                                </button>
+                            </div>
+                            @endif
+                            <!-- Button trigger modal -->
+
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Ubah Nilai Estate</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text" id="basic-addon1">Estate</span>
+                                                <select class="form-select" aria-label="Default select example" id="estateedit">
+                                                    @foreach ($estateoption as $items)
+                                                    <option value="{{$items['est']}}">{{$items['est']}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text" id="basic-addon1">Nilai</span>
+                                                <input type="number" class="form-control" placeholder="Nilai" aria-label="Nilai" id="nilaiedit">
+                                            </div>
+                                            <span class="input-group-text" id="basic-addon1">Status</span>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
+                                                <label class="form-check-label" for="flexRadioDefault1">
+                                                    Kurangkan Nilai
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+                                                <label class="form-check-label" for="flexRadioDefault2">
+                                                    Tambahkan Nilai
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary" id="editnilaiestate">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-auto">
                                 <form id="exportForm" action="{{ route('excelqcinspeksi') }}" method="POST">
                                     @csrf
@@ -1826,7 +1878,18 @@
             });
             getFindData()
         });
-
+        $("#editnilaiestate").click(function() {
+            Swal.fire({
+                title: 'Loading',
+                html: '<span class="loading-text">Mohon Tunggu...</span>',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            editnilaiqc()
+        });
         var map = null;
         var legendVar = null;
 
@@ -3527,29 +3590,52 @@
                     var resultwil = Object.entries(parseResult['resultwil'])
                     var resultestate = Object.entries(parseResult['resultestate'])
                     var resultafdeling = Object.entries(parseResult['resultafdeling'])
-                    console.log(resultafdeling);
+                    // console.log(resultafdeling);
                     var trekap2 = document.getElementById('tb_tahun');
                     var trekapwil = document.getElementById('tablewil');
                     var trekapafd = document.getElementById('rekapAFD');
 
+                    function isDataKosong(estate) {
+                        return estate.ancak.check_datacak === 'kosong' &&
+                            estate.buah.check_databh === 'kosong' &&
+                            estate.trans.check_datatrans === 'kosong';
+                    }
+
+                    function calculateTotalScore(estate) {
+                        return estate.ancak.skor_akhircak +
+                            estate.buah.TOTAL_SKORbh +
+                            estate.trans.totalSkortrans;
+                    }
                     let inc = 1;
                     resultestate.forEach(item => {
                         let item1 = inc++;
                         let item2 = item[0];
                         let item3 = '-';
                         let item4 = '-';
-                        let item5 = item[1].January.estate.ancak.skor_akhircak + item[1].January.estate.buah.TOTAL_SKORbh + item[1].January.estate.trans.totalSkortrans
-                        let item6 = item[1].February.estate.ancak.skor_akhircak + item[1].February.estate.buah.TOTAL_SKORbh + item[1].February.estate.trans.totalSkortrans
-                        let item7 = item[1].March.estate.ancak.skor_akhircak + item[1].March.estate.buah.TOTAL_SKORbh + item[1].March.estate.trans.totalSkortrans
-                        let item8 = item[1].April.estate.ancak.skor_akhircak + item[1].April.estate.buah.TOTAL_SKORbh + item[1].April.estate.trans.totalSkortrans
-                        let item9 = item[1].May.estate.ancak.skor_akhircak + item[1].May.estate.buah.TOTAL_SKORbh + item[1].May.estate.trans.totalSkortrans
-                        let item10 = item[1].June.estate.ancak.skor_akhircak + item[1].June.estate.buah.TOTAL_SKORbh + item[1].June.estate.trans.totalSkortrans
-                        let item11 = item[1].July.estate.ancak.skor_akhircak + item[1].July.estate.buah.TOTAL_SKORbh + item[1].July.estate.trans.totalSkortrans
-                        let item12 = item[1].August.estate.ancak.skor_akhircak + item[1].August.estate.buah.TOTAL_SKORbh + item[1].August.estate.trans.totalSkortrans
-                        let item13 = item[1].September.estate.ancak.skor_akhircak + item[1].September.estate.buah.TOTAL_SKORbh + item[1].September.estate.trans.totalSkortrans
-                        let item14 = item[1].October.estate.ancak.skor_akhircak + item[1].October.estate.buah.TOTAL_SKORbh + item[1].October.estate.trans.totalSkortrans
-                        let item15 = item[1].November.estate.ancak.skor_akhircak + item[1].November.estate.buah.TOTAL_SKORbh + item[1].November.estate.trans.totalSkortrans
-                        let item16 = item[1].December.estate.ancak.skor_akhircak + item[1].December.estate.buah.TOTAL_SKORbh + item[1].December.estate.trans.totalSkortrans
+                        let estate5 = item[1].January.estate;
+                        let item5 = isDataKosong(estate5) ? '-' : calculateTotalScore(estate5);
+                        let estate6 = item[1].February.estate;
+                        let item6 = isDataKosong(estate6) ? '-' : calculateTotalScore(estate6);
+                        let estate7 = item[1].March.estate;
+                        let item7 = isDataKosong(estate7) ? '-' : calculateTotalScore(estate7);
+                        let estate8 = item[1].April.estate;
+                        let item8 = isDataKosong(estate8) ? '-' : calculateTotalScore(estate8);
+                        let estate9 = item[1].May.estate;
+                        let item9 = isDataKosong(estate9) ? '-' : calculateTotalScore(estate9);
+                        let estate10 = item[1].June.estate;
+                        let item10 = isDataKosong(estate10) ? '-' : calculateTotalScore(estate10);
+                        let estate11 = item[1].July.estate;
+                        let item11 = isDataKosong(estate11) ? '-' : calculateTotalScore(estate11);
+                        let estate12 = item[1].August.estate;
+                        let item12 = isDataKosong(estate12) ? '-' : calculateTotalScore(estate12);
+                        let estate13 = item[1].September.estate;
+                        let item13 = isDataKosong(estate13) ? '-' : calculateTotalScore(estate13);
+                        let estate14 = item[1].October.estate;
+                        let item14 = isDataKosong(estate14) ? '-' : calculateTotalScore(estate14);
+                        let estate15 = item[1].November.estate;
+                        let item15 = isDataKosong(estate15) ? '-' : calculateTotalScore(estate15);
+                        let estate16 = item[1].December.estate;
+                        let item16 = isDataKosong(estate16) ? '-' : calculateTotalScore(estate16);
 
                         // Create table row and cell for each 'key'
                         let tr = document.createElement('tr');
@@ -3624,23 +3710,47 @@
                         trekap2.appendChild(tr);
                     });
                     let incs = 1;
+
+                    function isDataKosongwil(wil) {
+                        return wil.ancak.check_datacak === 'kosong' &&
+                            wil.buah.check_databh === 'kosong' &&
+                            wil.trans.check_datatrans === 'kosong';
+                    }
+
+                    function calculateTotalScorewil(wil) {
+                        return wil.ancak.skor_akhircak +
+                            wil.buah.TOTAL_SKORbh +
+                            wil.trans.totalSkortrans;
+                    }
                     resultwil.forEach(item => {
                         let item1 = incs++;
                         let item2 = 'Wil-' + ' ' + item[0];
                         let item3 = '-';
                         let item4 = '-';
-                        let item5 = item[1].January.wil.ancak.skor_akhircak + item[1].January.wil.buah.TOTAL_SKORbh + item[1].January.wil.trans.totalSkortrans
-                        let item6 = item[1].February.wil.ancak.skor_akhircak + item[1].February.wil.buah.TOTAL_SKORbh + item[1].February.wil.trans.totalSkortrans
-                        let item7 = item[1].March.wil.ancak.skor_akhircak + item[1].March.wil.buah.TOTAL_SKORbh + item[1].March.wil.trans.totalSkortrans
-                        let item8 = item[1].April.wil.ancak.skor_akhircak + item[1].April.wil.buah.TOTAL_SKORbh + item[1].April.wil.trans.totalSkortrans
-                        let item9 = item[1].May.wil.ancak.skor_akhircak + item[1].May.wil.buah.TOTAL_SKORbh + item[1].May.wil.trans.totalSkortrans
-                        let item10 = item[1].June.wil.ancak.skor_akhircak + item[1].June.wil.buah.TOTAL_SKORbh + item[1].June.wil.trans.totalSkortrans
-                        let item11 = item[1].July.wil.ancak.skor_akhircak + item[1].July.wil.buah.TOTAL_SKORbh + item[1].July.wil.trans.totalSkortrans
-                        let item12 = item[1].August.wil.ancak.skor_akhircak + item[1].August.wil.buah.TOTAL_SKORbh + item[1].August.wil.trans.totalSkortrans
-                        let item13 = item[1].September.wil.ancak.skor_akhircak + item[1].September.wil.buah.TOTAL_SKORbh + item[1].September.wil.trans.totalSkortrans
-                        let item14 = item[1].October.wil.ancak.skor_akhircak + item[1].October.wil.buah.TOTAL_SKORbh + item[1].October.wil.trans.totalSkortrans
-                        let item15 = item[1].November.wil.ancak.skor_akhircak + item[1].November.wil.buah.TOTAL_SKORbh + item[1].November.wil.trans.totalSkortrans
-                        let item16 = item[1].December.wil.ancak.skor_akhircak + item[1].December.wil.buah.TOTAL_SKORbh + item[1].December.wil.trans.totalSkortrans
+                        let wil5 = item[1].January.wil;
+                        let item5 = isDataKosongwil(wil5) ? '-' : calculateTotalScorewil(wil5);
+                        let wil6 = item[1].February.wil;
+                        let item6 = isDataKosongwil(wil6) ? '-' : calculateTotalScorewil(wil6);
+                        let wil7 = item[1].March.wil;
+                        let item7 = isDataKosongwil(wil7) ? '-' : calculateTotalScorewil(wil7);
+                        let wil8 = item[1].April.wil;
+                        let item8 = isDataKosongwil(wil8) ? '-' : calculateTotalScorewil(wil8);
+                        let wil9 = item[1].May.wil;
+                        let item9 = isDataKosongwil(wil9) ? '-' : calculateTotalScorewil(wil9);
+                        let wil10 = item[1].June.wil;
+                        let item10 = isDataKosongwil(wil10) ? '-' : calculateTotalScorewil(wil10);
+                        let wil11 = item[1].July.wil;
+                        let item11 = isDataKosongwil(wil11) ? '-' : calculateTotalScorewil(wil11);
+                        let wil12 = item[1].August.wil;
+                        let item12 = isDataKosongwil(wil12) ? '-' : calculateTotalScorewil(wil12);
+                        let wil13 = item[1].September.wil;
+                        let item13 = isDataKosongwil(wil13) ? '-' : calculateTotalScorewil(wil13);
+                        let wil14 = item[1].October.wil;
+                        let item14 = isDataKosongwil(wil14) ? '-' : calculateTotalScorewil(wil14);
+                        let wil15 = item[1].November.wil;
+                        let item15 = isDataKosongwil(wil15) ? '-' : calculateTotalScorewil(wil15);
+                        let wil16 = item[1].December.wil;
+                        let item16 = isDataKosongwil(wil16) ? '-' : calculateTotalScorewil(wil16);
 
                         // Create table row and cell for each 'key'
                         let tr = document.createElement('tr');
@@ -3714,6 +3824,19 @@
                         // Append the row to the table
                         trekapwil.appendChild(tr);
                     });
+                    let incx = 1;
+
+                    function isDataKosongafd(afdeling) {
+                        return afdeling.check_datacak === 'kosong' &&
+                            afdeling.check_databh === 'kosong' &&
+                            afdeling.check_datatrans === 'kosong';
+                    }
+
+                    function calculateTotalScoreafd(afdeling) {
+                        return afdeling.skor_akhircak +
+                            afdeling.TOTAL_SKORbh +
+                            afdeling.totalSkortrans;
+                    }
                     resultafdeling.forEach((estate) => {
                         let estateName = estate[0];
                         let afdelings = estate[1];
@@ -3722,61 +3845,148 @@
                         Object.keys(afdelings).forEach((afdelingKey) => {
                             let afdeling = afdelings[afdelingKey];
 
-                            // Loop through each month in the afdeling
-                            Object.keys(afdeling).forEach((monthKey) => {
-                                let monthData = afdeling[monthKey];
+                            let item1 = incx++;
+                            let item2 = estateName;
+                            let item3 = afdelingKey;
+                            let item4 = '-';
 
-                                let item1 = inc++;
-                                let item2 = estateName;
-                                let item3 = afdelingKey;
-                                let item4 = afdeling.January.TOTAL_SKORbh;
+                            let wil5 = afdeling.January;
+                            let item5 = isDataKosongafd(wil5) ? '-' : calculateTotalScoreafd(wil5);
+                            let wil6 = afdeling.February;
+                            let item6 = isDataKosongafd(wil6) ? '-' : calculateTotalScoreafd(wil6);
+                            let wil7 = afdeling.March;
+                            let item7 = isDataKosongafd(wil7) ? '-' : calculateTotalScoreafd(wil7);
+                            let wil8 = afdeling.April;
+                            let item8 = isDataKosongafd(wil8) ? '-' : calculateTotalScoreafd(wil8);
+                            let wil9 = afdeling.May;
+                            let item9 = isDataKosongafd(wil9) ? '-' : calculateTotalScoreafd(wil9);
+                            let wil10 = afdeling.June;
+                            let item10 = isDataKosongafd(wil10) ? '-' : calculateTotalScoreafd(wil10);
+                            let wil11 = afdeling.July;
+                            let item11 = isDataKosongafd(wil11) ? '-' : calculateTotalScoreafd(wil11);
+                            let wil12 = afdeling.August;
+                            let item12 = isDataKosongafd(wil12) ? '-' : calculateTotalScoreafd(wil12);
+                            let wil13 = afdeling.September;
+                            let item13 = isDataKosongafd(wil13) ? '-' : calculateTotalScoreafd(wil13);
+                            let wil14 = afdeling.October;
+                            let item14 = isDataKosongafd(wil14) ? '-' : calculateTotalScoreafd(wil14);
+                            let wil15 = afdeling.November;
+                            let item15 = isDataKosongafd(wil15) ? '-' : calculateTotalScoreafd(wil15);
+                            let wil16 = afdeling.December;
+                            let item16 = isDataKosongafd(wil16) ? '-' : calculateTotalScoreafd(wil16);
 
+                            // Create table row and cell for each 'key'
+                            let tr = document.createElement('tr');
+                            let itemElement1 = document.createElement('td');
+                            let itemElement2 = document.createElement('td');
+                            let itemElement3 = document.createElement('td');
+                            let itemElement4 = document.createElement('td');
+                            let itemElement5 = document.createElement('td');
+                            let itemElement6 = document.createElement('td');
+                            let itemElement7 = document.createElement('td');
+                            let itemElement8 = document.createElement('td');
+                            let itemElement9 = document.createElement('td');
+                            let itemElement10 = document.createElement('td');
+                            let itemElement11 = document.createElement('td');
+                            let itemElement12 = document.createElement('td');
+                            let itemElement13 = document.createElement('td');
+                            let itemElement14 = document.createElement('td');
+                            let itemElement15 = document.createElement('td');
+                            let itemElement16 = document.createElement('td');
 
-                                // Create table row and cell for each 'key'
-                                let tr = document.createElement('tr');
-                                let itemElement1 = document.createElement('td');
-                                let itemElement2 = document.createElement('td');
-                                let itemElement3 = document.createElement('td');
-                                let itemElement4 = document.createElement('td');
-                                let itemElement5 = document.createElement('td');
+                            itemElement1.classList.add("text-center");
+                            itemElement1.innerText = item1;
+                            itemElement2.innerText = item2;
+                            itemElement3.innerText = item3;
+                            itemElement4.innerText = item4;
+                            itemElement5.innerText = item5;
+                            itemElement6.innerText = item6;
+                            itemElement7.innerText = item7;
+                            itemElement8.innerText = item8;
+                            itemElement9.innerText = item9;
+                            itemElement10.innerText = item10;
+                            itemElement11.innerText = item11;
+                            itemElement12.innerText = item12;
+                            itemElement13.innerText = item13;
+                            itemElement14.innerText = item14;
+                            itemElement15.innerText = item15;
+                            itemElement16.innerText = item16;
 
-                                itemElement1.classList.add("text-center");
-                                itemElement1.innerText = item1;
-                                itemElement2.innerText = item2;
-                                itemElement3.innerText = item3;
-                                itemElement4.innerText = item4;
+                            setBackgroundColor(itemElement5, item5);
+                            setBackgroundColor(itemElement6, item6);
+                            setBackgroundColor(itemElement7, item7);
+                            setBackgroundColor(itemElement8, item8);
+                            setBackgroundColor(itemElement9, item9);
+                            setBackgroundColor(itemElement10, item10);
+                            setBackgroundColor(itemElement11, item11);
+                            setBackgroundColor(itemElement12, item12);
+                            setBackgroundColor(itemElement13, item13);
+                            setBackgroundColor(itemElement14, item14);
+                            setBackgroundColor(itemElement15, item15);
+                            setBackgroundColor(itemElement16, item16);
 
+                            tr.appendChild(itemElement1);
+                            tr.appendChild(itemElement2);
+                            tr.appendChild(itemElement3);
+                            tr.appendChild(itemElement4);
+                            tr.appendChild(itemElement5);
+                            tr.appendChild(itemElement6);
+                            tr.appendChild(itemElement7);
+                            tr.appendChild(itemElement8);
+                            tr.appendChild(itemElement9);
+                            tr.appendChild(itemElement10);
+                            tr.appendChild(itemElement11);
+                            tr.appendChild(itemElement12);
+                            tr.appendChild(itemElement13);
+                            tr.appendChild(itemElement14);
+                            tr.appendChild(itemElement15);
+                            tr.appendChild(itemElement16);
 
-                                setBackgroundColor(itemElement5, monthData);
-
-                                tr.appendChild(itemElement1);
-                                tr.appendChild(itemElement2);
-                                tr.appendChild(itemElement3);
-                                tr.appendChild(itemElement4);
-
-
-                                trekapafd.appendChild(tr);
-                            });
+                            trekapafd.appendChild(tr);
                         });
                     });
 
+                    function isDataKosongreg(reg) {
+                        return reg.ancak.check_datacak === 'kosong' &&
+                            reg.buah.check_databh === 'kosong' &&
+                            reg.trans.check_datatrans === 'kosong';
+                    }
+
+                    function calculateTotalScorereg(reg) {
+                        return reg.ancak.skor_akhircak +
+                            reg.buah.TOTAL_SKORbh +
+                            reg.trans.totalSkortrans;
+                    }
+                    console.log(resultreg);
                     var theadreg = document.getElementById('reg');
                     let item1 = '='
                     let item2 = 'RH'
                     let item3 = '-'
                     let item4 = '-'
-                    let item5 = resultreg[0][1].ancak.skor_akhircak + resultreg[0][1].buah.TOTAL_SKORbh + resultreg[0][1].trans.totalSkortrans
-                    let item6 = resultreg[1][1].ancak.skor_akhircak + resultreg[1][1].buah.TOTAL_SKORbh + resultreg[1][1].trans.totalSkortrans
-                    let item7 = resultreg[2][1].ancak.skor_akhircak + resultreg[2][1].buah.TOTAL_SKORbh + resultreg[2][1].trans.totalSkortrans
-                    let item8 = resultreg[3][1].ancak.skor_akhircak + resultreg[3][1].buah.TOTAL_SKORbh + resultreg[3][1].trans.totalSkortrans
-                    let item9 = resultreg[4][1].ancak.skor_akhircak + resultreg[4][1].buah.TOTAL_SKORbh + resultreg[4][1].trans.totalSkortrans
-                    let item10 = resultreg[5][1].ancak.skor_akhircak + resultreg[5][1].buah.TOTAL_SKORbh + resultreg[5][1].trans.totalSkortrans
-                    let item11 = resultreg[6][1].ancak.skor_akhircak + resultreg[6][1].buah.TOTAL_SKORbh + resultreg[6][1].trans.totalSkortrans
-                    let item12 = resultreg[7][1].ancak.skor_akhircak + resultreg[7][1].buah.TOTAL_SKORbh + resultreg[7][1].trans.totalSkortrans
-                    let item13 = resultreg[8][1].ancak.skor_akhircak + resultreg[8][1].buah.TOTAL_SKORbh + resultreg[8][1].trans.totalSkortrans
-                    let item14 = resultreg[9][1].ancak.skor_akhircak + resultreg[9][1].buah.TOTAL_SKORbh + resultreg[9][1].trans.totalSkortrans
-                    let item15 = resultreg[10][1].ancak.skor_akhircak + resultreg[10][1].buah.TOTAL_SKORbh + resultreg[10][1].trans.totalSkortrans
-                    let item16 = resultreg[11][1].ancak.skor_akhircak + resultreg[11][1].buah.TOTAL_SKORbh + resultreg[11][1].trans.totalSkortrans
+                    let wil5 = resultreg[0][1];
+                    let item5 = isDataKosongreg(wil5) ? '-' : calculateTotalScorereg(wil5);
+                    let wil6 = resultreg[1][1]
+                    let item6 = isDataKosongreg(wil6) ? '-' : calculateTotalScorereg(wil6);
+                    let wil7 = resultreg[2][1]
+                    let item7 = isDataKosongreg(wil7) ? '-' : calculateTotalScorereg(wil7);
+                    let wil8 = resultreg[3][1]
+                    let item8 = isDataKosongreg(wil8) ? '-' : calculateTotalScorereg(wil8);
+                    let wil9 = resultreg[4][1]
+                    let item9 = isDataKosongreg(wil9) ? '-' : calculateTotalScorereg(wil9);
+                    let wil10 = resultreg[5][1]
+                    let item10 = isDataKosongreg(wil10) ? '-' : calculateTotalScorereg(wil10);
+                    let wil11 = resultreg[6][1]
+                    let item11 = isDataKosongreg(wil11) ? '-' : calculateTotalScorereg(wil11);
+                    let wil12 = resultreg[7][1]
+                    let item12 = isDataKosongreg(wil12) ? '-' : calculateTotalScorereg(wil12);
+                    let wil13 = resultreg[8][1]
+                    let item13 = isDataKosongreg(wil13) ? '-' : calculateTotalScorereg(wil13);
+                    let wil14 = resultreg[9][1]
+                    let item14 = isDataKosongreg(wil14) ? '-' : calculateTotalScorereg(wil14);
+                    let wil15 = resultreg[10][1]
+                    let item15 = isDataKosongreg(wil15) ? '-' : calculateTotalScorereg(wil15);
+                    let wil16 = resultreg[11][1]
+                    let item16 = isDataKosongreg(wil16) ? '-' : calculateTotalScorereg(wil16);
 
 
                     var tr = document.createElement('tr');
@@ -6829,6 +7039,51 @@
         $("#downloadimgmap").click(function() {
             captureTableScreenshot('map', 'SCORE KUALITAS PANEN BERDASARKAN BLOK')
         });
+
+        function editnilaiqc() {
+            var regIns = $("#regDataIns").val();
+            var dateIns = $("#dateDataIns").val();
+            var estateedit = $("#estateedit").val();
+            var nilaiedit = $("#nilaiedit").val();
+            var kurangstatus = $("#flexRadioDefault1").prop("checked");
+            var tambahstatus = $("#flexRadioDefault2").prop("checked");
+
+            let flexSwitchCheckDefault = kurangstatus === true;
+
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url: "{{ route('editnilaidataestate') }}",
+                method: "post",
+                cache: false,
+                data: {
+                    _token: _token,
+                    regional: regIns,
+                    date: dateIns,
+                    estate: estateedit,
+                    nilai: nilaiedit,
+                    type: flexSwitchCheckDefault,
+                },
+                success: function(result, status, xhr) {
+                    Swal.close();
+                    // Handle responses based on the message
+                    if (result.message === 'Nilai berhasil di kurang' || result.message === 'Nilai berhasil di tambah') {
+                        alert(result.message); // Success message
+                        location.reload();
+                    } else if (result.message === 'Anda tidak dapat mengurangi atau menambah lagi estate ini') {
+                        alert(result.message); // Record already exists message
+                    } else {
+                        alert('Unexpected error occurred.'); // Handle other unexpected messages
+                        console.error(result.error); // Log the error for debugging
+                        location.reload();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('Error: ' + error); // Handle AJAX errors
+                    console.error(xhr.responseText); // Log the detailed error response
+                    location.reload();
+                }
+            });
+        }
     </script>
 
 </x-layout.app>
