@@ -28,7 +28,17 @@ class makemapsController extends Controller
         $regData = $request->get('regData');
         $date = $request->get('date');
 
-        // dd($regData);
+        $regData = explode(',', $regData);
+
+        $reg = $regData[0];
+
+        $regional = DB::connection('mysql2')->table('wil')
+            ->select('*')
+            ->join('estate', 'estate.wil', '=', 'wil.id')
+            ->where('estate.wil', $reg)
+            ->pluck('regional');
+        $regional = $regional[0];
+        // dd($regData, $regional);
 
         $queryTrans = DB::connection('mysql2')->table("mutu_transport")
             ->select("mutu_transport.*", "estate.wil")
@@ -42,20 +52,9 @@ class makemapsController extends Controller
         $DataEstate = $queryTrans->groupBy('blok');
         $DataEstate = json_decode($DataEstate, true);
 
-        $queryBuah = DB::connection('mysql2')->table("mutu_buah")
-            ->select("mutu_buah.*", "estate.wil")
-            ->join('estate', 'estate.est', '=', 'mutu_buah.estate')
-            ->where('mutu_buah.estate', $est)
-            ->whereYear('mutu_buah.datetime', $date)
-            ->where('mutu_buah.afdeling', '!=', 'Pla')
-            // ->where('mutu_buah.afd', 'OA')
-            ->get();
-
-        $DataMTbuah = $queryBuah->groupBy('blok');
-        $DataMTbuah = json_decode($DataMTbuah, true);
 
         $queryAncak = DB::connection('mysql2')->table("mutu_ancak_new")
-            ->select("mutu_ancak_new.*", "estate.wil")
+            ->select("mutu_ancak_new.*", "estate.wil", DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%Y-%m-%d") as date'))
             ->join('estate', 'estate.est', '=', 'mutu_ancak_new.estate')
             ->where('mutu_ancak_new.estate', $est)
             ->whereYear('mutu_ancak_new.datetime', $date)
@@ -63,8 +62,67 @@ class makemapsController extends Controller
             // ->where('mutu_ancak_new.afd', 'OA')
             ->get();
 
-        $DataMTAncak = $queryAncak->groupBy('blok');
+        $DataMTAncak = $queryAncak->groupBy(['blok']);
         $DataMTAncak = json_decode($DataMTAncak, true);
+        function normalizeBlock($block)
+        {
+            // Check for block identifiers like 'F006-CBI14'
+            if (preg_match('/^[A-Z]+\d+-CBI\d+$/', $block)) {
+                return substr($block, 0, strpos($block, 'CBI'));
+            }
+            // Check for block identifiers like 'O27012'
+            elseif (preg_match('/^[A-Z]+\d+$/', $block)) {
+                return substr($block, 0, -2);
+            }
+            // Return the original block if it doesn't match known patterns
+            return $block;
+        }
+
+        // Step 3: Normalize the block identifiers
+        $datamutuancak = [];
+        foreach ($DataMTAncak as $block => $data) {
+            // Normalize the block identifier
+            $normalizedBlock = normalizeBlock($block);
+
+            // Initialize the array for this normalized block if not exists
+            if (!isset($datamutuancak[$normalizedBlock])) {
+                $datamutuancak[$normalizedBlock] = [];
+            }
+
+            // Merge the data
+            $datamutuancak[$normalizedBlock] = array_merge($datamutuancak[$normalizedBlock], $data);
+        }
+        $datamututrans = [];
+        foreach ($DataEstate as $block => $data) {
+            // Normalize the block identifier
+            $normalizedBlock = normalizeBlock($block);
+
+            // Initialize the array for this normalized block if not exists
+            if (!isset($datamututrans[$normalizedBlock])) {
+                $datamututrans[$normalizedBlock] = [];
+            }
+
+            // Merge the data
+            $datamututrans[$normalizedBlock] = array_merge($datamututrans[$normalizedBlock], $data);
+        }
+
+        // dd($datamututrans['D13'], $datamutuancak);
+
+        // dd($DataMTAncak, $datamutuancak['O270']);
+        // $newArray = array_filter($DataMTAncak, function ($key) {
+        //     return in_array($key, ["O27017", "O27012"]);
+        // }, ARRAY_FILTER_USE_KEY);
+
+        // $testing = [];
+        // foreach ($newArray as $key => $value) {
+        //     $jgg = 0;
+        //     foreach ($value as $key1 => $value1) {
+        //         $jgg += $value1['jjg'];
+        //     }
+        //     $testing[$key]['jjg'] = $jgg;
+        // }
+        // dd($testing);
+
         $QueryEst = DB::connection('mysql2')
             ->table("estate")
             ->join('afdeling', 'afdeling.estate', 'estate.id')
@@ -76,11 +134,6 @@ class makemapsController extends Controller
 
 
         $queryBlok = json_decode($QueryEst, true);
-        // dd($dataAfdeling);
-        // $bloks_afd = array_reduce($queryBlok->toArray(), function ($carry, $item) {
-        //     $carry[$item->afdeling][$item->nama][] = $item;
-        //     return $carry;
-        // }, []);
         $bloks_afd = array_reduce($queryBlok, function ($carry, $item) {
             $carry[$item['afdeling']][$item['nama']][] = $item;
             return $carry;
@@ -113,80 +166,124 @@ class makemapsController extends Controller
 
         // dd($coordinates);
 
+        // dd($datamututrans['M180']);
+
         $dataSkor = array();
-        foreach ($DataEstate as $key => $value) {
+        foreach ($datamututrans as $key => $value) {
             $sum_bt = 0;
             $sum_Restan = 0;
             $tph_sample = 0;
             $listBlokPerAfd = array();
             foreach ($value as $key2 => $value2) {
-                if (!in_array($value2['estate'] . ' ' . $value2['afdeling'] . ' ' . $value2['blok'], $listBlokPerAfd)) {
-                    $listBlokPerAfd[] = $value2['estate'] . ' ' . $value2['afdeling'] . ' ' . $value2['blok'];
-                }
+                $listBlokPerAfd[] = $value2['estate'] . ' ' . $value2['afdeling'] . ' ' . $value2['blok'];
                 $tph_sample = count($listBlokPerAfd);
+                // $tph_sample = count($listBlokPerAfd);
                 $sum_Restan += $value2['rst'];
                 $sum_bt += $value2['bt'];
             }
             $skorTrans = skor_brd_tinggal(round($sum_bt / $tph_sample, 2)) + skor_buah_tinggal(round($sum_Restan / $tph_sample, 2));
             $dataSkor[$key][0]['skorTrans'] = $skorTrans;
+            $dataSkor[$key][0]['tph_sample'] = $tph_sample;
+            $dataSkor[$key][0]['sum_Restan'] = $sum_Restan;
+            $dataSkor[$key][0]['sum_bt'] = $sum_bt;
             $dataSkor[$key][0]['latin'] = $value2['lat'] . ',' . $value2['lon'];
         }
 
+        // dd($dataSkor['I250']);
 
 
-        // dd($dataSkor);
-        foreach ($DataMTAncak as $key => $value) {
-            $listBlok = array();
-            $sph = 0;
-            $jml_pokok_sm = 0;
-            $jml_jjg_panen = 0;
-            $jml_brtp = 0;
-            $jml_brtk = 0;
-            $jml_brtgl = 0;
-            $jml_bhts = 0;
-            $jml_bhtm1 = 0;
-            $jml_bhtm2 = 0;
-            $jml_bhtm3 = 0;
-            $jml_ps = 0;
+        foreach ($datamutuancak as $key => $value) {
+            $akp = 0;
+            $skor_bTinggal = 0;
+            $brdPerjjg = 0;
+            $ttlSkorMA = 0;
+            $ttlSkorMAess = 0;
+            $listBlokPerAfd = array();
+            $jum_ha = 0;
+            $totalPokok = 0;
+            $totalPanen = 0;
+            $totalP_panen = 0;
+            $totalK_panen = 0;
+            $totalPTgl_panen = 0;
+            $totalbhts_panen = 0;
+            $totalbhtm1_panen = 0;
+            $totalbhtm2_panen = 0;
+            $totalbhtm3_oanen = 0;
+            $totalpelepah_s = 0;
+            $check_input = 'kosong';
             foreach ($value as $key2 => $value2) {
-                if (!in_array($value2['estate'] . ' ' . $value2['afdeling'] . ' ' . $value2['blok'], $listBlok)) {
+                if (!in_array($value2['estate'] . ' ' . $value2['afdeling'] . ' ' . $value2['blok'], $listBlokPerAfd)) {
                     if ($value2['sph'] != 0) {
-                        $listBlok[] = $value2['estate'] . ' ' . $value2['afdeling'] . ' ' . $value2['blok'];
-                        $sph += $value2['sph'];
+                        $listBlokPerAfd[] = $value2['estate'] . ' ' . $value2['afdeling'] . ' ' . $value2['blok'];
                     }
                 }
-                $jml_blok = count($listBlok);
-                $jml_pokok_sm += $value2['sample'];
-                $jml_jjg_panen += $value2['jjg'];
-                $jml_brtp += $value2['brtp'];
-                $jml_brtk += $value2['brtk'];
-                $jml_brtgl += $value2['brtgl'];
-                $jml_bhts += $value2['bhts'];
-                $jml_bhtm1 += $value2['bhtm1'];
-                $jml_bhtm2 += $value2['bhtm2'];
-                $jml_bhtm3 += $value2['bhtm2'];
-                $jml_ps += $value2['ps'];
+
+                $jml_blok = count($listBlokPerAfd);
+                $totalPokok += $value2['sample'];
+                $totalPanen +=  $value2['jjg'];
+                $totalP_panen += $value2['brtp'];
+                $totalK_panen += $value2['brtk'];
+                $totalPTgl_panen += $value2['brtgl'];
+
+                $totalbhts_panen += $value2['bhts'];
+                $totalbhtm1_panen += $value2['bhtm1'];
+                $totalbhtm2_panen += $value2['bhtm2'];
+                $totalbhtm3_oanen += $value2['bhtm3'];
+                $check_input = $value2['jenis_input'];
+                $nilai_input = $value2['skor_akhir'];
+                $totalpelepah_s += $value2['ps'];
             }
-            $jml_sph = $jml_blok == 0 ? $sph : ($sph / $jml_blok);
-            $tot_brd = ($jml_brtp + $jml_brtk + $jml_brtgl);
-            $tot_jjg = ($jml_bhts + $jml_bhtm1 + $jml_bhtm2 + $jml_bhtm3);
-            $luas_ha = ($jml_sph != 0) ? round(($jml_pokok_sm / $jml_sph), 2) : 0;
+            if ($totalPokok != 0) {
+                $akp = $totalPanen / $totalPokok * 100;
+            } else {
+                $akp = 0;
+            }
 
 
-            $perBrdt = ($jml_jjg_panen != 0) ? round(($tot_brd / $jml_jjg_panen), 2) : 0;
-            $perBt = ($jml_jjg_panen != 0) ? round(($tot_jjg / ($jml_jjg_panen + $tot_jjg)) * 100, 2) : 0;
+            $skor_bTinggal = $totalP_panen + $totalK_panen + $totalPTgl_panen;
 
-            $perPSMA = count_percent($jml_ps, $jml_pokok_sm);
-            $skorAncak = skor_brd_ma($perBrdt) + skor_buah_Ma($perBt) + skor_palepah_ma($perPSMA);
+            if ($totalPanen != 0) {
+                $brdPerjjg = $skor_bTinggal / $totalPanen;
+            } else {
+                $brdPerjjg = 0;
+            }
 
-            $dataSkor[$key][0]['skorAncak'] = $skorAncak;
+            $sumBH = $totalbhts_panen +  $totalbhtm1_panen +  $totalbhtm2_panen +  $totalbhtm3_oanen;
+            if ($sumBH != 0) {
+                $sumPerBH = $sumBH / ($totalPanen + $sumBH) * 100;
+            } else {
+                $sumPerBH = 0;
+            }
+
+            if ($totalpelepah_s != 0) {
+                $perPl = ($totalpelepah_s / $totalPokok) * 100;
+            } else {
+                $perPl = 0;
+            }
+            $nonZeroValues = array_filter([$totalP_panen, $totalK_panen, $totalPTgl_panen, $totalbhts_panen, $totalbhtm1_panen, $totalbhtm2_panen, $totalbhtm3_oanen]);
+
+            if (!empty($nonZeroValues)) {
+                $dataSkor[$key][0]['check_datacak'] = 'ada';
+            } else {
+                $dataSkor[$key][0]['check_datacak'] = 'kosong';
+            }
+
+            // $ttlSkorMA = $skor_bh + $skor_brd + $skor_ps;
+            $ttlSkorMA =  skor_buah_Ma($sumPerBH) + skor_brd_ma($brdPerjjg) + skor_palepah_ma($perPl);
+
+
+            $dataSkor[$key][0]['skorAncak'] = $ttlSkorMA;
+            $dataSkor[$key][0]['tot_brd'] = $brdPerjjg;
+            $dataSkor[$key][0]['sumBH'] = $sumBH;
+            $dataSkor[$key][0]['tot_jjg'] = $totalPanen;
             $dataSkor[$key][0]['latin2'] = $value2['lat_awal'] . ',' . $value2['lon_awal'];
         }
-        // dd($dataSkor);
 
+
+        // dd($dataSkor['D13']);
         $dataSkorResult = array();
         $newData = '';
-
+        // dd($regData);
         // dd($dataSkor, $est);
         foreach ($dataSkor as $key => $value) {
             foreach ($value as $key1 => $value1) {
@@ -196,16 +293,18 @@ class makemapsController extends Controller
                 $skorTrans = check_array('skorTrans', $value1);
                 $skorBuah = check_array('skorBuah', $value1);
                 $skorAncak = check_array('skorAncak', $value1);
-                // $skorAkhir = $skorTrans + $skorBuah + $skorAncak;
+                $denominator = 65.0; // Denominator for percentage calculation
+
                 if ($skorTrans != 0 && $skorAncak != 0) {
-                    $skorAkhir = $skorTrans + $skorAncak + 34;
-                } else if ($skorTrans != 0) {
-                    $skorAkhir = $skorTrans + 34;
-                } else if ($skorAncak != 0) {
-                    $skorAkhir = $skorAncak + 34;
+                    $skorAkhir = (int) round((($skorTrans + $skorAncak) * 100) / 65 - 1);
+                } elseif ($skorTrans != 0) {
+                    $skorAkhir = (int)round(($skorTrans * 100) / 65 - 1);
+                } elseif ($skorAncak != 0) {
+                    $skorAkhir = (int) round(($skorAncak * 100) / 65 - 1);
                 } else {
                     $skorAkhir = 0;
                 }
+
 
                 if ($skorTrans == 0 && $skorAncak == 0) {
                     $check = 'empty';
@@ -233,6 +332,9 @@ class makemapsController extends Controller
             }
         }
 
+        dd($dataSkorResult['M180']);
+
+        // dd($dataSkor['O27017']);
 
         function isPointInPolygon($point, $polygon)
         {
@@ -331,7 +433,6 @@ class makemapsController extends Controller
             }
         }
 
-        // dd($blokLatLnEw);
 
         // $values = array_values($blokEstateFix['BDE']);
         $uniqueCombinations = [];
@@ -349,6 +450,7 @@ class makemapsController extends Controller
                         $uniqueCombinations[$key] = true; // Mark the combination as encountered
                         $blokLatLn[] = [
                             'blok' => $value['blok'],
+                            'blok_asli' => $marker['blok'] ?? '-',
                             'estate' => $est,
                             'latln' => $value['latinnew'],
                             'nilai' => $marker['skorAkhir'],
@@ -365,6 +467,7 @@ class makemapsController extends Controller
                     $uniqueCombinations[$key] = true; // Mark the combination as encountered
                     $blokLatLn[] = [
                         'blok' => $value['blok'],
+                        'blok_asli' => '-',
                         'estate' => $est,
                         'latln' => $value['latinnew'],
                         'nilai' => 0,
@@ -482,8 +585,8 @@ class makemapsController extends Controller
             'nilai' => $lowestValue,
         ];
 
-
-        // dd($blokLatLn, $dataLegend);
+        // dd($dataSkorResult);
+        // dd($blokLatLn, $dataSkorResult);
 
 
         $plot['blok'] = $blokLatLn;

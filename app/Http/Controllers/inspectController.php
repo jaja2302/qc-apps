@@ -2829,7 +2829,7 @@ class inspectController extends Controller
         $dataReg['total_buahcak'] = $totalSkorBuah;
         $dataReg['TOTAL_SKORbh'] = $totalSkorBuah;
         $dataReg['check_databh'] = 'ada';
-        // dd($transNewdata);
+        // dd($rekap[2]['BKE']);
         return view('Qcinspeksi.dataInspeksi', ['data' => $rekap, 'reg' => $regional, 'bulan' => $bulan, 'datareg' => $dataReg]);
     }
 

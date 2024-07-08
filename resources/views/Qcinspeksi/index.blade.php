@@ -2019,6 +2019,8 @@
                 getPlotStr +=
                     '{"type":"Feature","properties":{"blok":"' +
                     blok[i][1]['blok'] +
+                    '","blok_asli":"' +
+                    blok[i][1]['blok_asli'] +
                     '","estate":"' +
                     blok[i][1]['estate'] +
                     '","afdeling":"' +
@@ -2130,8 +2132,8 @@
                 onEachFeature: function(feature, layer) {
                     layer.myTag = 'BlokMarker';
                     layer.bindPopup(
-                        "<p><b>Blok</b>: " +
-                        feature.properties.blok +
+                        "<p><b>Blok Sidak</b>: " +
+                        feature.properties.blok_asli +
                         '</p> ' +
                         "<p><b>Afdeling</b>: " +
                         feature.properties.afdeling +

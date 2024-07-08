@@ -3672,11 +3672,16 @@ class inspeksidashController extends Controller
                     $dataBLokWil = 0;
                     $sum_btWil = 0;
                     $sum_rstWil = 0;
+                    // Initialize variables outside the loop to accumulate values across iterations
+                    $testsampel = [];
+                    // $sampelblok = [];
+
                     foreach ($value2 as $key3 => $value3) {
                         $dataBLokEst = 0;
                         $sum_btEst = 0;
                         $sum_rstEst = 0;
-                        foreach ($value3 as $key4 => $value4) if (is_array($value4)) {
+
+                        foreach ($value3 as $key4 => $value4) {
                             $sum_bt = 0;
                             $sum_rst = 0;
                             $brdPertph = 0;
@@ -3684,135 +3689,121 @@ class inspeksidashController extends Controller
                             $totalSkor = 0;
                             $dataBLok = 0;
                             $totalSkores = 0;
-                            $listBlokPerAfd = array();
-                            foreach ($value4 as $key5 => $value5) {
-                                $listBlokPerAfd[] = $value5->estate . ' ' . $value5->afdeling . ' ' . $value5->blok;
-                                // }
-                                $dataBLok = count($listBlokPerAfd);
-                                $sum_bt += $value5->bt;
-                                $sum_rst += $value5->rst;
-                            }
-                            $tot_sample = 0;  // Define the variable outside of the foreach loop
 
-                            foreach ($transNewdata as $keys => $trans) if ($keys == $key) {
-                                foreach ($trans as $keys1 => $trans1) if ($keys1 == $key1) {
-                                    foreach ($trans1 as $keys2 => $trans2) if ($keys2 == $key2) {
-                                        foreach ($trans2 as $keys3 => $trans3) if ($keys3 == $key3) {
-                                            foreach ($trans3 as $keys4 => $trans4) if ($keys4 == $key4) {
-                                                $tot_sample = $trans4['total_tph'];
+                            $tot_sample = 0; // Initialize outside the inner loops
+                            $listBlokPerAfd = [];
+                            if (is_array($value4)) {
+                                foreach ($value4 as $key5 => $value5) {
+                                    $listBlokPerAfd[] = $value5->estate . ' ' . $value5->afdeling . ' ' . $value5->blok;
+                                    $dataBLok = count($listBlokPerAfd);
+                                    $sum_bt += $value5->bt;
+                                    $sum_rst += $value5->rst;
+                                }
+
+                                foreach ($transNewdata as $keys => $trans) {
+                                    if ($keys == $key) {
+                                        foreach ($trans as $keys1 => $trans1) {
+                                            if ($keys1 == $key1) {
+                                                foreach ($trans1 as $keys2 => $trans2) {
+                                                    if ($keys2 == $key2) {
+                                                        foreach ($trans2 as $keys3 => $trans3) {
+                                                            if ($keys3 == $key3) {
+                                                                foreach ($trans3 as $keys4 => $trans4) {
+                                                                    if ($keys4 == $key4) {
+                                                                        $tot_sample = $trans4['total_tph'];
+                                                                        $testsampel[] = $trans4['total_tph'];
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
 
-                            if ($RegData == '2' || $RegData == 2) {
-                                if ($dataBLok != 0) {
-                                    $brdPertph = $sum_bt / $tot_sample;
+                                if ($RegData == '2' || $RegData == 2) {
+                                    $brdPertph = ($dataBLok != 0) ? $sum_bt / $tot_sample : 0;
+                                    $buahPerTPH = ($dataBLok != 0) ? $sum_rst / $tot_sample : 0;
                                 } else {
-                                    $brdPertph = 0;
+                                    $brdPertph = ($dataBLok != 0) ? $sum_bt / $dataBLok : 0;
+                                    $buahPerTPH = ($dataBLok != 0) ? $sum_rst / $dataBLok : 0;
                                 }
-                            } else {
-                                if ($dataBLok != 0) {
-                                    $brdPertph = $sum_bt / $dataBLok;
-                                } else {
-                                    $brdPertph = 0;
-                                }
-                            }
 
-                            if ($RegData == '2' || $RegData == 2) {
-                                if ($dataBLok != 0) {
-                                    $buahPerTPH = $sum_rst / $tot_sample;
-                                } else {
-                                    $buahPerTPH = 0;
-                                }
-                            } else {
-                                if ($dataBLok != 0) {
-                                    $buahPerTPH = $sum_rst / $dataBLok;
-                                } else {
-                                    $buahPerTPH = 0;
-                                }
-                            }
+                                $nonZeroValues = array_filter([$sum_bt, $sum_rst]);
+                                $rekap[$key][$key1][$key2][$key3][$key4]['check_datatrans'] = !empty($nonZeroValues) ? 'ada' : 'kosong';
+                                $totalSkor = skor_brd_tinggal($brdPertph) + skor_buah_tinggal($buahPerTPH);
+                                $rekap[$key][$key1][$key2][$key3][$key4]['tph_sampleNew'] = ($RegData == '2' || $RegData == 2) ? $tot_sample : $dataBLok;
+                                $rekap[$key][$key1][$key2][$key3][$key4]['total_brdtrans'] = $sum_bt;
+                                $rekap[$key][$key1][$key2][$key3][$key4]['total_brdperTPHtrans'] = $brdPertph;
+                                $rekap[$key][$key1][$key2][$key3][$key4]['total_buahtrans'] = $sum_rst;
+                                $rekap[$key][$key1][$key2][$key3][$key4]['total_buahPerTPHtrans'] = $buahPerTPH;
+                                $rekap[$key][$key1][$key2][$key3][$key4]['skor_brdPertphtrans'] = skor_brd_tinggal($brdPertph);
+                                $rekap[$key][$key1][$key2][$key3][$key4]['skor_buahPerTPHtrans'] = skor_buah_tinggal($buahPerTPH);
+                                $rekap[$key][$key1][$key2][$key3][$key4]['totalSkortrans'] = $totalSkor;
+                                $rekap[$key][$key1][$key2][$key3][$key4]['mututrans'] = '-----------------------------------';
 
-
-                            $nonZeroValues = array_filter([$sum_bt, $sum_rst]);
-
-                            if (!empty($nonZeroValues)) {
-                                $rekap[$key][$key1][$key2][$key3][$key4]['check_datatrans'] = 'ada';
-                            } else {
-                                $rekap[$key][$key1][$key2][$key3][$key4]['check_datatrans'] = "kosong";
-                            }
-                            // dd($transNewdata);
-
-
-
-
-                            $totalSkor =   skor_brd_tinggal($brdPertph) + skor_buah_tinggal($buahPerTPH);
-
-                            if ($RegData == '2' || $RegData == 2) {
-                                $rekap[$key][$key1][$key2][$key3][$key4]['tph_sampleNew'] = $tot_sample;
-                            } else {
-                                $rekap[$key][$key1][$key2][$key3][$key4]['tph_sampleNew'] = $dataBLok;
-                            }
-
-                            $rekap[$key][$key1][$key2][$key3][$key4]['total_brdtrans'] = $sum_bt;
-                            $rekap[$key][$key1][$key2][$key3][$key4]['total_brdperTPHtrans'] = $brdPertph;
-                            $rekap[$key][$key1][$key2][$key3][$key4]['total_buahtrans'] = $sum_rst;
-                            $rekap[$key][$key1][$key2][$key3][$key4]['total_buahPerTPHtrans'] = $buahPerTPH;
-                            $rekap[$key][$key1][$key2][$key3][$key4]['skor_brdPertphtrans'] = skor_brd_tinggal($brdPertph);
-                            $rekap[$key][$key1][$key2][$key3][$key4]['skor_buahPerTPHtrans'] = skor_buah_tinggal($buahPerTPH);
-                            $rekap[$key][$key1][$key2][$key3][$key4]['totalSkortrans'] = $totalSkor;
-                            $rekap[$key][$key1][$key2][$key3][$key4]['mututrans'] = '-----------------------------------';
-
-                            if ($RegData == '2' || $RegData == 2) {
-                                $dataBLokEst += $tot_sample;
-                            } else {
+                                $sum_btEst += $sum_bt;
+                                $sum_rstEst += $sum_rst;
                                 $dataBLokEst += $dataBLok;
+                            } else {
+                                $totalSkores = skor_brd_tinggal(0) + skor_buah_tinggal(0);
+
+                                foreach ($transNewdata as $keys => $trans) {
+                                    if ($keys == $key) {
+                                        foreach ($trans as $keys1 => $trans1) {
+                                            if ($keys1 == $key1) {
+                                                foreach ($trans1 as $keys2 => $trans2) {
+                                                    if ($keys2 == $key2) {
+                                                        foreach ($trans2 as $keys3 => $trans3) {
+                                                            if ($keys3 == $key3) {
+                                                                foreach ($trans3 as $keys4 => $trans4) {
+                                                                    if ($keys4 == $key4) {
+                                                                        $tot_sample = $trans4['total_tph'];
+                                                                        $testsampel[] = $trans4['total_tph'];
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                $rekap[$key][$key1][$key2][$key3][$key4]['check_datatrans'] = 'kosong';
+                                $rekap[$key][$key1][$key2][$key3][$key4]['tph_sampleNew'] = ($RegData == '2' || $RegData == 2) ? $tot_sample : $dataBLok;
+                                $rekap[$key][$key1][$key2][$key3][$key4]['tph_sampletrans'] = 0;
+                                $rekap[$key][$key1][$key2][$key3][$key4]['total_brdtrans'] = 0;
+                                $rekap[$key][$key1][$key2][$key3][$key4]['total_brdperTPHtrans'] = 0;
+                                $rekap[$key][$key1][$key2][$key3][$key4]['total_buahtrans'] = 0;
+                                $rekap[$key][$key1][$key2][$key3][$key4]['total_buahPerTPHtrans'] = 0;
+                                $rekap[$key][$key1][$key2][$key3][$key4]['skor_brdPertphtrans'] = 0;
+                                $rekap[$key][$key1][$key2][$key3][$key4]['skor_buahPerTPHtrans'] = 0;
+                                $rekap[$key][$key1][$key2][$key3][$key4]['totalSkortrans'] = $totalSkores;
+                                $rekap[$key][$key1][$key2][$key3][$key4]['mututrans'] = '-----------------------------------';
                             }
-
-                            $sum_btEst += $sum_bt;
-                            $sum_rstEst += $sum_rst;
-                        } else {
-                            $totalSkores =   skor_brd_tinggal(0) + skor_buah_tinggal(0);
-
-                            $rekap[$key][$key1][$key2][$key3][$key4]['check_datatrans'] = 'kosong';
-                            $rekap[$key][$key1][$key2][$key3][$key4]['tph_sampleNew'] = 0;
-                            $rekap[$key][$key1][$key2][$key3][$key4]['tph_sampletrans'] = 0;
-                            $rekap[$key][$key1][$key2][$key3][$key4]['total_brdtrans'] = 0;
-                            $rekap[$key][$key1][$key2][$key3][$key4]['total_brdperTPHtrans'] = 0;
-                            $rekap[$key][$key1][$key2][$key3][$key4]['total_buahtrans'] = 0;
-                            $rekap[$key][$key1][$key2][$key3][$key4]['total_buahPerTPHtrans'] = 0;
-                            $rekap[$key][$key1][$key2][$key3][$key4]['skor_brdPertphtrans'] = 0;
-                            $rekap[$key][$key1][$key2][$key3][$key4]['skor_buahPerTPHtrans'] = 0;
-                            $rekap[$key][$key1][$key2][$key3][$key4]['totalSkortrans'] = $totalSkores;
-                            $rekap[$key][$key1][$key2][$key3][$key4]['mututrans'] = '-----------------------------------';
-                        }
-                        if ($dataBLokEst != 0) {
-                            $brdPertphEst = $sum_btEst / $dataBLokEst;
-                        } else {
-                            $brdPertphEst = 0;
                         }
 
-                        if ($dataBLokEst != 0) {
-                            $buahPerTPHEst = $sum_rstEst / $dataBLokEst;
-                        } else {
-                            $buahPerTPHEst = 0;
+                        if ($RegData == '2' || $RegData == 2) {
+                            $dataBLokEst = array_sum($testsampel);
                         }
+
+                        $brdPertphEst = ($dataBLokEst != 0) ? round($sum_btEst / $dataBLokEst, 3) : 0;
+                        $buahPerTPHEst = ($dataBLokEst != 0) ? round($sum_rstEst / $dataBLokEst, 3) : 0;
+                        $totalSkorEst = skor_brd_tinggal($brdPertphEst) + skor_buah_tinggal($buahPerTPHEst);
                         $nonZeroValues = array_filter([$sum_btEst, $sum_rstEst]);
 
                         if (!empty($nonZeroValues)) {
                             $check_data = 'ada';
-                            // $rekap[$key][$key1]['skor_buahPerTPH'] = $skor_buah =  skor_buah_tinggal($buahPerTPHEst);
                         } else {
                             $check_data = 'kosong';
-                            // $rekap[$key][$key1]['skor_buahPerTPH'] = $skor_buah = 0;
                         }
 
-                        // dd($rekap);
-                        $totalSkorEst = skor_brd_tinggal($brdPertphEst) + skor_buah_tinggal($buahPerTPHEst);
-
-
                         $rekap[$key][$key1][$key2][$key3]['estate']['trans'] = [
+                            // 'tph_sampleNew' => $dataBLokEst,
                             'tph_sampleNew' => $dataBLokEst,
                             'total_brdtrans' => $sum_btEst,
                             'check_datatrans' => $check_data,
@@ -3829,6 +3820,9 @@ class inspeksidashController extends Controller
                         $sum_btWil += $sum_btEst;
                         $sum_rstWil += $sum_rstEst;
                     }
+
+                    // dd($testsampel);
+
                     if ($dataBLokWil != 0) {
                         $brdPertphWil = round($sum_btWil / $dataBLokWil, 3);
                     } else {
@@ -3909,7 +3903,7 @@ class inspeksidashController extends Controller
                 ];
             }
         }
-        // dd($rekap);
+        // dd($rekap[2]['July'][6]);
 
         $resultafdeling = [];
 
@@ -3991,7 +3985,7 @@ class inspeksidashController extends Controller
         // dd($transNewdata[2]['January'][4]);
 
         // dd($defaultAncak, $defaultbuah, $defaulttrans);
-
+        // dd($rekap[1]['July'][2]['BKE']);
         $arrView = array();
 
         $arrView['resultreg'] =  $resultreg;
