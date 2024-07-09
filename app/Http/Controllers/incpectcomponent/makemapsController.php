@@ -58,12 +58,14 @@ class makemapsController extends Controller
             ->join('estate', 'estate.est', '=', 'mutu_ancak_new.estate')
             ->where('mutu_ancak_new.estate', $est)
             ->whereYear('mutu_ancak_new.datetime', $date)
+            ->orderBy('blok', 'desc')
             ->where('mutu_ancak_new.afdeling', '!=', 'Pla')
             // ->where('mutu_ancak_new.afd', 'OA')
             ->get();
 
         $DataMTAncak = $queryAncak->groupBy(['blok']);
         $DataMTAncak = json_decode($DataMTAncak, true);
+        // dd($DataMTAncak);
         function normalizeBlock($block)
         {
             // Check for block identifiers like 'F006-CBI14'
@@ -105,7 +107,7 @@ class makemapsController extends Controller
             // Merge the data
             $datamututrans[$normalizedBlock] = array_merge($datamututrans[$normalizedBlock], $data);
         }
-
+        // dd($datamutuancak['R009']);
         // dd($datamututrans['D13'], $datamutuancak);
 
         // dd($DataMTAncak, $datamutuancak['O270']);
@@ -113,6 +115,7 @@ class makemapsController extends Controller
         //     return in_array($key, ["O27017", "O27012"]);
         // }, ARRAY_FILTER_USE_KEY);
 
+        // dd($newArray);
         // $testing = [];
         // foreach ($newArray as $key => $value) {
         //     $jgg = 0;
@@ -189,9 +192,18 @@ class makemapsController extends Controller
             $dataSkor[$key][0]['latin'] = $value2['lat'] . ',' . $value2['lon'];
         }
 
-        // dd($dataSkor['I250']);
+        // dd($dataSkor['H58']);
 
+        // dd($datamutuancak['R009']);
 
+        // $testing = [];
+        // $jgg = 0;
+        // foreach ($datamutuancak['R009'] as $key => $value) {
+
+        //     $jgg += $value['jjg'];
+        // }
+        // $testing['jjg'] = $jgg;
+        // dd($testing);
         foreach ($datamutuancak as $key => $value) {
             $akp = 0;
             $skor_bTinggal = 0;
@@ -275,11 +287,11 @@ class makemapsController extends Controller
             $dataSkor[$key][0]['skorAncak'] = $ttlSkorMA;
             $dataSkor[$key][0]['tot_brd'] = $brdPerjjg;
             $dataSkor[$key][0]['sumBH'] = $sumBH;
-            $dataSkor[$key][0]['tot_jjg'] = $totalPanen;
+            $dataSkor[$key][0]['totalPanen'] = $totalPanen;
             $dataSkor[$key][0]['latin2'] = $value2['lat_awal'] . ',' . $value2['lon_awal'];
         }
 
-
+        // dd($dataSkor['R009']);
         // dd($dataSkor['D13']);
         $dataSkorResult = array();
         $newData = '';
@@ -332,7 +344,8 @@ class makemapsController extends Controller
             }
         }
 
-        dd($dataSkorResult['M180']);
+        // dd($dataSkorResult);
+        // dd($dataSkorResult['M180']);
 
         // dd($dataSkor['O27017']);
 

@@ -2061,6 +2061,7 @@
                     var checkboxId = 'checkbox-' + afdeling;
 
                     legendHTML +=
+
                         '<div><input type="checkbox" id="' +
                         checkboxId +
                         '" name="afdeling" value="' +
@@ -2132,6 +2133,9 @@
                 onEachFeature: function(feature, layer) {
                     layer.myTag = 'BlokMarker';
                     layer.bindPopup(
+                        "<p><b>Blok Database</b>: " +
+                        feature.properties.blok +
+                        '</p> ' +
                         "<p><b>Blok Sidak</b>: " +
                         feature.properties.blok_asli +
                         '</p> ' +
