@@ -305,17 +305,34 @@ class makemapsController extends Controller
                 $skorTrans = check_array('skorTrans', $value1);
                 $skorBuah = check_array('skorBuah', $value1);
                 $skorAncak = check_array('skorAncak', $value1);
-                $denominator = 65.0; // Denominator for percentage calculation
 
-                if ($skorTrans != 0 && $skorAncak != 0) {
-                    $skorAkhir = (int) round((($skorTrans + $skorAncak) * 100) / 65 - 1);
-                } elseif ($skorTrans != 0) {
-                    $skorAkhir = (int)round(($skorTrans * 100) / 65 - 1);
-                } elseif ($skorAncak != 0) {
-                    $skorAkhir = (int) round(($skorAncak * 100) / 65 - 1);
+
+
+                if ($skorTrans != 0 || $skorAncak != 0) {
+                    $skorTotal = $skorTrans + $skorAncak;
+                    $skorAkhir = (int) round(($skorTotal * 100) / 65);
+
+                    if ($skorAkhir == 100) {
+                        $skorAkhir -= 1;
+                    }
                 } else {
                     $skorAkhir = 0;
                 }
+
+                if ($reg != 1) {
+                    $skorAkhir -= 1;
+                }
+
+
+                // if ($skorTrans != 0 && $skorAncak != 0) {
+                //     $skorAkhir = (int) round((($skorTrans + $skorAncak) * 100) / 65 - 1);
+                // } elseif ($skorTrans != 0) {
+                //     $skorAkhir = (int)round(($skorTrans * 100) / 65 - 1);
+                // } elseif ($skorAncak != 0) {
+                //     $skorAkhir = (int) round(($skorAncak * 100) / 65 - 1);
+                // } else {
+                //     $skorAkhir = 0;
+                // }
 
 
                 if ($skorTrans == 0 && $skorAncak == 0) {

@@ -2829,7 +2829,7 @@ class inspectController extends Controller
         $dataReg['total_buahcak'] = $totalSkorBuah;
         $dataReg['TOTAL_SKORbh'] = $totalSkorBuah;
         $dataReg['check_databh'] = 'ada';
-        // dd($rekap[2]['BKE']);
+        // dd($transNewdata);
         return view('Qcinspeksi.dataInspeksi', ['data' => $rekap, 'reg' => $regional, 'bulan' => $bulan, 'datareg' => $dataReg]);
     }
 
@@ -9814,19 +9814,9 @@ class inspectController extends Controller
         $est = $request->input('est');
         $afd = $request->input('afd');
         $date = $request->input('Tanggal');
+
         $reg = $request->get('reg');
 
-        $result = rekap_blok($est, $afd, $date, $reg);
-
-        $ancakM = DB::connection('mysql2')->table('mutu_ancak_new')
-            ->select("mutu_ancak_new.*", DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%Y") as tahun'))
-            ->where('datetime', 'like', '%' . $date . '%')
-            ->where('mutu_ancak_new.estate', $est)
-            ->where('mutu_ancak_new.afdeling', $afd)
-            ->orderBy('kemandoran', 'asc')
-            ->get();
-        $ancakM = $ancakM->groupBy(['kemandoran']);
-        $ancakM = json_decode($ancakM, true);
         $mutuAncak = DB::connection('mysql2')->table('mutu_ancak_new')
             ->select("mutu_ancak_new.*", DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%Y") as tahun'))
             ->where('datetime', 'like', '%' . $date . '%')
@@ -9838,24 +9828,27 @@ class inspectController extends Controller
         $mutuAncak = json_decode($mutuAncak, true);
 
 
-        $transM = DB::connection('mysql2')->table('mutu_transport')
-            ->select("mutu_transport.*", DB::raw('DATE_FORMAT(mutu_transport.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(mutu_transport.datetime, "%Y") as tahun'))
-            ->where('datetime', 'like', '%' . $date . '%')
-            ->where('mutu_transport.estate', $est)
-            ->where('mutu_transport.afdeling', $afd)
-            ->orderBy('kemandoran', 'asc')
-            ->get();
-        $transM = $transM->groupBy(['kemandoran']);
-        $transM = json_decode($transM, true);
-        $buahM = DB::connection('mysql2')->table('mutu_buah')
+        $mutuBuahQuery = DB::connection('mysql2')->table('mutu_buah')
             ->select("mutu_buah.*", DB::raw('DATE_FORMAT(mutu_buah.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(mutu_buah.datetime, "%Y") as tahun'))
             ->where('datetime', 'like', '%' . $date . '%')
             ->where('mutu_buah.estate', $est)
             ->where('mutu_buah.afdeling', $afd)
-            ->orderBy('kemandoran', 'asc')
+
             ->get();
-        $buahM = $buahM->groupBy(['kemandoran']);
-        $buahM = json_decode($buahM, true);
+        $mutuBuahQuery = $mutuBuahQuery->groupBy(['blok']);
+        $mutuBuahQuery = json_decode($mutuBuahQuery, true);
+
+        $mutuTransport = DB::connection('mysql2')->table('mutu_transport')
+            ->select("mutu_transport.*", DB::raw('DATE_FORMAT(mutu_transport.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(mutu_transport.datetime, "%Y") as tahun'))
+            ->where('datetime', 'like', '%' . $date . '%')
+            ->where('mutu_transport.estate', $est)
+            ->where('mutu_transport.afdeling', $afd)
+
+            ->get();
+        $mutuTransport = $mutuTransport->groupBy(['blok']);
+        $mutuTransport = json_decode($mutuTransport, true);
+
+        // dd($mutuAncak);
 
         $ancak = array();
         $sum = 0; // Initialize sum variable
@@ -9984,12 +9977,364 @@ class inspectController extends Controller
                 $count++;
             }
         }
+        $average = $count != 0 ? $sum / $count : 0;
+
+        // dd($ancak);
+        $avg = [];
+        foreach ($ancak as $key) {
+            $avg['average'] = $average;
+        }
+        // dd($ancak, $avg);
         $sph_values = [];
         foreach ($ancak as $key => $data) {
             $sph_values[] = $data['sph'];
         }
+
+        // Calculate the sum of sph values
         $sum = array_sum($sph_values);
 
+        if (count($sph_values) > 0) {
+            $average = round($sum / count($sph_values), 0);
+        } else {
+            $average = 0; // or any default value you prefer
+        }
+
+        // dd($average, $ancak);
+
+        $transport = array();
+
+        foreach ($mutuTransport as $key => $value) {
+            $sum_bt = 0;
+            $sum_Restan = 0;
+            $tph_sample = 0;
+            $listBlokPerAfd = array();
+            foreach ($value as $key2 => $value2) {
+                // if (!in_array($value3['estate'] . ' ' . $value3['afdeling'] . ' ' . $value3['blok'], $listBlokPerAfd)) {
+                $listBlokPerAfd[] = $value2['estate'] . ' ' . $value2['afdeling'] . ' ' . $value2['blok'];
+                // }
+                $sum_Restan += $value2['rst'];
+                $tph_sample = count($listBlokPerAfd);
+                $sum_bt += $value2['bt'];
+            }
+            $transport[$key]['reg'] = 'reg1/reg3';
+            $transport[$key]['bt_total'] = $sum_bt;
+            $transport[$key]['restan_total'] = $sum_Restan;
+            $transport[$key]['tph_sample'] = $tph_sample;
+            $transport[$key]['skor'] = ($tph_sample != 0) ? round($sum_bt / $tph_sample, 2) : 0;
+            $transport[$key]['skor_restan'] = ($tph_sample != 0) ? round($sum_Restan / $tph_sample, 2) : 0;
+        }
+
+
+        if ($reg == 2 || $reg == '2') {
+
+            // $ancak_status = $ancak[''];
+            foreach ($mutuTransport as $key => $value) {
+                $sum_bt = 0;
+                $sum_Restan = 0;
+                $tph_sample = 0;
+                $listBlokPerAfd = array();
+                foreach ($value as $key2 => $value2) {
+                    // if (!in_array($value3['estate'] . ' ' . $value3['afdeling'] . ' ' . $value3['blok'], $listBlokPerAfd)) {
+                    $listBlokPerAfd[] = $value2['estate'] . ' ' . $value2['afdeling'] . ' ' . $value2['blok'];
+                    // }
+                    $sum_Restan += $value2['rst'];
+                    $tph_sample = count($listBlokPerAfd);
+                    $sum_bt += $value2['bt'];
+                    // dd($value2);
+                }
+
+                $panenKey = 0;
+
+                if (isset($ancak[$key]['status_panen'])) {
+                    $transport[$key]['status_panen'] = $ancak[$key]['status_panen'];
+                    $panenKey = $ancak[$key]['status_panen'];
+                    $transport[$key]['status_panentrans'] = $value2['status_panen'];
+                    $transport[$key]['status_panenAncak'] = $ancak[$key]['status_panen'];
+                }
+                $LuasKey = 0;
+                if (isset($ancak[$key]['luas_blok'])) {
+                    $transport[$key]['luas_blok'] = $ancak[$key]['luas_blok'];
+                    $LuasKey = $ancak[$key]['luas_blok'];
+                }
+
+                if (isset($panenKey) && $panenKey <= 3 && isset($ancak[$key]['luas_blok'])) {
+                    $transport[$key]['tph_sample'] = round($LuasKey * 1.3);
+                } else {
+                    $transport[$key]['tph_sample'] = $tph_sample;
+                }
+
+
+                $transport[$key]['reg'] = $reg;
+                $transport[$key]['status_panen'] = $value2['status_panen'];
+                $transport[$key]['tph_sampleTrans'] = $tph_sample;
+                $transport[$key]['estate'] = $value2['estate'];
+                $transport[$key]['afdeling'] = $value2['afdeling'];
+                $transport[$key]['bt_total'] = $sum_bt;
+                $transport[$key]['restan_total'] = $sum_Restan;
+                $transport[$key]['skor'] = ($tph_sample != 0) ? round($sum_bt / $tph_sample, 2) : 0;
+                $transport[$key]['skor_restan'] = ($tph_sample != 0) ? round($sum_Restan / $tph_sample, 2) : 0;
+            }
+            // Add this code after your existing foreach loop
+
+
+            $transReg2 = array();
+            $tph_sample = 0;
+            foreach ($transport as $key => $value) {
+                # code...
+                $tph_sample += $value['tph_sample'];
+                // dd($value);
+            }
+            if (isset($value['estate'])) {
+                if (!isset($transReg2[$value['estate']])) {
+                    $transReg2[$value['estate']] = [];
+                }
+
+                if (!isset($transReg2[$value['estate']][$value['afdeling']])) {
+                    $transReg2[$value['estate']][$value['afdeling']] = [];
+                }
+
+                $transReg2[$value['estate']][$value['afdeling']]['tph_sample'] = $tph_sample;
+            }
+
+
+            foreach ($ancak as $key => $value) {
+                if (!array_key_exists($key, $transport)) {
+                    $transport[$key]['status_panen'] = $value['status_panen'];
+                    $transport[$key]['luas_blok'] = $value['luas_blok'];
+
+                    if ($value['status_panen'] <= 3) {
+                        $transport[$key]['tph_sample'] = round($value['luas_blok'] * 1.3, 2);
+                    } else {
+                        $transport[$key]['tph_sample'] = $value['status_panen'];
+                    }
+                    $transport[$key]['bt_total'] = 0;
+                    $transport[$key]['restan_total'] = 0;
+                    $transport[$key]['skor'] = 0;
+                    $transport[$key]['skor_restan'] = 0;
+                }
+            }
+        }
+
+        // dd($transport);
+        $newVariable = array();
+
+        foreach ($transport as $key => $value) {
+            if (isset($value['status_panentrans']) && isset($value['status_panenAncak'])) {
+                $newVariable[$key] = $value;
+                break;  // stop the loop after the first match
+            }
+        }
+
+        // dd($newVariable, $transport);
+        $mutuBuah = array();
+        foreach ($mutuBuahQuery as $key => $value) {
+            $listBlokPerAfd = array();
+            $janjang = 0;
+            $Jjg_Mth = 0;
+            $Jjg_Mth2 = 0;
+            $Jjg_Over = 0;
+            $Jjg_Empty = 0;
+            $Jjg_Abr = 0;
+            $Jjg_Vcut = 0;
+            $Jjg_Als = 0;
+            $dtBlok = count($value);
+            $count_alas_br_1 = 0;
+            $count_alas_br_0 = 0;
+            $vcutStack = 0;
+            foreach ($value as $key2 => $value2) {
+
+                if (!in_array($value2['blok'], $listBlokPerAfd)) {
+                    $listBlokPerAfd[] = $value2['blok'];
+                }
+                $janjang += $value2['jumlah_jjg'];
+                $Jjg_Mth += $value2['bmt'];
+                $Jjg_Mth2 += $value2['bmk'];
+                $Jjg_Over += $value2['overripe'];
+                $Jjg_Empty += $value2['empty_bunch'];
+                $Jjg_Abr += $value2['abnormal'];
+                $Jjg_Vcut += $value2['vcut'];
+                $Jjg_Als += $value2['alas_br'];
+
+                if ($value2['alas_br'] == 1) {
+                    $count_alas_br_1++;
+                } elseif ($value2['alas_br'] == 0) {
+                    $count_alas_br_0++;
+                }
+            }
+            //untuk food stacking
+            $vcutStack = $janjang - $Jjg_Vcut;
+
+            $jml_mth = ($Jjg_Mth + $Jjg_Mth2);
+            $jml_mtg = $janjang - ($jml_mth + $Jjg_Over + $Jjg_Empty + $Jjg_Abr);
+
+            $mutuBuah[$key]['blok_mb'] = $dtBlok;
+            $mutuBuah[$key]['status_panen'] = $value2['status_panen'];
+            $mutuBuah[$key]['alas_mb'] = $Jjg_Als;
+            $mutuBuah[$key]['bmt'] = $Jjg_Mth;
+            $mutuBuah[$key]['bmk'] = $Jjg_Mth2;
+            $mutuBuah[$key]['jml_janjang'] = $janjang;
+            $mutuBuah[$key]['jml_mentah'] = $jml_mth;
+            $mutuBuah[$key]['jml_masak'] = $jml_mtg;
+            $mutuBuah[$key]['jml_over'] = $Jjg_Over;
+            $mutuBuah[$key]['jml_empty'] = $Jjg_Empty;
+            $mutuBuah[$key]['jml_abnormal'] = $Jjg_Abr;
+            $mutuBuah[$key]['jml_vcut'] = $Jjg_Vcut;
+            $mutuBuah[$key]['jml_krg_brd'] = $dtBlok == 0 ? $Jjg_Als : round($Jjg_Als / $dtBlok, 2);
+            $denom = ($janjang - $Jjg_Abr) != 0 ? ($janjang - $Jjg_Abr) : 1;
+
+            $mutuBuah[$key]['PersenBuahMentah'] = $denom != 0 ? round(($jml_mth / $denom) * 100, 2) : 0;
+            $mutuBuah[$key]['PersenBuahMasak'] = $denom != 0 ? round(($jml_mtg / $denom) * 100, 2) : 0;
+            $mutuBuah[$key]['PersenBuahOver'] = $denom != 0 ? round(($Jjg_Over / $denom) * 100, 2) : 0;
+            $mutuBuah[$key]['PersenPerJanjang'] = $denom != 0 ? round(($Jjg_Empty / $denom) * 100, 2) : 0;
+            $mutuBuah[$key]['PersenVcut'] = count_percent($Jjg_Vcut, $janjang);
+            $mutuBuah[$key]['PersenAbr'] = count_percent($Jjg_Abr, $janjang);
+            $mutuBuah[$key]['PersenKrgBrd'] = count_percent($count_alas_br_1, $dtBlok);
+            $mutuBuah[$key]['count_alas_br_1'] = $count_alas_br_1;
+            $mutuBuah[$key]['count_alas_br_0'] = $count_alas_br_0;
+            $mutuBuah[$key]['vst'] = $vcutStack;
+            $mutuBuah[$key]['vcutStack'] = $janjang != 0 ? round(($vcutStack / $janjang) * 100, 2) : 0;
+        }
+
+        // dd($ancak, $mutuBuah);
+
+        $BuahStack = array();
+
+        // Merge the keys from both arrays and create a unique set of keys
+        $keys = array_unique(array_merge(array_keys($mutuBuah), array_keys($ancak)));
+
+        foreach ($keys as $key) {
+            $currentBuahStack = array();
+            $currentBuahStack['vst'] = isset($mutuBuah[$key]['vst']) ? $mutuBuah[$key]['vst'] : 0;
+            $currentBuahStack['jml_janjang'] = isset($mutuBuah[$key]['jml_janjang']) ? $mutuBuah[$key]['jml_janjang'] : 0;
+            $currentBuahStack['bmt'] = isset($mutuBuah[$key]['bmt']) ? $mutuBuah[$key]['bmt'] : 0;
+            $currentBuahStack['bmk'] = isset($mutuBuah[$key]['bmk']) ? $mutuBuah[$key]['bmk'] : 0;
+            $currentBuahStack['jml_vcut'] = isset($mutuBuah[$key]['jml_vcut']) ? $mutuBuah[$key]['jml_vcut'] : 0;
+            //ancak 
+            $currentBuahStack['front'] = isset($ancak[$key]['front']) ? $ancak[$key]['front'] : 0;
+            $currentBuahStack['pk_kuning'] = isset($ancak[$key]['pk_kuning']) ? $ancak[$key]['pk_kuning'] : 0;
+            $currentBuahStack['pokok_panen'] = isset($ancak[$key]['pokok_panen']) ? $ancak[$key]['pokok_panen'] : 0;
+            $currentBuahStack['und'] = isset($ancak[$key]['und']) ? $ancak[$key]['und'] : 0;
+            $currentBuahStack['overprn'] = isset($ancak[$key]['overprn']) ? $ancak[$key]['overprn'] : 0;
+            $currentBuahStack['prsmk'] = isset($ancak[$key]['prsmk']) ? $ancak[$key]['prsmk'] : 0;
+            $currentBuahStack['pokok_sample'] = isset($ancak[$key]['pokok_sample']) ? $ancak[$key]['pokok_sample'] : 0;
+
+            // Append the current iteration values to the main $BuahStack array with the $key
+            $BuahStack[$key] = $currentBuahStack;
+        }
+
+        // dd($BuahStack);
+        $CalculateStack = array();
+        $vcut = 0;
+        $jjg = 0;
+        $front = 0;
+        $und  = 0;
+        $overprn = 0;
+        $prsmk = 0;
+        $pkok_sam = 0;
+        $pkok_kuning = 0;
+        $bmt = 0;
+        $bmk = 0;
+        $vcutt = 0;
+        $pkok_panen = 0;
+        foreach ($BuahStack as $key => $value) {
+            $vcut += $value['vst'];
+            $vcutt += $value['jml_vcut'];
+            $bmt += $value['bmt'];
+            $bmk += $value['bmk'];
+            $jjg += $value['jml_janjang'];
+            $front += $value['front'];
+            $und  += $value['und'];
+            $overprn += $value['overprn'];
+            $prsmk += $value['prsmk'];
+            $pkok_sam += $value['pokok_sample'];
+            $pkok_panen += $value['pokok_panen'];
+            $pkok_kuning += $value['pk_kuning'];
+        }
+        $vcutStacks  = $jjg - $vcutt;
+        $CalculateStack['frontstack'] = $pkok_panen != 0 ? round(($front / $pkok_panen) * 100, 2) : 0;
+        $CalculateStack['pokok_kuning'] = $pkok_sam != 0 ? round(($pkok_kuning / $pkok_sam) * 100, 2) : 0;
+        $CalculateStack['piringansmk'] = $pkok_sam != 0 ? round(($prsmk / $pkok_sam) * 100, 2) : 0;
+        $CalculateStack['under'] = $pkok_sam != 0 ? round(($und / $pkok_sam) * 100, 2) : 0;
+        $CalculateStack['overprun'] = $pkok_sam != 0 ? round(($overprn / $pkok_sam) * 100, 2) : 0;
+        $CalculateStack['mentah_tpBrd'] = $jjg != 0 ? round(($bmt / $jjg) * 100, 2) : 0;
+        $CalculateStack['mentah_krngBRD'] = $jjg != 0 ? round(($bmk / $jjg) * 100, 2) : 0;
+        $CalculateStack['vcutStack'] = $jjg != 0 ? round(($vcutStacks / $jjg) * 100, 2) : 0;
+
+
+        $CalculateStack['vst'] = $vcut;
+        $CalculateStack['vcutStacks'] = $vcutStacks;
+        $CalculateStack['TidakVcut'] = $vcutt;
+        $CalculateStack['jjg_buah'] = $jjg;
+        $CalculateStack['bmk'] = $bmk;
+        $CalculateStack['bmt'] = $bmt;
+        $CalculateStack['pokok_sample'] = $jjg;
+        // dd($transReg2,$transport);
+        // dd($transport);
+        // Session::put('transReg2', $transReg2);
+        $result = array_merge_recursive($ancak, $transport, $mutuBuah);
+
+
+        // untuk kemandoran 
+
+        $ancakM = DB::connection('mysql2')->table('mutu_ancak_new')
+            ->select("mutu_ancak_new.*", DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%Y") as tahun'))
+            ->where('datetime', 'like', '%' . $date . '%')
+            ->where('mutu_ancak_new.estate', $est)
+            ->where('mutu_ancak_new.afdeling', $afd)
+            ->orderBy('kemandoran', 'asc')
+            ->get();
+        $ancakM = $ancakM->groupBy(['kemandoran']);
+        $ancakM = json_decode($ancakM, true);
+        // dd($ancak);
+
+
+        $buahM = DB::connection('mysql2')->table('mutu_buah')
+            ->select("mutu_buah.*", DB::raw('DATE_FORMAT(mutu_buah.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(mutu_buah.datetime, "%Y") as tahun'))
+            ->where('datetime', 'like', '%' . $date . '%')
+            ->where('mutu_buah.estate', $est)
+            ->where('mutu_buah.afdeling', $afd)
+            ->orderBy('kemandoran', 'asc')
+            ->get();
+        $buahM = $buahM->groupBy(['kemandoran']);
+        $buahM = json_decode($buahM, true);
+
+        $transM = DB::connection('mysql2')->table('mutu_transport')
+            ->select("mutu_transport.*", DB::raw('DATE_FORMAT(mutu_transport.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(mutu_transport.datetime, "%Y") as tahun'))
+            ->where('datetime', 'like', '%' . $date . '%')
+            ->where('mutu_transport.estate', $est)
+            ->where('mutu_transport.afdeling', $afd)
+            ->orderBy('kemandoran', 'asc')
+            ->get();
+        $transM = $transM->groupBy(['kemandoran']);
+        $transM = json_decode($transM, true);
+
+        // untuk reg 2 
+
+        $ancakM2 = DB::connection('mysql2')->table('mutu_ancak_new')
+            ->select("mutu_ancak_new.*", DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%Y") as tahun'))
+            ->where('datetime', 'like', '%' . $date . '%')
+            ->where('mutu_ancak_new.estate', $est)
+            ->orderBy('kemandoran', 'asc')
+            ->where('mutu_ancak_new.afdeling', $afd)
+
+            ->get();
+        $ancakM2 = $ancakM2->groupBy(['kemandoran', 'blok']);
+        $ancakM2 = json_decode($ancakM2, true);
+
+        $transM2 = DB::connection('mysql2')->table('mutu_transport')
+            ->select("mutu_transport.*", DB::raw('DATE_FORMAT(mutu_transport.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(mutu_transport.datetime, "%Y") as tahun'))
+            ->where('datetime', 'like', '%' . $date . '%')
+            ->where('mutu_transport.estate', $est)
+            ->orderBy('kemandoran', 'asc')
+            ->where('mutu_transport.afdeling', $afd)
+            ->get();
+        $transM2 = $transM2->groupBy(['kemandoran', 'blok']);
+        $transM2 = json_decode($transM2, true);
+
+        // dd($ancakM2);
+        // end reg 2 
+
+        // dd($ancakM);
         $ancakx = array();
         $countx  = 0;
         foreach ($ancakM as $key => $value) {
@@ -10120,6 +10465,8 @@ class inspectController extends Controller
             }
         }
 
+
+        // dd($ancakM, $ancakx);
         $transportx = array();
 
         foreach ($transM as $key => $value) {
@@ -10148,6 +10495,8 @@ class inspectController extends Controller
             $transportx[$key]['skor_restan'] = skor_buah_tinggal($rsttph);
             $transportx[$key]['tot_skortra'] = skor_buah_tinggal($rsttph) + skor_brd_tinggal($brdtph);
         }
+
+
 
         $mutuBuahx = array();
         foreach ($buahM as $key => $value) {
@@ -10237,7 +10586,7 @@ class inspectController extends Controller
         }
         $resultKemandoran = array_merge_recursive($ancakx, $transportx, $mutuBuahx);
 
-
+        // dd($transportx);
         if ($reg != 2 || $reg != '2') {
             $tot_mntol = [];
             $totsample = 0;
@@ -10257,7 +10606,7 @@ class inspectController extends Controller
             $alas_mb = 0;
             $jml_janjang = 0;
             $jml_mentah = 0;
-            $Jjg_Abr = 0;
+            $jml_masak = 0;
             $jml_over = 0;
             $jml_empty = 0;
             $jml_mtgx = 0;
@@ -10409,14 +10758,32 @@ class inspectController extends Controller
         } else {
             $resultKemandoran[] = [];
         }
-        // dd($result);
+
+
+        // dd($resultKemandoran);
+
+        // dd($tot_mntol, $resultKemandoran);
+
+
+        // dd($resultKemandoran, $result);
+        //     dd($transport);
+        // dd($ancak,$transport,$mutuBuah);
         $arrView = array();
+        $arrView['hitung'] =  $CalculateStack;
+        $arrView['mutuAncak'] =  $ancak;
+        $arrView['avg'] =  $avg;
+        $arrView['sph_avg'] = $average;
+        $arrView['mutuBuah'] =  $mutuBuah;
+        $arrView['mutuTransport'] =  $transport;
         $arrView['est'] =  $est;
         $arrView['afd'] =  $afd;
         $arrView['reg'] =  $reg;
         $arrView['tanggal'] =  $date;
-        $arrView['resultnew'] =  $result;
+        $arrView['ancak_trans'] =  $newVariable;
+        $arrView['data_chuack'] =  $result;
         $arrView['tabelmandor'] =  $resultKemandoran;
+
+
 
         echo json_encode($arrView);
         exit();

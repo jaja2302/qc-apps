@@ -1,6 +1,7 @@
 <?php
 // Important functions
 
+use App\Models\mutu_ancak;
 use Illuminate\Support\Facades\DB;
 
 if (!function_exists('count_percent')) {
@@ -1096,5 +1097,333 @@ if (!function_exists('fetchDataAndGroupByYearInChunks')) {
         }
 
         return $finalResult;
+    }
+}
+if (!function_exists('getnilaitphreg2_perblok_satu_dimensi')) {
+    function getnilaitphreg2_perblok_satu_dimensi($mutuAncak, $mutuTransport, $reg)
+    {
+        // berlaku hanya untuk array perblok satu demensi 
+
+        // Summarize the mutuAncak array
+        $ancakRegss2 = [];
+        foreach ($mutuAncak as $key => $value) {
+            $listBlok = [];
+            $firstEntry = $value[0];
+            $first = ($firstEntry['luas_blok'] != 0) ? $firstEntry['luas_blok'] : '-';
+
+            foreach ($value as $entry) {
+                if (!in_array($entry['estate'] . ' ' . $entry['afdeling'] . ' ' . $entry['blok'], $listBlok)) {
+                    if ($entry['sph'] != 0) {
+                        $listBlok[] = $entry['estate'] . ' ' . $entry['afdeling'] . ' ' . $entry['blok'];
+                    }
+                }
+            }
+            $ancakRegss2[$key]['luas_blok'] = $first;
+
+            $ancakRegss2[$key]['status_panen'] = explode(",", $firstEntry['status_panen'])[0];
+        }
+
+        // Process the mutuTransport array
+        $transNewdata = [];
+        foreach ($mutuTransport as $key => $value) {
+            $sum_bt = 0;
+            $sum_Restan = 0;
+            $tph_sample = 0;
+            $listBlokPerAfd = [];
+
+            foreach ($value as $entry) {
+                $listBlokPerAfd[] = $entry['estate'] . ' ' . $entry['afdeling'] . ' ' . $entry['blok'];
+                $sum_Restan += $entry['rst'];
+                $sum_bt += $entry['bt'];
+            }
+
+            $tph_sample = count($listBlokPerAfd);
+            $panenKey = $ancakRegss2[$key]['status_panen'] ?? 0;
+            $LuasKey = $ancakRegss2[$key]['luas_blok'] ?? 0;
+
+            $transNewdata[$key]['status_panen'] = $panenKey;
+            $transNewdata[$key]['luas_blok'] = $LuasKey;
+            $transNewdata[$key]['sum_Restan'] = $sum_Restan;
+            $transNewdata[$key]['sum_bt'] = $sum_bt;
+
+            if ($reg == 2) {
+
+                if ($panenKey !== 0 && $panenKey <= 3) {
+                    if (is_array($value) && count($value) == 1 && $value[0]['blok'] == '0') {
+                        $tph_sample = $value[0]['tph_baris'];
+                        $sum_bt = $value[0]['bt'];
+                    } else {
+                        $transNewdata[$key]['tph_sample'] = round(floatval($LuasKey) * 1.3, 3);
+                    }
+                } else {
+                    $transNewdata[$key]['tph_sample'] = $tph_sample;
+                }
+            } else {
+                $transNewdata[$key]['tph_sample'] = $tph_sample;
+            }
+
+
+            $transNewdata[$key]['afdeling'] = $value[0]['afdeling'];
+            $transNewdata[$key]['estate'] = $value[0]['estate'];
+        }
+
+        // Add data from ancakRegss2 if not present in transNewdata
+        $tph_tod = 0;
+        foreach ($ancakRegss2 as $key => $value) {
+            if (!isset($transNewdata[$key])) {
+                $transNewdata[$key] = $value;
+
+                if ($value['status_panen'] <= 3) {
+                    $transNewdata[$key]['tph_sample'] = round(floatval($value['luas_blok']) * 1.3, 3);
+                } else {
+                    $transNewdata[$key]['tph_sample'] = 0;
+                }
+
+                // Set default values for sum_Restan and sum_bt if not present
+                $transNewdata[$key]['sum_Restan'] = 0;
+                $transNewdata[$key]['sum_bt'] = 0;
+            }
+
+            if (isset($value['tph_sample'])) {
+                $tph_tod += $value['tph_sample'];
+            }
+        }
+
+        // Calculate the total tph_sample
+        $tph_sample_total = 0;
+        foreach ($transNewdata as $key => $value) {
+            if (isset($value['tph_sample'])) {
+                $tph_sample_total += $value['tph_sample'];
+            }
+        }
+
+        // return [$transNewdata, $tph_sample_total];
+        return $transNewdata;
+    }
+}
+
+
+// helper perblok perhari 
+
+if (!function_exists('rekap_blok')) {
+    function rekap_blok($est, $afd, $date, $reg)
+    {
+
+        $mutuAncak = DB::connection('mysql2')->table('mutu_ancak_new')
+            ->select("mutu_ancak_new.*", DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%Y") as tahun'))
+            ->where('datetime', 'like', '%' . $date . '%')
+            ->where('mutu_ancak_new.estate', $est)
+            ->where('mutu_ancak_new.afdeling', $afd)
+
+            ->get();
+        $mutuAncak = $mutuAncak->groupBy(['blok']);
+        $mutuAncak = json_decode($mutuAncak, true);
+
+        $mutuBuahQuery = DB::connection('mysql2')->table('mutu_buah')
+            ->select("mutu_buah.*", DB::raw('DATE_FORMAT(mutu_buah.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(mutu_buah.datetime, "%Y") as tahun'))
+            ->where('datetime', 'like', '%' . $date . '%')
+            ->where('mutu_buah.estate', $est)
+            ->where('mutu_buah.afdeling', $afd)
+
+            ->get();
+        $mutuBuahQuery = $mutuBuahQuery->groupBy(['blok']);
+        $mutuBuahQuery = json_decode($mutuBuahQuery, true);
+        $mutuTransport = DB::connection('mysql2')->table('mutu_transport')
+            ->select("mutu_transport.*", DB::raw('DATE_FORMAT(mutu_transport.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(mutu_transport.datetime, "%Y") as tahun'))
+            ->where('datetime', 'like', '%' . $date . '%')
+            ->where('mutu_transport.estate', $est)
+            ->where('mutu_transport.afdeling', $afd)
+
+            ->get();
+        $mutuTransport = $mutuTransport->groupBy(['blok']);
+        $mutuTransport = json_decode($mutuTransport, true);
+        $rekap = [];
+
+        $transnewdata = getnilaitphreg2_perblok_satu_dimensi($mutuAncak, $mutuTransport, $reg);
+
+
+        foreach ($mutuAncak as $key => $value) {
+            $akp = 0;
+            $skor_bTinggal = 0;
+            $brdPerjjg = 0;
+
+            $ttlSkorMA = 0;
+            $ttlSkorMAess = 0;
+            $listBlokPerAfd = array();
+            $jum_ha = 0;
+
+            $totalPokok = 0;
+            $totalPanen = 0;
+            $totalP_panen = 0;
+            $totalK_panen = 0;
+            $totalPTgl_panen = 0;
+            $totalbhts_panen = 0;
+            $totalbhtm1_panen = 0;
+            $totalbhtm2_panen = 0;
+            $totalbhtm3_oanen = 0;
+            $totalpelepah_s = 0;
+            $sph = 0;
+            $check_input = 'kosong';
+            foreach ($value as $key1 => $value1) {
+                if (!in_array($value1['estate'] . ' ' . $value1['afdeling'] . ' ' . $value1['blok'], $listBlokPerAfd)) {
+                    $listBlokPerAfd[] = $value1['estate'] . ' ' . $value1['afdeling'] . ' ' . $value1['blok'];
+                    if ($value1['sph'] != 0) {
+                        $sph += $value1['sph'];
+                    }
+                }
+                $jum_ha = count($listBlokPerAfd);
+
+                $totalPokok += $value1['sample'];
+                $totalPanen +=  $value1['jjg'];
+                $totalP_panen += $value1['brtp'];
+                $totalK_panen += $value1['brtk'];
+                $totalPTgl_panen += $value1['brtgl'];
+
+                $totalbhts_panen += $value1['bhts'];
+                $totalbhtm1_panen += $value1['bhtm1'];
+                $totalbhtm2_panen += $value1['bhtm2'];
+                $totalbhtm3_oanen += $value1['bhtm3'];
+
+                $totalpelepah_s += $value1['ps'];
+                $check_input = $value1['jenis_input'];
+                $nilai_input = $value1['skor_akhir'];
+                $status_panen = explode(',', $value1['status_panen']);
+                $status_panen = $status_panen[0];
+            }
+            $jml_sph = $jum_ha == 0 ? $sph : ($sph / $jum_ha);
+            $luas_ha = ($jml_sph != 0) ? round(($totalPokok / $jml_sph), 2) : 0;
+
+            if ($totalPokok != 0) {
+                $akp = $totalPanen / $totalPokok * 100;
+            } else {
+                $akp = 0;
+            }
+
+
+            $skor_bTinggal = $totalP_panen + $totalK_panen + $totalPTgl_panen;
+
+            if ($totalPanen != 0) {
+                $brdPerjjg = $skor_bTinggal / $totalPanen;
+            } else {
+                $brdPerjjg = 0;
+            }
+
+            $sumBH = $totalbhts_panen +  $totalbhtm1_panen +  $totalbhtm2_panen +  $totalbhtm3_oanen;
+            if ($sumBH != 0) {
+                $sumPerBH = $sumBH / ($totalPanen + $sumBH) * 100;
+            } else {
+                $sumPerBH = 0;
+            }
+
+            if ($totalpelepah_s != 0) {
+                $perPl = ($totalpelepah_s / $totalPokok) * 100;
+            } else {
+                $perPl = 0;
+            }
+            $nonZeroValues = array_filter([$totalP_panen, $totalK_panen, $totalPTgl_panen, $totalbhts_panen, $totalbhtm1_panen, $totalbhtm2_panen, $totalbhtm3_oanen]);
+
+            if (!empty($nonZeroValues)) {
+                $rekap[$key]['check_datacak'] = 'ada';
+            } else {
+                $rekap[$key]['check_datacak'] = 'kosong';
+            }
+
+            // $ttlSkorMA = $skor_bh + $skor_brd + $skor_ps;
+            $ttlSkorMA =  skor_buah_Ma($sumPerBH) + skor_brd_ma($brdPerjjg) + skor_palepah_ma($perPl);
+
+            // $namaGM = '-';
+            // foreach ($queryAsisten as $asisten) {
+
+            //     // dd($asisten);
+            //     if ($asisten['est'] == $key1 && $asisten['afd'] == $key2) {
+            //         $namaGM = $asisten['nama'];
+            //         break;
+            //     }
+            // }
+            $rekap[$key]['pokok_samplecak'] = $totalPokok;
+            $rekap[$key]['bulan'] = $key1;
+            $rekap[$key]['luas_ha'] = $luas_ha;
+            $rekap[$key]['namaGM'] = '-';
+            $rekap[$key]['ha_samplecak'] = $jum_ha;
+            $rekap[$key]['jumlah_panencak'] = $totalPanen;
+            $rekap[$key]['status_panen'] = $status_panen;
+            $rekap[$key]['akp_rlcak'] = $akp;
+            $rekap[$key]['pcak'] = $totalP_panen;
+            $rekap[$key]['kcak'] = $totalK_panen;
+            $rekap[$key]['tglcak'] = $totalPTgl_panen;
+            $rekap[$key]['total_brdcak'] = $skor_bTinggal;
+            $rekap[$key]['brdperjjgcak'] = $brdPerjjg;
+            // data untuk buah tinggal
+            $rekap[$key]['bhts_scak'] = $totalbhts_panen;
+            $rekap[$key]['bhtm1cak'] = $totalbhtm1_panen;
+            $rekap[$key]['bhtm2cak'] = $totalbhtm2_panen;
+            $rekap[$key]['bhtm3cak'] = $totalbhtm3_oanen;
+            $rekap[$key]['buahperjjgcak'] = $sumPerBH;
+            $rekap[$key]['total_buahcak'] = $sumBH;
+            $rekap[$key]['jjgperBuahcak'] = number_format($sumPerBH, 2);
+            // data untuk pelepah sengklek
+            $rekap[$key]['palepah_pokokcak'] = $totalpelepah_s;
+            $rekap[$key]['palepah_percak'] = $perPl;
+            $rekap[$key]['skor_bhcak'] = skor_buah_Ma($sumPerBH);
+            $rekap[$key]['skor_brdcak'] = skor_brd_ma($brdPerjjg);
+            $rekap[$key]['skor_pscak'] =  skor_palepah_ma($perPl);
+            // total skor akhir
+            $rekap[$key]['skor_akhircak'] = $ttlSkorMA;
+            $rekap[$key]['check_inputcak'] = $check_input;
+            $rekap[$key]['blok'] = $key1;
+            $rekap[$key]['mutuancak'] = '-----------------------------------';
+        }
+        // dd($transnewdata);
+        foreach ($transnewdata as $key => $value) {
+            $dataBLok = $value['tph_sample'];
+            $status_panen = $value['status_panen'];
+
+            $brdPertph = ($dataBLok != 0) ? $value['sum_bt'] / $dataBLok : 0;
+            $buahPerTPH = ($dataBLok != 0) ? $value['sum_Restan'] / $dataBLok : 0;
+
+            $nonZeroValues = array_filter([$value['sum_bt'], $value['sum_Restan']]);
+            $rekap[$key]['check_datatrans'] = !empty($nonZeroValues) ? 'ada' : 'kosong';
+            $totalSkor = skor_brd_tinggal($brdPertph) + skor_buah_tinggal($buahPerTPH);
+            $rekap[$key]['tph_sampleNew'] = $dataBLok;
+            $rekap[$key]['status_panen'] = $status_panen;
+            $rekap[$key]['total_brdtrans'] = $value['sum_bt'];
+            $rekap[$key]['total_brdperTPHtrans'] = $brdPertph;
+            $rekap[$key]['total_buahtrans'] = $value['sum_Restan'];
+            $rekap[$key]['total_buahPerTPHtrans'] = $buahPerTPH;
+            $rekap[$key]['skor_brdPertphtrans'] = skor_brd_tinggal($brdPertph);
+            $rekap[$key]['skor_buahPerTPHtrans'] = skor_buah_tinggal($buahPerTPH);
+            $rekap[$key]['totalSkortrans'] = $totalSkor;
+            $rekap[$key]['mututrans'] = '-----------------------------------';
+        }
+
+        foreach ($rekap as $key => $value) {
+            $skorTrans = $value['totalSkortrans'] ?? 0;
+            $skorAncak = $value['skor_akhircak'] ?? 0;
+
+            if ($skorTrans != 0 || $skorAncak != 0) {
+                $skorTotal = $skorTrans + $skorAncak;
+                $skorAkhir = (int) round(($skorTotal * 100) / 65);
+
+                if ($skorAkhir == 100) {
+                    $skorAkhir -= 1;
+                }
+            } else {
+                $skorAkhir = 0;
+            }
+
+            if ($reg != 1) {
+                $skorAkhir -= 1;
+            }
+
+            $ktg = skor_kategori_akhir($skorAkhir);
+            // dd($ktg);
+            $rekap[$key]['skorAkhir'] = $skorAkhir;
+            $rekap[$key]['kategori'] = $ktg[1];
+            $rekap[$key]['totaleakhir'] = '-----------------------------------';
+        }
+
+        // dd($rekap);
+
+        return $rekap;
     }
 }

@@ -818,7 +818,7 @@
         <br>
         <br>
 
-        @if ($reg == 2 )
+
         <H1 class="text-center ">Data Perblok</H1>
         <div class="ml-3 mr-3 mb-3">
             <div class="row text-center tbl-fixed">
@@ -830,7 +830,6 @@
                             <th class="align-middle" colspan="5" rowspan="2" bgcolor="#588434">DATA BLOK SAMPEL</th>
                             <th class="align-middle" colspan="17" bgcolor="#588434">Mutu Ancak (MA)</th>
                             <th class="align-middle" colspan="8" bgcolor="blue">Mutu Transport (MT)</th>
-                            <th class="align-middle" colspan="23" bgcolor="#ffc404" style="color: #000000;">Mutu Buah (MB)
                             <th class="align-middle" rowspan="3" bgcolor="gray" style="color: #fff;">All Skor</th>
                             <th class="align-middle" rowspan="3" bgcolor="gray" style="color: #fff;">Kategori</th>
                             </th>
@@ -846,23 +845,6 @@
                             <th class="align-middle" colspan="3" bgcolor="blue">Brd Tinggal</th>
                             <th class="align-middle" colspan="3" bgcolor="blue">Buah Tinggal</th>
                             <th class="align-middle" rowspan="2" bgcolor="blue">Total Skor</th>
-
-                            <!-- Table Mutu Buah -->
-                            <th class="align-middle" rowspan="2" bgcolor="#ffc404" style="color: #000000;">TPH Sampel</th>
-                            <th class="align-middle" rowspan="2" bgcolor="#ffc404" style="color: #000000;">Total Janjang
-                                Sampel</th>
-                            <th class="align-middle" colspan="3" bgcolor="#ffc404" style="color: #000000;">Mentah (A)</th>
-                            <th class="align-middle" colspan="3" bgcolor="#ffc404" style="color: #000000;">Matang (N)</th>
-                            <th class="align-middle" colspan="3" bgcolor="#ffc404" style="color: #000000;">Lewat Matang (O)
-                            </th>
-                            <th class="align-middle" colspan="3" bgcolor="#ffc404" style="color: #000000;">Janjang Kosong
-                                (E)</th>
-                            <th class="align-middle" colspan="3" bgcolor="#ffc404" style="color: #000000;">Tidak Standar
-                                V-Cut</th>
-                            <th class="align-middle" colspan="2" bgcolor="#ffc404" style="color: #000000;">Abnormal</th>
-                            <th class="align-middle" colspan="3" bgcolor="#ffc404" style="color: #000000;">Penggunaan Karung
-                                Brondolan</th>
-                            <th class="align-middle" rowspan="2" bgcolor="#ffc404" style="color: #000000;">Total Skor</th>
                         </tr>
                         <tr>
                             <!-- Table Mutu Ancak -->
@@ -895,32 +877,6 @@
                             <th class="align-middle" bgcolor="blue">Jjg/TPH</th>
                             <th class="align-middle" bgcolor="blue">Skor</th>
                             <!-- Table Mutu Buah -->
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Jjg</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">%</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Skor</th>
-
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Jjg</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">%</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Skor</th>
-
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Jjg</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">%</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Skor</th>
-
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Jjg</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">%</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Skor</th>
-
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Jjg</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">%</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Skor</th>
-
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Jjg</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">%</th>
-
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Ya</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">%</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Skor</th>
                         </tr>
                     </thead>
 
@@ -931,120 +887,7 @@
                 </table>
             </div>
         </div>
-        @else
-        <H1 class="text-center ">Data Perblok</H1>
-        <div class="ml-3 mr-3 mb-3">
-            <div class="row text-center tbl-fixed">
-                <table class="table-responsive">
-                    <thead style="color: white;">
-                        <tr>
-                            <th class="freeze-col align-middle" rowspan="3" bgcolor="#1c5870">No</th>
-                            <th class="freeze-col align-middle" rowspan="3" bgcolor="#1c5870">BLOK</th>
-                            <th class="align-middle" colspan="4" rowspan="2" bgcolor="#588434">DATA BLOK SAMPEL</th>
-                            <th class="align-middle" colspan="17" bgcolor="#588434">Mutu Ancak (MA)</th>
-                            <th class="align-middle" colspan="8" bgcolor="blue">Mutu Transport (MT)</th>
-                            <th class="align-middle" colspan="23" bgcolor="#ffc404" style="color: #000000;">Mutu Buah (MB)
-                            <th class="align-middle" rowspan="3" bgcolor="gray" style="color: #fff;">All Skor</th>
-                            <th class="align-middle" rowspan="3" bgcolor="gray" style="color: #fff;">Kategori</th>
-                            </th>
-                        </tr>
-                        <tr>
-                            <!-- Table Mutu Ancak -->
-                            <th class="align-middle" colspan="6" bgcolor="#588434">Brondolan Tinggal</th>
-                            <th class="align-middle" colspan="7" bgcolor="#588434">Buah Tinggal</th>
-                            <th class="align-middle" colspan="3" bgcolor="#588434">Pelepah Sengkleh</th>
-                            <th class="align-middle" rowspan="2" bgcolor="#588434">Total Skor</th>
-
-                            <th class="align-middle" rowspan="2" bgcolor="blue">TPH Sampel</th>
-                            <th class="align-middle" colspan="3" bgcolor="blue">Brd Tinggal</th>
-                            <th class="align-middle" colspan="3" bgcolor="blue">Buah Tinggal</th>
-                            <th class="align-middle" rowspan="2" bgcolor="blue">Total Skor</th>
-
-                            <!-- Table Mutu Buah -->
-                            <th class="align-middle" rowspan="2" bgcolor="#ffc404" style="color: #000000;">TPH Sampel</th>
-                            <th class="align-middle" rowspan="2" bgcolor="#ffc404" style="color: #000000;">Total Janjang
-                                Sampel</th>
-                            <th class="align-middle" colspan="3" bgcolor="#ffc404" style="color: #000000;">Mentah (A)</th>
-                            <th class="align-middle" colspan="3" bgcolor="#ffc404" style="color: #000000;">Matang (N)</th>
-                            <th class="align-middle" colspan="3" bgcolor="#ffc404" style="color: #000000;">Lewat Matang (O)
-                            </th>
-                            <th class="align-middle" colspan="3" bgcolor="#ffc404" style="color: #000000;">Janjang Kosong
-                                (E)</th>
-                            <th class="align-middle" colspan="3" bgcolor="#ffc404" style="color: #000000;">Tidak Standar
-                                V-Cut</th>
-                            <th class="align-middle" colspan="2" bgcolor="#ffc404" style="color: #000000;">Abnormal</th>
-                            <th class="align-middle" colspan="3" bgcolor="#ffc404" style="color: #000000;">Penggunaan Karung
-                                Brondolan</th>
-                            <th class="align-middle" rowspan="2" bgcolor="#ffc404" style="color: #000000;">Total Skor</th>
-                        </tr>
-                        <tr>
-                            <!-- Table Mutu Ancak -->
-                            <th class="align-middle" bgcolor="#588434">Jumlah Pokok Sampel</th>
-                            <th class="align-middle" bgcolor="#588434">Luas Ha Sampel</th>
-                            <th class="align-middle" bgcolor="#588434">Jumlah Jjg Panen</th>
-                            <th class="align-middle" bgcolor="#588434">AKP Realisasi</th>
-                            <th class="align-middle" bgcolor="#588434">P</th>
-                            <th class="align-middle" bgcolor="#588434">K</th>
-                            <th class="align-middle" bgcolor="#588434">GL</th>
-                            <th class="align-middle" bgcolor="#588434">Total Brd</th>
-                            <th class="align-middle" bgcolor="#588434">Brd/JJG</th>
-                            <th class="align-middle" bgcolor="#588434">Skor</th>
-                            <th class="align-middle" bgcolor="#588434">S</th>
-                            <th class="align-middle" bgcolor="#588434">M1</th>
-                            <th class="align-middle" bgcolor="#588434">M2</th>
-                            <th class="align-middle" bgcolor="#588434">M3</th>
-                            <th class="align-middle" bgcolor="#588434">Total JJG</th>
-                            <th class="align-middle" bgcolor="#588434">%</th>
-                            <th class="align-middle" bgcolor="#588434">Skor</th>
-                            <th class="align-middle" bgcolor="#588434">Pokok</th>
-                            <th class="align-middle" bgcolor="#588434">%</th>
-                            <th class="align-middle" bgcolor="#588434">Skor</th>
-
-                            <th class="align-middle" bgcolor="blue">Butir</th>
-                            <th class="align-middle" bgcolor="blue">Butir/TPH</th>
-                            <th class="align-middle" bgcolor="blue">Skor</th>
-                            <th class="align-middle" bgcolor="blue">Jjg</th>
-                            <th class="align-middle" bgcolor="blue">Jjg/TPH</th>
-                            <th class="align-middle" bgcolor="blue">Skor</th>
-                            <!-- Table Mutu Buah -->
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Jjg</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">%</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Skor</th>
-
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Jjg</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">%</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Skor</th>
-
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Jjg</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">%</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Skor</th>
-
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Jjg</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">%</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Skor</th>
-
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Jjg</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">%</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Skor</th>
-
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Jjg</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">%</th>
-
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Ya</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">%</th>
-                            <th class="align-middle" bgcolor="#ffc404" style="color: #000000;">Skor</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="dataInspeksi">
-                        <!-- <td>PLE</td>
-                                    <td>OG</td> -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-
+        @if ($reg !== 2 )
         <H1 class="text-center ">Data Per Kemandoran</H1>
         <div class="ml-3 mr-3 mb-3">
             <div class="row text-center tbl-fixed">
@@ -1574,6 +1417,23 @@
 
 
     <script type="text/javascript">
+        function setBackgroundColor(element, score) {
+            if (score >= 95) {
+                element.style.backgroundColor = "#609cd4";
+            } else if (score >= 85) {
+                element.style.backgroundColor = "#08b454";
+            } else if (score >= 75) {
+                element.style.backgroundColor = "#fffc04";
+            } else if (score >= 65) {
+                element.style.backgroundColor = "#ffc404";
+            } else if (score === '-') {
+                element.style.backgroundColor = "white";
+            } else {
+                element.style.backgroundColor = "red";
+            }
+            element.style.color = "black";
+        }
+
         //constvar $j = jQuery.noConflict();
         const canedit = @json(can_edit());
 
@@ -3647,1049 +3507,65 @@
                 },
                 success: function(result) {
                     var parseResult = JSON.parse(result)
-                    var mutuAncak = Object.entries(parseResult['mutuAncak'])
-                    var mutuBuah = Object.entries(parseResult['mutuBuah'])
-                    var mutuTransport = Object.entries(parseResult['mutuTransport'])
-                    var all_data = Object.entries(parseResult['data_chuack'])
-                    var resmandr = Object.entries(parseResult['tabelmandor'])
-
+                    var resultnew = Object.entries(parseResult['resultnew'])
                     // console.log(resmandr);
                     var tbody1 = document.getElementById('dataInspeksi');
+                    var resmandr = Object.entries(parseResult['tabelmandor'])
 
-                    // console.log(all_data);
-                    var arrTbody1 = all_data
+                    // console.log(resultnew);
+                    let inc = 1;
+                    resultnew.forEach(item => {
+                        let item1 = inc++;
+                        let item2 = item[0];
+                        let item3 = item[1]?.status_panen ?? '-';
+                        let item4 = item[1]?.pokok_samplecak ?? '-';
+                        let item5 = item[1]?.luas_ha ?? '-';
 
-                    function brd_tph(skor) {
-                        if (skor <= 3) {
-                            return 10;
-                        } else if (skor >= 3 && skor <= 5) {
-                            return 8;
-                        } else if (skor >= 5 && skor <= 7) {
-                            return 6;
-                        } else if (skor >= 7 && skor <= 9) {
-                            return 4;
-                        } else if (skor >= 9 && skor <= 11) {
-                            return 2;
-                        } else if (skor >= 11) {
-                            return 0;
-                        } else if (skor == undefined) {
-                            return 0;
-                        }
-                    }
+                        // Create an array of item values
+                        let itemValues = [
+                            item1, item2, item3, item4, item5,
+                            item[1]?.jumlah_panencak ?? '-', (item[1]?.akp_rlcak?.toFixed(2)) ?? '-', item[1]?.pcak ?? '-', item[1]?.kcak ?? '-',
+                            item[1]?.tglcak ?? '-', item[1]?.total_brdcak ?? '-', item[1]?.brdperjjgcak?.toFixed(2) ?? '-', item[1]?.skor_brdcak ?? '-', item[1]?.bhts_scak ?? '-',
+                            item[1]?.bhtm1cak ?? '-', item[1]?.bhtm2cak ?? '-', item[1]?.bhtm3cak ?? '-', item[1]?.total_buahcak ?? '-',
+                            item[1]?.jjgperBuahcak ?? '-', item[1]?.skor_bhcak ?? '-', item[1]?.palepah_pokokcak ?? '-', item[1]?.palepah_percak?.toFixed(2) ?? '-',
+                            item[1]?.skor_pscak ?? '-', item[1]?.skor_akhircak ?? '-', item[1]?.tph_sampleNew ?? '-', item[1]?.total_brdtrans ?? '-',
+                            item[1]?.total_brdperTPHtrans ?? '-', item[1]?.skor_brdPertphtrans ?? '-', item[1]?.total_buahtrans ?? '-', item[1]?.total_buahPerTPHtrans ?? '-',
+                            item[1]?.skor_buahPerTPHtrans ?? '-', item[1]?.totalSkortrans ?? '-', item[1]?.skorAkhir ?? '-', item[1]?.kategori ?? '-'
+                        ];
 
-                    function skor_brd_ma(skor) {
-                        if (skor <= 1.0) {
-                            return 20;
-                        } else if (skor >= 1 && skor <= 1.5) {
-                            return 16;
-                        } else if (skor >= 1.5 && skor <= 2.0) {
-                            return 12;
-                        } else if (skor >= 2.0 && skor <= 2.5) {
-                            return 8;
-                        } else if (skor >= 2.5 && skor <= 3.0) {
-                            return 4;
-                        } else if (skor >= 3.0 && skor <= 3.5) {
-                            return 0;
-                        } else if (skor >= 3.5 && skor <= 4.0) {
-                            return -4;
-                        } else if (skor >= 4.0 && skor <= 4.5) {
-                            return -8;
-                        } else if (skor >= 4.5 && skor <= 5.0) {
-                            return -12;
-                        } else if (skor >= 5.0) {
-                            return -16;
-                        } else if (skor == undefined) {
-                            return 0;
-                        }
-                    }
+                        let tr = document.createElement('tr');
 
-                    function skor_buah_Ma(skor) {
-                        if (skor <= 0.0) {
-                            return 20;
-                        } else if (skor >= 0.0 && skor <= 1.0) {
-                            return 18;
-                        } else if (skor >= 1 && skor <= 1.5) {
-                            return 16;
-                        } else if (skor >= 1.5 && skor <= 2.0) {
-                            return 12;
-                        } else if (skor >= 2.0 && skor <= 2.5) {
-                            return 8;
-                        } else if (skor >= 2.5 && skor <= 3.0) {
-                            return 4;
-                        } else if (skor >= 3.0 && skor <= 3.5) {
-                            return 0;
-                        } else if (skor >= 3.5 && skor <= 4.0) {
-                            return -4;
-                        } else if (skor >= 4.0 && skor <= 4.5) {
-                            return -8;
-                        } else if (skor >= 4.5 && skor <= 5.0) {
-                            return -12;
-                        } else if (skor >= 5.0) {
-                            return -16;
-                        } else if (skor == undefined) {
-                            return 0;
-                        }
-                    }
+                        let skorAkhirValue;
 
-                    function skor_palepah_ma(skor) {
-                        if (skor <= 0.5) {
-                            return 5;
-                        } else if (skor >= 0.5 && skor <= 1.0) {
-                            return 4;
-                        } else if (skor >= 1.0 && skor <= 1.5) {
-                            return 3;
-                        } else if (skor >= 1.5 && skor <= 2.0) {
-                            return 2;
-                        } else if (skor >= 2.0 && skor <= 2.5) {
-                            return 1;
-                        } else if (skor >= 2.5) {
-                            return 0;
-                        } else if (skor == undefined) {
-                            return 0;
-                        }
-                    }
+                        itemValues.forEach((value, index) => {
+                            let itemElement = document.createElement('td');
+                            itemElement.classList.add("text-center");
+                            itemElement.innerText = value;
 
-                    function buah_tph(skor) {
-                        if (skor <= 0.0) {
-                            return 10;
-                        } else if (skor >= 0.0 && skor <= 0.5) {
-                            return 8;
-                        } else if (skor >= 0.5 && skor <= 1) {
-                            return 6;
-                        } else if (skor >= 1.0 && skor <= 1.5) {
-                            return 4;
-                        } else if (skor >= 1.5 && skor <= 2.0) {
-                            return 2;
-                        } else if (skor >= 2.0 && skor <= 2.5) {
-                            return 0;
-                        } else if (skor >= 2.5 && skor <= 3.0) {
-                            return -2;
-                        } else if (skor >= 3.0 && skor <= 3.5) {
-                            return -4;
-                        } else if (skor >= 3.5 && skor <= 4.0) {
-                            return -6;
-                        } else if (skor >= 4.0) {
-                            return -8;
-                        } else if (skor == undefined) {
-                            return 0;
-                        }
-                    }
-
-                    function mb_mentah(skor) {
-                        if (skor <= 1.0) {
-                            return 10;
-                        } else if (skor >= 1.0 && skor <= 2.0) {
-                            return 8;
-                        } else if (skor >= 2.0 && skor <= 3.0) {
-                            return 6;
-                        } else if (skor >= 3.0 && skor <= 4.0) {
-                            return 4;
-                        } else if (skor >= 4.0 && skor <= 5.0) {
-                            return 2;
-                        } else if (skor >= 5.0) {
-                            return 0;
-                        } else if (skor == undefined) {
-                            return 0;
-                        }
-                    }
-
-                    function mb_masak(skor) {
-                        if (skor <= 75.0) {
-                            return 0;
-                        } else if (skor >= 75.0 && skor <= 80.0) {
-                            return 1;
-                        } else if (skor >= 80.0 && skor <= 85.0) {
-                            return 2;
-                        } else if (skor >= 85.0 && skor <= 90.0) {
-                            return 3;
-                        } else if (skor >= 90.0 && skor <= 95.0) {
-                            return 4;
-                        } else if (skor >= 95.0) {
-                            return 5;
-                        } else if (skor == undefined) {
-                            return 0;
-                        }
-                    }
-
-                    function mb_over(skor) {
-                        if (skor <= 2.0) {
-                            return 5;
-                        } else if (skor >= 2.0 && skor <= 4.0) {
-                            return 4;
-                        } else if (skor >= 4.0 && skor <= 6.0) {
-                            return 3;
-                        } else if (skor >= 6.0 && skor <= 8.0) {
-                            return 2;
-                        } else if (skor >= 8.0 && skor <= 10.0) {
-                            return 1;
-                        } else if (skor >= 10.0) {
-                            return 0;
-                        } else if (skor == undefined) {
-                            return 0;
-                        }
-                    }
-
-                    function mb_jangkos(skor) {
-                        if (skor <= 1.0) {
-                            return 5;
-                        } else if (skor >= 1.0 && skor <= 2.0) {
-                            return 4;
-                        } else if (skor >= 2.0 && skor <= 3.0) {
-                            return 3;
-                        } else if (skor >= 3.0 && skor <= 4.0) {
-                            return 2;
-                        } else if (skor >= 4.0 && skor <= 5.0) {
-                            return 1;
-                        } else if (skor >= 5.0) {
-                            return 0;
-                        } else if (skor == undefined) {
-                            return 0;
-                        }
-                    }
-
-                    function mb_vcut(skor) {
-                        if (skor <= 2.0) {
-                            return 5;
-                        } else if (skor >= 2.0 && skor <= 4.0) {
-                            return 4;
-                        } else if (skor >= 4.0 && skor <= 6.0) {
-                            return 3;
-                        } else if (skor >= 6.0 && skor <= 8.0) {
-                            return 2;
-                        } else if (skor >= 8.0 && skor <= 10.0) {
-                            return 1;
-                        } else if (skor >= 10.0) {
-                            return 0;
-                        } else if (skor == undefined) {
-                            return 0;
-                        }
-                    }
-
-                    function mbalas_br(skor) {
-                        if (skor >= 100) {
-                            return 5;
-                        } else if (skor >= 90 && skor <= 100) {
-                            return 4;
-                        } else if (skor >= 80 && skor <= 90) {
-                            return 3;
-                        } else if (skor >= 70 && skor <= 80) {
-                            return 2;
-                        } else if (skor >= 60 && skor <= 70) {
-                            return 1;
-                        } else if (skor <= 60) {
-                            return 0;
-                        } else if (skor == undefined) {
-                            return 0;
-                        }
-                    }
-
-                    function kategori(skor) {
-                        if (skor >= 95) {
-                            return "EXCELLENT";
-                        } else if (skor >= 85) {
-                            return "GOOD";
-                        } else if (skor >= 75) {
-                            return "SATISFACTORY";
-                        } else if (skor >= 65) {
-                            return "FAIR";
-                        } else {
-                            return "POOR";
-                        }
-                    }
-
-
-
-                    if (reg == 2) {
-                        let inc = 1;
-                        let tod = 0;
-                        let ted = 0;
-                        let tok = 0;
-                        arrTbody1.forEach(element => {
-                            var tr = document.createElement('tr');
-                            let item1 = inc++;
-                            let item2 = element[0];
-                            let item3 = element[1]['status_panen'] ?? 0;
-                            let item4 = element[1]['pokok_sample'] ?? 0;
-                            let item5 = (element[1]['luas_blok'] ?? [0])[0]; // Extract the first element from the array
-
-                            let item6 = element[1]['jml_jjg_panen'] ?? 0;
-                            let item7 = element[1]['akp_real'] ?? 0;
-                            let item8 = element[1]['p_ma'] ?? 0;
-                            let item9 = element[1]['k_ma'] ?? 0;
-                            let item10 = element[1]['gl_ma'] ?? 0;
-                            let item11 = element[1]['total_brd_ma'] ?? 0;
-                            let item12 = element[1]['btr_jjg_ma'] ?? 0;
-                            let item13 = element[1]['skor_brd'] ?? 0;
-
-                            let item14 = element[1]['bhts_ma'] ?? 0;
-                            let item15 = element[1]['bhtm1_ma'] ?? 0;
-                            let item16 = element[1]['bhtm2_ma'] ?? 0;
-                            let item17 = element[1]['bhtm3_ma'] ?? 0;
-                            let item18 = element[1]['tot_jjg_ma'] ?? 0;
-                            let item19 = element[1]['jjg_tgl_ma'] ?? 0;
-                            let item20 = element[1]['skor_buah'] ?? 0;
-                            let item21 = element[1]['ps_ma'] ?? 0;
-                            let item22 = element[1]['PerPSMA'] ?? 0;
-                            let item23 = element[1]['skor_pale'] ?? 0;
-                            let item24 = (element[1]['skor_pale'] ?? 0) + (element[1]['skor_brd'] ?? 0) + (element[1]['skor_buah'] ?? 0);
-
-
-                            let item25 = element[1]['tph_sample'] ?? 0;
-                            let item26 = element[1]['bt_total'] ?? 0;
-                            let item27 = element[1]['skor'] ?? 0;
-                            let item28 = brd_tph(element[1]['skor']);
-                            let item29 = element[1]['restan_total'] ?? 0;
-                            let item30 = element[1]['skor_restan'] ?? 0;
-                            let item31 = buah_tph(element[1]['skor_restan'])
-                            let item32 = buah_tph(element[1]['skor_restan']) + brd_tph(element[1]['skor']);
-
-                            let item33 = element[1]['blok_mb'] ?? 0;
-                            let item34 = element[1]['jml_janjang'] ?? 0;
-                            let item35 = element[1]['jml_mentah'] ?? 0;
-                            let item36 = element[1]['PersenBuahMentah'] ?? 0;
-                            let item37 = mb_mentah(element[1]['PersenBuahMentah']);
-                            let item38 = element[1]['jml_masak'] ?? 0;
-                            let item39 = element[1]['PersenBuahMasak'] ?? 0;
-                            let item40 = mb_masak(element[1]['PersenBuahMasak']);
-                            let item41 = element[1]['jml_over'] ?? 0;
-                            let item42 = element[1]['PersenBuahOver'] ?? 0;
-                            let item43 = mb_over(element[1]['PersenBuahOver']);
-                            let item44 = element[1]['jml_empty'] ?? 0;
-                            let item45 = element[1]['PersenPerJanjang'] ?? 0;
-                            let item46 = mb_jangkos(element[1]['PersenPerJanjang']);
-                            let item47 = element[1]['jml_vcut'] ?? 0;
-                            let item48 = element[1]['PersenVcut'] ?? 0;
-                            let item49 = mb_vcut(element[1]['PersenVcut']);
-                            let item50 = element[1]['jml_abnormal'] ?? 0;
-                            let item51 = element[1]['PersenAbr'] ?? 0;
-                            let item52 = (element[1]['alas_mb'] ?? 0);
-                            let item53 = element[1]['PersenKrgBrd'] ?? 0;
-                            let item54 = mbalas_br(element[1]['PersenKrgBrd']);
-                            let item55 = mbalas_br(element[1]['PersenKrgBrd']) + mb_vcut(element[1]['PersenVcut']) +
-                                mb_jangkos(element[1]['PersenPerJanjang']) + mb_over(element[1]['PersenBuahOver']) +
-                                mb_masak(element[1]['PersenBuahMasak']) + mb_mentah(element[1]['PersenBuahMentah']);
-                            tod = (element[1]['skor_pale'] ?? 0) + (element[1]['skor_brd'] ?? 0) + (element[1]['skor_buah'] ?? 0)
-                            ted = buah_tph(element[1]['skor_restan']) + brd_tph(element[1]['skor']);
-                            tok = mbalas_br(element[1]['PersenKrgBrd']) + mb_vcut(element[1]['PersenVcut']) +
-                                mb_jangkos(element[1]['PersenPerJanjang']) + mb_over(element[1]['PersenBuahOver']) +
-                                mb_masak(element[1]['PersenBuahMasak']) + mb_mentah(element[1]['PersenBuahMentah']);
-                            let item56 = tod + ted + tok;
-                            let item57 = kategori(item56)
-                            const items = [];
-                            for (let i = 1; i <= 57; i++) {
-                                items.push(eval(`item${i}`));
-                            }
-
-                            items.forEach((item, index) => {
-                                const itemElement = document.createElement('td');
-                                itemElement.classList.add('text-center');
-                                itemElement.innerText = item;
-
-                                if (index === 56) {
-                                    // Apply background color based on the value of item32
-                                    if (item === 'SATISFACTORY') {
-                                        itemElement.style.backgroundColor = '#fffc04';
-                                    } else if (item === 'EXCELLENT') {
-                                        itemElement.style.backgroundColor = '#08fc2c';
-                                    } else if (item === 'GOOD') {
-                                        itemElement.style.backgroundColor = '#6074c4';
-                                    } else if (item === 'POOR') {
-                                        itemElement.style.backgroundColor = '#ff0404';
-                                    } else if (item === 'FAIR') {
-                                        itemElement.style.backgroundColor = '#ffa404';
-                                    }
+                            // Store the skorAkhir value
+                            if (index === itemValues.length - 2) { // Assuming skorAkhir is at the second last position
+                                if (value === '-') {
+                                    skorAkhirValue = '-';
+                                } else {
+                                    skorAkhirValue = parseFloat(value);
                                 }
-
-                                if (index === 55) {
-                                    // Apply background color based on the value of item32
-                                    if (item >= 95) {
-                                        itemElement.style.backgroundColor = '#08fc2c';
-                                    } else if (item >= 85) {
-                                        itemElement.style.backgroundColor = '#5874c4';
-                                    } else if (item >= 75) {
-                                        itemElement.style.backgroundColor = '#fffc04';
-                                    } else if (item >= 65) {
-                                        itemElement.style.backgroundColor = '#ffa404';
-                                    } else {
-                                        itemElement.style.backgroundColor = '#ff0404';
-                                    }
-                                }
-
-                                if (index >= 3 && index <= 55) {
-                                    // Apply background color based on the value of item32
-                                    if (item == 0) {
-                                        itemElement.style.opacity = '0.5';
-                                    }
-                                }
-                                if (index == 3) {
-                                    if (Array.isArray(item) && item.length > 0) {
-                                        var selectedValue = item[0];
-                                        if (typeof selectedValue === 'number') {
-                                            itemElement.innerText = selectedValue;
-                                        } else if (typeof selectedValue === 'string') {
-                                            // If selectedValue is a string, you can split it by comma and take the first value
-                                            var values = selectedValue.split(',');
-                                            itemElement.innerText = values[0].trim();
-                                        }
-                                    }
-                                }
-                                if (index == 2) {
-                                    if (Array.isArray(item) && item.length > 0) {
-                                        var selectedValue = item[0];
-                                        if (typeof selectedValue === 'number') {
-                                            itemElement.innerText = selectedValue;
-                                        } else if (typeof selectedValue === 'string') {
-                                            // If selectedValue is a string, you can split it by comma and take the first value
-                                            var values = selectedValue.split(',');
-                                            itemElement.innerText = values[0].trim();
-                                        }
-                                    }
-                                }
-
-
-
-
-                                tr.appendChild(itemElement);
-
-                            });
-
-                            tbody1.appendChild(tr)
-                            // }
-                        });
-
-                        var cellsx = document.getElementById('dataInspeksi');
-                        let total = 0;
-                        let total2 = 0;
-                        let total3 = 0;
-                        let total4 = 0;
-                        let total5 = 0;
-                        let total6 = 0;
-                        let total7 = 0;
-                        let total8 = 0;
-                        let total9 = 0;
-                        let total10 = 0;
-                        let total11 = 0;
-                        let total12 = 0;
-                        let total13 = 0;
-                        let total14 = 0;
-                        let total15 = 0;
-                        let total16 = 0;
-                        let total17 = 0;
-                        let total18 = 0;
-                        let total19 = 0;
-                        let total20 = 0;
-                        let total21 = 0;
-                        let total22 = 0;
-                        let total23 = 0;
-                        let total24 = 0;
-                        let total25 = 0;
-                        let total26 = 0;
-                        let total27 = 0;
-                        let total28 = 0;
-                        let total29 = 0;
-
-                        for (let i = 0; i < cellsx.rows.length; i++) {
-                            if (cellsx.rows[i].cells.length > 3) {
-                                total += Number(cellsx.rows[i].cells[3].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 4) {
-                                total2 += Number(cellsx.rows[i].cells[4].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 5) {
-                                total3 += Number(cellsx.rows[i].cells[5].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 6) {
-                                total4 += Number(cellsx.rows[i].cells[6].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 7) {
-                                total5 += Number(cellsx.rows[i].cells[7].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 8) {
-                                total6 += Number(cellsx.rows[i].cells[8].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 9) {
-                                total7 += Number(cellsx.rows[i].cells[9].innerText);
+                                setBackgroundColor(itemElement, skorAkhirValue);
                             }
 
-                            if (cellsx.rows[i].cells.length > 10) {
-                                total8 += Number(cellsx.rows[i].cells[10].innerText);
-                            }
-
-                            if (cellsx.rows[i].cells.length > 11) {
-                                total9 = total8 / total3;
-                            }
-                            if (cellsx.rows[i].cells.length > 12) {
-                                total10 = skor_brd_ma((total8 / total3));
-                            }
-                            if (cellsx.rows[i].cells.length > 13) {
-                                total11 += Number(cellsx.rows[i].cells[13].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 14) {
-                                total12 += Number(cellsx.rows[i].cells[14].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 15) {
-                                total13 += Number(cellsx.rows[i].cells[15].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 16) {
-                                total14 += Number(cellsx.rows[i].cells[16].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 17) {
-                                total15 += Number(cellsx.rows[i].cells[17].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 18) {
-                                total16 = total15 / (total3 + total15) * 100;
-                            }
-                            if (cellsx.rows[i].cells.length > 20) {
-                                total17 += Number(cellsx.rows[i].cells[20].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 24) {
-                                total18 += Number(cellsx.rows[i].cells[24].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 25) {
-                                total19 += Number(cellsx.rows[i].cells[25].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 28) {
-                                total20 += Number(cellsx.rows[i].cells[28].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 32) {
-                                total21 += Number(cellsx.rows[i].cells[32].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 33) {
-                                total22 += Number(cellsx.rows[i].cells[33].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 34) {
-                                total23 += Number(cellsx.rows[i].cells[34].innerText);
-                            }
-                            // abnormal
-                            if (cellsx.rows[i].cells.length > 49) {
-                                total24 += Number(cellsx.rows[i].cells[49].innerText);
-                            }
-                            //
-                            if (cellsx.rows[i].cells.length > 37) {
-                                total25 += Number(cellsx.rows[i].cells[37].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 40) {
-                                total26 += Number(cellsx.rows[i].cells[40].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 43) {
-                                total27 += Number(cellsx.rows[i].cells[43].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 46) {
-                                total28 += Number(cellsx.rows[i].cells[46].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 51) {
-                                total29 += Number(cellsx.rows[i].cells[51].innerText);
-                            }
-
-                        }
-
-                        var tr = document.createElement('tr');
-                        let item1 = 'Total';
-                        let item2 = total
-                        let item3 = total2.toFixed(3);
-                        let item4 = total3;
-                        let item5 = (total3 / total).toFixed(3);
-                        let item6 = total5;
-                        let item7 = total6;
-                        let item8 = total7;
-                        let item9 = total8;
-                        let item10 = total9.toFixed(3);
-                        let item11 = skor_brd_ma(total9);
-                        let item12 = total11;
-                        let item13 = total12;
-                        let item14 = total13;
-                        let item15 = total14;
-                        let item16 = total15;
-                        let item17 = total16.toFixed(3);
-                        let item18 = skor_buah_Ma(total16.toFixed(3))
-                        let item19 = total17
-                        let item20 = (total17 / total * 100).toFixed(3)
-                        let item21 = skor_palepah_ma(total17 / total * 100)
-                        let item22 = skor_palepah_ma(total17 / total * 100) + skor_buah_Ma(total16.toFixed(3)) + skor_brd_ma(total9);
-                        let item23 = total18.toFixed(3)
-                        let item24 = total19
-                        let item25 = (total19 / total18).toFixed(3)
-                        let item26 = brd_tph(total19 / total18)
-                        let item27 = total20
-                        let item28 = (total20 / total18).toFixed(3)
-                        let item29 = buah_tph(total20 / total18)
-                        let item30 = buah_tph(total20 / total18) + brd_tph(total19 / total18)
-                        let item31 = total21
-                        let item32 = total22
-                        let item33 = total23
-                        let item34 = (total23 / (total22 - total24) * 100).toFixed(3)
-                        let item35 = mb_mentah(total23 / (total22 - total24) * 100)
-                        let item36 = total25
-                        let item37 = (total25 / (total22 - total24) * 100).toFixed(3)
-                        let item38 = mb_masak(total25 / (total22 - total24) * 100)
-                        let item39 = total26
-                        let item40 = (total26 / (total22 - total24) * 100).toFixed(3)
-                        let item41 = mb_over(total26 / (total22 - total24) * 100)
-                        let item42 = total27
-                        let item43 = (total27 / (total22 - total24) * 100).toFixed(3)
-                        let item44 = mb_jangkos(total27 / (total22 - total24) * 100)
-                        let item45 = total28
-                        let item46 = ((total28 / total22) * 100).toFixed(3)
-                        let item47 = mb_vcut((total28 / total22) * 100)
-                        let item48 = total24
-                        let item49 = ((total24 / total22) * 100).toFixed(3)
-                        // let item50 = total21 + '/' + total29
-                        let item50 = total29 + '/' + total21
-                        // (element[1]['blok_mb'] ?? 0) + '/' + (element[1]['alas_mb'] ?? 0);
-                        let item51 = ((total29 / total21) * 100).toFixed(3)
-                        let item52 = mbalas_br((total29 / total21) * 100)
-                        let item53 = mbalas_br((total29 / total21) * 100) + mb_vcut((total28 / total22) * 100) + mb_jangkos(total27 / (total22 - total24) * 100) +
-                            mb_over(total26 / (total22 - total24) * 100) + mb_masak(total25 / (total22 - total24) * 100) + mb_mentah(total23 / (total22 - total24) * 100)
-                        let item54 = item53 + item30 + item22
-                        let item55 = kategori(item54)
-                        const items = [];
-                        for (let i = 1; i <= 55; i++) {
-                            items.push(eval(`item${i}`));
-                        }
-
-
-                        items.forEach((item, index) => {
-                            const itemElement = document.createElement('td');
-                            item
-                            itemElement.classList.add('text-center');
-                            itemElement.innerText = item;
-                            if (index === 0) {
-                                itemElement.setAttribute('colspan', '3'); // Add colspan attribute for item1
-                            }
-                            if (index === 54) {
-                                // Apply background color based on the value of item32
-                                if (item === 'SATISFACTORY') {
-                                    itemElement.style.backgroundColor = '#fffc04';
-                                } else if (item === 'EXCELLENT') {
-                                    itemElement.style.backgroundColor = '#5074c4';
-                                } else if (item === 'GOOD') {
-                                    itemElement.style.backgroundColor = '#6074c4';
-                                } else if (item === 'POOR') {
-                                    itemElement.style.backgroundColor = '#ff0404';
-                                } else if (item === 'FAIR') {
-                                    itemElement.style.backgroundColor = '#ffb004';
-                                }
-                            }
-
-                            if (item54 >= 95) {
-                                tr.style.backgroundColor = '#5074c4';
-                            } else if (item54 >= 85) {
-                                tr.style.backgroundColor = '#5874c4';
-                            } else if (item54 >= 75) {
-                                tr.style.backgroundColor = '#10fc2c';
-                            } else if (item54 >= 65) {
-                                tr.style.backgroundColor = '#ffa404';
-                            } else {
-                                tr.style.backgroundColor = '#ff0404';
+                            // Set background color based on skorAkhir for the last item
+                            if (index === itemValues.length - 1) {
+                                setBackgroundColor(itemElement, skorAkhirValue);
                             }
 
                             tr.appendChild(itemElement);
                         });
 
+                        // Append the row to the table
                         tbody1.appendChild(tr);
-                    } else {
-                        let inc = 1;
-                        let tod = 0;
-                        let ted = 0;
-                        let tok = 0;
-                        let totalsph = 0;
-                        let countSph = 0;
-                        let totalluas = 0;
-
-                        arrTbody1.forEach(element => {
-                            var tr = document.createElement('tr');
-                            let item1 = inc++;
-                            let item2 = element[0];
-                            let item3 = element[1]['pokok_sample'] ?? 0;
-                            let item4 = element[1]['luas_ha'] ?? 0
-                            let item5 = element[1]['jml_jjg_panen'] ?? 0;
-                            let item6 = element[1]['akp_real'] ?? 0;
-                            let item7 = element[1]['p_ma'] ?? 0;
-                            let item8 = element[1]['k_ma'] ?? 0;
-                            let item9 = element[1]['gl_ma'] ?? 0;
-                            let item10 = element[1]['total_brd_ma'] ?? 0;
-                            let item11 = element[1]['btr_jjg_ma'] ?? 0;
-                            let item12 = element[1]['skor_brd'] ?? 0;
-
-                            let item13 = element[1]['bhts_ma'] ?? 0;
-                            let item14 = element[1]['bhtm1_ma'] ?? 0;
-                            let item15 = element[1]['bhtm2_ma'] ?? 0;
-                            let item16 = element[1]['bhtm3_ma'] ?? 0;
-                            let item17 = element[1]['tot_jjg_ma'] ?? 0;
-                            let item18 = element[1]['jjg_tgl_ma'] ?? 0;
-                            let item19 = element[1]['skor_buah'] ?? 0;
-                            let item20 = element[1]['ps_ma'] ?? 0;
-                            let item21 = element[1]['PerPSMA'] ?? 0;
-                            let item22 = element[1]['skor_pale'] ?? 0;
-                            let item23 = (element[1]['skor_pale'] ?? 0) + (element[1]['skor_brd'] ?? 0) + (element[1]['skor_buah'] ?? 0);
+                    });
 
 
-                            let item24 = element[1]['tph_sample'] ?? 0;
-                            let item25 = element[1]['bt_total'] ?? 0;
-                            let item26 = element[1]['skor'] ?? 0;
-                            let item27 = brd_tph(element[1]['skor']);
-                            let item28 = element[1]['restan_total'] ?? 0;
-                            let item29 = element[1]['skor_restan'] ?? 0;
-                            let item30 = buah_tph(element[1]['skor_restan'])
-                            let item31 = buah_tph(element[1]['skor_restan']) + brd_tph(element[1]['skor']);
-
-                            let item32 = element[1]['blok_mb'] ?? 0;
-                            let item33 = element[1]['jml_janjang'] ?? 0;
-                            let item34 = element[1]['jml_mentah'] ?? 0;
-                            let item35 = element[1]['PersenBuahMentah'] ?? 0;
-                            let item36 = mb_mentah(element[1]['PersenBuahMentah']);
-                            let item37 = element[1]['jml_masak'] ?? 0;
-                            let item38 = element[1]['PersenBuahMasak'] ?? 0;
-                            let item39 = mb_masak(element[1]['PersenBuahMasak']);
-                            let item40 = element[1]['jml_over'] ?? 0;
-                            let item41 = element[1]['PersenBuahOver'] ?? 0;
-                            let item42 = mb_over(element[1]['PersenBuahOver']);
-                            let item43 = element[1]['jml_empty'] ?? 0;
-                            let item44 = element[1]['PersenPerJanjang'] ?? 0;
-                            let item45 = mb_jangkos(element[1]['PersenPerJanjang']);
-                            let item46 = element[1]['jml_vcut'] ?? 0;
-                            let item47 = element[1]['PersenVcut'] ?? 0;
-                            let item48 = mb_vcut(element[1]['PersenVcut']);
-                            let item49 = element[1]['jml_abnormal'] ?? 0;
-                            let item50 = element[1]['PersenAbr'] ?? 0;
-                            // let item51 = (element[1]['blok_mb'] ?? 0) + '/' + (element[1]['alas_mb'] ?? 0);
-                            let item51 = (element[1]['alas_mb'] ?? 0);
-                            let item52 = element[1]['PersenKrgBrd'] ?? 0;
-                            let item53 = mbalas_br(element[1]['PersenKrgBrd']);
-                            let item54 = mbalas_br(element[1]['PersenKrgBrd']) + mb_vcut(element[1]['PersenVcut']) +
-                                mb_jangkos(element[1]['PersenPerJanjang']) + mb_over(element[1]['PersenBuahOver']) +
-                                mb_masak(element[1]['PersenBuahMasak']) + mb_mentah(element[1]['PersenBuahMentah']);
-                            tod = (element[1]['skor_pale'] ?? 0) + (element[1]['skor_brd'] ?? 0) + (element[1]['skor_buah'] ?? 0)
-                            ted = buah_tph(element[1]['skor_restan']) + brd_tph(element[1]['skor']);
-                            tok = mbalas_br(element[1]['PersenKrgBrd']) + mb_vcut(element[1]['PersenVcut']) +
-                                mb_jangkos(element[1]['PersenPerJanjang']) + mb_over(element[1]['PersenBuahOver']) +
-                                mb_masak(element[1]['PersenBuahMasak']) + mb_mentah(element[1]['PersenBuahMentah']);
-                            let item55 = tod + ted + tok;
-                            let item56 = kategori(item55)
-                            const items = [];
-                            for (let i = 1; i <= 56; i++) {
-                                items.push(eval(`item${i}`));
-                            }
-
-                            items.forEach((item, index) => {
-                                const itemElement = document.createElement('td');
-                                itemElement.classList.add('text-center');
-                                itemElement.innerText = item;
-
-                                if (index === 55) {
-                                    // Apply background color based on the value of item32
-                                    if (item === 'SATISFACTORY') {
-                                        itemElement.style.backgroundColor = '#fffc04';
-                                    } else if (item === 'EXCELLENT') {
-                                        itemElement.style.backgroundColor = '#08fc2c';
-                                    } else if (item === 'GOOD') {
-                                        itemElement.style.backgroundColor = '#10fc2c';
-                                    } else if (item === 'POOR') {
-                                        itemElement.style.backgroundColor = '#ff0404';
-                                    } else if (item === 'FAIR') {
-                                        itemElement.style.backgroundColor = '#ffa404';
-                                    }
-                                }
-
-                                if (index === 54) {
-                                    // Apply background color based on the value of item32
-                                    if (item >= 95) {
-                                        itemElement.style.backgroundColor = '#08fc2c';
-                                    } else if (item >= 85) {
-                                        itemElement.style.backgroundColor = '#5874c4';
-                                    } else if (item >= 75) {
-                                        itemElement.style.backgroundColor = '#fffc04';
-                                    } else if (item >= 65) {
-                                        itemElement.style.backgroundColor = '#ffa404';
-                                    } else {
-                                        itemElement.style.backgroundColor = '#ff0404';
-                                    }
-                                }
-
-                                if (index >= 2 && index <= 54) {
-                                    // Apply background color based on the value of item32
-                                    if (item == 0) {
-                                        itemElement.style.opacity = '0.5';
-                                    }
-                                }
-                                if (index == 3) {
-                                    if (Array.isArray(item) && item.length > 0) {
-                                        var selectedValue = item[0];
-                                        if (typeof selectedValue === 'number') {
-                                            itemElement.innerText = selectedValue;
-                                        } else if (typeof selectedValue === 'string') {
-                                            // If selectedValue is a string, you can split it by comma and take the first value
-                                            var values = selectedValue.split(',');
-                                            itemElement.innerText = values[0].trim();
-                                        }
-                                    }
-                                }
-
-
-
-
-                                tr.appendChild(itemElement);
-
-                            });
-
-                            tbody1.appendChild(tr)
-                            let sph = element[1]['sph'] ?? 0;
-                            let luas = element[1]['luas_ha'] ?? 0;
-                            totalsph += sph;
-                            totalluas += luas;
-
-                            if (sph > 0) {
-                                countSph++; // Increment the count for non-zero sph values
-                            }
-                        });
-
-
-                        var cellsx = document.getElementById('dataInspeksi');
-                        let total = 0;
-                        let total2 = 0;
-                        let total3 = 0;
-                        let total4 = 0;
-                        let total5 = 0;
-                        let total6 = 0;
-                        let total7 = 0;
-                        let total8 = 0;
-                        let total9 = 0;
-                        let total10 = 0;
-                        let total11 = 0;
-                        let total12 = 0;
-                        let total13 = 0;
-                        let total14 = 0;
-                        let total15 = 0;
-                        let total16 = 0;
-                        let total17 = 0;
-                        let total18 = 0;
-                        let total19 = 0;
-                        let total20 = 0;
-                        let total21 = 0;
-                        let total22 = 0;
-                        let total23 = 0;
-                        let total24 = 0;
-                        let total25 = 0;
-                        let total26 = 0;
-                        let total27 = 0;
-                        let total28 = 0;
-                        let total29 = 0;
-
-                        for (let i = 0; i < cellsx.rows.length; i++) {
-                            if (cellsx.rows[i].cells.length > 2) {
-                                total += Number(cellsx.rows[i].cells[2].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 3) {
-                                total2 += Number(cellsx.rows[i].cells[3].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 4) {
-                                total3 += Number(cellsx.rows[i].cells[4].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 5) {
-                                total4 += Number(cellsx.rows[i].cells[5].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 6) {
-                                total5 += Number(cellsx.rows[i].cells[6].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 7) {
-                                total6 += Number(cellsx.rows[i].cells[7].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 8) {
-                                total7 += Number(cellsx.rows[i].cells[8].innerText);
-                            }
-
-                            if (cellsx.rows[i].cells.length > 9) {
-                                total8 += Number(cellsx.rows[i].cells[9].innerText);
-                            }
-
-                            if (cellsx.rows[i].cells.length > 10) {
-                                total9 = total8 / total3;
-                            }
-                            if (cellsx.rows[i].cells.length > 11) {
-                                total10 = skor_brd_ma((total8 / total3));
-                            }
-                            if (cellsx.rows[i].cells.length > 12) {
-                                total11 += Number(cellsx.rows[i].cells[12].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 13) {
-                                total12 += Number(cellsx.rows[i].cells[13].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 14) {
-                                total13 += Number(cellsx.rows[i].cells[14].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 15) {
-                                total14 += Number(cellsx.rows[i].cells[15].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 16) {
-                                total15 += Number(cellsx.rows[i].cells[16].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 17) {
-                                total16 = total15 / (total3 + total15) * 100;
-                            }
-                            if (cellsx.rows[i].cells.length > 19) {
-                                total17 += Number(cellsx.rows[i].cells[19].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 23) {
-                                total18 += Number(cellsx.rows[i].cells[23].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 24) {
-                                total19 += Number(cellsx.rows[i].cells[24].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 27) {
-                                total20 += Number(cellsx.rows[i].cells[27].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 31) {
-                                total21 += Number(cellsx.rows[i].cells[31].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 32) {
-                                total22 += Number(cellsx.rows[i].cells[32].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 33) {
-                                total23 += Number(cellsx.rows[i].cells[33].innerText);
-                            }
-                            // abnormal
-                            if (cellsx.rows[i].cells.length > 48) {
-                                total24 += Number(cellsx.rows[i].cells[48].innerText);
-                            }
-                            //
-                            if (cellsx.rows[i].cells.length > 36) {
-                                total25 += Number(cellsx.rows[i].cells[36].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 39) {
-                                total26 += Number(cellsx.rows[i].cells[39].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 42) {
-                                total27 += Number(cellsx.rows[i].cells[42].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 45) {
-                                total28 += Number(cellsx.rows[i].cells[45].innerText);
-                            }
-                            if (cellsx.rows[i].cells.length > 50) {
-                                total29 += Number(cellsx.rows[i].cells[50].innerText);
-                            }
-
-                        }
-                        let avarage = (totalsph / countSph).toFixed(3)
-
-                        var tr = document.createElement('tr');
-                        let item1 = 'Total';
-                        let item2 = total;
-                        // let item3 = avarage
-                        let item3 = totalluas.toFixed(3)
-                        let item4 = total3;
-                        let item5 = ((total3 / total) * 100).toFixed(3);
-                        let item6 = total5;
-                        let item7 = total6;
-                        let item8 = total7;
-                        let item9 = total8;
-                        let item10 = total9.toFixed(3);
-                        let item11 = skor_brd_ma(total9.toFixed(3));
-                        let item12 = total11;
-                        let item13 = total12;
-                        let item14 = total13;
-                        let item15 = total14;
-                        let item16 = total15;
-                        let item17 = total16.toFixed(3);
-                        let item18 = skor_buah_Ma(total16.toFixed(3))
-                        let item19 = total17
-                        let item20 = (total17 / total * 100).toFixed(3)
-                        let item21 = skor_palepah_ma(total17 / total * 100)
-                        let item22 = skor_palepah_ma(total17 / total * 100) + skor_buah_Ma(total16.toFixed(3)) + skor_brd_ma(total9);
-                        let item23 = total18
-                        let item24 = total19
-                        let item25 = (total19 / total18).toFixed(3)
-                        let item26 = brd_tph(total19 / total18)
-                        let item27 = total20
-                        let item28 = (total20 / total18).toFixed(3)
-                        let item29 = buah_tph(total20 / total18)
-                        let item30 = buah_tph(total20 / total18) + brd_tph(total19 / total18)
-                        let item31 = total21
-                        let item32 = total22
-                        let item33 = total23
-                        let item34 = (total23 / (total22 - total24) * 100).toFixed(3)
-                        let item35 = mb_mentah(total23 / (total22 - total24) * 100)
-                        let item36 = total25
-                        let item37 = (total25 / (total22 - total24) * 100).toFixed(3)
-                        let item38 = mb_masak(total25 / (total22 - total24) * 100)
-                        let item39 = total26
-                        let item40 = (total26 / (total22 - total24) * 100).toFixed(3)
-                        let item41 = mb_over(total26 / (total22 - total24) * 100)
-                        let item42 = total27
-                        let item43 = (total27 / (total22 - total24) * 100).toFixed(3)
-                        let item44 = mb_jangkos(total27 / (total22 - total24) * 100)
-                        let item45 = total28
-                        let item46 = ((total28 / total22) * 100).toFixed(3)
-                        let item47 = mb_vcut((total28 / total22) * 100)
-                        let item48 = total24
-                        let item49 = ((total24 / total22) * 100).toFixed(3)
-                        // let item50 = total21 + '/' + total29
-                        let item50 = total29 + '/' + total21
-                        // (element[1]['blok_mb'] ?? 0) + '/' + (element[1]['alas_mb'] ?? 0);
-                        let item51 = ((total29 / total21) * 100).toFixed(3)
-                        let item52 = mbalas_br((total29 / total21) * 100)
-                        let item53 = mbalas_br((total29 / total21) * 100) + mb_vcut((total28 / total22) * 100) + mb_jangkos(total27 / (total22 - total24) * 100) +
-                            mb_over(total26 / (total22 - total24) * 100) + mb_masak(total25 / (total22 - total24) * 100) + mb_mentah(total23 / (total22 - total24) * 100)
-                        let item54 = item22 + item30 + item53;
-                        let item55 = kategori(item54)
-                        const items = [];
-                        for (let i = 1; i <= 55; i++) {
-                            items.push(eval(`item${i}`));
-                        }
-
-
-                        items.forEach((item, index) => {
-                            const itemElement = document.createElement('td');
-                            item
-                            itemElement.classList.add('text-center');
-                            itemElement.innerText = item;
-                            if (index === 0) {
-                                itemElement.setAttribute('colspan', '2'); // Add colspan attribute for item1
-                            }
-
-
-
-
-                            if (index === 55) {
-                                // Apply background color based on the value of item32
-                                if (item === 'SATISFACTORY') {
-                                    itemElement.style.backgroundColor = '#ffdc04';
-                                } else if (item === 'EXCELLENT') {
-                                    itemElement.style.backgroundColor = '#5074c4';
-                                } else if (item === 'GOOD') {
-                                    itemElement.style.backgroundColor = '#08fc2c';
-                                } else if (item === 'POOR') {
-                                    itemElement.style.backgroundColor = '#ff0404';
-                                } else if (item === 'FAIR') {
-                                    itemElement.style.backgroundColor = '#ffb004';
-                                }
-                            }
-
-                            if (item54 >= 95) {
-                                tr.style.backgroundColor = '#5074c4';
-                            } else if (item54 >= 85) {
-                                tr.style.backgroundColor = '#08fc2c';
-                            } else if (item54 >= 75) {
-                                tr.style.backgroundColor = '#ffdc04';
-                            } else if (item54 >= 65) {
-                                tr.style.backgroundColor = '#ffa404';
-                            } else {
-                                tr.style.backgroundColor = '#ff0404';
-                            }
-
-                            tr.appendChild(itemElement);
-                        });
-
-                        tbody1.appendChild(tr);
-
-
-                        // }
-
-                        // end table 
-                    }
-
-                    if (reg == 2) {
-
-                    } else {
+                    if (reg !== 2) {
                         let tbody1 = document.getElementById('datakemandoran');
                         // Assuming 'resmandr' is your array
                         resmandr.forEach(element => {
@@ -4903,12 +3779,11 @@
                         });
 
                     }
-
                 }
             });
         }
 
-        if (currentUserName === 'Askep' || currentUserName === 'Manager') {
+        if (canedit) {
             document.getElementById('moveDataButton').onclick = function() {
 
 
