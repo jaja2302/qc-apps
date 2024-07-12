@@ -19,6 +19,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
@@ -26,6 +27,7 @@ require_once(app_path('helpers.php'));
 
 class ApiqcController extends Controller
 {
+    use WithoutMiddleware;
     public function getHistoryedit(Request $request)
     {
         // Get the ID parameter from the request
@@ -939,8 +941,13 @@ class ApiqcController extends Controller
                 // dd($case);
                 // dd($value['status']);
 
-                if ($case === 'Atasan_1_not_approved') {
-                    // Send notification to Atasan 1 to approve
+                $status_send = $value['status_send_notif'];
+                $status_send = explode('$', $status_send);
+                $send_atasan1 = $status_send[0];
+                $send_atasan2 = $status_send[1];
+                $send_user = $status_send[2];
+                // dd($status_send);
+                if ($send_atasan1 != 1 && $case === 'Atasan_1_not_approved') {
                     $responseData[] = [
                         'id' => $value->id . '/' . '1',
                         'status' => 'approved',
@@ -951,10 +958,12 @@ class ApiqcController extends Controller
                         'tanggal_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('d-m-Y'),
                         'keperluan' => $value['keperluan'],
                         'lokasi_tujuan' => $value['lokasi_tujuan'],
-
                     ];
-                } elseif ($case === 'Atasan_2_not_approved') {
-                    // Send notification to Atasan 2 to approve
+                    Formijin::where('id', $value['id'])
+                        ->update([
+                            'status_send_notif' => '1$0$0',
+                        ]);
+                } else if ($send_atasan2 != 1 && $case === 'Atasan_2_not_approved') {
                     $responseData[] = [
                         'id' => $value->id . '/' . '2',
                         'status' => 'approved',
@@ -967,8 +976,11 @@ class ApiqcController extends Controller
                         'keperluan' => $value['keperluan'],
                         'lokasi_tujuan' => $value['lokasi_tujuan'],
                     ];
-                } elseif ($case === 'User_not_sending') {
-                    // Send notification to user that ijin got approved
+                    Formijin::where('id', $value['id'])
+                        ->update([
+                            'status_send_notif' => '1$1$0',
+                        ]);
+                } else if ($send_user != 1 && $case === 'User_not_sending') {
                     $responseData[] = [
                         'id' => $value->id,
                         'id_atasan' => 3,
@@ -980,6 +992,10 @@ class ApiqcController extends Controller
                         'keperluan' => $value['keperluan'],
                         'lokasi_tujuan' => $value['lokasi_tujuan'],
                     ];
+                    Formijin::where('id', $value['id'])
+                        ->update([
+                            'status_send_notif' => '1$1$1',
+                        ]);
                 } elseif ($case === 'rejected') {
                     // Send notification to user that ijin got approved
                     $responseData[] = [
@@ -1317,19 +1333,24 @@ class ApiqcController extends Controller
 
     public function checkPcStatus()
     {
-        $threshold = Carbon::now('Asia/Jakarta')->subHour()->format('Y-m-d H:i:s');
+        // Set the threshold time to 10 minutes ago
+        $threshold = Carbon::now('Asia/Jakarta')->subMinutes(10)->format('Y-m-d H:i:s');
+
+        // Fetch PCs with last update time older than the threshold
         $pcs = DB::connection('mysql2')->table('pc_status')->where('last_update', '<', $threshold)->get();
 
         if ($pcs->isEmpty()) {
             return response()->json(['message' => 'All PCs are online']);
         }
 
+        // Send notifications for PCs that are offline
         foreach ($pcs as $pc) {
             $this->sendTelegramNotification($pc->pc_id);
         }
 
         return response()->json(['message' => 'Notifications sent']);
     }
+
 
     protected function sendTelegramNotification($pc_id)
     {

@@ -3963,7 +3963,7 @@
                             reg.buah.TOTAL_SKORbh +
                             reg.trans.totalSkortrans;
                     }
-                    console.log(resultreg);
+                    // console.log(resultreg);
                     var theadreg = document.getElementById('reg');
                     let item1 = '='
                     let item2 = 'RH'
@@ -6532,7 +6532,7 @@
                             }]
                         },
                     });
-                    console.log(mths);
+                    // console.log(mths);
                     GraphBhmth.updateSeries([{
                         name: est,
                         data: mths

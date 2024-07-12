@@ -26,6 +26,7 @@ class Formijin extends Model
         'status_bot',
         'plat_nomor',
         'kendaraan',
+        'status_send_notif',
     ];
 
 

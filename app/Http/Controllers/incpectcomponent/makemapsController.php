@@ -614,11 +614,15 @@ class makemapsController extends Controller
             'blok' => $bloksWithLowestNilai,
             'nilai' => $lowestValue,
         ];
-
+        // dd($blokLatLn);
         // dd($dataSkorResult);
         // dd($blokLatLn, $dataSkorResult);
 
+        $str1 = "N039";
+        $str2 = "N39-";
 
+        $distance = levenshtein($str1, $str2);
+        dd($distance);
         $plot['blok'] = $blokLatLn;
         $plot['legend'] = $dataLegend;
         $plot['lowest'] = $resultsLow;
@@ -1047,7 +1051,7 @@ class makemapsController extends Controller
             }
         }
 
-
+        // dd($plotLine);
 
 
 

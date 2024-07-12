@@ -8,7 +8,12 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         table {
@@ -27,7 +32,6 @@
             background-color: #f2f2f2;
         }
 
-
         .highlight {
             background-color: #f9f9f9;
             font-weight: bold;
@@ -35,6 +39,7 @@
 
         .table-container {
             page-break-inside: avoid;
+            flex: 1;
         }
 
         .image-table {
@@ -44,7 +49,6 @@
 
         .image-table td {
             padding: 10px;
-            /* border: 1px solid #ccc; */
             text-align: center;
         }
 
@@ -53,6 +57,17 @@
             height: auto;
             display: flex;
             margin: 0 auto;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 30;
+            width: 100%;
+            background-color: #f2f2f2;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 10px;
+            border-top: 1px solid #000;
         }
     </style>
 </head>
@@ -118,13 +133,7 @@
             <td style="text-align: left;border:none;padding: 0;font-size:15px;width:26%">Berat Rata-rata TBS (BJR)</td>
             <td style="text-align: left;border:none;padding: 0;font-size:15px">: {{$data['bjr']}}</td>
         </tr>
-        <tr>
-            <td style="text-align: left;border:none;padding: 0;font-size:15px">App Versi</td>
-            <td style="text-align: right;border:none;padding: 0;font-size:15px">:</td>
-            <td style="text-align: left;border:none;padding: 0;font-size:15px">{{$data['appvers']}}</td>
-            <td style="text-align: left;border:none;padding: 0;font-size:15px;width:26%">Merek HP</td>
-            <td style="text-align: left;border:none;padding: 0;font-size:15px">: {{$data['phone_version']}}</td>
-        </tr>
+
     </table>
     <h3 style="margin: 0; padding-top: 10px; text-transform: capitalize;">DATA HASIL GRADING</h3>
     <table style="font-size: 12px;padding-top: 10px;">
@@ -317,7 +326,6 @@
     }
     @endphp
 
-    <!-- Your HTML code with corrections -->
     <table style="font-size: 12px; padding-top: 10px;">
         <thead>
             <tr class="header">
@@ -420,7 +428,9 @@
             </tr>
         </table>
     </div>
-
+    <footer>
+        <p><strong>App Versi</strong> :{{$data['appvers']}} <strong>OS Versi</strong> {{$data['appvers']}} <strong>Tipe Hp</strong> {{$data['phone_version']}}</p>
+    </footer>
 </body>
 
 </html>
