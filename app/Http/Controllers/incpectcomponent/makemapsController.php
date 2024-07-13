@@ -308,31 +308,31 @@ class makemapsController extends Controller
 
 
 
-                if ($skorTrans != 0 || $skorAncak != 0) {
-                    $skorTotal = $skorTrans + $skorAncak;
-                    $skorAkhir = (int) round(($skorTotal * 100) / 65);
+                // if ($skorTrans != 0 || $skorAncak != 0) {
+                //     $skorTotal = $skorTrans + $skorAncak;
+                //     $skorAkhir = (int) round(($skorTotal * 100) / 65);
 
-                    if ($skorAkhir == 100) {
-                        $skorAkhir -= 1;
-                    }
-                } else {
-                    $skorAkhir = 0;
-                }
-
-                if ($reg != 1) {
-                    $skorAkhir -= 1;
-                }
-
-
-                // if ($skorTrans != 0 && $skorAncak != 0) {
-                //     $skorAkhir = (int) round((($skorTrans + $skorAncak) * 100) / 65 - 1);
-                // } elseif ($skorTrans != 0) {
-                //     $skorAkhir = (int)round(($skorTrans * 100) / 65 - 1);
-                // } elseif ($skorAncak != 0) {
-                //     $skorAkhir = (int) round(($skorAncak * 100) / 65 - 1);
+                //     if ($skorAkhir == 100) {
+                //         $skorAkhir -= 1;
+                //     }
                 // } else {
                 //     $skorAkhir = 0;
                 // }
+
+                // if ($reg != 1) {
+                //     $skorAkhir -= 1;
+                // }
+
+
+                if ($skorTrans != 0 && $skorAncak != 0) {
+                    $skorAkhir = (int) round((($skorTrans + $skorAncak) * 100) / 65 - 1);
+                } elseif ($skorTrans != 0) {
+                    $skorAkhir = (int)round(($skorTrans * 100) / 65 - 1);
+                } elseif ($skorAncak != 0) {
+                    $skorAkhir = (int) round(($skorAncak * 100) / 65 - 1);
+                } else {
+                    $skorAkhir = 0;
+                }
 
 
                 if ($skorTrans == 0 && $skorAncak == 0) {
@@ -366,34 +366,6 @@ class makemapsController extends Controller
 
         // dd($dataSkor['O27017']);
 
-        function isPointInPolygon($point, $polygon)
-        {
-            $splPoint = explode(',', $point);
-            $x = $splPoint[0];
-            $y = $splPoint[1];
-
-            $vertices = array_map(function ($vertex) {
-                return explode(',', $vertex);
-            }, explode('$', $polygon));
-
-            $numVertices = count($vertices);
-            $isInside = false;
-
-            for ($i = 0, $j = $numVertices - 1; $i < $numVertices; $j = $i++) {
-                $xi = $vertices[$i][0];
-                $yi = $vertices[$i][1];
-                $xj = $vertices[$j][0];
-                $yj = $vertices[$j][1];
-
-                $intersect = (($yi > $y) != ($yj > $y)) && ($x < ($xj - $xi) * ($y - $yi) / ($yj - $yi) + $xi);
-
-                if ($intersect) {
-                    $isInside = !$isInside;
-                }
-            }
-
-            return $isInside;
-        }
 
         $estateQuery = DB::connection('mysql2')->table('estate')
             ->select('*')
@@ -463,53 +435,150 @@ class makemapsController extends Controller
             }
         }
 
-
-        // $values = array_values($blokEstateFix['BDE']);
-        $uniqueCombinations = [];
+        $blokLatLn = [];
 
         foreach ($blokLatLnEw as $value) {
-            $key = $value['blok'] . '_' . $est . '_' . $value['latln']; // Initialize key before the inner loop
+            $hasData = false;
 
-            $hasData = false; // Flag to track if there's data for the current latln
-
-            foreach ($dataSkorResult as $marker) {
+            foreach ($dataSkorResult as $markerKey => $marker) {
                 if (isPointInPolygon($marker['latin'], $value['latln'])) {
-                    $hasData = true; // Set the flag to true if there's data
-                    // Check if the combination already exists
-                    if (!isset($uniqueCombinations[$key])) {
-                        $uniqueCombinations[$key] = true; // Mark the combination as encountered
-                        $blokLatLn[] = [
+                    $blokLatLn[$value['blok']] = [
+                        'blok' => $value['blok'],
+                        'blok_asli' => $marker['blok'] ?? '-',
+                        'estate' => $marker['estate'],
+                        'latln' => $value['latinnew'],
+                        'nilai' => $marker['skorAkhir'],
+                        'afdeling' => $value['afd'],
+                        'kategori' => $marker['text'],
+                    ];
+                    $hasData = true;
+                }
+            }
+
+            if (!$hasData) {
+                foreach ($dataSkorResult as $markerKey => $marker) {
+                    if (!isset($blokLatLn[$value['blok']])) {
+                        $blokLatLn[$value['blok']] = [
                             'blok' => $value['blok'],
                             'blok_asli' => $marker['blok'] ?? '-',
-                            'estate' => $est,
+                            'estate' => $marker['estate'],
                             'latln' => $value['latinnew'],
                             'nilai' => $marker['skorAkhir'],
-                            'afdeling' => $value['afd'],
+                            'afdeling' => '-', // Default value to be updated later
                             'kategori' => $marker['text'],
                         ];
                     }
                 }
             }
+        }
 
-            // Check if there is no data for the current latln and add it to the result
-            if (!$hasData) {
-                if (!isset($uniqueCombinations[$key])) {
-                    $uniqueCombinations[$key] = true; // Mark the combination as encountered
-                    $blokLatLn[] = [
-                        'blok' => $value['blok'],
-                        'blok_asli' => '-',
-                        'estate' => $est,
-                        'latln' => $value['latinnew'],
-                        'nilai' => 0,
-                        'afdeling' => $value['afd'],
-                        'kategori' => 'x',
-                    ];
+        dd($blokLatLn, $dataSkorResult);
+
+        $compareblok = $blokLatLn;
+
+        // dd($compareblok);
+        // dd($blokLatLn, $blokLatLnEw);
+        $collectBlok = [];
+        // Iterate over the array to find and remove elements that meet the condition
+        foreach ($blokLatLn as $key => $value) {
+            if ($value['blok_asli'] !== '-' && $value['blok'] !== $value['blok_asli']) {
+                unset($blokLatLn[$key]); // Unset the current element
+                unset($value['latln']); // Remove 'latln' from the current element
+                $collectBlok[] = $value; // Add the modified value to the collectBlok array
+            }
+        }
+        // dd($collectBlok, $blokLatLn);
+
+
+        // Reset array keys
+        // $blokLatLn = array_values($blokLatLn);
+
+        // Iterate over the collectBlok array to update 'latln' values
+        foreach ($collectBlok as $key => $value) {
+            $found = false;
+            foreach ($blokLatLnEw as $value1) {
+                if ($value['blok_asli'] === $value1['blok']) {
+                    $collectBlok[$key]['latln'] = $value1['latinnew'];
+                    unset($value['blok']); // Remove 'latln' from the current element
+                    $collectBlok[$key]['blok'] = $value1['blok'];
+                    $found = true;
+                    break; // Exit the inner loop once a match is found
+                }
+            }
+            if (!$found) {
+                $similarityFound = false;
+                foreach ($blokLatLnEw as $value2) {
+                    if (similar_text($value['blok_asli'], $value2['blok']) >= 3) { // Adjust threshold as needed
+                        $collectBlok[$key]['latln'] = $value2['latinnew'];
+                        unset($value['blok']);
+                        $collectBlok[$key]['blok'] = $value2['blok'];
+                        $collectBlok[$key]['similar_blok'] = $value['blok_asli'] . '-' . $value2['blok'];
+                        $similarityFound = true;
+                        break; // Exit the inner loop once a similar match is found
+                    }
+                }
+                if (!$similarityFound) {
+                    // dd($key);
+                    $collectBlok[$key]['latln'] = 'kosong';
                 }
             }
         }
+        // $string1 = 'L37';
+        // $string2 = 'L036';
+        // $similarity = similar_text($string1, $string2);
 
-        // dd($blokLatLn, $dataSkorResult);
+        // dd($collectBlok);
+        // Combine the arrays
+        $combinedArray = array_merge($blokLatLn, $collectBlok);
+        // dd($combinedArray[0], $combinedArray[66]);
+        $groupedByBlok = [];
 
+        foreach ($combinedArray as $key => $item) {
+            if (isset($item['blok'])) {
+                $blok = $item['blok'];
+                if (!isset($groupedByBlok[$blok])) {
+                    $groupedByBlok[$blok] = [];
+                }
+                $groupedByBlok[$blok][] = $key;
+            }
+        }
+        // dd($groupedByBlok);
+        // Step 2: Identify and process arrays with the same 'blok' value
+        foreach ($groupedByBlok as $blok => $keys) {
+            if (count($keys) > 1) {
+                foreach ($keys as $key) {
+                    if ($combinedArray[$key]['blok_asli'] === '-') {
+                        unset($combinedArray[$key]);
+                    }
+                }
+            }
+        }
+        // dd($compareblok);
+        // dd($combinedArray, $compareblok);
+        $finalresultblok = [];
+
+        foreach ($compareblok as $key => $value) {
+            $isSame = false;
+            foreach ($combinedArray as $key1 => $value1) {
+                if ($value['blok'] === $value1['blok']) {
+                    $finalresultblok['same'][] = $value;
+                    $isSame = true;
+                    break; // Exit the inner loop once a match is found
+                }
+            }
+            if (!$isSame) {
+                $finalresultblok['notsame'][] = $value;
+            }
+        }
+
+
+
+        $finalLatln = array_merge($finalresultblok['notsame'], $combinedArray);
+
+        // Optionally, reindex the merged array if you want to have sequential keys
+        $finalLatln = array_values($finalLatln);
+        // dd($finalLatln);
+        // dd($groupedByBlok, $combinedArray);
 
 
         $dataLegend = array();
@@ -520,7 +589,7 @@ class makemapsController extends Controller
         $poor = array();
         $empty = array();
         $dataLegend = array();
-        foreach ($blokLatLn as $key => $value) {
+        foreach ($finalLatln as $key => $value) {
             $skor = $value['nilai'];
             $data = $value['kategori'];
             if ($data == 'EXCELLENT') {
@@ -565,7 +634,7 @@ class makemapsController extends Controller
         $estatesWithHighestNilai = [];
         $bloksWithHighestNilai = [];
 
-        foreach ($blokLatLn as $value) {
+        foreach ($finalLatln as $value) {
             $nilai = $value['nilai'];
             $estate = $value['estate'];
             $blok = $value['blok'];
@@ -590,7 +659,7 @@ class makemapsController extends Controller
         $estatesWithLowestNilai = [];
         $bloksWithLowestNilai = [];
 
-        foreach ($blokLatLn as $value) {
+        foreach ($finalLatln as $value) {
             $nilai = $value['nilai'];
             $estate = $value['estate'];
             $blok = $value['blok'];
@@ -622,8 +691,8 @@ class makemapsController extends Controller
         $str2 = "N39-";
 
         $distance = levenshtein($str1, $str2);
-        dd($distance);
-        $plot['blok'] = $blokLatLn;
+        // dd($distance);
+        $plot['blok'] = $finalLatln;
         $plot['legend'] = $dataLegend;
         $plot['lowest'] = $resultsLow;
         $plot['highest'] = $resultsHIgh;

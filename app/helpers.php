@@ -5112,3 +5112,35 @@ if (!function_exists('rekap_pertahun_mutubuah')) {
         ];
     }
 }
+
+//helper halaman sidak mutu buah pertahun
+if (!function_exists('isPointInPolygon')) {
+    function isPointInPolygon($point, $polygon)
+    {
+        $splPoint = explode(',', $point);
+        $x = $splPoint[0];
+        $y = $splPoint[1];
+
+        $vertices = array_map(function ($vertex) {
+            return explode(',', $vertex);
+        }, explode('$', $polygon));
+
+        $numVertices = count($vertices);
+        $isInside = false;
+
+        for ($i = 0, $j = $numVertices - 1; $i < $numVertices; $j = $i++) {
+            $xi = $vertices[$i][0];
+            $yi = $vertices[$i][1];
+            $xj = $vertices[$j][0];
+            $yj = $vertices[$j][1];
+
+            $intersect = (($yi > $y) != ($yj > $y)) && ($x < ($xj - $xi) * ($y - $yi) / ($yj - $yi) + $xi);
+
+            if ($intersect) {
+                $isInside = !$isInside;
+            }
+        }
+
+        return $isInside;
+    }
+}
