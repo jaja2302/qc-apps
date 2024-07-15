@@ -5118,11 +5118,12 @@ if (!function_exists('isPointInPolygon')) {
     function isPointInPolygon($point, $polygon)
     {
         $splPoint = explode(',', $point);
-        $x = $splPoint[0];
-        $y = $splPoint[1];
+        $y = (float)$splPoint[0];
+        $x = (float)$splPoint[1];
 
         $vertices = array_map(function ($vertex) {
-            return explode(',', $vertex);
+            $coords = explode(',', $vertex);
+            return [(float)$coords[1], (float)$coords[0]];
         }, explode('$', $polygon));
 
         $numVertices = count($vertices);

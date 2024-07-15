@@ -1911,7 +1911,7 @@
 
 
                     var caktemuan1 = L.icon({
-                        iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
+                        iconUrl: "{{ asset('img/marker/marker-icon-2x-blue.png') }}",
                         shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
                         iconSize: [14, 21],
                         iconAnchor: [7, 22],
@@ -1921,7 +1921,7 @@
 
 
                     var caktemuan2 = L.icon({
-                        iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
+                        iconUrl: "{{ asset('img/marker/marker-icon-2x-red.png')}}",
                         shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
                         iconSize: [14, 21],
                         iconAnchor: [7, 22],
@@ -1930,7 +1930,7 @@
                     });
 
                     var cakfu1 = L.icon({
-                        iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
+                        iconUrl: "{{asset('img/marker/marker-icon-2x-green.png')}}",
                         shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
                         iconSize: [14, 21],
                         iconAnchor: [7, 22],
@@ -1939,7 +1939,7 @@
                     });
                     var ancak_fu2 = '{{ asset("img/push-pin1.png") }}';
                     var cakfu2 = L.icon({
-                        iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
+                        iconUrl: "{{ asset('img/marker/marker-icon-2x-green.png')}}",
                         shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
                         iconSize: [14, 21],
                         iconAnchor: [7, 22],

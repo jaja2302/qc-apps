@@ -70,7 +70,7 @@ class makemapsController extends Controller
         {
             // Check for block identifiers like 'F006-CBI14'
             if (preg_match('/^[A-Z]+\d+-CBI\d+$/', $block)) {
-                return substr($block, 0, strpos($block, 'CBI'));
+                return substr($block, 0, strpos($block, '-CBI'));
             }
             // Check for block identifiers like 'O27012'
             elseif (preg_match('/^[A-Z]+\d+$/', $block)) {
@@ -79,6 +79,7 @@ class makemapsController extends Controller
             // Return the original block if it doesn't match known patterns
             return $block;
         }
+
 
         // Step 3: Normalize the block identifiers
         $datamutuancak = [];
@@ -107,25 +108,8 @@ class makemapsController extends Controller
             // Merge the data
             $datamututrans[$normalizedBlock] = array_merge($datamututrans[$normalizedBlock], $data);
         }
-        // dd($datamutuancak['R009']);
-        // dd($datamututrans['D13'], $datamutuancak);
 
-        // dd($DataMTAncak, $datamutuancak['O270']);
-        // $newArray = array_filter($DataMTAncak, function ($key) {
-        //     return in_array($key, ["O27017", "O27012"]);
-        // }, ARRAY_FILTER_USE_KEY);
-
-        // dd($newArray);
-        // $testing = [];
-        // foreach ($newArray as $key => $value) {
-        //     $jgg = 0;
-        //     foreach ($value as $key1 => $value1) {
-        //         $jgg += $value1['jjg'];
-        //     }
-        //     $testing[$key]['jjg'] = $jgg;
-        // }
-        // dd($testing);
-
+        // dd($datamutuancak, $datamututrans);
         $QueryEst = DB::connection('mysql2')
             ->table("estate")
             ->join('afdeling', 'afdeling.estate', 'estate.id')
@@ -307,23 +291,6 @@ class makemapsController extends Controller
                 $skorAncak = check_array('skorAncak', $value1);
 
 
-
-                // if ($skorTrans != 0 || $skorAncak != 0) {
-                //     $skorTotal = $skorTrans + $skorAncak;
-                //     $skorAkhir = (int) round(($skorTotal * 100) / 65);
-
-                //     if ($skorAkhir == 100) {
-                //         $skorAkhir -= 1;
-                //     }
-                // } else {
-                //     $skorAkhir = 0;
-                // }
-
-                // if ($reg != 1) {
-                //     $skorAkhir -= 1;
-                // }
-
-
                 if ($skorTrans != 0 && $skorAncak != 0) {
                     $skorAkhir = (int) round((($skorTrans + $skorAncak) * 100) / 65 - 1);
                 } elseif ($skorTrans != 0) {
@@ -365,6 +332,7 @@ class makemapsController extends Controller
         // dd($dataSkorResult['M180']);
 
         // dd($dataSkor['O27017']);
+
 
 
         $estateQuery = DB::connection('mysql2')->table('estate')
@@ -427,158 +395,308 @@ class makemapsController extends Controller
                     }
                 }
 
-                $blokLatLnEw[$inc]['afd'] = $key;
-                $blokLatLnEw[$inc]['blok'] = $value1;
-                $blokLatLnEw[$inc]['latln'] = rtrim($latln, '$');
-                $blokLatLnEw[$inc]['latinnew'] = rtrim($latln2, ',');
+                $blokLatLnEw[$value1]['afd'] = $key;
+                $blokLatLnEw[$value1]['blok'] = $value1;
+                $blokLatLnEw[$value1]['latln'] = rtrim($latln, '$');
+                $blokLatLnEw[$value1]['latinnew'] = rtrim($latln2, ',');
                 $inc++;
             }
         }
-
+        // dd($blokLatLnEw);
         $blokLatLn = [];
+        // dd($blokLatLnEw);
 
-        foreach ($blokLatLnEw as $value) {
-            $hasData = false;
+        foreach ($dataSkorResult as $markerKey => $marker) {
+            $found = false; // Flag to check if the marker is found in any polygon
+            $blok_asli = $marker['blok'];
 
-            foreach ($dataSkorResult as $markerKey => $marker) {
+            foreach ($blokLatLnEw as $key => $value) {
                 if (isPointInPolygon($marker['latin'], $value['latln'])) {
-                    $blokLatLn[$value['blok']] = [
+                    $found = true;
+                    $blokLatLn[$value['blok']][] = [
                         'blok' => $value['blok'],
-                        'blok_asli' => $marker['blok'] ?? '-',
+                        'blok_asli' => $blok_asli,
                         'estate' => $marker['estate'],
                         'latln' => $value['latinnew'],
                         'nilai' => $marker['skorAkhir'],
                         'afdeling' => $value['afd'],
                         'kategori' => $marker['text'],
                     ];
-                    $hasData = true;
+                    // No break here, so we continue checking for more matches
                 }
             }
 
-            if (!$hasData) {
-                foreach ($dataSkorResult as $markerKey => $marker) {
-                    if (!isset($blokLatLn[$value['blok']])) {
-                        $blokLatLn[$value['blok']] = [
-                            'blok' => $value['blok'],
-                            'blok_asli' => $marker['blok'] ?? '-',
-                            'estate' => $marker['estate'],
-                            'latln' => $value['latinnew'],
-                            'nilai' => $marker['skorAkhir'],
-                            'afdeling' => '-', // Default value to be updated later
-                            'kategori' => $marker['text'],
-                        ];
+            if (!$found) {
+                $blokLatLn[$value['blok']][] = [
+                    'blok' => $marker['blok'],
+                    'blok_asli' => $marker['blok'],
+                    'estate' => $marker['estate'],
+                    'latln' => 'no_coordinates',
+                    'nilai' => $marker['skorAkhir'],
+                    'afdeling' => '-', // or other appropriate default value
+                    'kategori' => $marker['text'],
+                ];
+            }
+        }
+
+        $double_blok = [];
+
+        foreach ($blokLatLn as $key => $value) {
+            $val = count($value);
+            if ($val > 1) {
+                unset($blokLatLn[$key]);
+                $double_blok[$key] = $value;
+            }
+        }
+
+        // dd($blokLatLn, $double_blok);
+
+        $not_match = [];
+
+        foreach ($double_blok as $key => $values) {
+            $maxSimilarity = 0;
+            $bestMatchIndex = null;
+
+            // First pass: Find the best match index
+            foreach ($values as $index => $data) {
+                $similarity = 0;
+                similar_text($key, $data['blok_asli'], $similarity);
+
+                if ($similarity > $maxSimilarity) {
+                    $maxSimilarity = $similarity;
+                    $bestMatchIndex = $index;
+                }
+            }
+
+            // Second pass: Unset non-matching elements
+            foreach ($values as $index => $data) {
+                if ($index !== $bestMatchIndex) {
+                    $not_match[$data['blok_asli']] = $data;
+                    unset($double_blok[$key][$index]);
+                }
+            }
+
+            // If there are no matches found, remove the entire key
+            if ($bestMatchIndex === null) {
+                $not_match[$key] = $values;
+                unset($double_blok[$key]);
+            }
+        }
+        // dd($blokLatLnEw);
+
+        $combine_latin_double = array_merge($blokLatLn, $double_blok);
+
+        $collectBlok = [];
+        foreach ($combine_latin_double as $key => $value) {
+            foreach ($value as $key1 => $value1) {
+                if (similar_text($value1['blok_asli'], $value1['blok']) <= 2) {
+                    unset($combine_latin_double[$key]);
+                    unset($value1['latln']);
+                    $collectBlok[$value1['blok']] = $value;
+                }
+            }
+        }
+        // dd($combine_latin_double);
+
+        foreach ($collectBlok as $key => $value) {
+            foreach ($value as $key1 => $value1) {
+                $found = false;
+
+                // First, check for an exact match
+                foreach ($blokLatLnEw as $value2) {
+                    if ($value1['blok_asli'] === $value2['blok']) {
+                        $collectBlok[$key][$key1]['latln'] = $value2['latinnew'];
+                        $collectBlok[$key][$key1]['blok'] = $value2['blok'];
+                        $collectBlok[$key][$key1]['similar_blok'] = $value2['blok'];
+                        $found = true;
+                        break; // Exit the inner loop once a match is found
+                    }
+                }
+
+                // If no exact match is found, check for the most similar block using Levenshtein distance
+                if (!$found) {
+                    $lowestDistance = PHP_INT_MAX;
+                    $mostSimilarBlok = null;
+                    foreach ($blokLatLnEw as $value3) {
+                        $distance = levenshtein($value1['blok_asli'], $value3['blok']);
+                        if ($distance < $lowestDistance) {
+                            $lowestDistance = $distance;
+                            $mostSimilarBlok = $value3;
+                        }
+                    }
+
+                    // If a similar block is found, update the array with its latln
+                    if ($mostSimilarBlok && $lowestDistance < PHP_INT_MAX) {
+                        $collectBlok[$key][$key1]['latln'] = $mostSimilarBlok['latinnew'];
+                        $collectBlok[$key][$key1]['blok'] = $mostSimilarBlok['blok'];
+                        $collectBlok[$key][$key1]['similar_blok'] = $mostSimilarBlok['blok'];
+                    } else {
+                        $collectBlok[$key][$key1]['latln'] = 'kosong';
+                        $collectBlok[$key][$key1]['similar_blok'] = 'kosong';
                     }
                 }
             }
         }
-
-        dd($blokLatLn, $dataSkorResult);
-
-        $compareblok = $blokLatLn;
-
-        // dd($compareblok);
-        // dd($blokLatLn, $blokLatLnEw);
-        $collectBlok = [];
-        // Iterate over the array to find and remove elements that meet the condition
-        foreach ($blokLatLn as $key => $value) {
-            if ($value['blok_asli'] !== '-' && $value['blok'] !== $value['blok_asli']) {
-                unset($blokLatLn[$key]); // Unset the current element
-                unset($value['latln']); // Remove 'latln' from the current element
-                $collectBlok[] = $value; // Add the modified value to the collectBlok array
+        $new_blok = [];
+        foreach ($collectBlok as $key => $value) {
+            foreach ($value as $key1 => $value1) {
+                $new_blok[$value1['similar_blok']][$key1] = $value1;
             }
         }
-        // dd($collectBlok, $blokLatLn);
 
-
-        // Reset array keys
-        // $blokLatLn = array_values($blokLatLn);
-
-        // Iterate over the collectBlok array to update 'latln' values
-        foreach ($collectBlok as $key => $value) {
+        $combinedArray = array_merge($combine_latin_double, $new_blok);
+        // dd($not_match);
+        foreach ($not_match as $key => $value) {
             $found = false;
-            foreach ($blokLatLnEw as $value1) {
-                if ($value['blok_asli'] === $value1['blok']) {
-                    $collectBlok[$key]['latln'] = $value1['latinnew'];
-                    unset($value['blok']); // Remove 'latln' from the current element
-                    $collectBlok[$key]['blok'] = $value1['blok'];
+
+            // First, check for an exact match
+            foreach ($blokLatLnEw as $value2) {
+                if ($value['blok_asli'] === $value2['blok']) {
+                    $not_match[$key]['latln'] = $value2['latinnew'];
+                    $not_match[$key]['blok'] = $value2['blok'];
+                    $not_match[$key]['similar_blok'] = $value2['blok'];
                     $found = true;
                     break; // Exit the inner loop once a match is found
                 }
             }
+
+            // If no exact match is found, check for the most similar block using Levenshtein distance
             if (!$found) {
-                $similarityFound = false;
-                foreach ($blokLatLnEw as $value2) {
-                    if (similar_text($value['blok_asli'], $value2['blok']) >= 3) { // Adjust threshold as needed
-                        $collectBlok[$key]['latln'] = $value2['latinnew'];
-                        unset($value['blok']);
-                        $collectBlok[$key]['blok'] = $value2['blok'];
-                        $collectBlok[$key]['similar_blok'] = $value['blok_asli'] . '-' . $value2['blok'];
-                        $similarityFound = true;
-                        break; // Exit the inner loop once a similar match is found
+                $lowestDistance = PHP_INT_MAX;
+                $mostSimilarBlok = null;
+                foreach ($blokLatLnEw as $value3) {
+                    $distance = levenshtein($value['blok_asli'], $value3['blok']);
+                    if ($distance < $lowestDistance) {
+                        $lowestDistance = $distance;
+                        $mostSimilarBlok = $value3;
                     }
                 }
-                if (!$similarityFound) {
-                    // dd($key);
-                    $collectBlok[$key]['latln'] = 'kosong';
+
+                // If a similar block is found, update the array with its latln
+                if ($mostSimilarBlok && $lowestDistance < PHP_INT_MAX) {
+                    $not_match[$key]['latln'] = $mostSimilarBlok['latinnew'];
+                    $not_match[$key]['blok'] = $mostSimilarBlok['blok'];
+                    $not_match[$key]['similar_blok'] = $mostSimilarBlok['blok'];
+                } else {
+                    $not_match[$key]['latln'] = 'kosong';
+                    $not_match[$key]['similar_blok'] = 'kosong';
                 }
             }
         }
-        // $string1 = 'L37';
-        // $string2 = 'L036';
-        // $similarity = similar_text($string1, $string2);
 
-        // dd($collectBlok);
-        // Combine the arrays
-        $combinedArray = array_merge($blokLatLn, $collectBlok);
-        // dd($combinedArray[0], $combinedArray[66]);
-        $groupedByBlok = [];
+        // dd($not_match);
+        $new_blok_not_match = [];
+        foreach ($not_match as $key => $value) {
+            $new_blok_not_match[$value['similar_blok']][] = $value;
+        }
 
-        foreach ($combinedArray as $key => $item) {
-            if (isset($item['blok'])) {
-                $blok = $item['blok'];
-                if (!isset($groupedByBlok[$blok])) {
-                    $groupedByBlok[$blok] = [];
-                }
-                $groupedByBlok[$blok][] = $key;
+
+        $last_latls = array_merge($combinedArray, $new_blok_not_match);
+        $not_include_key = [];
+        foreach ($blokLatLnEw as $key => $value) {
+            if (!isset($last_latls[$key])) {
+                unset($value['latln']);
+                // dd($value);
+                $not_include_key[$key][] = [
+                    "blok" => $key,
+                    "blok_asli" => $key,
+                    "estate" => '-',
+                    'latln' => $value['latinnew'],
+                    'nilai' => '-',
+                    'afdeling' => '-',
+                    'kategori' => '-',
+                    'similar_blok' => '-',
+                ];
             }
         }
-        // dd($groupedByBlok);
-        // Step 2: Identify and process arrays with the same 'blok' value
-        foreach ($groupedByBlok as $blok => $keys) {
-            if (count($keys) > 1) {
-                foreach ($keys as $key) {
-                    if ($combinedArray[$key]['blok_asli'] === '-') {
-                        unset($combinedArray[$key]);
-                    }
-                }
+        $finalLatln = array_merge($last_latls, $not_include_key);
+
+        foreach ($finalLatln as $key => $value) {
+            foreach ($value as $key1 => $value1) {
+                $finalLatln[$key] = $value1;
             }
         }
-        // dd($compareblok);
-        // dd($combinedArray, $compareblok);
-        $finalresultblok = [];
 
-        foreach ($compareblok as $key => $value) {
-            $isSame = false;
-            foreach ($combinedArray as $key1 => $value1) {
-                if ($value['blok'] === $value1['blok']) {
-                    $finalresultblok['same'][] = $value;
-                    $isSame = true;
+        $fix_no_coordintes = [];
+        foreach ($finalLatln as $key => $value) {
+            if ($value['latln'] === 'no_coordinates') {
+                unset($finalLatln[$key]);
+                $fix_no_coordintes[$key] = $value;
+            }
+        }
+        // dd($finalLatln, $fix_no_coordintes);
+        foreach ($fix_no_coordintes as $key => $value) {
+            $found = false;
+
+            // First, check for an exact match
+            foreach ($blokLatLnEw as $value2) {
+                if ($value['blok_asli'] === $value2['blok']) {
+                    $fix_no_coordintes[$key]['latln'] = $value2['latinnew'];
+                    $fix_no_coordintes[$key]['blok'] = $value2['blok'];
+                    $fix_no_coordintes[$key]['similar_blok'] = $value2['blok'];
+                    $found = true;
                     break; // Exit the inner loop once a match is found
                 }
             }
-            if (!$isSame) {
-                $finalresultblok['notsame'][] = $value;
+
+            // If no exact match is found, check for the most similar block using Levenshtein distance
+            if (!$found) {
+                $lowestDistance = PHP_INT_MAX;
+                $mostSimilarBlok = null;
+                foreach ($blokLatLnEw as $value3) {
+                    $distance = levenshtein($value['blok_asli'], $value3['blok']);
+                    if ($distance < $lowestDistance) {
+                        $lowestDistance = $distance;
+                        $mostSimilarBlok = $value3;
+                    }
+                }
+
+                // If a similar block is found, update the array with its latln
+                if ($mostSimilarBlok && $lowestDistance < PHP_INT_MAX) {
+                    $fix_no_coordintes[$key]['latln'] = $mostSimilarBlok['latinnew'];
+                    $fix_no_coordintes[$key]['blok'] = $mostSimilarBlok['blok'];
+                    $fix_no_coordintes[$key]['similar_blok'] = $mostSimilarBlok['blok'];
+                } else {
+                    $fix_no_coordintes[$key]['latln'] = 'kosong';
+                    $fix_no_coordintes[$key]['similar_blok'] = 'kosong';
+                }
+            }
+        }
+        $new_blok2 = [];
+        foreach ($fix_no_coordintes as $key => $value) {
+            $new_blok2[$value['similar_blok']] = $value;
+        }
+
+        foreach ($finalLatln as $key => $value) {
+            if (isset($new_blok2[$key])) {
+                unset($finalLatln[$key]);
             }
         }
 
+        $finalLatln = array_merge($finalLatln, $new_blok2);
+        foreach ($blokLatLnEw as $key => $value) {
+            if (isset($fix_no_coordintes[$key])) {
+                // unset($fix_no_coordintes[$value]);
+                // dd($value);
+                $fix_no_coordintes[$key] = [
+                    "blok" => $key,
+                    "blok_asli" => $key,
+                    "estate" => '-',
+                    'latln' => $value['latinnew'],
+                    'nilai' => '-',
+                    'afdeling' => '-',
+                    'kategori' => '-',
+                    'similar_blok' => '-',
+                ];
+            }
+        }
 
+        // dd($fix_no_coordintes);
+        // dd($finalLatln, $fix_no_coordintes, $new_blok2);
+        $finalLatln = array_merge($finalLatln, $new_blok2, $fix_no_coordintes);
 
-        $finalLatln = array_merge($finalresultblok['notsame'], $combinedArray);
-
-        // Optionally, reindex the merged array if you want to have sequential keys
-        $finalLatln = array_values($finalLatln);
-        // dd($finalLatln);
-        // dd($groupedByBlok, $combinedArray);
+        // dd($finalLatln, $fix_no_coordintes);
+        // dd($finalLatln, $not_include_key);
 
 
         $dataLegend = array();
