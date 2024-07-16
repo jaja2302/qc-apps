@@ -1504,24 +1504,6 @@
 
 
     <script type="module">
-        function setBackgroundColor(element, score) {
-            if (score >= 95) {
-                element.style.backgroundColor = "#609cd4";
-            } else if (score >= 85) {
-                element.style.backgroundColor = "#08b454";
-            } else if (score >= 75) {
-                element.style.backgroundColor = "#fffc04";
-            } else if (score >= 65) {
-                element.style.backgroundColor = "#ffc404";
-            } else if (score === '-') {
-                element.style.backgroundColor = "white";
-            } else {
-                element.style.backgroundColor = "red";
-            }
-            element.style.color = "black";
-        }
-
-
         const estDataMapSelect = document.querySelector('#estDataMap');
         const regDataMapSelect = document.querySelector('#regDataMap');
         const buttonimg = document.getElementById('downloadimgmap');
@@ -2851,359 +2833,71 @@
                 },
                 success: function(result) {
                     Swal.close();
-                    // console.log(reg);
-                    var parseResult = JSON.parse(result)
-                    var rekapafd = Object.entries(parseResult['tab_afdeling'])
-                    var rekapest = Object.entries(parseResult['tab_estate'])
-                    var rekapwil = Object.entries(parseResult['tab_wil'])
-                    var dataReg = Object.entries(parseResult['dataReg'])
-                    let table1 = rekapafd[0]
-                    let table2 = rekapafd[1]
-                    let table3 = rekapafd[2] ?? []
-                    let table1est = rekapest[0]
-                    let table2est = rekapest[1]
-                    let table3est = rekapest[2] ?? []
-                    let table1wil = rekapwil[0]
-                    let table2wil = rekapwil[1]
-                    let table3wil = rekapwil[2] ?? []
-                    // chart est 
-                    var getnameest = parseResult['getnameest'];
-                    var cakbrd = parseResult['cakbrd'];
-                    var cakbuah = parseResult['cakbuah'];
-                    var brdtrans = parseResult['brdtrans'];
-                    var buahtrans = parseResult['buahtrans'];
-                    var mentahbuah = parseResult['mentahbuah'];
-                    var masakbuah = parseResult['masakbuah'];
-                    var overbuah = parseResult['overbuah'];
-                    var abrbuah = parseResult['abrbuah'];
-                    var emptybuah = parseResult['emptybuah'];
-                    var vcutbuah = parseResult['vcutbuah'];
-                    // chart wil 
-                    var getnamewil = parseResult['getnamewil'];
-                    var cakbrdwil = parseResult['cakbrdwil'];
-                    var cakbuahwil = parseResult['cakbuahwil'];
-                    var brdtranswil = parseResult['brdtranswil'];
-                    var buahtranswil = parseResult['buahtranswil'];
-                    var mentahbuahwil = parseResult['mentahbuahwil'];
-                    var masakbuahwil = parseResult['masakbuahwil'];
-                    var overbuahwil = parseResult['overbuahwil'];
-                    var abrbuahwil = parseResult['abrbuahwil'];
-                    var emptybuahwil = parseResult['emptybuahwil'];
-                    var vcutbuahwil = parseResult['vcutbuahwil'];
-                    // table pertama 
-                    var trekap1 = document.getElementById('tbody1');
-                    Object.keys(table1[1]).forEach(key => {
-                        Object.keys(table1[1][key]).forEach(subKey => {
-                            let item1 = table1[1][key][subKey]['est'];
-                            let item2 = table1[1][key][subKey]['afd'];
-                            let item3 = table1[1][key][subKey]['nama']
-                            let item4 = table1[1][key][subKey]['data'] !== 'kosong' ? table1[1][key][subKey]['total_skor'] : '-';
 
-
-                            // item4 = (item4 < 0) ? 0 : item4;
-                            let item5 = table1[1][key][subKey]['rank'] ?? '-';
-
-                            let bg = table1[1][key][subKey]['bgcolor'];
-
-                            // Create table row and cell for each 'total' value
-                            var tr = document.createElement('tr');
-                            let itemElement1 = document.createElement('td');
-                            let itemElement2 = document.createElement('td');
-                            let itemElement3 = document.createElement('td');
-                            let itemElement4 = document.createElement('td');
-                            let itemElement5 = document.createElement('td');
-
-
-
-                            itemElement1.classList.add("text-center");
-                            itemElement1.innerText = item1;
-                            itemElement2.innerText = item2;
-                            itemElement3.innerText = item3;
-                            itemElement4.innerText = item4;
-                            itemElement5.innerText = item5
-
-                            setBackgroundColor(itemElement4, item4);
-                            tr.style.backgroundColor = bg;
-
-                            tr.appendChild(itemElement1)
-                            tr.appendChild(itemElement2)
-                            tr.appendChild(itemElement3)
-                            tr.appendChild(itemElement4)
-                            tr.appendChild(itemElement5)
-                            trekap1.appendChild(tr);
-                        });
-                    });
-
-                    Object.keys(table1est[1]).forEach(key => {
-                        let item1 = table1est[1][key]['est'];
-                        let item2 = table1est[1][key]['afd'];
-                        let item3 = table1est[1][key]['nama']
-                        let item4 = table1est[1][key]['data'] !== 'kosong' ? table1est[1][key]['total_skor'] : '-';
-
-                        // item4 = (item4 < 0) ? 0 : item4;
-                        let item5 = table1est[1][key]['rank'] ?? '-';
-
-                        let bg = table1est[1][key]['bgcolor'];
-
-                        // Create table row and cell for each 'total' value
-
-                        var tr = document.createElement('tr');
-                        let itemElement1 = document.createElement('td');
-                        let itemElement2 = document.createElement('td');
-                        let itemElement3 = document.createElement('td');
-                        let itemElement4 = document.createElement('td');
-                        let itemElement5 = document.createElement('td');
-
-
-
-                        itemElement1.classList.add("text-center");
-                        itemElement1.innerText = item1;
-                        itemElement2.innerText = item2;
-                        itemElement3.innerText = item3;
-                        itemElement4.innerText = item4;
-                        itemElement5.innerText = item5
-                        let items = [itemElement1, itemElement2, itemElement3, itemElement4, itemElement5];
-
-                        for (let index = 0; index < items.length; index++) {
-                            items[index].style.backgroundColor = '#C7E1AA';
-                            tr.appendChild(items[index]);
-                        }
-
-                        setBackgroundColor(itemElement4, item4);
-                        tr.style.backgroundColor = "#f0f0f0";
-                        tr.appendChild(itemElement1)
-                        tr.appendChild(itemElement2)
-                        tr.appendChild(itemElement3)
-                        tr.appendChild(itemElement4)
-                        tr.appendChild(itemElement5)
-                        trekap1.appendChild(tr);
-                    });
-
-                    getwil1(table1wil)
-
-
-
-
-                    // table kedua 
-                    var trekap2 = document.getElementById('tbody2');
-                    Object.keys(table2[1]).forEach(key => {
-                        Object.keys(table2[1][key]).forEach(subKey => {
-                            let item1 = table2[1][key][subKey]['est'];
-                            let item2 = table2[1][key][subKey]['afd'];
-                            let item3 = table2[1][key][subKey]['nama'] ?? '-'
-                            let item4 = table2[1][key][subKey]['data'] !== 'kosong' ? table2[1][key][subKey]['total_skor'] : '-';
-                            let item5 = table2[1][key][subKey]['rank'] ?? '-';
-
-                            let bg = table2[1][key][subKey]['bgcolor'];
-
-                            // Create table row and cell for each 'total' value
-
-                            var tr = document.createElement('tr');
-                            let itemElement1 = document.createElement('td');
-                            let itemElement2 = document.createElement('td');
-                            let itemElement3 = document.createElement('td');
-                            let itemElement4 = document.createElement('td');
-                            let itemElement5 = document.createElement('td');
-
-
-
-                            itemElement1.classList.add("text-center");
-                            itemElement1.innerText = item1;
-                            itemElement2.innerText = item2;
-                            itemElement3.innerText = item3;
-                            itemElement4.innerText = item4;
-                            itemElement5.innerText = item5
-
-                            setBackgroundColor(itemElement4, item4);
-                            tr.style.backgroundColor = bg;
-
-                            tr.appendChild(itemElement1)
-                            tr.appendChild(itemElement2)
-                            tr.appendChild(itemElement3)
-                            tr.appendChild(itemElement4)
-                            tr.appendChild(itemElement5)
-                            trekap2.appendChild(tr);
-                        });
-                    });
-
-                    Object.keys(table2est[1]).forEach(key => {
-                        let item1 = table2est[1][key]['est'];
-                        let item2 = table2est[1][key]['afd'];
-                        let item3 = table2est[1][key]['nama']
-                        let item4 = table2est[1][key]['data'] !== 'kosong' ? table2est[1][key]['total_skor'] : '-';
-
-                        let item5 = table2est[1][key]['rank'] ?? '-';
-
-                        let bg = table2est[1][key]['bgcolor'];
-
-                        // Create table row and cell for each 'total' value
-
-                        var tr = document.createElement('tr');
-                        let itemElement1 = document.createElement('td');
-                        let itemElement2 = document.createElement('td');
-                        let itemElement3 = document.createElement('td');
-                        let itemElement4 = document.createElement('td');
-                        let itemElement5 = document.createElement('td');
-
-
-
-                        itemElement1.classList.add("text-center");
-                        itemElement1.innerText = item1;
-                        itemElement2.innerText = item2;
-                        itemElement3.innerText = item3;
-                        itemElement4.innerText = item4;
-                        itemElement5.innerText = item5
-
-                        let items = [itemElement1, itemElement2, itemElement3, itemElement4, itemElement5];
-
-                        for (let index = 0; index < items.length; index++) {
-                            items[index].style.backgroundColor = '#C7E1AA';
-                            tr.appendChild(items[index]);
-                        }
-
-
-                        setBackgroundColor(itemElement4, item4);
-                        tr.style.backgroundColor = "#f0f0f0";
-
-                        tr.appendChild(itemElement1)
-                        tr.appendChild(itemElement2)
-                        tr.appendChild(itemElement3)
-                        tr.appendChild(itemElement4)
-                        tr.appendChild(itemElement5)
-                        trekap2.appendChild(tr);
-                    });
-
-                    getwil2(table2wil)
-
-
-
-                    // tableketiga 
-                    if (table3.length > 0) {
-                        // console.log('tidak kosong');
-                        // console.log(table3);
-                        var trekap3 = document.getElementById('tbody3');
-                        Object.keys(table3[1]).forEach(key => {
-                            Object.keys(table3[1][key]).forEach(subKey => {
-                                let item1 = table3[1][key][subKey]['est'];
-                                let item2 = table3[1][key][subKey]['afd'];
-                                let item3 = table3[1][key][subKey]['nama']
-                                let item4 = table3[1][key][subKey]['data'] !== 'kosong' ? table3[1][key][subKey]['total_skor'] : '-';
-
-                                let item5 = table3[1][key][subKey]['rank'] ?? '-';
-
-                                let bg = table3[1][key][subKey]['bgcolor'];
-
-                                // Create table row and cell for each 'total' value
-
-                                var tr = document.createElement('tr');
-                                let itemElement1 = document.createElement('td');
-                                let itemElement2 = document.createElement('td');
-                                let itemElement3 = document.createElement('td');
-                                let itemElement4 = document.createElement('td');
-                                let itemElement5 = document.createElement('td');
-
-                                itemElement1.classList.add("text-center");
-                                itemElement1.innerText = item1;
-                                itemElement2.innerText = item2;
-                                itemElement3.innerText = item3;
-                                itemElement4.innerText = item4;
-                                itemElement5.innerText = item5
-
-                                setBackgroundColor(itemElement4, item4);
-                                tr.style.backgroundColor = bg;
-
-                                tr.appendChild(itemElement1)
-                                tr.appendChild(itemElement2)
-                                tr.appendChild(itemElement3)
-                                tr.appendChild(itemElement4)
-                                tr.appendChild(itemElement5)
-                                trekap3.appendChild(tr);
-                            });
-                        });
-
-                        Object.keys(table3est[1]).forEach(key => {
-                            let item1 = table3est[1][key]['est'];
-                            let item2 = table3est[1][key]['afd'];
-                            let item3 = table3est[1][key]['nama']
-                            let item4 = table3est[1][key]['data'] !== 'kosong' ? table3est[1][key]['total_skor'] : '-';
-
-                            let item5 = table3est[1][key]['rank'] ?? '-';
-
-                            let bg = table3est[1][key]['bgcolor'];
-
-                            // Create table row and cell for each 'total' value
-
-                            var tr = document.createElement('tr');
-                            let itemElement1 = document.createElement('td');
-                            let itemElement2 = document.createElement('td');
-                            let itemElement3 = document.createElement('td');
-                            let itemElement4 = document.createElement('td');
-                            let itemElement5 = document.createElement('td');
-
-
-
-                            itemElement1.classList.add("text-center");
-                            itemElement1.innerText = item1;
-                            itemElement2.innerText = item2;
-                            itemElement3.innerText = item3;
-                            itemElement4.innerText = item4;
-                            itemElement5.innerText = item5
-                            let items = [itemElement1, itemElement2, itemElement3, itemElement4, itemElement5];
-
-                            for (let index = 0; index < items.length; index++) {
-                                items[index].style.backgroundColor = '#C7E1AA';
-                                tr.appendChild(items[index]);
-                            }
-
-                            setBackgroundColor(itemElement4, item4);
-                            tr.style.backgroundColor = "#f0f0f0";
-
-                            tr.appendChild(itemElement1)
-                            tr.appendChild(itemElement2)
-                            tr.appendChild(itemElement3)
-                            tr.appendChild(itemElement4)
-                            tr.appendChild(itemElement5)
-                            trekap3.appendChild(tr);
-                        });
-
-                        getwil3(table3wil)
-
-
-                    } else {
-                        // console.log('kosong');
+                    var rekapafd = result['rekap_per_afdeling']
+                    var rekap_per_estate = result['rekap_per_estate']
+                    var rekap_per_wil = result['rekap_per_wil']
+                    var rekap_per_reg = result['rekap_per_reg']
+                    var datachart = result['datachart']
+
+                    // untuk perbadeling 
+                    let table1 = rekapafd[1] ?? rekapafd[4] ?? rekapafd[7] ?? rekapafd[10]
+                    let table2 = rekapafd[2] ?? rekapafd[5] ?? rekapafd[8] ?? rekapafd[11]
+                    let table3 = rekapafd[3] ?? rekapafd[6] ?? []
+                    let tbody1 = document.getElementById('tbody1');
+                    let tbody2 = document.getElementById('tbody2');
+                    let tbody3 = document.getElementById('tbody3');
+                    populateTableWithRanks(table1, tbody1);
+                    populateTableWithRanks(table2, tbody2);
+                    populateTableWithRanks(table3, tbody3);
+                    //untuk perestate
+                    let table1_est = rekap_per_estate[1] ?? rekap_per_estate[4] ?? rekap_per_estate[7] ?? rekap_per_estate[10]
+                    let table2_est = rekap_per_estate[2] ?? rekap_per_estate[5] ?? rekap_per_estate[8] ?? rekap_per_estate[11]
+                    let table3_est = rekap_per_estate[3] ?? rekap_per_estate[6] ?? []
+                    populateTableWithRanks(table1_est, tbody1);
+                    populateTableWithRanks(table2_est, tbody2);
+                    populateTableWithRanks(table3_est, tbody3);
+                    // untuk perwill 
+                    let table1_wil = rekap_per_wil[1] ?? rekap_per_wil[4] ?? rekap_per_wil[7] ?? rekap_per_wil[10]
+                    let table2_wil = rekap_per_wil[2] ?? rekap_per_wil[5] ?? rekap_per_wil[8] ?? rekap_per_wil[11]
+                    let table3_wil = rekap_per_wil[3] ?? rekap_per_wil[6] ?? []
+                    let theadreg = document.getElementById('theadreg');
+                    // console.log(table1_wil);
+                    TableForWilReg(table1_wil, tbody1);
+                    TableForWilReg(table2_wil, tbody2);
+                    TableForWilReg(table3_wil, tbody3);
+                    TableForWilReg(rekap_per_reg, theadreg);
+                    // console.log(datachart);
+                    let list_estate = [];
+                    let cakbrd = [];
+                    let cakbuah = [];
+                    let mentahbuah = [];
+                    let masakbuah = [];
+                    let overbuah = [];
+                    let abrbuah = [];
+                    let emptybuah = [];
+                    let vcutbuah = [];
+                    let brdtrans = [];
+                    let buahtrans = [];
+                    let keys = Object.keys(datachart);
+
+                    for (let index = 0; index < keys.length; index++) {
+                        let key = keys[index];
+                        list_estate.push(key);
+                        cakbrd.push(datachart[key].brd_jjgcak);
+                        cakbuah.push(datachart[key].buah_jjgcak);
+                        mentahbuah.push(datachart[key].total_perMentahbh);
+                        masakbuah.push(datachart[key].total_perMasakbh);
+                        overbuah.push(datachart[key].total_perOverbh);
+                        abrbuah.push(datachart[key].perAbnormalbh);
+                        emptybuah.push(datachart[key].total_perKosongjjgbh);
+                        vcutbuah.push(datachart[key].perVcutbh);
+                        brdtrans.push(datachart[key].total_brdperTPHtrans);
+                        buahtrans.push(datachart[key].total_buahPerTPHtrans);
                     }
-                    // console.log(dataReg);
 
-                    var theadreg = document.getElementById('theadreg');
-                    let item1 = dataReg[2][1]
-                    let item2 = 'RH'
-                    let item3 = dataReg[1][1]
-                    let item4 = dataReg[21][1] + dataReg[33][1] + dataReg[60][1]
-
-
-                    var tr = document.createElement('tr');
-                    let itemElement1 = document.createElement('td');
-                    let itemElement2 = document.createElement('td');
-                    let itemElement3 = document.createElement('td');
-                    let itemElement4 = document.createElement('td');
-
-
-
-                    itemElement1.classList.add("text-center");
-                    itemElement1.innerText = item1;
-                    itemElement2.innerText = item2;
-                    itemElement3.innerText = item3;
-                    itemElement4.innerText = item4;
-
-                    // itemElement3.style.color === "#609cd4"
-                    setBackgroundColor(itemElement4, item4);
-                    tr.style.backgroundColor = "#d0e4b4";
-                    tr.appendChild(itemElement1)
-                    tr.appendChild(itemElement2)
-                    tr.appendChild(itemElement3)
-                    tr.appendChild(itemElement4)
-
-                    theadreg.appendChild(tr);
+                    // console.log(list_estate);
+                    // chart 
                     chartGrain.updateSeries([{
                         name: 'Btr / jjg Panen',
                         data: cakbrd
@@ -3211,7 +2905,7 @@
 
                     chartGrain.updateOptions({
                         xaxis: {
-                            categories: getnameest
+                            categories: list_estate
                         }
                     });
 
@@ -3222,7 +2916,7 @@
 
                     chartFruit.updateOptions({
                         xaxis: {
-                            categories: getnameest
+                            categories: list_estate
                         }
                     });
 
@@ -3233,7 +2927,7 @@
 
                     mtb_mentah.updateOptions({
                         xaxis: {
-                            categories: getnameest
+                            categories: list_estate
                         }
                     });
 
@@ -3244,7 +2938,7 @@
 
                     mtb_masak.updateOptions({
                         xaxis: {
-                            categories: getnameest
+                            categories: list_estate
                         }
                     });
 
@@ -3255,7 +2949,7 @@
 
                     mtb_over.updateOptions({
                         xaxis: {
-                            categories: getnameest
+                            categories: list_estate
                         }
                     });
 
@@ -3266,7 +2960,7 @@
 
                     mtb_abnr.updateOptions({
                         xaxis: {
-                            categories: getnameest
+                            categories: list_estate
                         }
                     });
 
@@ -3277,7 +2971,7 @@
 
                     mtb_kosong.updateOptions({
                         xaxis: {
-                            categories: getnameest
+                            categories: list_estate
                         }
                     });
 
@@ -3288,7 +2982,7 @@
 
                     mtb_vcuts.updateOptions({
                         xaxis: {
-                            categories: getnameest
+                            categories: list_estate
                         }
                     });
 
@@ -3299,7 +2993,7 @@
 
                     transprot_brd.updateOptions({
                         xaxis: {
-                            categories: getnameest
+                            categories: list_estate
                         }
                     });
 
@@ -3310,23 +3004,40 @@
 
                     transport_buah.updateOptions({
                         xaxis: {
-                            categories: getnameest
+                            categories: list_estate
                         }
                     });
 
+                    // chart per will 
+                    let list_wil = [];
+                    let cakbrdwil = [];
+                    let cakbuahwil = [];
+                    let mentahbuahwil = [];
+                    let masakbuahwil = [];
+                    let overbuahwil = [];
+                    let abrbuahwil = [];
+                    let emptybuahwil = [];
+                    let vcutbuahwil = [];
+                    let brdtranswil = [];
+                    let buahtranswil = [];
+                    let keyss = Object.keys(rekap_per_wil);
+                    // console.log(rekap_per_wil);
+                    for (let index = 0; index < keyss.length; index++) {
+                        let key = keyss[index];
+                        list_wil.push(key);
+                        cakbrdwil.push(rekap_per_wil[key].brd_jjgcak);
+                        cakbuahwil.push(rekap_per_wil[key].buah_jjgcak);
+                        mentahbuahwil.push(rekap_per_wil[key].total_perMentahbh);
+                        masakbuahwil.push(rekap_per_wil[key].total_perMasakbh);
+                        overbuahwil.push(rekap_per_wil[key].total_perOverbh);
+                        abrbuahwil.push(rekap_per_wil[key].perAbnormalbh);
+                        emptybuahwil.push(rekap_per_wil[key].total_perKosongjjgbh);
+                        vcutbuahwil.push(rekap_per_wil[key].perVcutbh);
+                        brdtranswil.push(rekap_per_wil[key].total_brdperTPHtrans);
+                        buahtranswil.push(rekap_per_wil[key].total_buahPerTPHtrans);
+                    }
 
-                    // chart wil 
-                    // var getnamewil = parseResult['getnamewil'];
-                    // var cakbrdwil = parseResult['cakbrdwil'];
-                    // var cakbuahwil = parseResult['cakbuahwil'];
-                    // var brdtranswil = parseResult['brdtranswil'];
-                    // var buahtranswil = parseResult['buahtranswil'];
-                    // var mentahbuahwil = parseResult['mentahbuahwil'];
-                    // var masakbuahwil = parseResult['masakbuahwil'];
-                    // var overbuahwil = parseResult['overbuahwil'];
-                    // var abrbuahwil = parseResult['abrbuahwil'];
-                    // var emptybuahwil = parseResult['emptybuahwil'];
-                    // var vcutbuahwil = parseResult['vcutbuahwil'];
+
                     chartGrainWil.updateSeries([{
                         name: 'Btr / jjg Panen',
                         data: cakbrdwil
@@ -3334,7 +3045,7 @@
 
                     chartGrainWil.updateOptions({
                         xaxis: {
-                            categories: getnamewil
+                            categories: list_wil
                         }
                     });
 
@@ -3345,7 +3056,7 @@
 
                     chartFruitWil.updateOptions({
                         xaxis: {
-                            categories: getnamewil
+                            categories: list_wil
                         }
                     });
 
@@ -3356,7 +3067,7 @@
 
                     mtb_mentahwil.updateOptions({
                         xaxis: {
-                            categories: getnamewil
+                            categories: list_wil
                         }
                     });
 
@@ -3367,7 +3078,7 @@
 
                     mtb_masakwil.updateOptions({
                         xaxis: {
-                            categories: getnamewil
+                            categories: list_wil
                         }
                     });
 
@@ -3378,7 +3089,7 @@
 
                     mtb_overwil.updateOptions({
                         xaxis: {
-                            categories: getnamewil
+                            categories: list_wil
                         }
                     });
 
@@ -3389,7 +3100,7 @@
 
                     mtb_abnrwil.updateOptions({
                         xaxis: {
-                            categories: getnamewil
+                            categories: list_wil
                         }
                     });
 
@@ -3400,7 +3111,7 @@
 
                     mtb_kosongwil.updateOptions({
                         xaxis: {
-                            categories: getnamewil
+                            categories: list_wil
                         }
                     });
 
@@ -3411,7 +3122,7 @@
 
                     mtb_vcutswil.updateOptions({
                         xaxis: {
-                            categories: getnamewil
+                            categories: list_wil
                         }
                     });
 
@@ -3422,7 +3133,7 @@
 
                     transportwil_brd.updateOptions({
                         xaxis: {
-                            categories: getnamewil
+                            categories: list_wil
                         }
                     });
 
@@ -3433,121 +3144,15 @@
 
                     transportwil_buah.updateOptions({
                         xaxis: {
-                            categories: getnamewil
+                            categories: list_wil
                         }
                     });
+
 
                 }
             });
         }
 
-        function getwil1(table1wil) {
-            var trekap1 = document.getElementById('tbody1');
-            let item1 = table1wil[1]['est'];
-            let item2 = table1wil[1]['afd'];
-            let item3 = table1wil[1]['nama']
-            let item4 = table1wil[1]['total_skor'];
-            let item5 = table1wil[1]['rank'] ?? '-';
-            let bg = table1wil[1]['bgcolor'];
-
-            var tr = document.createElement('tr');
-            let itemElement1 = document.createElement('td');
-            let itemElement2 = document.createElement('td');
-            let itemElement3 = document.createElement('td');
-            let itemElement4 = document.createElement('td');
-            let itemElement5 = document.createElement('td');
-
-
-
-            itemElement1.classList.add("text-center");
-            itemElement1.innerText = item1;
-            itemElement2.innerText = item2;
-            itemElement3.innerText = item3;
-            itemElement4.innerText = item4;
-            itemElement5.innerText = item5
-            // itemElement3.style.color === "#609cd4"
-            setBackgroundColor(itemElement4, item4);
-            tr.style.backgroundColor = "#FCF086";
-            tr.appendChild(itemElement1)
-            tr.appendChild(itemElement2)
-            tr.appendChild(itemElement3)
-            tr.appendChild(itemElement4)
-            tr.appendChild(itemElement5)
-            trekap1.appendChild(tr);
-
-        }
-
-        function getwil2(table1wil) {
-            var trekap1 = document.getElementById('tbody2');
-            let item1 = table1wil[1]['est'];
-            let item2 = table1wil[1]['afd'];
-            let item3 = table1wil[1]['nama']
-            let item4 = table1wil[1]['total_skor'];
-            let item5 = table1wil[1]['rank'] ?? '-';
-            let bg = table1wil[1]['bgcolor'];
-
-            var tr = document.createElement('tr');
-            let itemElement1 = document.createElement('td');
-            let itemElement2 = document.createElement('td');
-            let itemElement3 = document.createElement('td');
-            let itemElement4 = document.createElement('td');
-            let itemElement5 = document.createElement('td');
-
-
-
-            itemElement1.classList.add("text-center");
-            itemElement1.innerText = item1;
-            itemElement2.innerText = item2;
-            itemElement3.innerText = item3;
-            itemElement4.innerText = item4;
-            itemElement5.innerText = item5
-            // itemElement3.style.color === "#609cd4"
-            setBackgroundColor(itemElement4, item4);
-            tr.style.backgroundColor = "#FCF086";
-            tr.appendChild(itemElement1)
-            tr.appendChild(itemElement2)
-            tr.appendChild(itemElement3)
-            tr.appendChild(itemElement4)
-            tr.appendChild(itemElement5)
-            trekap1.appendChild(tr);
-
-        }
-
-        function getwil3(table1wil) {
-            var trekap1 = document.getElementById('tbody3');
-            let item1 = table1wil[1]['est'];
-            let item2 = table1wil[1]['afd'];
-            let item3 = table1wil[1]['nama']
-            let item4 = table1wil[1]['total_skor'];
-            let item5 = table1wil[1]['rank'] ?? '-';
-            let bg = table1wil[1]['bgcolor'];
-
-            var tr = document.createElement('tr');
-            let itemElement1 = document.createElement('td');
-            let itemElement2 = document.createElement('td');
-            let itemElement3 = document.createElement('td');
-            let itemElement4 = document.createElement('td');
-            let itemElement5 = document.createElement('td');
-
-
-
-            itemElement1.classList.add("text-center");
-            itemElement1.innerText = item1;
-            itemElement2.innerText = item2;
-            itemElement3.innerText = item3;
-            itemElement4.innerText = item4;
-            itemElement5.innerText = item5
-            // itemElement3.style.color === "#609cd4"
-            setBackgroundColor(itemElement4, item4);
-            tr.style.backgroundColor = "#FCF086";
-            tr.appendChild(itemElement1)
-            tr.appendChild(itemElement2)
-            tr.appendChild(itemElement3)
-            tr.appendChild(itemElement4)
-            tr.appendChild(itemElement5)
-            trekap1.appendChild(tr);
-
-        }
 
         document.getElementById('showTahung').onclick = function() {
             // Show loading screen

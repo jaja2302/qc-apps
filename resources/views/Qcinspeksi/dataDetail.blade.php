@@ -1714,7 +1714,7 @@
 
                     var transIconUrl = '{{ asset("img/placeholder.png") }}';
                     var transicon = L.icon({
-                        iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png",
+                        iconUrl: "{{asset('img/marker/marker-icon-2x-gold.png')}}",
                         shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
                         iconSize: [14, 21],
                         iconAnchor: [7, 22],
@@ -1725,7 +1725,7 @@
 
                     var transTmuanUrl = '{{ asset("img/placeholder2.png") }}';
                     var transtemuan = L.icon({
-                        iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png",
+                        iconUrl: "{{asset('img/marker/marker-icon-2x-yellow.png')}}",
                         shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
                         iconSize: [14, 21],
                         iconAnchor: [7, 22],
@@ -1734,7 +1734,7 @@
                     });
                     var transFollowUrl = '{{ asset("img/placeholder3.png") }}';
                     var transFollowup = L.icon({
-                        iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png",
+                        iconUrl: "{{asset('img/marker/marker-icon-2x-orange.png')}}",
                         shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
                         iconSize: [14, 21],
                         iconAnchor: [7, 22],
@@ -1821,7 +1821,7 @@
 
                     var myIconUrl = '{{ asset("img/pin.png") }}';
                     var myIcon = L.icon({
-                        iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png",
+                        iconUrl: "{{asset('img/marker/marker-icon-2x-grey.png')}}",
                         shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
                         iconSize: [14, 21],
                         iconAnchor: [7, 22],
@@ -1831,7 +1831,7 @@
                     });
                     var myIconUrl2 = '{{ asset("img/pin2.png") }}';
                     var myIcon2 = L.icon({
-                        iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png",
+                        iconUrl: "{{asset('img/marker/marker-icon-2x-black.png')}}",
                         shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
                         iconSize: [14, 21],
                         iconAnchor: [7, 22],
@@ -2129,27 +2129,34 @@
                         shadowSize: [30, 80],
                         shadowAnchor: [30, 80],
                     });
-
+                    var markerIconUrl1 = "{{ asset('img/marker/marker-icon-2x-blue.png') }}";
+                    var markerIconUrl2 = "{{ asset('img/marker/marker-icon-2x-red.png') }}";
+                    var markerIconUrl3 = "{{ asset('img/marker/marker-icon-2x-green.png') }}";
+                    var markerIconUrl4 = "{{ asset('img/marker/marker-icon-2x-gold.png') }}";
+                    var markerIconUrl5 = "{{ asset('img/marker/marker-icon-2x-yellow.png') }}";
+                    var markerIconUrl6 = "{{ asset('img/marker/marker-icon-2x-orange.png') }}";
+                    var markerIconUrl7 = "{{ asset('img/marker/marker-icon-2x-black.png') }}";
+                    var markerIconUrl8 = "{{ asset('img/marker/marker-icon-2x-grey.png') }}";
 
                     legend.onAdd = function(map) {
 
                         var div = L.DomUtil.create("div", "legend");
                         div.innerHTML += "<h4>Keterangan :</h4>";
-                        div.innerHTML += '<div>  <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png" style="width:12pt;height:13pt" >  Mutu Ancak';
+                        div.innerHTML += '<div><img src="' + markerIconUrl1 + '" style="width:12pt;height:13pt"> Mutu Ancak</div>';
                         div.innerHTML += '</div>';
-                        div.innerHTML += '<div>  <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png" style="width:12pt;height:13pt" >  MA Temuan';
+                        div.innerHTML += '<div>  <img src="' + markerIconUrl2 + '" style="width:12pt;height:13pt" >  MA Temuan';
                         div.innerHTML += '</div>';
-                        div.innerHTML += '<div>  <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png" style="width:12pt;height:13pt" >  MA Follow Up';
+                        div.innerHTML += '<div>  <img src="' + markerIconUrl3 + '" style="width:12pt;height:13pt" >  MA Follow Up';
                         div.innerHTML += '</div>';
-                        div.innerHTML += '<div>  <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png" style="width:12pt;height:13pt" >  Mutu Transport';
+                        div.innerHTML += '<div>  <img src="' + markerIconUrl4 + '" style="width:12pt;height:13pt" >  Mutu Transport';
                         div.innerHTML += '</div>';
-                        div.innerHTML += '<div>  <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png" style="width:12pt;height:13pt" >  MT Temuan';
+                        div.innerHTML += '<div> <img src="' + markerIconUrl5 + '" style="width:12pt;height:13pt" >  MT Temuan';
                         div.innerHTML += '</div>';
-                        div.innerHTML += '<div>  <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png" style="width:12pt;height:13pt" >  MT Follow Up';
+                        div.innerHTML += '<div>  <img src="' + markerIconUrl6 + '" style="width:12pt;height:13pt" >  MT Follow Up';
                         div.innerHTML += '</div>';
-                        div.innerHTML += '<div>  <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png" style="width:12pt;height:13pt" >  Mutu Buah';
+                        div.innerHTML += '<div>  <img src="' + markerIconUrl7 + '" style="width:12pt;height:13pt" >  Mutu Buah';
                         div.innerHTML += '</div>';
-                        div.innerHTML += '<div>  <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png" style="width:12pt;height:13pt" >  MB Temuan';
+                        div.innerHTML += '<div>  <img src="' + markerIconUrl8 + '" style="width:12pt;height:13pt" >  MB Temuan';
                         div.innerHTML += '</div>';
                         div.innerHTML += '<div><i style="background: #88b87a;width:15px;height:15px;margin-top:5px;border:1px solid green"></i> Blok yang dikunjungi';
                         div.innerHTML += '</div>';

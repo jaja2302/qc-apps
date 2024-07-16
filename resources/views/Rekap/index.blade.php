@@ -741,23 +741,6 @@
             getdataweek();
         }
 
-        function setBackgroundColor(element, score) {
-            if (score >= 95) {
-                element.style.backgroundColor = "#609cd4";
-            } else if (score >= 85) {
-                element.style.backgroundColor = "#08b454";
-            } else if (score >= 75) {
-                element.style.backgroundColor = "#fffc04";
-            } else if (score >= 65) {
-                element.style.backgroundColor = "#ffc404";
-            } else if (score === '-') {
-                element.style.backgroundColor = "white";
-            } else {
-                element.style.backgroundColor = "red";
-            }
-            element.style.color = "black";
-        }
-
 
         function getdataweek() {
             var reg = document.getElementById('regrekapweek').value;

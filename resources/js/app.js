@@ -71,3 +71,142 @@ window.captureTableScreenshot = (tableId, fileName) => {
         }
     });
 };
+// Define calculateRanks function
+function calculateRanks(data) {
+    let totals = [];
+
+    // Collect all totals
+    Object.keys(data).forEach((estateName) => {
+        let estate = data[estateName];
+
+        Object.keys(estate).forEach((afdelingKey) => {
+            let afdeling = estate[afdelingKey];
+
+            let total = afdeling.TOTAL_SKORbh + afdeling.totalSkortrans + afdeling.skor_akhircak;
+            totals.push({
+                estateName,
+                afdelingKey,
+                total
+            });
+        });
+    });
+
+    // Sort the totals in descending order
+    totals.sort((a, b) => b.total - a.total);
+
+    // Create a map for ranking based on the sorted totals
+    let rankMap = new Map();
+    totals.forEach((item, index) => {
+        rankMap.set(`${item.estateName}-${item.afdelingKey}`, index + 1);
+    });
+
+    return rankMap;
+}
+
+// Define populateTableWithRanks function and attach it to the window object
+function populateTableWithRanks(tableData, tableBody) {
+    let rankMap = calculateRanks(tableData);
+
+    Object.keys(tableData).forEach((estateName) => {
+        let estate = tableData[estateName];
+
+        Object.keys(estate).forEach((afdelingKey) => {
+            let afdeling = estate[afdelingKey];
+
+            let total = afdeling.TOTAL_SKORbh + afdeling.totalSkortrans + afdeling.skor_akhircak;
+            let rank = rankMap.get(`${estateName}-${afdelingKey}`);
+
+            // Create table row and cells
+            let tr = document.createElement('tr');
+            let itemElement1 = document.createElement('td');
+            let itemElement2 = document.createElement('td');
+            let itemElement3 = document.createElement('td');
+            let itemElement4 = document.createElement('td');
+            let itemElement5 = document.createElement('td');
+
+            itemElement1.classList.add("text-center");
+            itemElement1.innerText = estateName;
+            itemElement2.innerText = afdelingKey;
+            itemElement3.innerText = afdeling.asisten
+            itemElement4.innerText = total;
+            itemElement5.innerText = rank;
+
+  
+            if (afdelingKey === 'estate') {
+               
+                itemElement1.style.backgroundColor = "#f0f0f0";
+                itemElement2.style.backgroundColor = "#f0f0f0";
+                itemElement3.style.backgroundColor = "#f0f0f0";
+                setBackgroundColor(itemElement4, total);
+                itemElement5.style.backgroundColor = "#f0f0f0";
+            }else{
+                setBackgroundColor(itemElement4, total);
+            }
+           
+            tr.appendChild(itemElement1);
+            tr.appendChild(itemElement2);
+            tr.appendChild(itemElement3);
+            tr.appendChild(itemElement4);
+            tr.appendChild(itemElement5);
+
+            tableBody.appendChild(tr); // Append the row to the table body
+        });
+    });
+}
+function setBackgroundColor(element, score) {
+    if (score >= 95) {
+        element.style.backgroundColor = "#609cd4";
+    } else if (score >= 85) {
+        element.style.backgroundColor = "#08b454";
+    } else if (score >= 75) {
+        element.style.backgroundColor = "#fffc04";
+    } else if (score >= 65) {
+        element.style.backgroundColor = "#ffc404";
+    } else if (score === '-') {
+        element.style.backgroundColor = "white";
+    } else {
+        element.style.backgroundColor = "red";
+    }
+    element.style.color = "black";
+}
+
+function MakeTableforwil(data, tableBody) {
+    let item1 = data['afd'];
+    let item2 = data['est'];
+    let item3 = data['gm'] ?? '-';
+    let item4 = data['TOTAL_SKORbh'] + data['totalSkortrans'] + data['skor_akhircak'];
+    let item5 = '-';
+
+    var tr = document.createElement('tr');
+    let itemElement1 = document.createElement('td');
+    let itemElement2 = document.createElement('td');
+    let itemElement3 = document.createElement('td');
+    let itemElement4 = document.createElement('td');
+    let itemElement5 = document.createElement('td');
+
+    itemElement1.classList.add("text-center");
+    itemElement1.innerText = item1;
+    itemElement2.innerText = item2;
+    itemElement3.innerText = item3;
+    itemElement4.innerText = item4;
+    itemElement5.innerText = item5;
+
+    setBackgroundColor(itemElement4, item4);
+    tr.style.backgroundColor = "#FCF086";
+    tr.appendChild(itemElement1);
+    tr.appendChild(itemElement2);
+    tr.appendChild(itemElement3);
+    tr.appendChild(itemElement4);
+    tr.appendChild(itemElement5);
+
+    tableBody.appendChild(tr);
+}
+
+
+// Example usage:
+
+
+// Attach the function to the window object to make it globally accessible
+window.populateTableWithRanks = populateTableWithRanks;
+window.setBackgroundColor = setBackgroundColor;
+window.TableForWilReg = MakeTableforwil;

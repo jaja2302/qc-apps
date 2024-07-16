@@ -13,6 +13,8 @@ require_once(app_path('helpers.php'));
 class RekapController extends Controller
 {
     //
+    public  $minutes = 60;
+
 
     public function index()
     {
@@ -5029,20 +5031,32 @@ class RekapController extends Controller
 
         // dd($datanilaiwil, $newfinalwil);
 
+        $cacherekap_rekap_rekapafd_cache = 'rekap_rekapafd_cache' . $regional . '_' . $bulan;
+        $cacherekap_rekap_rekapmua_cache = 'rekap_rekapmua_cache' . $regional . '_' . $bulan;
+        $cacherekap_rekap_rekapwil_cache = 'rekap_rekapwil_cache' . $regional . '_' . $bulan;
 
-        // dd($calwilmtb,$calwil,$RekapWIlTabel,$finalwil);
-        $arr = array();
-        $arr['rekapafd'] = $rekapafd;
-        $arr['rekapmua'] = $rekapmua;
-        $arr['rekapwil'] = $finalwil;
+        // Fetch and store other data in cache
+        $rekap_afd_cache = Cache::remember($cacherekap_rekap_rekapafd_cache, $this->minutes, function () use ($rekapafd) {
+            return $rekapafd;
+        });
+        $rekap_rekapmua_cache = Cache::remember($cacherekap_rekap_rekapmua_cache, $this->minutes, function () use ($rekapmua) {
+            return $rekapmua;
+        });
+        $rekap_rekapwil_cache = Cache::remember($cacherekap_rekap_rekapwil_cache, $this->minutes, function () use ($finalwil) {
+            return $finalwil;
+        });
 
+        $arr = [];
+        $arr['rekapafd'] = $rekap_afd_cache;
+        $arr['rekapmua'] = $rekap_rekapmua_cache;
+        $arr['rekapwil'] = $rekap_rekapwil_cache;
+
+        // Output JSON response
         echo json_encode($arr);
         exit();
 
         // dd($rekap, $sidaktph, $mutu_buah, $qcinspeksi);
     }
-
-    public  $minutes = 60;
 
 
     public function getdatayear(Request $request)

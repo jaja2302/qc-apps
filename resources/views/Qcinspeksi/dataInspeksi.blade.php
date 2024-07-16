@@ -74,14 +74,14 @@
         <td style="background-color: {{ $color }}">{{ $item1['check_databh'] === 'ada' ||  $item1['check_datacak'] === 'ada'   ||  $item1['check_datatrans'] === 'ada'? $item1['kcak']  : '-'}}</td>
         <td style="background-color: {{ $color }}">{{ $item1['check_databh'] === 'ada' ||  $item1['check_datacak'] === 'ada'   ||  $item1['check_datatrans'] === 'ada'? $item1['tglcak']  : '-'}}</td>
         <td style="background-color: {{ $color }}">{{ $item1['check_databh'] === 'ada' ||  $item1['check_datacak'] === 'ada'   ||  $item1['check_datatrans'] === 'ada'? $item1['total_brdcak']  : '-'}}</td>
-        <td style="background-color: {{ $color }}">{{ $item1['check_databh'] === 'ada' ||  $item1['check_datacak'] === 'ada'   ||  $item1['check_datatrans'] === 'ada'? round($item1['brd/jjgcak'],1)  : '-'}}</td>
+        <td style="background-color: {{ $color }}">{{ $item1['check_databh'] === 'ada' ||  $item1['check_datacak'] === 'ada'   ||  $item1['check_datatrans'] === 'ada'? round($item1['brd_jjgcak'],1)  : '-'}}</td>
         <td style="background-color: {{ $color }}">{{ $item1['check_databh'] === 'ada' ||  $item1['check_datacak'] === 'ada'   ||  $item1['check_datatrans'] === 'ada'? $item1['skor_brdcak']  : '-'}}</td>
         <td style="background-color: {{ $color }}">{{ $item1['check_databh'] === 'ada' ||  $item1['check_datacak'] === 'ada'   ||  $item1['check_datatrans'] === 'ada'? $item1['bhts_scak']  : '-'}}</td>
         <td style="background-color: {{ $color }}">{{ $item1['check_databh'] === 'ada' ||  $item1['check_datacak'] === 'ada'   ||  $item1['check_datatrans'] === 'ada'? $item1['bhtm1cak']  : '-'}}</td>
         <td style="background-color: {{ $color }}">{{ $item1['check_databh'] === 'ada' ||  $item1['check_datacak'] === 'ada'   ||  $item1['check_datatrans'] === 'ada'? $item1['bhtm2cak']  : '-'}}</td>
         <td style="background-color: {{ $color }}">{{ $item1['check_databh'] === 'ada' ||  $item1['check_datacak'] === 'ada'   ||  $item1['check_datatrans'] === 'ada'? $item1['bhtm3cak']  : '-'}}</td>
         <td style="background-color: {{ $color }}">{{ $item1['check_databh'] === 'ada' ||  $item1['check_datacak'] === 'ada'   ||  $item1['check_datatrans'] === 'ada'? $item1['total_buahcak']  : '-'}}</td>
-        <td style="background-color: {{ $color }}">{{ $item1['check_databh'] === 'ada' ||  $item1['check_datacak'] === 'ada'   ||  $item1['check_datatrans'] === 'ada'? round($item1['buah/jjgcak'],1)  : '-'}}</td>
+        <td style="background-color: {{ $color }}">{{ $item1['check_databh'] === 'ada' ||  $item1['check_datacak'] === 'ada'   ||  $item1['check_datatrans'] === 'ada'? round($item1['buah_jjgcak'],1)  : '-'}}</td>
         <td style="background-color: {{ $color }}">{{ $item1['check_databh'] === 'ada' ||  $item1['check_datacak'] === 'ada'   ||  $item1['check_datatrans'] === 'ada'? $item1['skor_bhcak']  : '-'}}</td>
         <td style="background-color: {{ $color }}">{{ $item1['check_databh'] === 'ada' ||  $item1['check_datacak'] === 'ada'   ||  $item1['check_datatrans'] === 'ada'? $item1['palepah_pokokcak']  : '-'}}</td>
         <td style="background-color: {{ $color }}">{{ $item1['check_databh'] === 'ada' ||  $item1['check_datacak'] === 'ada'   ||  $item1['check_datatrans'] === 'ada'? round($item1['palepah_percak'],1)  : '-'}}</td>
@@ -198,14 +198,14 @@
         <td style="background-color: {{ $colorreg }}">{{ $datareg['check_databh'] === 'ada' ||  $datareg['check_datacak'] === 'ada'   ||  $datareg['check_datatrans'] === 'ada'? $datareg['kcak']  : '-'}}</td>
         <td style="background-color: {{ $colorreg }}">{{ $datareg['check_databh'] === 'ada' ||  $datareg['check_datacak'] === 'ada'   ||  $datareg['check_datatrans'] === 'ada'? $datareg['tglcak']  : '-'}}</td>
         <td style="background-color: {{ $colorreg }}">{{ $datareg['check_databh'] === 'ada' ||  $datareg['check_datacak'] === 'ada'   ||  $datareg['check_datatrans'] === 'ada'? $datareg['total_brdcak']  : '-'}}</td>
-        <td style="background-color: {{ $colorreg }}">{{ $datareg['check_databh'] === 'ada' ||  $datareg['check_datacak'] === 'ada'   ||  $datareg['check_datatrans'] === 'ada'? $datareg['brd/jjgcak']  : '-'}}</td>
+        <td style="background-color: {{ $colorreg }}">{{ $datareg['check_databh'] === 'ada' ||  $datareg['check_datacak'] === 'ada'   ||  $datareg['check_datatrans'] === 'ada'? $datareg['brd_jjgcak']  : '-'}}</td>
         <td style="background-color: {{ $colorreg }}">{{ $datareg['check_databh'] === 'ada' ||  $datareg['check_datacak'] === 'ada'   ||  $datareg['check_datatrans'] === 'ada'? $datareg['skor_brdcak']  : '-'}}</td>
         <td style="background-color: {{ $colorreg }}">{{ $datareg['check_databh'] === 'ada' ||  $datareg['check_datacak'] === 'ada'   ||  $datareg['check_datatrans'] === 'ada'? $datareg['bhts_scak']  : '-'}}</td>
         <td style="background-color: {{ $colorreg }}">{{ $datareg['check_databh'] === 'ada' ||  $datareg['check_datacak'] === 'ada'   ||  $datareg['check_datatrans'] === 'ada'? $datareg['bhtm1cak']  : '-'}}</td>
         <td style="background-color: {{ $colorreg }}">{{ $datareg['check_databh'] === 'ada' ||  $datareg['check_datacak'] === 'ada'   ||  $datareg['check_datatrans'] === 'ada'? $datareg['bhtm2cak']  : '-'}}</td>
         <td style="background-color: {{ $colorreg }}">{{ $datareg['check_databh'] === 'ada' ||  $datareg['check_datacak'] === 'ada'   ||  $datareg['check_datatrans'] === 'ada'? $datareg['bhtm3cak']  : '-'}}</td>
         <td style="background-color: {{ $colorreg }}">{{ $datareg['check_databh'] === 'ada' ||  $datareg['check_datacak'] === 'ada'   ||  $datareg['check_datatrans'] === 'ada'? $datareg['total_buahcak']  : '-'}}</td>
-        <td style="background-color: {{ $colorreg }}">{{ $datareg['check_databh'] === 'ada' ||  $datareg['check_datacak'] === 'ada'   ||  $datareg['check_datatrans'] === 'ada'? $datareg['buah/jjgcak']  : '-'}}</td>
+        <td style="background-color: {{ $colorreg }}">{{ $datareg['check_databh'] === 'ada' ||  $datareg['check_datacak'] === 'ada'   ||  $datareg['check_datatrans'] === 'ada'? $datareg['buah_jjgcak']  : '-'}}</td>
         <td style="background-color: {{ $colorreg }}">{{ $datareg['check_databh'] === 'ada' ||  $datareg['check_datacak'] === 'ada'   ||  $datareg['check_datatrans'] === 'ada'? $datareg['skor_bhcak']  : '-'}}</td>
         <td style="background-color: {{ $colorreg }}">{{ $datareg['check_databh'] === 'ada' ||  $datareg['check_datacak'] === 'ada'   ||  $datareg['check_datatrans'] === 'ada'? $datareg['palepah_pokokcak']  : '-'}}</td>
         <td style="background-color: {{ $colorreg }}">{{ $datareg['check_databh'] === 'ada' ||  $datareg['check_datacak'] === 'ada'   ||  $datareg['check_datatrans'] === 'ada'? round($datareg['palepah_percak'])  : '-'}}</td>
