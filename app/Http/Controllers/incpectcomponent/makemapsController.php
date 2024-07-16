@@ -41,7 +41,8 @@ class makemapsController extends Controller
         // dd($regData, $regional);
 
         $queryTrans = DB::connection('mysql2')->table("mutu_transport")
-            ->select("mutu_transport.*", "estate.wil")
+            // ->select("mutu_transport.*", "estate.wil")
+            ->select("mutu_transport.*", "estate.wil", DB::raw('DATE_FORMAT(mutu_transport.datetime, "%Y-%m-%d") as date'))
             ->join('estate', 'estate.est', '=', 'mutu_transport.estate')
             ->where('mutu_transport.estate', $est)
             ->whereYear('mutu_transport.datetime', $date)
@@ -49,7 +50,8 @@ class makemapsController extends Controller
             // ->where('mutu_transport.afd', 'OA')
             ->get();
 
-        $DataEstate = $queryTrans->groupBy('blok');
+        // $DataEstate = $queryTrans->groupBy(['blok', 'date']);
+        $DataEstate = $queryTrans->groupBy(['blok']);
         $DataEstate = json_decode($DataEstate, true);
 
 
@@ -63,9 +65,12 @@ class makemapsController extends Controller
             // ->where('mutu_ancak_new.afd', 'OA')
             ->get();
 
+        // $DataMTAncak = $queryAncak->groupBy(['blok', 'date']);
         $DataMTAncak = $queryAncak->groupBy(['blok']);
         $DataMTAncak = json_decode($DataMTAncak, true);
         // dd($DataMTAncak);
+
+        // dd($DataMTAncak, $DataEstate);
         function normalizeBlock($block)
         {
             // Check for block identifiers like 'F006-CBI14'
@@ -152,8 +157,8 @@ class makemapsController extends Controller
         }
 
         // dd($coordinates);
-
-        // dd($datamututrans['M180']);
+        $grouped = collect($datamutuancak['R009'])->groupBy('date');
+        // dd($grouped);
 
         $dataSkor = array();
         foreach ($datamututrans as $key => $value) {
@@ -176,7 +181,7 @@ class makemapsController extends Controller
             $dataSkor[$key][0]['latin'] = $value2['lat'] . ',' . $value2['lon'];
         }
 
-        // dd($dataSkor['H58']);
+        // dd($dataSkor);
 
         // dd($datamutuancak['R009']);
 
@@ -268,14 +273,19 @@ class makemapsController extends Controller
             $ttlSkorMA =  skor_buah_Ma($sumPerBH) + skor_brd_ma($brdPerjjg) + skor_palepah_ma($perPl);
 
 
+            $dataSkor[$key][0]['Ancak'] = '=======================================================';
             $dataSkor[$key][0]['skorAncak'] = $ttlSkorMA;
             $dataSkor[$key][0]['tot_brd'] = $brdPerjjg;
+            $dataSkor[$key][0]['total_brd'] = $skor_bTinggal;
             $dataSkor[$key][0]['sumBH'] = $sumBH;
+            $dataSkor[$key][0]['totalP_panen'] = $totalP_panen;
+            $dataSkor[$key][0]['totalK_panen'] = $totalK_panen;
+            $dataSkor[$key][0]['totalPTgl_panen'] = $totalPTgl_panen;
             $dataSkor[$key][0]['totalPanen'] = $totalPanen;
             $dataSkor[$key][0]['latin2'] = $value2['lat_awal'] . ',' . $value2['lon_awal'];
         }
 
-        // dd($dataSkor['R009']);
+        dd($dataSkor['R009']);
         // dd($dataSkor['D13']);
         $dataSkorResult = array();
         $newData = '';
@@ -404,7 +414,7 @@ class makemapsController extends Controller
         }
         // dd($blokLatLnEw);
         $blokLatLn = [];
-        // dd($blokLatLnEw);
+        // dd($dataSkorResult);
 
         foreach ($dataSkorResult as $markerKey => $marker) {
             $found = false; // Flag to check if the marker is found in any polygon
@@ -602,7 +612,7 @@ class makemapsController extends Controller
                     "blok_asli" => $key,
                     "estate" => '-',
                     'latln' => $value['latinnew'],
-                    'nilai' => '-',
+                    'nilai' => 0,
                     'afdeling' => '-',
                     'kategori' => '-',
                     'similar_blok' => '-',
@@ -683,7 +693,7 @@ class makemapsController extends Controller
                     "blok_asli" => $key,
                     "estate" => '-',
                     'latln' => $value['latinnew'],
-                    'nilai' => '-',
+                    'nilai' => 0,
                     'afdeling' => '-',
                     'kategori' => '-',
                     'similar_blok' => '-',
