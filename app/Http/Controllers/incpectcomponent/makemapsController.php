@@ -285,7 +285,7 @@ class makemapsController extends Controller
             $dataSkor[$key][0]['latin2'] = $value2['lat_awal'] . ',' . $value2['lon_awal'];
         }
 
-        dd($dataSkor['R009']);
+        // dd($dataSkor['R009']);
         // dd($dataSkor['D13']);
         $dataSkorResult = array();
         $newData = '';

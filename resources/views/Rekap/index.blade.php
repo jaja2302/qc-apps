@@ -1264,421 +1264,157 @@
                     'X-CSRF-TOKEN': _token
                 },
                 success: function(result) {
-                    var parseResult = JSON.parse(result)
-                    var rekapafd = Object.entries(parseResult['rekapafd'])
-                    var rekapmua = parseResult['rekapmua']
-                    Swal.close();
+                    // var parseResult = JSON.parse(result)
+                    var rekapafd = result['rekap_afdeling']
 
                     // console.log(rekapafd);
-                    let table1 = rekapafd[0]
-                    let table2 = rekapafd[1]
-                    let table3 = rekapafd[2]
-
-                    function assignValue(checkValue, compareValue, assignIfEqual, assignIfNotEqual) {
-                        return checkValue === compareValue ? assignIfEqual : assignIfNotEqual;
-                    }
-
-                    // untk perestate 
+                    let table1 = rekapafd[1] ?? rekapafd[4] ?? rekapafd[7] ?? rekapafd[10]
+                    let table2 = rekapafd[2] ?? rekapafd[5] ?? rekapafd[8] ?? rekapafd[11]
+                    let table3 = rekapafd[3] ?? rekapafd[6] ?? []
                     var title1 = document.getElementById('yearwil1');
-                    let key1 = table1[0];
+                    let trekap1 = document.getElementById('year1');
+                    // Iterate over each estate (KNE, PLE, RDE, SLE)
+                    Object.keys(table1).forEach((estateName) => {
+                        let estate = table1[estateName];
 
+                        // Iterate over each afdeling (OA, OB, OC, OD) within the estate
+                        Object.keys(estate).forEach((afdelingKey) => {
+                            let afdeling = estate[afdelingKey];
 
-                    var trekap1 = document.getElementById('yearest1');
-                    Object.keys(table1[1]).forEach(key => {
-                        Object.keys(table1[1][key]).forEach(subKey => {
-                            let item1 = table1[1][key][subKey]['est'];
-                            let item2 = table1[1][key][subKey]['afd'];
-                            let item3 = table1[1][key][subKey]['nama']
-                            let item4 = table1[1][key][subKey]['total'];
-                            // item4 = (item4 < 0) ? 0 : item4;
-                            let item5 = table1[1][key][subKey]['rank'] ?? '-';
+                            // Extracting relevant data for table cells
+                            let skor_mtb = afdeling.skor_mtb;
+                            let skor_mt = afdeling.skor_mt;
+                            let skor_ma = afdeling.skor_ma;
+                            let total = afdeling.total;
+                            let asistenafd = afdeling.asistenafd;
+                            let EM = afdeling.EM;
 
-                            let bg = table1[1][key][subKey]['bgcolor'];
-
-                            // Create table row and cell for each 'total' value
+                            // Create table row and cells
                             let tr = document.createElement('tr');
                             let itemElement1 = document.createElement('td');
                             let itemElement2 = document.createElement('td');
                             let itemElement3 = document.createElement('td');
                             let itemElement4 = document.createElement('td');
                             let itemElement5 = document.createElement('td');
-
-
+                            // let itemElement6 = document.createElement('td');
 
                             itemElement1.classList.add("text-center");
-                            itemElement1.innerText = item1;
-                            itemElement2.innerText = item2;
-                            itemElement3.innerText = item3;
-                            itemElement4.innerText = item4;
-                            itemElement5.innerText = item5
+                            itemElement1.innerText = estateName
+                            itemElement2.innerText = afdelingKey; // KNE, PLE, RDE, SLE
+                            itemElement3.innerText = skor_ma; // OA, OB, OC, OD
+                            itemElement4.innerText = skor_mt
+                            itemElement5.innerText = skor_mtb; // Adjust to display total with 2 decimal places
+                            // itemElement6.innerText = total; // Display assistant name
+                            setBackgroundColor(itemElement3, skor_ma);
+                            setBackgroundColor(itemElement4, skor_mt);
+                            setBackgroundColor(itemElement5, skor_mtb);
+                            tr.appendChild(itemElement1);
+                            tr.appendChild(itemElement2);
+                            tr.appendChild(itemElement3);
+                            tr.appendChild(itemElement4);
+                            tr.appendChild(itemElement5);
+                            // tr.appendChild(itemElement6);
 
-                            setBackgroundColor(itemElement4, item4);
-                            tr.style.backgroundColor = bg;
-
-                            tr.appendChild(itemElement1)
-                            tr.appendChild(itemElement2)
-                            tr.appendChild(itemElement3)
-                            tr.appendChild(itemElement4)
-                            tr.appendChild(itemElement5)
-                            trekap1.appendChild(tr);
+                            trekap1.appendChild(tr); // Append the row to the table body
                         });
                     });
+                    let year2 = document.getElementById('year2');
+                    Object.keys(table2).forEach((estateName) => {
+                        let estate = table2[estateName];
 
+                        // Iterate over each afdeling (OA, OB, OC, OD) within the estate
+                        Object.keys(estate).forEach((afdelingKey) => {
+                            let afdeling = estate[afdelingKey];
 
-                    var title2 = document.getElementById('yearwil2');
-                    let key2 = table2[0];
-                    if (reg == 4) {
-                        title1.textContent = 'Wilayah Inti'
-                        title2.textContent = 'Wilayah Plasma'
-                    } else {
-                        title2.textContent = 'Wilayah ' + key2;
-                        title1.textContent = 'Wilayah ' + key1;
+                            // Extracting relevant data for table cells
+                            let skor_mtb = afdeling.skor_mtb;
+                            let skor_mt = afdeling.skor_mt;
+                            let skor_ma = afdeling.skor_ma;
+                            let total = afdeling.total;
+                            let asistenafd = afdeling.asistenafd;
+                            let EM = afdeling.EM;
+
+                            // Create table row and cells
+                            let tr = document.createElement('tr');
+                            let itemElement1 = document.createElement('td');
+                            let itemElement2 = document.createElement('td');
+                            let itemElement3 = document.createElement('td');
+                            let itemElement4 = document.createElement('td');
+                            let itemElement5 = document.createElement('td');
+                            // let itemElement6 = document.createElement('td');
+
+                            itemElement1.classList.add("text-center");
+                            itemElement1.innerText = estateName
+                            itemElement2.innerText = afdelingKey; // KNE, PLE, RDE, SLE
+                            itemElement3.innerText = skor_ma; // OA, OB, OC, OD
+                            itemElement4.innerText = skor_mt
+                            itemElement5.innerText = skor_mtb; // Adjust to display total with 2 decimal places
+                            // itemElement6.innerText = total; // Display assistant name
+                            setBackgroundColor(itemElement3, skor_ma);
+                            setBackgroundColor(itemElement4, skor_mt);
+                            setBackgroundColor(itemElement5, skor_mtb);
+                            tr.appendChild(itemElement1);
+                            tr.appendChild(itemElement2);
+                            tr.appendChild(itemElement3);
+                            tr.appendChild(itemElement4);
+                            tr.appendChild(itemElement5);
+                            // tr.appendChild(itemElement6);
+
+                            year2.appendChild(tr); // Append the row to the table body
+                        });
+                    });
+                    // console.log(table3);
+                    let year3 = document.getElementById('year3');
+                    if (table3.length != 0) {
+                        Object.keys(table3).forEach((estateName) => {
+                            let estate = table3[estateName];
+
+                            // Iterate over each afdeling (OA, OB, OC, OD) within the estate
+                            Object.keys(estate).forEach((afdelingKey) => {
+                                let afdeling = estate[afdelingKey];
+
+                                // Extracting relevant data for table cells
+                                let skor_mtb = afdeling.skor_mtb;
+                                let skor_mt = afdeling.skor_mt;
+                                let skor_ma = afdeling.skor_ma;
+                                let total = afdeling.total;
+                                let asistenafd = afdeling.asistenafd;
+                                let EM = afdeling.EM;
+
+                                // Create table row and cells
+                                let tr = document.createElement('tr');
+                                let itemElement1 = document.createElement('td');
+                                let itemElement2 = document.createElement('td');
+                                let itemElement3 = document.createElement('td');
+                                let itemElement4 = document.createElement('td');
+                                let itemElement5 = document.createElement('td');
+                                // let itemElement6 = document.createElement('td');
+
+                                itemElement1.classList.add("text-center");
+                                itemElement1.innerText = estateName
+                                itemElement2.innerText = afdelingKey; // KNE, PLE, RDE, SLE
+                                itemElement3.innerText = skor_ma; // OA, OB, OC, OD
+                                itemElement4.innerText = skor_mt
+                                itemElement5.innerText = skor_mtb; // Adjust to display total with 2 decimal places
+                                // itemElement6.innerText = total; // Display assistant name
+                                setBackgroundColor(itemElement3, skor_ma);
+                                setBackgroundColor(itemElement4, skor_mt);
+                                setBackgroundColor(itemElement5, skor_mtb);
+                                tr.appendChild(itemElement1);
+                                tr.appendChild(itemElement2);
+                                tr.appendChild(itemElement3);
+                                tr.appendChild(itemElement4);
+                                tr.appendChild(itemElement5);
+                                // tr.appendChild(itemElement6);
+
+                                year3.appendChild(tr); // Append the row to the table body
+                            });
+                        });
                     }
 
-                    var trekap2 = document.getElementById('yearest2');
-                    Object.keys(table2[1]).forEach(key => {
-                        Object.keys(table2[1][key]).forEach(subKey => {
-                            let item1 = table2[1][key][subKey]['est'];
-                            let item2 = table2[1][key][subKey]['afd'];
-                            let item3 = table2[1][key][subKey]['nama'] ?? '-'
-                            let item4 = table2[1][key][subKey]['total'];
-                            // item4 = (item4 < 0) ? 0 : item4;
-                            let item5 = table2[1][key][subKey]['rank'] ?? '-';
 
-                            let bg = table2[1][key][subKey]['bgcolor'];
 
-                            // Create table row and cell for each 'total' value
-                            let tr = document.createElement('tr');
-                            let itemElement1 = document.createElement('td');
-                            let itemElement2 = document.createElement('td');
-                            let itemElement3 = document.createElement('td');
-                            let itemElement4 = document.createElement('td');
-                            let itemElement5 = document.createElement('td');
-
-
-
-                            itemElement1.classList.add("text-center");
-                            itemElement1.innerText = item1;
-                            itemElement2.innerText = item2;
-                            itemElement3.innerText = item3;
-                            itemElement4.innerText = item4;
-                            itemElement5.innerText = item5
-
-                            setBackgroundColor(itemElement4, item4);
-                            tr.style.backgroundColor = bg;
-
-                            tr.appendChild(itemElement1)
-                            tr.appendChild(itemElement2)
-                            tr.appendChild(itemElement3)
-                            tr.appendChild(itemElement4)
-                            tr.appendChild(itemElement5)
-                            trekap2.appendChild(tr);
-                        });
-                    });
-
-
-
-                    //   perwilayah 
-
-                    var tbody1 = document.getElementById('year1');
-                    // console.log(table1);
-                    // Iterate through the main object keys (KNE, PLE, etc.)
-                    Object.keys(table1[1]).forEach(key => {
-                        // Iterate through the nested objects (OA, OB, etc.) within each main key
-                        Object.keys(table1[1][key]).forEach(subKey => {
-                            let item0 = table1[1][key][subKey]['est'];
-                            let item1 = table1[1][key][subKey]['afd'];
-
-
-                            const kosong = 'kosong';
-                            let item2 = assignValue(
-                                table1[1][key][subKey]['qc_check'],
-                                kosong,
-                                '-',
-                                table1[1][key][subKey]['skor_qc']
-                            );
-
-                            let item3 = assignValue(
-                                table1[1][key][subKey]['tph_check'],
-                                kosong,
-                                '-',
-                                table1[1][key][subKey]['skor_tph']
-                            );
-
-                            let item4 = assignValue(
-                                table1[1][key][subKey]['buah_check'],
-                                kosong,
-                                '-',
-                                table1[1][key][subKey]['skor_buah']
-                            );
-
-
-
-
-                            let bg = table1[1][key][subKey]['bgcolor'];
-
-                            // Create table row and cell for each 'total' value
-                            let tr = document.createElement('tr');
-                            let itemElement0 = document.createElement('td');
-                            let itemElement1 = document.createElement('td');
-                            let itemElement2 = document.createElement('td');
-                            let itemElement3 = document.createElement('td');
-                            let itemElement4 = document.createElement('td');
-
-                            itemElement1.classList.add("text-center");
-                            itemElement0.innerText = item0;
-                            itemElement1.innerText = item1;
-                            itemElement2.innerText = item2;
-                            itemElement3.innerText = item3;
-                            itemElement4.innerText = item4;
-
-                            // Set background color style to the table row
-                            tr.style.backgroundColor = bg;
-                            setBackgroundColor(itemElement2, item2);
-                            setBackgroundColor(itemElement3, item3);
-                            setBackgroundColor(itemElement4, item4);
-                            tr.appendChild(itemElement0)
-                            tr.appendChild(itemElement1)
-                            tr.appendChild(itemElement2)
-                            tr.appendChild(itemElement3)
-                            tr.appendChild(itemElement4)
-                            tbody1.appendChild(tr);
-                        });
-
-                    });
-                    var tbody2 = document.getElementById('year2');
-                    // Iterate through the main object keys (KNE, PLE, etc.)
-                    Object.keys(table2[1]).forEach(key => {
-                        // Iterate through the nested objects (OA, OB, etc.) within each main key
-                        Object.keys(table2[1][key]).forEach(subKey => {
-                            let item0 = table2[1][key][subKey]['est'];
-                            let item1 = table2[1][key][subKey]['afd'];
-
-
-                            const kosong = 'kosong';
-
-                            let item2 = assignValue(
-                                table2[1][key][subKey]['qc_check'],
-                                kosong,
-                                '-',
-                                table2[1][key][subKey]['skor_qc']
-                            );
-
-                            let item3 = assignValue(
-                                table2[1][key][subKey]['tph_check'],
-                                kosong,
-                                '-',
-                                table2[1][key][subKey]['skor_tph']
-                            );
-
-                            let item4 = assignValue(
-                                table2[1][key][subKey]['buah_check'],
-                                kosong,
-                                '-',
-                                table2[1][key][subKey]['skor_buah']
-                            );
-
-
-
-
-
-
-
-                            let bg = table2[1][key][subKey]['bgcolor'];
-
-                            // Create table row and cell for each 'total' value
-                            let tr = document.createElement('tr');
-                            let itemElement0 = document.createElement('td');
-                            let itemElement1 = document.createElement('td');
-                            let itemElement2 = document.createElement('td');
-                            let itemElement3 = document.createElement('td');
-                            let itemElement4 = document.createElement('td');
-
-                            itemElement1.classList.add("text-center");
-                            itemElement0.innerText = item0;
-                            itemElement1.innerText = item1;
-                            itemElement2.innerText = item2;
-                            itemElement3.innerText = item3;
-                            itemElement4.innerText = item4;
-
-                            // Set background color style to the table row
-                            tr.style.backgroundColor = bg;
-                            setBackgroundColor(itemElement2, item2);
-                            setBackgroundColor(itemElement3, item3);
-                            setBackgroundColor(itemElement4, item4);
-                            tr.appendChild(itemElement0)
-                            tr.appendChild(itemElement1)
-                            tr.appendChild(itemElement2)
-                            tr.appendChild(itemElement3)
-                            tr.appendChild(itemElement4)
-                            tbody2.appendChild(tr);
-                        });
-                    });
-
-                    var tbody3 = document.getElementById('year3');
-                    Object.keys(table3[1]).forEach(key => {
-                        // Iterate through the nested objects (OA, OB, etc.) within each main key
-                        Object.keys(table3[1][key]).forEach(subKey => {
-                            let item0 = table3[1][key][subKey]['est'];
-                            let item1 = table3[1][key][subKey]['afd'];
-
-
-                            const kosong = 'kosong';
-
-                            let item2 = assignValue(
-                                table3[1][key][subKey]['qc_check'],
-                                kosong,
-                                '-',
-                                table3[1][key][subKey]['skor_qc']
-                            );
-
-                            let item3 = assignValue(
-                                table3[1][key][subKey]['tph_check'],
-                                kosong,
-                                '-',
-                                table3[1][key][subKey]['skor_tph']
-                            );
-
-                            let item4 = assignValue(
-                                table3[1][key][subKey]['buah_check'],
-                                kosong,
-                                '-',
-                                table3[1][key][subKey]['skor_buah']
-                            );
-
-
-
-
-
-
-                            let bg = table3[1][key][subKey]['bgcolor'];
-
-                            // Create table row and cell for each 'total' value
-                            let tr = document.createElement('tr');
-                            let itemElement0 = document.createElement('td');
-                            let itemElement1 = document.createElement('td');
-                            let itemElement2 = document.createElement('td');
-                            let itemElement3 = document.createElement('td');
-                            let itemElement4 = document.createElement('td');
-
-                            itemElement1.classList.add("text-center");
-                            itemElement0.innerText = item0;
-                            itemElement1.innerText = item1;
-                            itemElement2.innerText = item2;
-                            itemElement3.innerText = item3;
-                            itemElement4.innerText = item4;
-
-                            // Set background color style to the table row
-                            tr.style.backgroundColor = bg;
-                            setBackgroundColor(itemElement2, item2);
-                            setBackgroundColor(itemElement3, item3);
-                            setBackgroundColor(itemElement4, item4);
-                            tr.appendChild(itemElement0)
-                            tr.appendChild(itemElement1)
-                            tr.appendChild(itemElement2)
-                            tr.appendChild(itemElement3)
-                            tr.appendChild(itemElement4)
-                            tbody3.appendChild(tr);
-                        });
-                    });
-                    Object.entries(rekapmua).forEach(([key, value]) => {
-                        let tr = document.createElement('tr');
-
-                        let itemElement1 = document.createElement('td');
-                        let itemElement2 = document.createElement('td');
-                        let itemElement3 = document.createElement('td');
-                        let itemElement4 = document.createElement('td');
-                        let itemElement5 = document.createElement('td');
-
-                        itemElement1.innerText = key;
-                        itemElement2.innerText = key;
-                        itemElement3.innerText = value['skorqc'];
-                        itemElement4.innerText = value['skortph'];
-                        itemElement5.innerText = value['skor_mutubuah'];
-                        setBackgroundColor(itemElement3, value['skorqc']);
-                        setBackgroundColor(itemElement4, value['skortph']);
-                        setBackgroundColor(itemElement5, value['skor_mutubuah']);
-                        tr.appendChild(itemElement1);
-                        tr.appendChild(itemElement2);
-                        tr.appendChild(itemElement3);
-                        tr.appendChild(itemElement4);
-                        tr.appendChild(itemElement5);
-
-                        tbody3.appendChild(tr);
-                    });
-
-                    var title3 = document.getElementById('yearwil3');
-                    let key = table3[0] ?? 'INTI';
-
-                    title3.textContent = 'Wilayah ' + key;
-
-                    var trekap3 = document.getElementById('yearest3');
-                    Object.keys(table3[1]).forEach(key => {
-                        Object.keys(table3[1][key]).forEach(subKey => {
-                            let item1 = table3[1][key][subKey]['est'];
-                            let item2 = table3[1][key][subKey]['afd'];
-                            let item3 = table3[1][key][subKey]['nama']
-                            let item4 = table3[1][key][subKey]['total'];
-                            // item4 = (item4 < 0) ? 0 : item4;
-                            let item5 = table3[1][key][subKey]['rank'] ?? '-';
-
-                            let bg = table3[1][key][subKey]['bgcolor'];
-
-                            // Create table row and cell for each 'total' value
-                            let tr = document.createElement('tr');
-                            let itemElement1 = document.createElement('td');
-                            let itemElement2 = document.createElement('td');
-                            let itemElement3 = document.createElement('td');
-                            let itemElement4 = document.createElement('td');
-                            let itemElement5 = document.createElement('td');
-
-
-
-                            itemElement1.classList.add("text-center");
-                            itemElement1.innerText = item1;
-                            itemElement2.innerText = item2;
-                            itemElement3.innerText = item3;
-                            itemElement4.innerText = item4;
-                            itemElement5.innerText = item5
-
-                            setBackgroundColor(itemElement4, item4);
-                            tr.style.backgroundColor = bg;
-
-                            tr.appendChild(itemElement1)
-                            tr.appendChild(itemElement2)
-                            tr.appendChild(itemElement3)
-                            tr.appendChild(itemElement4)
-                            tr.appendChild(itemElement5)
-                            trekap3.appendChild(tr);
-                        });
-                    });
-                    Object.entries(rekapmua).forEach(([key, value]) => {
-                        let tr = document.createElement('tr');
-
-                        let itemElement1 = document.createElement('td');
-                        let itemElement2 = document.createElement('td');
-                        let itemElement3 = document.createElement('td');
-                        let itemElement4 = document.createElement('td');
-                        let itemElement5 = document.createElement('td');
-
-                        itemElement1.innerText = key;
-                        itemElement2.innerText = key;
-                        itemElement3.innerText = value['asistenafd'] ?? value['manager'] ?? '-'
-                        itemElement4.innerText = value['skorestate'];
-                        itemElement5.innerText = '-'
-
-                        setBackgroundColor(itemElement4, value['skorestate']);
-
-                        tr.appendChild(itemElement1);
-                        tr.appendChild(itemElement2);
-                        tr.appendChild(itemElement3);
-                        tr.appendChild(itemElement4);
-                        tr.appendChild(itemElement5);
-
-                        trekap3.appendChild(tr);
-                    });
-
-
+                    Swal.close();
 
                 },
                 error: function(xhr, status, error) {
@@ -2029,6 +1765,7 @@
 
                     var tbody3 = document.getElementById('afd3');
                     var title3 = document.getElementById('wil3');
+                    // console.log(table3[0]);
                     let key = table3[0] ?? 'INTI';
 
                     title3.textContent = 'Wilayah ' + key;

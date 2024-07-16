@@ -3,6 +3,7 @@
 
 use App\Models\mutu_ancak;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cookie;
 
 if (!function_exists('count_percent')) {
     function count_percent($skor1, $skor2)
@@ -1432,6 +1433,8 @@ if (!function_exists('rekap_blok')) {
 if (!function_exists('rekap_pertahun')) {
     function rekap_pertahun($year, $RegData)
     {
+
+        // dd($year, $RegData);
         $queryAsisten = DB::connection('mysql2')->table('asisten_qc')->get();
         $queryAsisten = json_decode($queryAsisten, true);
 
@@ -5113,7 +5116,7 @@ if (!function_exists('rekap_pertahun_mutubuah')) {
     }
 }
 
-//helper halaman sidak mutu buah pertahun
+//helper maps
 if (!function_exists('isPointInPolygon')) {
     function isPointInPolygon($point, $polygon)
     {
@@ -5143,5 +5146,52 @@ if (!function_exists('isPointInPolygon')) {
         }
 
         return $isInside;
+    }
+}
+if (!function_exists('countNonZeroValues')) {
+    function countNonZeroValues($array)
+    {
+        // Filter out elements equal to 0
+        $filteredArray = array_filter($array, function ($value) {
+            return $value !== 0;
+        });
+
+        // Count the remaining elements
+        $count = count($filteredArray);
+
+        return $count;
+    }
+}
+
+if (!function_exists('get_nama_asisten')) {
+    function get_nama_asisten($est, $afd)
+    {
+        $query = DB::connection('mysql2')->table('asisten_qc')
+            ->where('est', $est)
+            ->where('afd', $afd)
+            ->first();
+
+        // Check if the query result is not null
+        if ($query !== null) {
+            return $query->nama;
+        } else {
+            return '-';  // Return null or a default value if no record is found
+        }
+    }
+}
+
+if (!function_exists('get_nama_em')) {
+    function get_nama_em($est)
+    {
+        $query =  DB::connection('mysql2')->table('asisten_qc')
+            ->where('est', $est)
+            ->where('afd', 'EM')
+            ->first();
+
+        if ($query !== null) {
+            return $query->nama;
+        } else {
+            return '-';  // Return null or a default value if no record is found
+        }
     }
 }
