@@ -4946,372 +4946,77 @@
                 success: function(result) {
 
                     closeLoadingSwal(btnShoWeekdata);
-                    var parseResult = JSON.parse(result)
+                    var data = result['data_tabel']
+                    let inc = 1
+                    let tableBody = document.getElementById('data_weekTab2');
+                    // console.log(data);
+                    Object.keys(data).forEach((regname) => {
+                        let regs = data[regname];
+                        Object.keys(regs).forEach((estatename) => {
+                            let estate = regs[estatename];
+                            Object.keys(estate).forEach((afdelingname) => {
+                                let afdeling = estate[afdelingname];
+                                let item1 = inc++;
+                                let estatelink;
 
-                    var data_Sidakv2 = Object.entries(parseResult['data_weekv2'])
-                    var regional = Object.entries(parseResult['reg_data'])
+                                if (afdelingname === 'ESTATE') {
+                                    estatelink = document.createElement('a');
+                                    estatelink.href = `detailtmutubuah/${estatename}/${afdelingname}/${bulan}`;
+                                    estatelink.target = '_blank';
+                                    estatelink.innerText = afdelingname;
+                                } else {
+                                    estatelink = afdelingname;
+                                }
 
+                                let rowData = [
+                                    item1, estatename, estatelink, afdeling.nama_staff, afdeling.Jumlah_janjang,
+                                    afdeling.tnp_brd, afdeling.persenTNP_brd, afdeling.krg_brd, afdeling.persenKRG_brd,
+                                    afdeling.total_jjg, afdeling.persen_totalJjg, afdeling.skor_total, afdeling.jjg_matang,
+                                    afdeling.persen_jjgMtang, afdeling.skor_jjgMatang, afdeling.lewat_matang,
+                                    afdeling.persen_lwtMtng, afdeling.skor_lewatMTng, afdeling.janjang_kosong,
+                                    afdeling.persen_kosong, afdeling.skor_kosong, afdeling.vcut, afdeling.vcut_persen,
+                                    afdeling.vcut_skor, afdeling.abnormal, afdeling.abnormal_persen, afdeling.rat_dmg,
+                                    afdeling.rd_persen, afdeling.TPH, afdeling.persen_krg, afdeling.skor_kr,
+                                    afdeling.All_skor, afdeling.kategori
+                                ];
 
+                                let tr = document.createElement('tr');
+                                rowData.forEach((data, cellIndex) => {
+                                    let cell = document.createElement('td');
+                                    if (cellIndex === 2 && afdelingname === 'ESTATE') {
+                                        cell.appendChild(estatelink); // Append the link element for 'ESTATE'
+                                    } else {
+                                        cell.textContent = data;
+                                    }
+                                    if (cellIndex === 32 || cellIndex === 31) {
+                                        let colorData = rowData[31]; // Correctly retrieve the data from index 32
+                                        setBackgroundColorCell(cell, colorData);
+                                    }
 
-                    delete data_Sidakv2[0][1].Plasma1;
-                    // console.log(data_Sidakv2);
-
-                    function createTableCell(data, isHTML = false) {
-                        let td = document.createElement('td');
-                        if (isHTML) {
-                            td.innerHTML = data;
-                        } else {
-                            td.textContent = data;
-                        }
-                        return td;
-                    }
-
-                    function createTableCellWithColor(data, kategori) {
-                        let cell = document.createElement('td');
-                        cell.innerText = data;
-
-                        // Set background color based on kategori value
-                        switch (kategori) {
-                            case "POOR":
-                                cell.style.backgroundColor = '#ff0404';
-                                break;
-                            case "GOOD":
-                                cell.style.backgroundColor = '#08fc2c';
-                                break;
-                            case "FAIR":
-                                cell.style.backgroundColor = '#ffa404';
-                                break;
-                            case "EXCELLENT":
-                                cell.style.backgroundColor = '#5074c4';
-                                break;
-                            case "SATISFACTORY":
-                                cell.style.backgroundColor = '#fffc04';
-                                break;
-                        }
-
-                        return cell;
-                    }
-
-
-                    var arrbody2 = data_Sidakv2;
-                    // Extract Wilayah
-
-
-
-                    let counters = 1;
-
-
-                    function setBackgroundColorForEstate(data, bgColor) {
-                        let cell = document.createElement('td');
-                        cell.textContent = data;
-                        cell.style.backgroundColor = bgColor;
-                        return cell;
-                    }
-
-                    // console.log(arrbody2)
-
-                    var body2 = document.getElementById('data_weekTab2');
-                    arrbody2.forEach(element => {
-                        let afdelingData = element[1];
-                        let wilayahData;
-
-                        if (typeof element[0] === 'string' && typeof afdelingData[element[0]] === 'object') {
-                            wilayahData = afdelingData[element[0]];
-                        }
-
-                        Object.keys(afdelingData).forEach((key) => {
-                            let currentData = afdelingData[key];
-                            if (typeof currentData === 'object' && currentData !== null && !Array.isArray(currentData)) {
-                                Object.keys(currentData).forEach(innerKey => {
-                                    let innerData = currentData[innerKey];
-                                    if (typeof innerData === 'object' && innerData !== null && innerData.hasOwnProperty('Jumlah_janjang')) {
-
-                                        let tr = document.createElement('tr');
-                                        let item1 = counters++
-
-                                        let item4 = innerData.est;
-                                        // let item4 = document.createElement('span');
-                                        // item4.innerText = innerData.est;
-
-
-
-                                        let afd = innerData.afd;
-                                        let item5;
-
-                                        if (afd === 'EST') {
-                                            item5 = document.createElement('a');
-                                            item5.href = 'detailtmutubuah/' + innerData.est + '/' + innerData.afd + '/' + bulan;
-                                            item5.target = '_blank';
-                                            item5.innerText = innerData.afd;
-                                        } else {
-                                            item5 = document.createElement('span'); // or use 'div', 'p', etc. based on your needs
-                                            item5.innerText = innerData.afd;
+                                    if (afdelingname === 'ESTATE') {
+                                        if (cellIndex !== 31 && cellIndex !== 32) {
+                                            cell.style.backgroundColor = '#61C9D6'; // Set color for all cells except 31 and 32
                                         }
-
-
-                                        // let item5 = innerData.afd;
-                                        let item6 = innerData.nama_staff !== undefined ? innerData.nama_staff : '-';
-                                        let item7 = innerData.Jumlah_janjang;
-                                        let item8 = innerData.tnp_brd;
-                                        let item9 = innerData.persenTNP_brd;
-                                        let item10 = innerData.krg_brd;
-                                        let item11 = innerData.persenKRG_brd;
-                                        let item12 = innerData.total_jjg;
-                                        let item13 = innerData.persen_totalJjg;
-                                        let item14 = innerData.skor_total;
-                                        let item15 = innerData.jjg_matang;
-                                        let item16 = innerData.persen_jjgMtang;
-                                        let item17 = innerData.skor_jjgMatang;
-                                        let item18 = innerData.lewat_matang;
-                                        let item19 = innerData.persen_lwtMtng;
-                                        let item20 = innerData.skor_lewatMTng;
-                                        let item21 = innerData.janjang_kosong;
-                                        let item22 = innerData.persen_kosong;
-                                        let item23 = innerData.skor_kosong;
-                                        let item24 = innerData.vcut;
-                                        let item25 = innerData.vcut_persen;
-                                        let item26 = innerData.vcut_skor;
-                                        let item27 = innerData.abnormal;
-                                        let item28 = innerData.abnormal_persen;
-                                        let item29 = innerData.rat_dmg;
-                                        let item30 = innerData.rd_persen;
-                                        let item31 = innerData.TPH;
-                                        let item32 = innerData.persen_krg;
-                                        let item33 = innerData.skor_kr;
-                                        let item34 = innerData.All_skor;
-                                        let item35 = innerData.kategori;
-
-                                        let rowData = [
-                                            item1, item4, item5, item6, item7, item8, item9, item10,
-                                            item11, item12, item13, item14, item15, item16, item17, item18, item19, item20,
-                                            item21, item22, item23, item24, item25, item26, item27, item28, item29, item30,
-                                            item31, item32, item33, item34, item35
-                                        ];
-
-
-                                        rowData.forEach((data, cellIndex) => {
-                                            let cell;
-
-                                            // Create a colored cell for item35 using createTableCellWithColor function
-                                            if (cellIndex === 32) {
-                                                cell = createTableCellWithColor(data, data);
-                                            } else {
-                                                cell = document.createElement('td');
-                                            }
-
-                                            cell.classList.add('text-center');
-
-                                            // Add the sticky-cell class and set different left values for cells in the 4th and 5th columns
-                                            if (cellIndex === 1) {
-                                                cell.classList.add('sticky-cell');
-                                                cell.style.left = '0';
-                                            } else if (cellIndex === 2) {
-                                                cell.classList.add('sticky-cell');
-                                                cell.style.left = '30px'; // You can adjust this value based on the width of the 4th column
-                                            }
-
-                                            if (cellIndex === 2) {
-                                                cell.appendChild(data);
-                                            } else if (cellIndex !== 32) {
-                                                cell.innerText = data;
-                                            }
-
-                                            // ...
-
-                                            // Apply background color to the entire row except for cell 34, cell 4 and cell 5
-                                            if (cellIndex !== 32) {
-                                                cell.style.backgroundColor = innerData['background_color'];
-                                            }
-
-                                            tr.appendChild(cell);
-                                            // ...
-
-                                        });
-
-                                        body2.appendChild(tr);
                                     }
+                                    cell.classList.add('text-center');
+
+
+                                    if (cellIndex === 1) {
+                                        cell.classList.add('sticky-cell');
+                                        cell.style.left = '0';
+                                    } else if (cellIndex === 2) {
+                                        cell.classList.add('sticky-cell');
+                                        cell.style.left = '30px'; // You can adjust this value based on the width of the 4th column
+                                    }
+
+
+                                    tr.appendChild(cell);
                                 });
-                            }
-                        });
 
-                        if (wilayahData) {
-                            let tr = document.createElement('tr');
-                            let item1 = counters++
-
-                            let item4 = wilayahData.est;
-                            let item5 = ' '
-
-                            let item6 = wilayahData.nama_staff !== undefined ? wilayahData.nama_staff : '-';
-                            let item7 = wilayahData.Jumlah_janjang;
-                            let item8 = wilayahData.tnp_brd;
-                            let item9 = wilayahData.persenTNP_brd;
-                            let item10 = wilayahData.krg_brd;
-                            let item11 = wilayahData.persenKRG_brd;
-                            let item12 = wilayahData.total_jjg;
-                            let item13 = wilayahData.persen_totalJjg;
-                            let item14 = wilayahData.skor_total;
-                            let item15 = wilayahData.jjg_matang;
-                            let item16 = wilayahData.persen_jjgMtang;
-                            let item17 = wilayahData.skor_jjgMatang;
-                            let item18 = wilayahData.lewat_matang;
-                            let item19 = wilayahData.persen_lwtMtng;
-                            let item20 = wilayahData.skor_lewatMTng;
-                            let item21 = wilayahData.janjang_kosong;
-                            let item22 = wilayahData.persen_kosong;
-                            let item23 = wilayahData.skor_kosong;
-                            let item24 = wilayahData.vcut;
-                            let item25 = wilayahData.vcut_persen;
-                            let item26 = wilayahData.vcut_skor;
-                            let item27 = wilayahData.abnormal;
-                            let item28 = wilayahData.abnormal_persen;
-                            let item29 = wilayahData.rat_dmg;
-                            let item30 = wilayahData.rd_persen;
-                            let item31 = wilayahData.TPH;
-                            let item32 = wilayahData.persen_krg;
-                            let item33 = wilayahData.skor_kr;
-                            let item34 = wilayahData.all_skor;
-                            let item35 = wilayahData.kategori;
-
-                            let rowData = [
-                                item1, item4, item5, item6, item7, item8, item9, item10,
-                                item11, item12, item13, item14, item15, item16, item17, item18, item19, item20,
-                                item21, item22, item23, item24, item25, item26, item27, item28, item29, item30,
-                                item31, item32, item33, item34, item35
-                            ];
-
-                            rowData.forEach((data, cellIndex) => {
-                                let cell = document.createElement('td');
-                                cell.classList.add('text-center');
-
-                                if (cellIndex === 2) {
-                                    cell.classList.add('freeze-reg');
-                                } else if (cellIndex === 3) {
-                                    cell.classList.add('freeze-afd');
-                                }
-
-                                // Set background color for item35 (category)
-                                if (cellIndex === 32) {
-                                    switch (data) {
-                                        case "POOR":
-                                            cell.style.backgroundColor = '#ff0404';
-                                            break;
-                                        case "GOOD":
-                                            cell.style.backgroundColor = '#08fc2c';
-                                            break;
-                                        case "FAIR":
-                                            cell.style.backgroundColor = '#ffa404';
-                                            break;
-                                        case "EXCELLENT":
-                                            cell.style.backgroundColor = '#5074c4';
-                                            break;
-                                        case "SATISFACTORY":
-                                            cell.style.backgroundColor = '#fffc04';
-                                            break;
-                                    }
-                                }
-
-
-                                // Apply background color to the entire row except for cell 34
-                                if (cellIndex !== 32) {
-                                    cell.style.backgroundColor = wilayahData['background_color'];
-                                }
-
-                                cell.innerText = data;
-                                tr.appendChild(cell);
+                                tableBody.appendChild(tr);
                             });
-                            body2.appendChild(tr);
-                        }
+                        })
                     });
-
-
-
-                    let regInpt = reg
-                    let regs = ''
-                    if (regInpt === '1') {
-                        regs = 'REG-I'
-                    } else if (regInpt === '2') {
-                        regs = 'REG-II'
-                    } else if (regInpt === '3') {
-                        regs = 'REG-III'
-                    } else {
-                        regs = 'REG-IV'
-                    }
-
-
-
-                    var arrTbody1 = regional;
-                    // console.log(arrTbody1);
-                    var tbody1 = document.getElementById('data_weekTab2');
-                    let counter = 1;
-
-
-                    arrTbody1.forEach(element => {
-                        let tr = document.createElement('tr');
-
-                        let dataItems = {
-                            item1: counter++,
-                            item2: element[1].Total.reg,
-                            item5: '',
-                            item6: element[1].Total.nama_staff,
-                            item7: element[1].Total.Jumlah_janjang,
-                            item8: element[1].Total.tnp_brd,
-                            item9: element[1].Total.persenTNP_brd,
-                            item10: element[1].Total.krg_brd,
-                            item11: element[1].Total.persenKRG_brd,
-                            item12: element[1].Total.total_jjg,
-                            item13: element[1].Total.persen_totalJjg,
-                            item14: element[1].Total.skor_total,
-                            item15: element[1].Total.jjg_matang,
-                            item16: element[1].Total.persen_jjgMtang,
-                            item17: element[1].Total.skor_jjgMatang,
-                            item18: element[1].Total.lewat_matang,
-                            item19: element[1].Total.persen_lwtMtng,
-                            item20: element[1].Total.skor_lewatMTng,
-                            item21: element[1].Total.janjang_kosong,
-                            item22: element[1].Total.persen_kosong,
-                            item23: element[1].Total.skor_kosong,
-                            item24: element[1].Total.vcut,
-                            item25: element[1].Total.vcut_persen,
-                            item26: element[1].Total.vcut_skor,
-                            item27: element[1].Total.abnormal,
-                            item28: element[1].Total.abnormal_persen,
-                            item29: element[1].Total.rat_dmg,
-                            item30: element[1].Total.rd_persen,
-                            item31: element[1].Total.TPH,
-                            item32: element[1].Total.persen_krg,
-                            item33: element[1].Total.skor_kr,
-                            item34: element[1].Total.all_skor,
-                            item35: element[1].Total.kategori,
-                        };
-
-                        const rowData = Object.values(dataItems);
-
-                        rowData.forEach((data, cellIndex) => {
-                            // Create a new cell with a background color based on the 'kategori' value
-                            let isHTML = cellIndex === 2;
-                            let cell = (cellIndex === 32) ? createTableCellWithColor(data, data) : createTableCell(data, isHTML);
-
-
-                            // Add the freeze-reg and freeze-afd classes to the corresponding cells
-                            // if (cellIndex === 3) {
-                            //     cell.classList.add('freeze-reg');
-                            // } else if (cellIndex === 4) {
-                            //     cell.classList.add('freeze-afd');
-                            // }
-                            if (cellIndex !== 32) {
-                                cell.style.backgroundColor = element[1].Total['background_color'];
-                            }
-
-                            tr.appendChild(cell);
-                        });
-                        tbody1.appendChild(tr);
-                    });
-
-
-
-
-
-
                 },
                 error: function(xhr, status, error) {
                     closeLoadingSwal(btnShoWeekdata);

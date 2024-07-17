@@ -112,8 +112,18 @@ function populateTableWithRanks(tableData, tableBody) {
 
         Object.keys(estate).forEach((afdelingKey) => {
             let afdeling = estate[afdelingKey];
+            let total;
 
-            let total = afdeling.TOTAL_SKORbh + afdeling.totalSkortrans + afdeling.skor_akhircak;
+            if (afdeling.TOTAL_SKORbh !== undefined) {
+                total = afdeling.TOTAL_SKORbh + afdeling.totalSkortrans + afdeling.skor_akhircak;
+            } 
+            if (afdeling.total_score !== undefined) {
+                total = afdeling.total_score;
+            }
+
+            if (afdeling.score_estate !== undefined) {
+                total = afdeling.score_estate;
+            }
             let rank = rankMap.get(`${estateName}-${afdelingKey}`);
 
             // Create table row and cells
@@ -169,12 +179,33 @@ function setBackgroundColor(element, score) {
     }
     element.style.color = "black";
 }
+function setBackgroundColorCell(cell, score) {
+    if (score >= 95) {
+        cell.style.backgroundColor = "#609cd4";
+    } else if (score >= 85) {
+        cell.style.backgroundColor = "#08b454";
+    } else if (score >= 75) {
+        cell.style.backgroundColor = "#fffc04";
+    } else if (score >= 65) {
+        cell.style.backgroundColor = "#ffc404";
+    } else if (score === '-') {
+        cell.style.backgroundColor = "white";
+    } else {
+        cell.style.backgroundColor = "red";
+    }
+    cell.style.color = "black";
+}
 
 function MakeTableforwil(data, tableBody) {
-    let item1 = data['afd'];
-    let item2 = data['est'];
-    let item3 = data['gm'] ?? '-';
-    let item4 = data['TOTAL_SKORbh'] + data['totalSkortrans'] + data['skor_akhircak'];
+    let item1 = data['afd'] ?? data['wil'] ?? 'WIL';
+    let item2 = data['est']  ?? data['wil'];;
+    let item3 = data['gm'] ?? data['rh'] ?? '-';
+    let item4;
+    if (data['TOTAL_SKORbh'] !== undefined) {
+        item4 = data['TOTAL_SKORbh'] + data['totalSkortrans'] + data['skor_akhircak'];
+    }else{
+        item4 = data['skor'].toFixed(2) ;
+    }
     let item5 = '-';
 
     var tr = document.createElement('tr');
@@ -203,10 +234,11 @@ function MakeTableforwil(data, tableBody) {
 }
 
 
+
 // Example usage:
 
 
 // Attach the function to the window object to make it globally accessible
 window.populateTableWithRanks = populateTableWithRanks;
 window.setBackgroundColor = setBackgroundColor;
-window.TableForWilReg = MakeTableforwil;
+window.setBackgroundColorCell = setBackgroundColorCell;

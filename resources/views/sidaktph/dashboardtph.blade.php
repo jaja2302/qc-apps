@@ -1731,7 +1731,7 @@
         $('#tbody3Month').empty()
         $('#plasmaMonth').empty()
         $('#tbodySkorRHMonth').empty()
-        console.log('button clicked');
+        // console.log('button clicked');
         Swal.fire({
           title: 'Loading',
           html: '<span class="loading-text">Mohon Tunggu...</span>',
@@ -4431,23 +4431,59 @@
           success: function(result) {
             Swal.close();
             //parsing result ke json untuk dalam estate
-            var parseResult = JSON.parse(result)
-            var rekapmua = parseResult['newSidak_mua']
-            var listest = parseResult['listest']
-            var brdchart = parseResult['brdchart']
-            var chartrst = parseResult['chartrst']
-            var listwil = parseResult['listwil']
-            var brdchartwil = parseResult['brdchartwil']
-            var chartrstwil = parseResult['chartrstwil']
-            var afdeling1 = Object.entries(parseResult['afdeling1'])
-            var afdeling2 = Object.entries(parseResult['afdeling2'])
-            var afdeling3 = Object.entries(parseResult['afdeling3'])
-            var estate1 = Object.entries(parseResult['estate1'])
-            var estate2 = Object.entries(parseResult['estate2'])
-            var estate3 = Object.entries(parseResult['estate3'])
-            var hasilRh = Object.entries(parseResult['hasilRh'])
+            var rekapafd = result['rekap_perafdeling_groupwil']
+            var rekap_per_estate = result['rekap_perestate_groupwill']
+            var rekap_per_wil = result['rekap_perwill_groupwil']
+            var rekap_per_reg = result['rekap_rh']
+            var datachart = result['datachart_est']
+            // console.log(rekap_per_reg);
+            let table1 = rekapafd[1] ?? rekapafd[4] ?? rekapafd[7] ?? rekapafd[10]
+            let table2 = rekapafd[2] ?? rekapafd[5] ?? rekapafd[8] ?? rekapafd[11]
+            let table3 = rekapafd[3] ?? rekapafd[6] ?? []
+            let tbody1 = document.getElementById('tbody1Month');
+            let tbody2 = document.getElementById('tbody2Month');
+            let tbody3 = document.getElementById('tbody3Month');
+            populateTableWithRanks(table1, tbody1);
+            populateTableWithRanks(table2, tbody2);
+            populateTableWithRanks(table3, tbody3);
+            //untuk perestate
+            let table1_est = rekap_per_estate[1] ?? rekap_per_estate[4] ?? rekap_per_estate[7] ?? rekap_per_estate[10]
+            let table2_est = rekap_per_estate[2] ?? rekap_per_estate[5] ?? rekap_per_estate[8] ?? rekap_per_estate[11]
+            let table3_est = rekap_per_estate[3] ?? rekap_per_estate[6] ?? []
+            populateTableWithRanks(table1_est, tbody1);
+            populateTableWithRanks(table2_est, tbody2);
+            populateTableWithRanks(table3_est, tbody3);
+            // untuk perwill 
+            let table1_wil = rekap_per_wil[1] ?? rekap_per_wil[4] ?? rekap_per_wil[7] ?? rekap_per_wil[10]
+            let table2_wil = rekap_per_wil[2] ?? rekap_per_wil[5] ?? rekap_per_wil[8] ?? rekap_per_wil[11]
+            let table3_wil = rekap_per_wil[3] ?? rekap_per_wil[6] ?? []
+            TableForWilReg(table1_wil, tbody1);
+            TableForWilReg(table2_wil, tbody2);
+            TableForWilReg(table3_wil, tbody3);
+            let theadreg = document.getElementById('tbodySkorRHMonth');
+            TableForWilReg(rekap_per_reg, theadreg);
 
-            // renderChartTphMonth
+            // charto anone 
+            let list_estate = [];
+            let brdchart = [];
+            let chartrst = [];
+            let mentahbuah = [];
+            let masakbuah = [];
+            let overbuah = [];
+            let abrbuah = [];
+            let emptybuah = [];
+            let vcutbuah = [];
+            let brdtrans = [];
+            let buahtrans = [];
+            let keys = Object.keys(datachart);
+
+            for (let index = 0; index < keys.length; index++) {
+              let key = keys[index];
+              list_estate.push(key);
+              brdchart.push(datachart[key].brd);
+              chartrst.push(datachart[key].buah);
+            }
+
             renderChartTphMonth.updateSeries([{
               name: 'Brondolan Tinggal',
               data: brdchart
@@ -4456,7 +4492,7 @@
             // If ktg is an array, you can use it for x-axis categories
             renderChartTphMonth.updateOptions({
               xaxis: {
-                categories: listest
+                categories: list_estate
               }
             });
             renderChartKarungMonth.updateSeries([{
@@ -4467,626 +4503,44 @@
             // If ktg is an array, you can use it for x-axis categories
             renderChartKarungMonth.updateOptions({
               xaxis: {
-                categories: listest
+                categories: list_estate
               }
             });
 
+            let list_wil = [];
+            let cakbrdwil = [];
+            let cakbuahwil = [];
+            let keyss = Object.keys(rekap_per_wil);
+            // console.log(rekap_per_wil);
+            for (let index = 0; index < keyss.length; index++) {
+              let key = keyss[index];
+              list_wil.push(key);
+              cakbrdwil.push(rekap_per_wil[key].brd);
+              cakbuahwil.push(rekap_per_wil[key].buah);
+            }
 
             will_bttMonth.updateSeries([{
               name: 'Brondolan Tinggal',
-              data: brdchartwil
+              data: cakbrdwil
             }]);
 
             // If ktg is an array, you can use it for x-axis categories
             will_bttMonth.updateOptions({
               xaxis: {
-                categories: listwil
+                categories: list_wil
               }
             });
             renderChartKarungWilMonth.updateSeries([{
               name: 'Buah Tinggal',
-              data: chartrstwil
+              data: cakbuahwil
             }]);
 
             // If ktg is an array, you can use it for x-axis categories
             renderChartKarungWilMonth.updateOptions({
               xaxis: {
-                categories: listwil
+                categories: list_wil
               }
             });
-
-
-            var rh = document.getElementById('tbodySkorRHMonth');
-            // console.log(hasilRh);
-            let tr = document.createElement('tr')
-            let reg1 = hasilRh[0][1]['est']
-            let reg2 = hasilRh[0][1]['jab']
-            let reg3 = hasilRh[0][1]['nama']
-            let reg4 = hasilRh[0][1]['skor']
-            // let reg4 = 'oke'
-            let regElement1 = document.createElement('td')
-            let regElement2 = document.createElement('td')
-            let regElement3 = document.createElement('td')
-            let regElement4 = document.createElement('td')
-
-            regElement1.classList.add("text-center")
-            regElement2.classList.add("text-center")
-            regElement3.classList.add("text-center")
-            regElement4.classList.add("text-center")
-
-            regElement1.style.backgroundColor = "#c8e4b4";
-            regElement2.style.backgroundColor = "#c8e4b4";
-            regElement3.style.backgroundColor = "#c8e4b4";
-            regElement4.style.backgroundColor = "white";
-
-
-            if (reg4 === '-') {
-              regElement4.style.backgroundColor = "white";
-            }
-            setBackgroundColor(regElement4, reg4);
-
-
-            regElement1.innerText = reg1;
-            regElement2.innerText = reg2;
-            regElement3.innerText = reg3;
-            regElement4.innerText = reg4;
-
-            tr.appendChild(regElement1)
-            tr.appendChild(regElement2)
-            tr.appendChild(regElement3)
-            tr.appendChild(regElement4)
-
-            rh.appendChild(tr)
-            ///untuk table
-            //table wil 1
-
-            var arrTbody1 = afdeling1
-            // console.log(arrTbody1);
-            var table1 = document.getElementById('table1Month');
-
-            var tbody1 = document.getElementById('tbody1Month');
-            // Create a copy of the original array and sort it in descending order of scores
-            arrTbody1.forEach((element, index) => {
-
-              let tr = document.createElement('tr')
-              let item1 = element[1]['est']
-              let item2 = element[1]['afd']
-              let item3 = element[1]['asisten']
-              let item4 = element[1]['skor'];
-
-              // Check if item4 is less than 0, and set it to 0 if true
-              // item4 = (item4 < 0) ? 0 : item4;
-
-              let item5 = element[1]['ranking']
-              // console.log(item5);
-
-              let itemElement1 = document.createElement('td')
-              let itemElement2 = document.createElement('td')
-              let itemElement3 = document.createElement('td')
-              let itemElement4 = document.createElement('td')
-              let itemElement5 = document.createElement('td')
-
-              itemElement1.classList.add("text-center")
-              itemElement2.classList.add("text-center")
-              itemElement3.classList.add("text-center")
-              itemElement4.classList.add("text-center")
-              itemElement5.classList.add("text-center")
-              if (item3.trim() === "VACANT") { // Use trim to remove leading/trailing spaces
-                itemElement3.style.color = "red";
-              } else {
-                itemElement3.style.color = "black";
-              }
-
-
-              if (item4 === '-') {
-                itemElement4.style.backgroundColor = "white";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 95) {
-                itemElement4.style.backgroundColor = "#609cd4";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 85 && item4 < 95) {
-                itemElement4.style.backgroundColor = "#08b454";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 75 && item4 < 85) {
-                itemElement4.style.backgroundColor = "#fffc04";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 65 && item4 < 75) {
-                itemElement4.style.backgroundColor = "#ffc404";
-                itemElement4.style.color = "black";
-              } else {
-                itemElement4.style.backgroundColor = "red";
-                itemElement4.style.color = "black";
-              }
-
-              if (itemElement4.style.backgroundColor === "#609cd4") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "#08b454") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "#fffc04") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "#ffc404") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "red") {
-                itemElement4.style.color = "black";
-              }
-
-              itemElement1.innerText = item1
-              itemElement2.innerText = item2
-              itemElement3.innerText = item3
-              itemElement4.innerText = item4
-
-              itemElement5.innerText = item5
-
-              tr.appendChild(itemElement1)
-              tr.appendChild(itemElement2)
-              tr.appendChild(itemElement3)
-              tr.appendChild(itemElement4)
-              tr.appendChild(itemElement5)
-
-              tbody1.appendChild(tr)
-              // }
-            });
-            // table will 1 bagian perestate skor 
-            var arrTbody1 = estate1
-            var table1 = document.getElementById('table1Month');
-            var tbody1 = document.getElementById('tbody1Month');
-            arrTbody1.forEach(element => {
-              // for (let i = 0; i < 5; i++) {
-              let tr = document.createElement('tr')
-              let item1 = element[1]['est']
-              let item2 = element[1]['afd']
-              let item3 = element[1]['asisten']
-              let item4 = element[1]['skor'];
-
-              // Check if item4 is less than 0, and set it to 0 if true
-              // item4 = (item4 < 0) ? 0 : item4;
-
-              let item5 = element[1]['ranking']
-              let item6 = element[1]['est_score']
-
-              let itemElement1 = document.createElement('td')
-              let itemElement2 = document.createElement('td')
-              let itemElement3 = document.createElement('td')
-              let itemElement4 = document.createElement('td')
-              let itemElement5 = document.createElement('td')
-
-              itemElement1.classList.add("text-center")
-              itemElement2.classList.add("text-center")
-              itemElement3.classList.add("text-center")
-              itemElement4.classList.add("text-center")
-              itemElement5.classList.add("text-center")
-              itemElement1.style.backgroundColor = "#e8ecdc";
-              itemElement2.style.backgroundColor = "#e8ecdc";
-              itemElement3.style.backgroundColor = "#e8ecdc";
-              if (item3.trim() === "VACANT") { // Use trim to remove leading/trailing spaces
-                itemElement3.style.color = "red";
-              } else {
-                itemElement3.style.color = "black";
-              }
-
-
-              if (item4 === '-') {
-                itemElement4.style.backgroundColor = "white";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 95) {
-                itemElement4.style.backgroundColor = "#609cd4";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 85 && item4 < 95) {
-                itemElement4.style.backgroundColor = "#08b454";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 75 && item4 < 85) {
-                itemElement4.style.backgroundColor = "#fffc04";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 65 && item4 < 75) {
-                itemElement4.style.backgroundColor = "#ffc404";
-                itemElement4.style.color = "black";
-              } else {
-                itemElement4.style.backgroundColor = "red";
-                itemElement4.style.color = "black";
-              }
-
-              if (itemElement4.style.backgroundColor === "#609cd4") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "#08b454") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "#fffc04") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "#ffc404") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "red") {
-                itemElement4.style.color = "black";
-              }
-              itemElement1.innerText = item1
-              itemElement2.innerText = item2
-              itemElement3.innerText = item3
-              itemElement4.innerText = item4
-              itemElement5.innerText = item5
-
-              tr.appendChild(itemElement1)
-              tr.appendChild(itemElement2)
-              tr.appendChild(itemElement3)
-              tr.appendChild(itemElement4)
-              tr.appendChild(itemElement5)
-
-              tbody1.appendChild(tr)
-
-            });
-            ///table wil 2
-            var arrTbody2 = afdeling2
-            var tbody2 = document.getElementById('tbody2Month');
-            arrTbody2.forEach(element => {
-              // for (let i = 0; i < 5; i++) {
-              let tr = document.createElement('tr')
-              let item1 = element[1]['est']
-              let item2 = element[1]['afd']
-              let item3 = element[1]['asisten']
-              // let item4 = element[1]['skor']
-
-              let item4 = element[1]['skor'];
-
-              // Check if item4 is less than 0, and set it to 0 if true
-              // item4 = (item4 < 0) ? 0 : item4;
-              let item5 = element[1]['ranking']
-
-              let itemElement1 = document.createElement('td')
-              let itemElement2 = document.createElement('td')
-              let itemElement3 = document.createElement('td')
-              let itemElement4 = document.createElement('td')
-              let itemElement5 = document.createElement('td')
-              itemElement1.classList.add("text-center")
-              itemElement2.classList.add("text-center")
-              itemElement3.classList.add("text-center")
-              itemElement4.classList.add("text-center")
-              itemElement5.classList.add("text-center")
-
-              if (item3.trim() === "VACANT") { // Use trim to remove leading/trailing spaces
-                itemElement3.style.color = "red";
-              } else {
-                itemElement3.style.color = "black";
-              }
-
-
-              if (item4 === '-') {
-                itemElement4.style.backgroundColor = "white";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 95) {
-                itemElement4.style.backgroundColor = "#609cd4";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 85 && item4 < 95) {
-                itemElement4.style.backgroundColor = "#08b454";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 75 && item4 < 85) {
-                itemElement4.style.backgroundColor = "#fffc04";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 65 && item4 < 75) {
-                itemElement4.style.backgroundColor = "#ffc404";
-                itemElement4.style.color = "black";
-              } else {
-                itemElement4.style.backgroundColor = "red";
-                itemElement4.style.color = "black";
-              }
-
-              if (itemElement4.style.backgroundColor === "#609cd4") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "#08b454") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "#fffc04") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "#ffc404") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "red") {
-                itemElement4.style.color = "black";
-              }
-              itemElement1.innerText = item1
-              itemElement2.innerText = item2
-              itemElement3.innerText = item3
-              itemElement4.innerText = item4
-              /* if (item4 != 0) {
-                  itemElement4.innerHTML = '<a class="detailBa" href="detailSidakTph/' +
-                      element['est'] + '/' + element['afd'] + '/' +
-                      firstWeek + '/' + lastWeek + '">' + element['skor'] +
-                      ' </a>'
-              } else {
-                  itemElement4.innerText = item4
-              } */
-              itemElement5.innerText = item5
-              tr.appendChild(itemElement1)
-              tr.appendChild(itemElement2)
-              tr.appendChild(itemElement3)
-              tr.appendChild(itemElement4)
-              tr.appendChild(itemElement5)
-              tbody2.appendChild(tr)
-              // }
-            });
-            //untuk estate wil 2
-            var arrTbody2 = estate2
-            arrTbody2.forEach(element => {
-              // for (let i = 0; i < 5; i++) {
-              let tr = document.createElement('tr')
-              let item1 = element[1]['est']
-              let item2 = element[1]['afd']
-              let item3 = element[1]['asisten']
-
-              let item4 = element[1]['skor'];
-
-              // Check if item4 is less than 0, and set it to 0 if true
-              // item4 = (item4 < 0) ? 0 : item4;
-              let item5 = element[1]['ranking']
-              let itemElement1 = document.createElement('td')
-              let itemElement2 = document.createElement('td')
-              let itemElement3 = document.createElement('td')
-              let itemElement4 = document.createElement('td')
-              let itemElement5 = document.createElement('td')
-
-              itemElement1.classList.add("text-center")
-              itemElement2.classList.add("text-center")
-              itemElement3.classList.add("text-center")
-              itemElement4.classList.add("text-center")
-              itemElement5.classList.add("text-center")
-              itemElement1.style.backgroundColor = "#e8ecdc";
-              itemElement2.style.backgroundColor = "#e8ecdc";
-              itemElement3.style.backgroundColor = "#e8ecdc";
-              if (item3.trim() === "VACANT") { // Use trim to remove leading/trailing spaces
-                itemElement3.style.color = "red";
-              } else {
-                itemElement3.style.color = "black";
-              }
-
-
-              if (item4 === '-') {
-                itemElement4.style.backgroundColor = "white";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 95) {
-                itemElement4.style.backgroundColor = "#609cd4";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 85 && item4 < 95) {
-                itemElement4.style.backgroundColor = "#08b454";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 75 && item4 < 85) {
-                itemElement4.style.backgroundColor = "#fffc04";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 65 && item4 < 75) {
-                itemElement4.style.backgroundColor = "#ffc404";
-                itemElement4.style.color = "black";
-              } else {
-                itemElement4.style.backgroundColor = "red";
-                itemElement4.style.color = "black";
-              }
-
-              if (itemElement4.style.backgroundColor === "#609cd4") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "#08b454") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "#fffc04") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "#ffc404") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "red") {
-                itemElement4.style.color = "black";
-              }
-              itemElement1.innerText = item1
-              itemElement2.innerText = item2
-              itemElement3.innerText = item3
-              itemElement4.innerText = item4
-              itemElement5.innerText = item5
-
-              tr.appendChild(itemElement1)
-              tr.appendChild(itemElement2)
-              tr.appendChild(itemElement3)
-              tr.appendChild(itemElement4)
-              tr.appendChild(itemElement5)
-
-              tbody2.appendChild(tr)
-              // }
-            });
-            ///table wil 3
-            // if (regSidak != 3) {
-            var arrTbody3 = afdeling3
-            var tbody3 = document.getElementById('tbody3Month');
-            arrTbody3.forEach(element => {
-              // for (let i = 0; i < 5; i++) {
-              let tr = document.createElement('tr')
-              let item1 = element[1]['est']
-              let item2 = element[1]['afd']
-              let item3 = element[1]['asisten']
-
-              let item4 = element[1]['skor'];
-
-              // Check if item4 is less than 0, and set it to 0 if true
-              // item4 = (item4 < 0) ? 0 : item4;
-              let item5 = element[1]['ranking']
-
-              let itemElement1 = document.createElement('td')
-              let itemElement2 = document.createElement('td')
-              let itemElement3 = document.createElement('td')
-              let itemElement4 = document.createElement('td')
-              let itemElement5 = document.createElement('td')
-
-              itemElement1.classList.add("text-center")
-              itemElement2.classList.add("text-center")
-              itemElement3.classList.add("text-center")
-              itemElement4.classList.add("text-center")
-              itemElement5.classList.add("text-center")
-              if (item3.trim() === "VACANT") { // Use trim to remove leading/trailing spaces
-                itemElement3.style.color = "red";
-              } else {
-                itemElement3.style.color = "black";
-              }
-
-
-              if (item4 === '-') {
-                itemElement4.style.backgroundColor = "white";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 95) {
-                itemElement4.style.backgroundColor = "#609cd4";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 85 && item4 < 95) {
-                itemElement4.style.backgroundColor = "#08b454";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 75 && item4 < 85) {
-                itemElement4.style.backgroundColor = "#fffc04";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 65 && item4 < 75) {
-                itemElement4.style.backgroundColor = "#ffc404";
-                itemElement4.style.color = "black";
-              } else {
-                itemElement4.style.backgroundColor = "red";
-                itemElement4.style.color = "black";
-              }
-
-              if (itemElement4.style.backgroundColor === "#609cd4") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "#08b454") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "#fffc04") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "#ffc404") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "red") {
-                itemElement4.style.color = "black";
-              }
-              itemElement1.innerText = item1
-              itemElement2.innerText = item2
-              itemElement3.innerText = item3
-              itemElement4.innerText = item4
-              /* if (item4 != 0) {
-                  itemElement4.innerHTML = '<a class="detailBa" href="detailSidakTph/' +
-                      element['est'] + '/' + element['afd'] + '/' +
-                      firstWeek + '/' + lastWeek + '">' + element['skor'] +
-                      ' </a>'
-              } else {
-                  itemElement4.innerText = item4
-              } */
-              itemElement5.innerText = item5
-
-              tr.appendChild(itemElement1)
-              tr.appendChild(itemElement2)
-              tr.appendChild(itemElement3)
-              tr.appendChild(itemElement4)
-              tr.appendChild(itemElement5)
-
-              tbody3.appendChild(tr)
-              // }
-            });
-            Object.entries(rekapmua).forEach(([key, value]) => {
-              let tr = document.createElement('tr');
-
-              let itemElement1 = document.createElement('td');
-              let itemElement2 = document.createElement('td');
-              let itemElement3 = document.createElement('td');
-              let itemElement4 = document.createElement('td');
-              let itemElement5 = document.createElement('td');
-
-              itemElement1.innerText = key;
-              itemElement2.innerText = key;
-              itemElement3.innerText = value['asisten'];
-              itemElement4.innerText = value['score_estate'];
-              itemElement5.innerText = '-';
-              if (key === 'PT.MUA') {
-                itemElement1.style.backgroundColor = "#e8ecdc";
-                itemElement2.style.backgroundColor = "#e8ecdc";
-                itemElement3.style.backgroundColor = "#e8ecdc";
-              }
-
-              setBackgroundColor(itemElement4, value['score_estate']);
-
-              tr.appendChild(itemElement1);
-              tr.appendChild(itemElement2);
-              tr.appendChild(itemElement3);
-              tr.appendChild(itemElement4);
-              tr.appendChild(itemElement5);
-
-              tbody3.appendChild(tr);
-            });
-            // untuk estate will 3
-            var arrTbody3 = estate3
-            arrTbody3.forEach(element => {
-              // for (let i = 0; i < 5; i++) {
-              let tr = document.createElement('tr')
-              let item1 = element[1]['est']
-              let item2 = element[1]['afd']
-              let item3 = element[1]['asisten']
-
-              let item4 = element[1]['skor'];
-
-              // Check if item4 is less than 0, and set it to 0 if true
-              // item4 = (item4 < 0) ? 0 : item4;
-              let item5 = element[1]['ranking']
-
-              let itemElement1 = document.createElement('td')
-              let itemElement2 = document.createElement('td')
-              let itemElement3 = document.createElement('td')
-              let itemElement4 = document.createElement('td')
-              let itemElement5 = document.createElement('td')
-
-              itemElement1.classList.add("text-center")
-              itemElement2.classList.add("text-center")
-              itemElement3.classList.add("text-center")
-              itemElement4.classList.add("text-center")
-              itemElement5.classList.add("text-center")
-              itemElement1.style.backgroundColor = "#e8ecdc";
-              itemElement2.style.backgroundColor = "#e8ecdc";
-              itemElement3.style.backgroundColor = "#e8ecdc";
-              if (item3.trim() === "VACANT") { // Use trim to remove leading/trailing spaces
-                itemElement3.style.color = "red";
-              } else {
-                itemElement3.style.color = "black";
-              }
-
-              if (item4 === '-') {
-                itemElement4.style.backgroundColor = "white";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 95) {
-                itemElement4.style.backgroundColor = "#609cd4";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 85 && item4 < 95) {
-                itemElement4.style.backgroundColor = "#08b454";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 75 && item4 < 85) {
-                itemElement4.style.backgroundColor = "#fffc04";
-                itemElement4.style.color = "black";
-              } else if (item4 >= 65 && item4 < 75) {
-                itemElement4.style.backgroundColor = "#ffc404";
-                itemElement4.style.color = "black";
-              } else {
-                itemElement4.style.backgroundColor = "red";
-                itemElement4.style.color = "black";
-              }
-
-              if (itemElement4.style.backgroundColor === "#609cd4") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "#08b454") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "#fffc04") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "#ffc404") {
-                itemElement4.style.color = "black";
-              } else if (itemElement4.style.backgroundColor === "red") {
-                itemElement4.style.color = "black";
-              }
-              /* if (item4 != 0) {
-                  itemElement4.innerHTML = '<a class="detailBa" href="BaSidakTPH/' + element[
-                          'est'] + '/' + firstWeek + '/' + lastWeek +
-                      '" target="_blank">' + element['skor'] + ' </a>'
-              } else {
-                  itemElement4.innerText = item4
-              } */
-              itemElement1.innerText = item1
-              itemElement2.innerText = item2
-              itemElement3.innerText = item3
-              itemElement4.innerText = item4
-              itemElement5.innerText = item5
-
-              tr.appendChild(itemElement1)
-              tr.appendChild(itemElement2)
-              tr.appendChild(itemElement3)
-              tr.appendChild(itemElement4)
-              tr.appendChild(itemElement5)
-
-              tbody3.appendChild(tr)
-              // }
-            });
-
 
           },
           error: function(xhr, status, error) {
