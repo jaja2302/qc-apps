@@ -1245,32 +1245,37 @@
 
                 $datenow = \Carbon\Carbon::now()->format('Y');
                 @endphp
-                <div class="d-flex justify-content-end mt-3 mb-2 ml-3 mr-3" style="padding-top: 20px;">
-                    <div class="row w-100">
-                        <div class="col-md-2 offset-md-8">
-                            {{csrf_field()}}
-                            <select class="form-control" id="regDataMap">
-                                <option value="" disabled>Pilih REG</option>
-                                <option value="1,2,3" selected>Region 1</option>
-                                <option value="4,5,6">Region 2</option>
-                                <option value="7,8">Region 3</option>
-                                <option value="10,11">Region 4</option>
-                            </select>
-                        </div>
-
-                        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
-                            {{ csrf_field() }}
-                            <select class="form-control" id="estDataMap" disabled>
-                                <option value="" disabled>Pilih EST</option>
-                            </select>
-
+                <div class="d-flex justify-content-end mr-3 mt-4">
+                    <div class="margin g-2">
+                        <div class="row align-items-center">
+                            <div class="col-md">
+                                {{csrf_field()}}
+                                <select class="form-control" id="regDataMap">
+                                    <option value="" disabled selected>Pilih REG</option>
+                                    <option value="1,2,3">Region 1</option>
+                                    <option value="4,5,6">Region 2</option>
+                                    <option value="7,8">Region 3</option>
+                                    <option value="10,11">Region 4</option>
+                                </select>
+                            </div>
+                            <div class="col-md">
+                                {{ csrf_field() }}
+                                <select class="form-control" id="estDataMap" disabled>
+                                    <option value="" disabled selected>Pilih EST</option>
+                                </select>
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-primary mb-2 ml-2" id="showEstMap">Show</button>
+                                @if (strpos(session('departemen'), 'QC') !== false && session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' || session('jabatan') == 'Admin' || auth()->user()->id_departement == '43' && in_array(auth()->user()->id_jabatan, ['10', '15', '20', '4', '5', '6']))
+                                <a class="btn btn-primary mb-2 ml-2" id="otherLink" href="{{ route('crudmatchblok') }}" target="_blank">
+                                    <span>Ubah Data Blok</span>
+                                </a>
+                                @endif
+                                <button class="btn btn-primary mb-2 ml-2" id="downloadimgmap">Download Image</button>
+                            </div>
                         </div>
                     </div>
-                    <button class="btn btn-primary mb-3 ml-3" id="showEstMap">Show</button>
-                    <button class="btn btn-primary" id="downloadimgmap">Download Image</button>
-
                 </div>
-
 
                 <div class="ml-4 mr-4 mb-3">
                     <div class="row text-center">

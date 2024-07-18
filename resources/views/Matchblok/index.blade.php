@@ -1,5 +1,8 @@
 <x-layout.app>
     <div class="card">
+        <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark ">
+            <h2>Mohon muat ulang halaman selesai mengedit untuk menerapkan perubahan </h2>
+        </div>
         <div class="d-flex justify-content-end mt-3 mb-2 ml-3 mr-3" style="padding-top: 20px;">
             <div class="row w-100">
                 <div class="col-md-2 offset-md-8">
@@ -440,5 +443,5 @@
                 });
             }
         </script>
-
+    </div>
 </x-layout.app>
