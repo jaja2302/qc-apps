@@ -41,6 +41,7 @@ class inspeksidashController extends Controller
             unset($value1);
         }
         unset($value);
+
         $rekap_per_estate = $result['data'];
         foreach ($rekap_per_estate as $key => &$value) {
             if (isset($value['wilayah'])) {
@@ -51,14 +52,15 @@ class inspeksidashController extends Controller
                     foreach ($value1 as $k => $v) {
                         if ($k !== 'estate') {
                             unset($value1[$k]);
-                            $rekap_per_estate[$key][$key1]['estate'] = $v;
                         }
                     }
                 }
             }
-            unset($value1);
         }
+        unset($value1);
         unset($value);
+        // dd($rekap_per_estate);
+
         $filtered_rekap_per_wil = $result['data'];
         $rekap_per_wil = [];
 
@@ -81,7 +83,7 @@ class inspeksidashController extends Controller
         }
         unset($datachart_est['SRE']);
         unset($datachart_est['LDE']);
-        // dd($rekap_per_wil);
+        // dd($rekap_per_estate);
         $arr = array();
 
         $arr['rekap_per_afdeling'] = $rekap_per_afdeling;

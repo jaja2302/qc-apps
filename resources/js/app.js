@@ -196,7 +196,7 @@ function setBackgroundColorCell(cell, score) {
     cell.style.color = "black";
 }
 
-function MakeTableforwil(data, tableBody) {
+function TableForWilReg(data, tableBody) {
     let item1 = data['afd'] ?? data['wil'] ?? 'WIL';
     let item2 = data['est']  ?? data['wil'];;
     let item3 = data['gm'] ?? data['rh'] ?? '-';
@@ -242,3 +242,4 @@ function MakeTableforwil(data, tableBody) {
 window.populateTableWithRanks = populateTableWithRanks;
 window.setBackgroundColor = setBackgroundColor;
 window.setBackgroundColorCell = setBackgroundColorCell;
+window.TableForWilReg = TableForWilReg;

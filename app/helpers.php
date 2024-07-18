@@ -1,6 +1,7 @@
 <?php
 // Important functions
 
+use App\Models\BlokMatch;
 use App\Models\mutu_ancak;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cookie;
@@ -3637,7 +3638,7 @@ if (!function_exists('rekap_qcinspeks_perbulan')) {
 
                     // $ttlSkorMA = $skor_bh + $skor_brd + $skor_ps;
                     $ttlSkorMA =  skor_buah_Ma($sumPerBH) + skor_brd_ma($brdPerjjg) + skor_palepah_ma($perPl);
-
+                    $rekap[$key][$key1][$key2]['afdeling_Data'] = '-----------------------';
                     $rekap[$key][$key1][$key2]['pokok_samplecak'] = $totalPokok;
                     $rekap[$key][$key1][$key2]['asisten'] = get_nama_asisten($key1, $key2);
                     $rekap[$key][$key1][$key2]['ha_samplecak'] = $luas_ha;
@@ -3686,6 +3687,7 @@ if (!function_exists('rekap_qcinspeks_perbulan')) {
                     // data untuk pelepah sengklek
                     $pelepah_sEST += $totalpelepah_s;
                 } else {
+                    $rekap[$key][$key1][$key2]['afdeling_Data'] = '-----------------------';
                     $rekap[$key][$key1][$key2]['pokok_samplecak'] = 0;
                     $rekap[$key][$key1][$key2]['ha_samplecak'] = 0;
                     $rekap[$key][$key1][$key2]['jumlah_panencak'] = 0;
@@ -3781,8 +3783,11 @@ if (!function_exists('rekap_qcinspeks_perbulan')) {
 
                 $totalSkorEst =  skor_brd_ma($brdPerjjgEst) + skor_buah_Ma($sumPerBHEst) + skor_palepah_ma($perPlEst);
                 //PENAMPILAN UNTUK PERESTATE
+                // dd($key1);
                 $rekap[$key][$key1]['est']['estancak'] = [
+                    'estate_Data' => '-----------------------',
                     'pokok_samplecak' => $pokok_panenEst,
+                    'asisten' => get_nama_em($key1),
                     'ha_samplecak' =>  $jum_haEst,
                     'jumlah_panencak' => $janjang_panenEst,
                     'akp_rlcak' =>  $akpEst,
@@ -3908,6 +3913,7 @@ if (!function_exists('rekap_qcinspeks_perbulan')) {
             $totalWil = skor_brd_ma($brdPerwil) + skor_buah_Ma($sumPerBHWil) + skor_palepah_ma($perPiWil);
 
             $rekap[$key]['wil']['wilancak'] = [
+                'wil_Data' => '-----------------------',
                 'data' =>  $data,
                 'pokok_samplecak' =>  $pokok_panenWil,
                 'ha_samplecak' =>   $jum_haWil,
@@ -3940,6 +3946,7 @@ if (!function_exists('rekap_qcinspeks_perbulan')) {
             ];
         } else {
             $rekap[$key]['wil']['wilancak'] = [
+                'wil_Data' => '-----------------------',
                 'pokok_samplecak' => 0,
                 'gm' =>  get_nama_gm($key),
                 'ha_samplecak' => 0,
@@ -5423,7 +5430,7 @@ if (!function_exists('rekap_qcinspeks_perbulan')) {
         $dataReg['TOTAL_SKORbh'] = $totalSkorBuah;
         $dataReg['check_databh'] = 'ada';
 
-
+        // dd($rekap);
         return  ['data' => $rekap, 'reg' => $regional, 'bulan' => $bulan, 'datareg' => $dataReg];
     }
 }
@@ -10274,6 +10281,877 @@ if (!function_exists('rekap_sidakmutubuah_bulan')) {
         return [
             'data_tabel' => $sidak_mutubuah,
             // 'reg_data' => $regional_arrays,
+        ];
+    }
+}
+if (!function_exists('fetch_verified_match')) {
+    function fetch_verified_match($estate, $afd, $blok_asli)
+    {
+        $match = BlokMatch::where('blok_asli', $blok_asli)
+            ->where('est', $estate)
+            ->where('afd', $afd)
+            ->first();
+        // dd($match->blok);
+        return $match ? $match->blok : null;
+    }
+}
+if (!function_exists('score_by_maps')) {
+    function score_by_maps($est, $regData, $date)
+    {
+        $regData = explode(',', $regData);
+
+        $reg = $regData[0];
+
+        $regional = DB::connection('mysql2')->table('wil')
+            ->select('*')
+            ->join('estate', 'estate.wil', '=', 'wil.id')
+            ->where('estate.wil', $reg)
+            ->pluck('regional');
+        $regional = $regional[0];
+        // dd($regData, $regional);
+
+        $queryTrans = DB::connection('mysql2')->table("mutu_transport")
+            // ->select("mutu_transport.*", "estate.wil")
+            ->select("mutu_transport.*", "estate.wil", DB::raw('DATE_FORMAT(mutu_transport.datetime, "%Y-%m-%d") as date'))
+            ->join('estate', 'estate.est', '=', 'mutu_transport.estate')
+            ->where('mutu_transport.estate', $est)
+            ->whereYear('mutu_transport.datetime', $date)
+            ->where('mutu_transport.afdeling', '!=', 'Pla')
+            // ->where('mutu_transport.afd', 'OA')
+            ->get();
+
+        // $DataEstate = $queryTrans->groupBy(['blok', 'date']);
+        $DataEstate = $queryTrans->groupBy(['blok']);
+        $DataEstate = json_decode($DataEstate, true);
+
+
+        $queryAncak = DB::connection('mysql2')->table("mutu_ancak_new")
+            ->select("mutu_ancak_new.*", "estate.wil", DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%Y-%m-%d") as date'))
+            ->join('estate', 'estate.est', '=', 'mutu_ancak_new.estate')
+            ->where('mutu_ancak_new.estate', $est)
+            ->whereYear('mutu_ancak_new.datetime', $date)
+            ->orderBy('blok', 'desc')
+            ->where('mutu_ancak_new.afdeling', '!=', 'Pla')
+            // ->where('mutu_ancak_new.afd', 'OA')
+            ->get();
+
+        // $DataMTAncak = $queryAncak->groupBy(['blok', 'date']);
+        $DataMTAncak = $queryAncak->groupBy(['blok']);
+        $DataMTAncak = json_decode($DataMTAncak, true);
+        // dd($DataMTAncak);
+
+        // dd($DataMTAncak, $DataEstate);
+        function normalizeBlock($block)
+        {
+            // Check for block identifiers like 'F006-CBI14'
+            if (preg_match('/^[A-Z]+\d+-CBI\d+$/', $block)) {
+                return substr($block, 0, strpos($block, '-CBI'));
+            }
+            // Check for block identifiers like 'O27012'
+            elseif (preg_match('/^[A-Z]+\d+$/', $block)) {
+                return substr($block, 0, -2);
+            }
+            // Return the original block if it doesn't match known patterns
+            return $block;
+        }
+
+
+        // Step 3: Normalize the block identifiers
+        $datamutuancak = [];
+        foreach ($DataMTAncak as $block => $data) {
+            // Normalize the block identifier
+            $normalizedBlock = normalizeBlock($block);
+
+            // Initialize the array for this normalized block if not exists
+            if (!isset($datamutuancak[$normalizedBlock])) {
+                $datamutuancak[$normalizedBlock] = [];
+            }
+
+            // Merge the data
+            $datamutuancak[$normalizedBlock] = array_merge($datamutuancak[$normalizedBlock], $data);
+        }
+        $datamututrans = [];
+        foreach ($DataEstate as $block => $data) {
+            // Normalize the block identifier
+            $normalizedBlock = normalizeBlock($block);
+
+            // Initialize the array for this normalized block if not exists
+            if (!isset($datamututrans[$normalizedBlock])) {
+                $datamututrans[$normalizedBlock] = [];
+            }
+
+            // Merge the data
+            $datamututrans[$normalizedBlock] = array_merge($datamututrans[$normalizedBlock], $data);
+        }
+
+        // dd($datamutuancak, $datamututrans);
+        $QueryEst = DB::connection('mysql2')
+            ->table("estate")
+            ->join('afdeling', 'afdeling.estate', 'estate.id')
+            ->join('blok', 'blok.afdeling', '=', 'afdeling.id')
+            ->select('blok.id', 'blok.nama', DB::raw('afdeling.nama as `afdeling`'), 'blok.lon', 'blok.lat')
+            ->where('est', $est)
+            // ->orderBy('lat', 'desc')
+            ->get();
+
+
+        $queryBlok = json_decode($QueryEst, true);
+        $bloks_afd = array_reduce($queryBlok, function ($carry, $item) {
+            $carry[$item['afdeling']][$item['nama']][] = $item;
+            return $carry;
+        }, []);
+
+        $plotBlokAlls = [];
+        foreach ($bloks_afd as $key => $coord) {
+            foreach ($coord as $key2 => $value) {
+                foreach ($value as $key3 => $value1) {
+                    $plotBlokAlls[$key][] = [$value1['lat'], $value1['lon']];
+                }
+            }
+        }
+        // dd($plotBlokAlls);
+
+        $dataAfdeling = $QueryEst->groupBy('afdeling', 'nama');
+        $dataAfdeling = json_decode($dataAfdeling, true);
+        $coordinates = [];
+
+        foreach ($dataAfdeling as $key => $afdelingItems) {
+            $coords = [];
+            foreach ($afdelingItems as $item) {
+                $coords[] = [
+                    'lat' => $item['lat'],
+                    'lon' => $item['lon'],
+                ];
+            }
+            $coordinates[$key] = $coords;
+        }
+
+        // dd($coordinates);
+        // $grouped = collect($datamutuancak['R009'])->groupBy('date');
+        // dd($grouped);
+
+        $dataSkor = array();
+        foreach ($datamututrans as $key => $value) {
+            $sum_bt = 0;
+            $sum_Restan = 0;
+            $tph_sample = 0;
+            $listBlokPerAfd = array();
+            foreach ($value as $key2 => $value2) {
+                $listBlokPerAfd[] = $value2['estate'] . ' ' . $value2['afdeling'] . ' ' . $value2['blok'];
+                $tph_sample = count($listBlokPerAfd);
+                // $tph_sample = count($listBlokPerAfd);
+                $sum_Restan += $value2['rst'];
+                $sum_bt += $value2['bt'];
+            }
+            $skorTrans = skor_brd_tinggal(round($sum_bt / $tph_sample, 2)) + skor_buah_tinggal(round($sum_Restan / $tph_sample, 2));
+            $dataSkor[$key][0]['skorTrans'] = $skorTrans;
+            $dataSkor[$key][0]['tph_sample'] = $tph_sample;
+            $dataSkor[$key][0]['sum_Restan'] = $sum_Restan;
+            $dataSkor[$key][0]['sum_bt'] = $sum_bt;
+            $dataSkor[$key][0]['latin'] = $value2['lat'] . ',' . $value2['lon'];
+        }
+
+        // dd($dataSkor);
+
+        // dd($datamutuancak['R009']);
+
+        // $testing = [];
+        // $jgg = 0;
+        // foreach ($datamutuancak['R009'] as $key => $value) {
+
+        //     $jgg += $value['jjg'];
+        // }
+        // $testing['jjg'] = $jgg;
+        // dd($testing);
+        foreach ($datamutuancak as $key => $value) {
+            $akp = 0;
+            $skor_bTinggal = 0;
+            $brdPerjjg = 0;
+            $ttlSkorMA = 0;
+            $ttlSkorMAess = 0;
+            $listBlokPerAfd = array();
+            $jum_ha = 0;
+            $totalPokok = 0;
+            $totalPanen = 0;
+            $totalP_panen = 0;
+            $totalK_panen = 0;
+            $totalPTgl_panen = 0;
+            $totalbhts_panen = 0;
+            $totalbhtm1_panen = 0;
+            $totalbhtm2_panen = 0;
+            $totalbhtm3_oanen = 0;
+            $totalpelepah_s = 0;
+            $check_input = 'kosong';
+            foreach ($value as $key2 => $value2) {
+                if (!in_array($value2['estate'] . ' ' . $value2['afdeling'] . ' ' . $value2['blok'], $listBlokPerAfd)) {
+                    if ($value2['sph'] != 0) {
+                        $listBlokPerAfd[] = $value2['estate'] . ' ' . $value2['afdeling'] . ' ' . $value2['blok'];
+                    }
+                }
+
+                $jml_blok = count($listBlokPerAfd);
+                $totalPokok += $value2['sample'];
+                $totalPanen +=  $value2['jjg'];
+                $totalP_panen += $value2['brtp'];
+                $totalK_panen += $value2['brtk'];
+                $totalPTgl_panen += $value2['brtgl'];
+
+                $totalbhts_panen += $value2['bhts'];
+                $totalbhtm1_panen += $value2['bhtm1'];
+                $totalbhtm2_panen += $value2['bhtm2'];
+                $totalbhtm3_oanen += $value2['bhtm3'];
+                $check_input = $value2['jenis_input'];
+                $nilai_input = $value2['skor_akhir'];
+                $totalpelepah_s += $value2['ps'];
+            }
+            if ($totalPokok != 0) {
+                $akp = $totalPanen / $totalPokok * 100;
+            } else {
+                $akp = 0;
+            }
+
+
+            $skor_bTinggal = $totalP_panen + $totalK_panen + $totalPTgl_panen;
+
+            if ($totalPanen != 0) {
+                $brdPerjjg = $skor_bTinggal / $totalPanen;
+            } else {
+                $brdPerjjg = 0;
+            }
+
+            $sumBH = $totalbhts_panen +  $totalbhtm1_panen +  $totalbhtm2_panen +  $totalbhtm3_oanen;
+            if ($sumBH != 0) {
+                $sumPerBH = $sumBH / ($totalPanen + $sumBH) * 100;
+            } else {
+                $sumPerBH = 0;
+            }
+
+            if ($totalpelepah_s != 0) {
+                $perPl = ($totalpelepah_s / $totalPokok) * 100;
+            } else {
+                $perPl = 0;
+            }
+            $nonZeroValues = array_filter([$totalP_panen, $totalK_panen, $totalPTgl_panen, $totalbhts_panen, $totalbhtm1_panen, $totalbhtm2_panen, $totalbhtm3_oanen]);
+
+            if (!empty($nonZeroValues)) {
+                $dataSkor[$key][0]['check_datacak'] = 'ada';
+            } else {
+                $dataSkor[$key][0]['check_datacak'] = 'kosong';
+            }
+
+            // $ttlSkorMA = $skor_bh + $skor_brd + $skor_ps;
+            $ttlSkorMA =  skor_buah_Ma($sumPerBH) + skor_brd_ma($brdPerjjg) + skor_palepah_ma($perPl);
+
+
+            $dataSkor[$key][0]['Ancak'] = '=======================================================';
+            $dataSkor[$key][0]['skorAncak'] = $ttlSkorMA;
+            $dataSkor[$key][0]['tot_brd'] = $brdPerjjg;
+            $dataSkor[$key][0]['total_brd'] = $skor_bTinggal;
+            $dataSkor[$key][0]['sumBH'] = $sumBH;
+            $dataSkor[$key][0]['totalP_panen'] = $totalP_panen;
+            $dataSkor[$key][0]['totalK_panen'] = $totalK_panen;
+            $dataSkor[$key][0]['totalPTgl_panen'] = $totalPTgl_panen;
+            $dataSkor[$key][0]['totalPanen'] = $totalPanen;
+            $dataSkor[$key][0]['latin2'] = $value2['lat_awal'] . ',' . $value2['lon_awal'];
+        }
+
+        // dd($dataSkor['R009']);
+        // dd($dataSkor['D13']);
+        $dataSkorResult = array();
+        $newData = '';
+        // dd($regData);
+        // dd($dataSkor, $est);
+        foreach ($dataSkor as $key => $value) {
+            foreach ($value as $key1 => $value1) {
+                // dd($key);
+
+
+                $skorTrans = check_array('skorTrans', $value1);
+                $skorBuah = check_array('skorBuah', $value1);
+                $skorAncak = check_array('skorAncak', $value1);
+
+
+                if ($skorTrans != 0 && $skorAncak != 0) {
+                    $skorAkhir = (int) round((($skorTrans + $skorAncak) * 100) / 65 - 1);
+                } elseif ($skorTrans != 0) {
+                    $skorAkhir = (int)round(($skorTrans * 100) / 65 - 1);
+                } elseif ($skorAncak != 0) {
+                    $skorAkhir = (int) round(($skorAncak * 100) / 65 - 1);
+                } else {
+                    $skorAkhir = 0;
+                }
+
+
+                if ($skorTrans == 0 && $skorAncak == 0) {
+                    $check = 'empty';
+                } else {
+                    $check = 'data';
+                }
+
+                if ($check == 'data') {
+                    $skor_kategori_akhir_est = skor_kategori_akhir($skorAkhir);
+                } else {
+                    $skor_kategori_akhir_est = 'xxx';
+                }
+
+
+
+                $dataSkorResult[$key]['estate'] = $est;
+                $dataSkorResult[$key]['skorTrans'] = $skorTrans;
+                $dataSkorResult[$key]['skorBuah'] = $skorBuah;
+                $dataSkorResult[$key]['skorAncak'] = $skorAncak;
+                $dataSkorResult[$key]['blok'] = $key;
+                $dataSkorResult[$key]['text'] = $skor_kategori_akhir_est[1];
+                $dataSkorResult[$key]['skorAkhir'] = $skorAkhir;
+                $dataSkorResult[$key]['check_data'] = $check;
+                $dataSkorResult[$key]['latin'] = $value1['latin'] ?? $value1['latin2'];
+            }
+        }
+
+        // dd($dataSkorResult);
+        // dd($dataSkorResult['M180']);
+
+        // dd($dataSkor['O27017']);
+
+
+
+        $estateQuery = DB::connection('mysql2')->table('estate')
+            ->select('*')
+            ->join('afdeling', 'afdeling.estate', '=', 'estate.id')
+            ->where('estate.est', $est)
+            ->get();
+        $estateQuery = json_decode($estateQuery, true);
+
+        $listIdAfd = array();
+        foreach ($estateQuery as $key => $value) {
+            $listIdAfd[] = $value['id'];
+        }
+
+
+        $blokEstate = DB::connection('mysql2')->table('blok')
+            ->select(DB::raw('DISTINCT nama, MIN(id) as id, afdeling'))
+            ->whereIn('afdeling', $listIdAfd)
+            ->groupBy('nama', 'afdeling')
+            ->get();
+        $blokEstate = json_decode($blokEstate, true);
+
+        $blokEstateFix = array();
+        foreach ($blokEstate as $key => $value) {
+            $blokEstateFix[$value['afdeling']][] = $value['nama'];
+        }
+
+        // dd($blokEstateFix);
+        $qrAfd = DB::connection('mysql2')->table('afdeling')
+            ->select('*')
+            ->get();
+        $qrAfd = json_decode($qrAfd, true);
+
+        $blokEstNewFix = array();
+        foreach ($blokEstateFix as $key => $value) {
+            foreach ($qrAfd as $key1 => $value1) {
+                if ($value1['id'] == $key) {
+                    $afdelingNama = $value1['nama'];
+                }
+            }
+            $blokEstNewFix[$afdelingNama] = $value;
+        }
+
+        $queryBlok = DB::connection('mysql2')->table('blok')
+            ->select('*')
+            ->whereIn('afdeling', $listIdAfd)
+            ->get();
+        $queryBlok = json_decode($queryBlok, true);
+
+        $blokLatLnEw = array();
+        $inc = 0;
+        foreach ($blokEstNewFix as $key => $value) {
+            foreach ($value as $key1 => $value1) {
+                $latln = '';
+                $latln2 = '';
+                foreach ($queryBlok as $key3 => $value4) {
+                    if ($value4['nama'] == $value1) {
+                        $latln .= $value4['lat'] . ',' . $value4['lon'] . '$';
+                        $latln2 .= '[' . $value4['lon'] . ',' . $value4['lat'] . '],';
+                    }
+                }
+
+                $blokLatLnEw[$value1]['afd'] = $key;
+                $blokLatLnEw[$value1]['blok'] = $value1;
+                $blokLatLnEw[$value1]['latln'] = rtrim($latln, '$');
+                $blokLatLnEw[$value1]['latinnew'] = rtrim($latln2, ',');
+                $inc++;
+            }
+        }
+        // dd($blokLatLnEw);
+        $blokLatLn = [];
+        // dd($dataSkorResult);
+
+        foreach ($dataSkorResult as $markerKey => $marker) {
+            $found = false; // Flag to check if the marker is found in any polygon
+            $blok_asli = $marker['blok'];
+
+            foreach ($blokLatLnEw as $key => $value) {
+                if (isPointInPolygon($marker['latin'], $value['latln'])) {
+                    $found = true;
+                    $blokLatLn[$value['blok']][] = [
+                        'blok' => $value['blok'],
+                        'blok_asli' => $blok_asli,
+                        'estate' => $marker['estate'],
+                        'latln' => $value['latinnew'],
+                        'nilai' => $marker['skorAkhir'],
+                        'afdeling' => $value['afd'],
+                        'kategori' => $marker['text'],
+                    ];
+                    // No break here, so we continue checking for more matches
+                }
+            }
+
+            if (!$found) {
+                $blokLatLn[$value['blok']][] = [
+                    'blok' => $marker['blok'],
+                    'blok_asli' => $marker['blok'],
+                    'estate' => $marker['estate'],
+                    'latln' => 'no_coordinates',
+                    'nilai' => $marker['skorAkhir'],
+                    'afdeling' => '-', // or other appropriate default value
+                    'kategori' => $marker['text'],
+                ];
+            }
+        }
+
+        $double_blok = [];
+
+        foreach ($blokLatLn as $key => $value) {
+            $val = count($value);
+            if ($val > 1) {
+                unset($blokLatLn[$key]);
+                $double_blok[$key] = $value;
+            }
+        }
+
+        // dd($blokLatLn, $double_blok);
+
+        $not_match = [];
+
+        foreach ($double_blok as $key => $values) {
+            $maxSimilarity = 0;
+            $bestMatchIndex = null;
+
+            // First pass: Find the best match index
+            foreach ($values as $index => $data) {
+                $similarity = 0;
+                similar_text($key, $data['blok_asli'], $similarity);
+
+                if ($similarity > $maxSimilarity) {
+                    $maxSimilarity = $similarity;
+                    $bestMatchIndex = $index;
+                }
+            }
+
+            // Second pass: Unset non-matching elements
+            foreach ($values as $index => $data) {
+                if ($index !== $bestMatchIndex) {
+                    $not_match[$data['blok_asli']] = $data;
+                    unset($double_blok[$key][$index]);
+                }
+            }
+
+            // If there are no matches found, remove the entire key
+            if ($bestMatchIndex === null) {
+                $not_match[$key] = $values;
+                unset($double_blok[$key]);
+            }
+        }
+        // dd($blokLatLnEw);
+
+        $combine_latin_double = array_merge($blokLatLn, $double_blok);
+
+        $collectBlok = [];
+        foreach ($combine_latin_double as $key => $value) {
+            foreach ($value as $key1 => $value1) {
+                if (similar_text($value1['blok_asli'], $value1['blok']) <= 2) {
+                    unset($combine_latin_double[$key]);
+                    unset($value1['latln']);
+                    $collectBlok[$value1['blok']] = $value;
+                }
+            }
+        }
+        // dd($combine_latin_double);
+
+        foreach ($collectBlok as $key => $value) {
+            foreach ($value as $key1 => $value1) {
+                $found = false;
+
+                // First, check for an exact match
+                foreach ($blokLatLnEw as $value2) {
+                    if ($value1['blok_asli'] === $value2['blok']) {
+                        $collectBlok[$key][$key1]['type'] = 'keysama';
+                        $collectBlok[$key][$key1]['latln'] = $value2['latinnew'];
+                        $collectBlok[$key][$key1]['blok'] = $value2['blok'];
+                        $collectBlok[$key][$key1]['similar_blok'] = $value2['blok'];
+                        $found = true;
+                        break; // Exit the inner loop once a match is found
+                    }
+                }
+                if (!$found) {
+                    $verified_blok = fetch_verified_match($value1['estate'], $value1['afdeling'], $value1['blok_asli']);
+
+                    if ($verified_blok !== null) {
+                        foreach ($blokLatLnEw as $value4) {
+                            if ($verified_blok === $value4['blok']) {
+                                $collectBlok[$key][$key1]['type'] = 'databasekeymatch';
+                                $collectBlok[$key][$key1]['latln'] = $value4['latinnew'];
+                                $collectBlok[$key][$key1]['blok'] = $value4['blok'];
+                                $collectBlok[$key][$key1]['similar_blok'] = $value4['blok'];
+                                $found = true;
+                                break; // Exit the inner loop once a match is found
+                            }
+                        }
+                    }
+                }
+                // If no exact match is found, check for the most similar block using Levenshtein distance
+                if (!$found) {
+                    $lowestDistance = PHP_INT_MAX;
+                    $mostSimilarBlok = null;
+                    foreach ($blokLatLnEw as $value3) {
+                        $distance = levenshtein($value1['blok_asli'], $value3['blok']);
+                        if ($distance < $lowestDistance) {
+                            $lowestDistance = $distance;
+                            $mostSimilarBlok = $value3;
+                        }
+                    }
+
+                    // If a similar block is found, update the array with its latln
+                    if ($mostSimilarBlok && $lowestDistance < PHP_INT_MAX) {
+                        $collectBlok[$key][$key1]['type'] = 'similar';
+                        $collectBlok[$key][$key1]['latln'] = $mostSimilarBlok['latinnew'];
+                        $collectBlok[$key][$key1]['blok'] = $mostSimilarBlok['blok'];
+                        $collectBlok[$key][$key1]['similar_blok'] = $mostSimilarBlok['blok'];
+                    } else {
+                        $collectBlok[$key][$key1]['latln'] = 'kosong';
+                        $collectBlok[$key][$key1]['similar_blok'] = 'kosong';
+                    }
+                }
+            }
+        }
+        // dd($collectBlok, $blokLatLnEw);
+
+        $new_blok = [];
+        foreach ($collectBlok as $key => $value) {
+            foreach ($value as $key1 => $value1) {
+                $new_blok[$value1['similar_blok']][$key1] = $value1;
+            }
+        }
+        // dd($new_blok);
+        $table_newblok['collect'] = $collectBlok;
+        // dd($table_newblok);
+        $combinedArray = array_merge($combine_latin_double, $new_blok);
+        // dd($not_match);
+        foreach ($not_match as $key => $value) {
+            $found = false;
+
+            // First, check for an exact match
+            foreach ($blokLatLnEw as $value2) {
+                if ($value['blok_asli'] === $value2['blok']) {
+                    $not_match[$key]['type'] = 'keysama';
+                    $not_match[$key]['latln'] = $value2['latinnew'];
+                    $not_match[$key]['blok'] = $value2['blok'];
+                    $not_match[$key]['similar_blok'] = $value2['blok'];
+                    $found = true;
+                    break; // Exit the inner loop once a match is found
+                }
+            }
+
+            // If no exact match is found, check the database for a verified match
+            if (!$found) {
+                $verified_blok = fetch_verified_match($value['estate'], $value['afdeling'], $value['blok_asli']);
+
+                if ($verified_blok !== null) {
+                    foreach ($blokLatLnEw as $value3) {
+                        if ($verified_blok === $value3['blok']) {
+                            $not_match[$key]['type'] = 'databasekeymatch';
+                            $not_match[$key]['latln'] = $value3['latinnew'];
+                            $not_match[$key]['blok'] = $value3['blok'];
+                            $not_match[$key]['similar_blok'] = $value3['blok'];
+                            $found = true;
+                            break; // Exit the inner loop once a match is found
+                        }
+                    }
+                }
+            }
+
+            // If no verified match is found, check for the most similar block using similar_text
+            if (!$found) {
+                $lowestDistance = PHP_INT_MAX;
+                $mostSimilarBlok = null;
+                foreach ($blokLatLnEw as $value3) {
+                    $distance = levenshtein($value['blok_asli'], $value3['blok']);
+                    if ($distance < $lowestDistance) {
+                        $lowestDistance = $distance;
+                        $mostSimilarBlok = $value3;
+                    }
+                }
+
+                // If a similar block is found, update the array with its latln
+                if ($mostSimilarBlok && $lowestDistance < PHP_INT_MAX) {
+                    $not_match[$key]['type'] = 'similar';
+                    $not_match[$key]['latln'] = $mostSimilarBlok['latinnew'];
+                    $not_match[$key]['blok'] = $mostSimilarBlok['blok'];
+                    $not_match[$key]['similar_blok'] = $mostSimilarBlok['blok'];
+                } else {
+                    $not_match[$key]['latln'] = 'kosong';
+                    $not_match[$key]['similar_blok'] = 'kosong';
+                }
+            }
+        }
+
+        $table_newblok['not_match'] = $not_match;
+        // dd($table_newblok);
+        // dd($not_match, $collectBlok);
+        $new_blok_not_match = [];
+        foreach ($not_match as $key => $value) {
+            $new_blok_not_match[$value['similar_blok']][] = $value;
+        }
+
+
+        $last_latls = array_merge($combinedArray, $new_blok_not_match);
+        $not_include_key = [];
+        foreach ($blokLatLnEw as $key => $value) {
+            if (!isset($last_latls[$key])) {
+                unset($value['latln']);
+                // dd($value);
+                $not_include_key[$key][] = [
+                    "blok" => $key,
+                    "blok_asli" => $key,
+                    "estate" => '-',
+                    'latln' => $value['latinnew'],
+                    'nilai' => 0,
+                    'afdeling' => '-',
+                    'kategori' => '-',
+                    'similar_blok' => '-',
+                ];
+            }
+        }
+        $finalLatln = array_merge($last_latls, $not_include_key);
+
+        foreach ($finalLatln as $key => $value) {
+            foreach ($value as $key1 => $value1) {
+                $finalLatln[$key] = $value1;
+            }
+        }
+
+        $fix_no_coordintes = [];
+        foreach ($finalLatln as $key => $value) {
+            if ($value['latln'] === 'no_coordinates') {
+                unset($finalLatln[$key]);
+                $fix_no_coordintes[$key] = $value;
+            }
+        }
+        // dd($finalLatln, $fix_no_coordintes);
+        foreach ($fix_no_coordintes as $key => $value) {
+            $found = false;
+
+            // First, check for an exact match
+            foreach ($blokLatLnEw as $value2) {
+                if ($value['blok_asli'] === $value2['blok']) {
+                    $fix_no_coordintes[$key]['type'] = 'keysama';
+                    $fix_no_coordintes[$key]['latln'] = $value2['latinnew'];
+                    $fix_no_coordintes[$key]['blok'] = $value2['blok'];
+                    $fix_no_coordintes[$key]['similar_blok'] = $value2['blok'];
+                    $found = true;
+                    break; // Exit the inner loop once a match is found
+                }
+            }
+            if (!$found) {
+                $verified_blok = fetch_verified_match($value['estate'], $value['afdeling'], $value['blok_asli']);
+
+                if ($verified_blok !== null) {
+                    foreach ($blokLatLnEw as $value4) {
+                        if ($verified_blok === $value4['blok']) {
+                            $fix_no_coordintes[$key]['type'] = 'databasekeymatch';
+                            $fix_no_coordintes[$key]['latln'] = $value4['latinnew'];
+                            $fix_no_coordintes[$key]['blok'] = $value4['blok'];
+                            $fix_no_coordintes[$key]['similar_blok'] = $value4['blok'];
+                            $found = true;
+                            break; // Exit the inner loop once a match is found
+                        }
+                    }
+                }
+            }
+            // If no exact match is found, check for the most similar block using Levenshtein distance
+            if (!$found) {
+                $lowestDistance = PHP_INT_MAX;
+                $mostSimilarBlok = null;
+                foreach ($blokLatLnEw as $value3) {
+                    $distance = levenshtein($value['blok_asli'], $value3['blok']);
+                    if ($distance < $lowestDistance) {
+                        $lowestDistance = $distance;
+                        $mostSimilarBlok = $value3;
+                    }
+                }
+
+                // If a similar block is found, update the array with its latln
+                if ($mostSimilarBlok && $lowestDistance < PHP_INT_MAX) {
+                    $fix_no_coordintes[$key]['type'] = 'similar';
+                    $fix_no_coordintes[$key]['latln'] = $mostSimilarBlok['latinnew'];
+                    $fix_no_coordintes[$key]['blok'] = $mostSimilarBlok['blok'];
+                    $fix_no_coordintes[$key]['similar_blok'] = $mostSimilarBlok['blok'];
+                } else {
+                    $fix_no_coordintes[$key]['latln'] = 'kosong';
+                    $fix_no_coordintes[$key]['similar_blok'] = 'kosong';
+                }
+            }
+        }
+        $table_newblok['fix_no_coordintes'] = $fix_no_coordintes;
+        // dd($fix_no_coordintes);
+        $new_blok2 = [];
+        foreach ($fix_no_coordintes as $key => $value) {
+            $new_blok2[$value['similar_blok']] = $value;
+        }
+
+        foreach ($finalLatln as $key => $value) {
+            if (isset($new_blok2[$key])) {
+                unset($finalLatln[$key]);
+            }
+        }
+
+        $finalLatln = array_merge($finalLatln, $new_blok2);
+        foreach ($blokLatLnEw as $key => $value) {
+            if (isset($fix_no_coordintes[$key])) {
+                // unset($fix_no_coordintes[$value]);
+                // dd($value);
+                $fix_no_coordintes[$key] = [
+                    "blok" => $key,
+                    "blok_asli" => $key,
+                    "estate" => '-',
+                    'latln' => $value['latinnew'],
+                    'nilai' => 0,
+                    'afdeling' => '-',
+                    'kategori' => '-',
+                    'similar_blok' => '-',
+                ];
+            }
+        }
+
+        // dd($fix_no_coordintes);
+        // dd($finalLatln, $fix_no_coordintes, $new_blok2);
+        $finalLatln = array_merge($finalLatln, $new_blok2, $fix_no_coordintes);
+
+        // dd($finalLatln, $fix_no_coordintes);
+        // dd($finalLatln, $not_include_key);
+
+
+        $dataLegend = array();
+        $excellent = array();
+        $good = array();
+        $satis = array();
+        $fair = array();
+        $poor = array();
+        $empty = array();
+        $dataLegend = array();
+        foreach ($finalLatln as $key => $value) {
+            $skor = $value['nilai'];
+            $data = $value['kategori'];
+            if ($data == 'EXCELLENT') {
+                $excellent[] = $value['nilai'];
+            } else if ($data == 'GOOD') {
+                $good[] = $value['nilai'];
+            } else if ($data == 'SATISFACTORY') {
+                $satis[] = $value['nilai'];
+            } else if ($data == 'FAIR') {
+                $fair[] = $value['nilai'];
+            } else if ($data == 'POOR') {
+                $poor[] = $value['nilai'];
+            } else if ($data == 'x') {
+                $empty[] = $value['nilai'];
+            }
+        }
+
+        $tot_exc = count($excellent);
+        $tot_good = count($good);
+        $tot_satis = count($satis);
+        $tot_fair = count($fair);
+        $tot_poor = count($poor);
+        $tot_empty = count($empty);
+
+        $totalSkor = $tot_exc + $tot_good + $tot_satis + $tot_fair + $tot_poor + $tot_empty;
+
+        $dataLegend['excellent'] = $tot_exc;
+        $dataLegend['good'] = $tot_good;
+        $dataLegend['satis'] = $tot_satis;
+        $dataLegend['fair'] = $tot_fair;
+        $dataLegend['poor'] = $tot_poor;
+        $dataLegend['empty'] = $tot_empty;
+        $dataLegend['total'] = $totalSkor;
+        $dataLegend['perExc'] = count_percent($tot_exc, $totalSkor);
+        $dataLegend['perGood'] = count_percent($tot_good, $totalSkor);
+        $dataLegend['perSatis'] = count_percent($tot_satis, $totalSkor);
+        $dataLegend['perFair'] = count_percent($tot_fair, $totalSkor);
+        $dataLegend['perPoor'] = count_percent($tot_poor, $totalSkor);
+        $dataLegend['perEmpty'] = count_percent($tot_empty, $totalSkor);
+
+        $highestValue = null;
+        $estatesWithHighestNilai = [];
+        $bloksWithHighestNilai = [];
+
+        foreach ($finalLatln as $value) {
+            $nilai = $value['nilai'];
+            $estate = $value['estate'];
+            $blok = $value['blok'];
+
+            if ($highestValue === null || $nilai > $highestValue) {
+                $highestValue = $nilai;
+                $estatesWithHighestNilai = [$estate];
+                $bloksWithHighestNilai = [$blok];
+            } elseif ($nilai === $highestValue) {
+                $estatesWithHighestNilai[] = $estate;
+                $bloksWithHighestNilai[] = $blok;
+            }
+        }
+
+        $resultsHIgh = [
+            'estate' => $estatesWithHighestNilai,
+            'blok' => $bloksWithHighestNilai,
+            'nilai' => $highestValue,
+        ];
+
+        $lowestValue = null;
+        $estatesWithLowestNilai = [];
+        $bloksWithLowestNilai = [];
+
+        foreach ($finalLatln as $value) {
+            $nilai = $value['nilai'];
+            $estate = $value['estate'];
+            $blok = $value['blok'];
+
+            if ($lowestValue === null && $nilai !== 0) {
+                $lowestValue = $nilai;
+                $estatesWithLowestNilai = [$estate];
+                $bloksWithLowestNilai = [$blok];
+            } elseif ($nilai < $lowestValue && $nilai !== 0) {
+                $lowestValue = $nilai;
+                $estatesWithLowestNilai = [$estate];
+                $bloksWithLowestNilai = [$blok];
+            } elseif ($nilai === $lowestValue && $nilai !== 0) {
+                $estatesWithLowestNilai[] = $estate;
+                $bloksWithLowestNilai[] = $blok;
+            }
+        }
+
+        $resultsLow = [
+            'estate' => $estatesWithLowestNilai,
+            'blok' => $bloksWithLowestNilai,
+            'nilai' => $lowestValue,
+        ];
+
+        return [
+            'blok' => $finalLatln,
+            'legend' => $dataLegend,
+            'lowest' => $resultsLow,
+            'highest' => $resultsHIgh,
+            'afdeling' => $plotBlokAlls,
+            'table_newblok' => $table_newblok,
+            'master_blok' => $blokLatLnEw,
         ];
     }
 }

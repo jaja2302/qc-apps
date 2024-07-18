@@ -21,6 +21,7 @@ use App\Http\Controllers\incpectcomponent\makemapsController;
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\RekapController;
 use App\Http\Controllers\GradingController;
+use App\Http\Controllers\Matchingblok;
 use Illuminate\Support\Facades\Artisan;
 /*
 |--------------------------------------------------------------------------
@@ -240,8 +241,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/getrekapperafdeling', [GradingController::class, 'getrekapperafdeling'])->name('getrekapperafdeling');
     Route::get('detailgradingmill/{est}/{afd}/{bulan}', [GradingController::class, 'detailgradingmill'])->name('detailgradingmill');
     Route::post('/exportpdfgrading', [GradingController::class, 'exportpdfgrading'])->name('exportpdfgrading');
-
     Route::post('/editnilaidataestate', [inspeksidashController::class, 'editnilaidataestate'])->name('editnilaidataestate');
+
+
+    Route::get('/crudmatchblok', [Matchingblok::class, 'dashboard'])->name('crudmatchblok');
+    Route::get('/tabledatamaps', [Matchingblok::class, 'tabledata'])->name('tabledatamaps');
+    Route::post('/addmatchblok', [Matchingblok::class, 'addmatchblok'])->name('addmatchblok');
 });
 Route::get('/memory-limit', function () {
     $memoryLimit = ini_get('memory_limit');
