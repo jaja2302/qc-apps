@@ -1276,18 +1276,30 @@
                         </div>
                     </div>
                 </div>
+                <div class="d-flex justify-content-end mr-3 mt-4">
+                    <div class="margin g-2">
+                        <div class="row align-items-center">
+                            <div class="col-md">
+                                <select id="afdelingFilter" class="form-select">
+                                    <option value="">Select Afdeling</option>
+                                </select>
 
+                            </div>
+                            <div class="col-md">
+                                <select id="blokFilter" class="form-select">
+                                    <option value="">Select Blok</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="ml-4 mr-4 mb-3">
-                    <select id="afdelingFilter">
-                        <option value="">Select Afdeling</option>
-                    </select>
-                    <select id="blokFilter">
-                        <option value="">Select Blok</option>
-                    </select>
-                    <div class="row text-center">
+
+                    <div class="row text-center mt-3">
                         <div id="map" style="width: 100%; height: 700px;"></div>
                     </div>
                 </div>
+
             </div>
 
             <div class="tab-pane fade" id="nav-grafik" role="tabpanel" aria-labelledby="nav-grafik-tab">
@@ -1882,11 +1894,32 @@
             getPlotBlok();
         });
 
+        // var googleSat; // Define googleSat variable
+
+        // function initializeMap() {
+        //     var map = L.map('map', {
+        //         preferCanvas: true, // Set preferCanvas to true
+        //     }).setView([-2.2745234, 111.61404248], 13);
+
+        //     googleSat = L.tileLayer('http://{s}.google.com/vt?lyrs=s&x={x}&y={y}&z={z}', {
+        //         maxZoom: 20,
+        //         subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+        //     }).addTo(map);
+
+        //     // map.addControl(new L.Control.Fullscreen());
+
+        //     return map;
+        // }
+
         function initializeMap() {
             // Initialize the map
-            map = L.map('map').setView([-2.3100466245353, 111.66031800302], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors'
+            map = L.map('map', {
+                preferCanvas: true, // Set preferCanvas to true
+            }).setView([-2.2745234, 111.61404248], 13);
+
+            L.tileLayer('http://{s}.google.com/vt?lyrs=s&x={x}&y={y}&z={z}', {
+                maxZoom: 20,
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
             }).addTo(map);
             layerGroup = L.layerGroup().addTo(map);
         }
