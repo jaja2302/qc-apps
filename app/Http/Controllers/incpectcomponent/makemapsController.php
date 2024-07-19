@@ -29,8 +29,8 @@ class makemapsController extends Controller
         $date = $request->get('date');
 
         $result = score_by_maps($est, $regData, $date);
-        // dd($plotBlokAll);
-        echo json_encode($result);
+
+        return response()->json($result);
     }
 
     public function getMapsdetail(Request $request)

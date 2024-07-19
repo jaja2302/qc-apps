@@ -1278,9 +1278,13 @@
                 </div>
 
                 <div class="ml-4 mr-4 mb-3">
+                    <select id="afdelingFilter">
+                        <option value="">Select Afdeling</option>
+                    </select>
+                    <select id="blokFilter">
+                        <option value="">Select Blok</option>
+                    </select>
                     <div class="row text-center">
-
-
                         <div id="map" style="width: 100%; height: 700px;"></div>
                     </div>
                 </div>
@@ -1498,8 +1502,6 @@
             </div>
         </div>
     </div>
-
-
 
 
 
@@ -1822,22 +1824,6 @@
 
 
 
-        var googleSat; // Define googleSat variable
-
-        function initializeMap() {
-            var map = L.map('map', {
-                preferCanvas: true, // Set preferCanvas to true
-            }).setView([-2.2745234, 111.61404248], 13);
-
-            googleSat = L.tileLayer('http://{s}.google.com/vt?lyrs=s&x={x}&y={y}&z={z}', {
-                maxZoom: 20,
-                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-            }).addTo(map);
-
-            // map.addControl(new L.Control.Fullscreen());
-
-            return map;
-        }
 
 
         $("#showDataIns").click(function() {
@@ -1877,20 +1863,13 @@
             });
             editnilaiqc()
         });
-        var map = null;
-        var legendVar = null;
+
+        let map = null;
+        let layerGroup = null;
+        const waktuini = @json($datenow);
 
         $('#showEstMap').click(function() {
             buttonimg.style.display = 'block';
-            if (map === null) {
-                map = initializeMap();
-            } else {
-                map.invalidateSize();
-            }
-
-            if (legendVar !== null) {
-                map.removeControl(legendVar);
-            }
             Swal.fire({
                 title: 'Loading',
                 html: '<span class="loading-text">Mohon Tunggu...</span>',
@@ -1900,401 +1879,23 @@
                     Swal.showLoading();
                 }
             });
-            removeMarkers();
             getPlotBlok();
-            drawEstatePlot();
-
-
-            // button.style.display = 'none';
-
         });
 
-        function drawBlokPlot(blok) {
-            if (blok.length === 0) {
-                const errorAnimationPath = 'https://assets1.lottiefiles.com/packages/lf20_no386ede.json';
-                showLottieAlert(errorAnimationPath);
-                return;
-            }
-            var afdelingColors = {
-                // Define the colors for each "afdeling" value
-                OA: 'red',
-                OB: 'blue',
-                OC: 'green',
-                OD: 'yellow',
-                OE: 'purple',
-                OF: 'orange',
-                OG: 'cyan',
-                OH: 'magenta',
-            };
-
-            var test;
-            var checkboxes = [];
-            var legendContainer = null;
-
-            function handleCheckboxChange() {
-                var checkedAfdeling = this.value;
-
-                // Uncheck all checkboxes except the clicked one
-                checkboxes.forEach(function(checkbox) {
-                    if (checkbox !== this) {
-                        checkbox.checked = false;
-                    }
-                }, this);
-
-                // Reset the style of all features and labels
-                test.eachLayer(function(layer) {
-                    layer.setStyle({
-                        fillOpacity: 0.2, // Set a lower opacity for unchecked features
-                    });
-
-                    if (layer.myLabel) {
-                        layer.myLabel.setStyle({
-                            opacity: 0.2, // Set a lower opacity for unchecked labels
-                        });
-                    }
-                });
-
-                // Find all the features with the selected "afdeling"
-                var features = test.getLayers().filter(function(layer) {
-                    return (
-                        layer.myTag === 'BlokMarker' &&
-                        layer.feature.properties.afdeling === checkedAfdeling
-                    );
-                });
-
-                if (features.length > 0) {
-                    // Highlight the features with the selected "afdeling" by updating their styles
-                    features.forEach(function(feature) {
-                        feature.setStyle({
-                            fillOpacity: 1,
-                        });
-
-                        if (feature.myLabel) {
-                            feature.myLabel.setStyle({
-                                opacity: 1, // Set full opacity for checked labels
-                            });
-                        }
-                    });
-                }
-            }
-
-
-
-            function handleFeatureClick(e) {
-                var clickedFeature = e.target;
-
-                // Get the "afdeling" value of the clicked feature
-                var clickedAfdeling = clickedFeature.feature.properties.afdeling;
-
-                // Check the corresponding checkbox
-                checkboxes.forEach(function(checkbox) {
-                    if (checkbox.value === clickedAfdeling) {
-                        checkbox.checked = true;
-                        handleCheckboxChange.call(checkbox); // Highlight the "afdeling"
-                    } else {
-                        checkbox.checked = false;
-                    }
-                });
-
-                // Prevent event propagation to avoid triggering the map's click event
-                L.DomEvent.stopPropagation(e);
-            }
-
-            var getPlotStr = '{"type":"FeatureCollection","features":[';
-
-            for (let i = 0; i < blok.length; i++) {
-                getPlotStr +=
-                    '{"type":"Feature","properties":{"blok":"' +
-                    blok[i][1]['blok'] +
-                    '","blok_asli":"' +
-                    blok[i][1]['blok_asli'] +
-                    '","estate":"' +
-                    blok[i][1]['estate'] +
-                    '","afdeling":"' +
-                    blok[i][1]['afdeling'] +
-                    '","nilai":"' +
-                    blok[i][1]['nilai'] +
-                    '"},"geometry":{"coordinates":[[' +
-                    blok[i][1]['latln'] +
-                    ']],"type":"Polygon"}}';
-
-                if (i < blok.length - 1) {
-                    getPlotStr += ',';
-                }
-            }
-
-            getPlotStr += ']}';
-
-            var blok = JSON.parse(getPlotStr);
-
-            // Remove the previous legend if it exists
-
-            legendContainer = L.control({
-                position: 'topright',
-            });
-
-            legendContainer.onAdd = function() {
-                var div = L.DomUtil.create('div', 'legend');
-                var legendHTML = '<h3>Afdeling</h3>';
-
-                var uniqueAfdelingValues = new Set(
-                    blok.features.map(function(feature) {
-                        return feature.properties.afdeling;
-                    })
-                );
-
-                uniqueAfdelingValues.forEach(function(afdeling) {
-                    var color = afdelingColors[afdeling];
-                    var checkboxId = 'checkbox-' + afdeling;
-
-                    legendHTML +=
-
-                        '<div><input type="checkbox" id="' +
-                        checkboxId +
-                        '" name="afdeling" value="' +
-                        afdeling +
-                        '">';
-                    legendHTML +=
-                        '<label for="' +
-                        checkboxId +
-                        '" style="background-color:' +
-                        color +
-                        '"></label>' +
-                        afdeling +
-                        '</div>';
-                });
-
-                div.innerHTML = legendHTML;
-
-                // Attach event listeners to the checkboxes
-                checkboxes = div.querySelectorAll('input[name="afdeling"]');
-                checkboxes.forEach(function(checkbox) {
-                    checkbox.addEventListener('change', handleCheckboxChange);
-                });
-
-                return div;
-            };
-            if (document.getElementsByClassName('legend')[0]) {
-                document.getElementsByClassName('legend')[0].remove();
-            }
-
-
-
-            test = L.geoJSON(blok, {
-                style: function(feature) {
-                    const afdeling = feature.properties.afdeling;
-                    var fillColor;
-
-                    if (!afdelingColors[afdeling]) {
-                        // Assign a default color if the "afdeling" value is not defined in the colors object
-                        fillColor = 'gray';
-                    } else {
-                        // Assign the color to the fill based on the "nilai" property
-                        var nilai = feature.properties.nilai;
-
-                        if (nilai >= 95.0 && nilai <= 100.0) {
-                            fillColor = '#4874c4';
-                        } else if (nilai >= 85.0 && nilai < 95.0) {
-                            fillColor = '#00ff2e';
-                        } else if (nilai >= 75.0 && nilai < 85.0) {
-                            fillColor = 'yellow';
-                        } else if (nilai >= 65.0 && nilai < 75.0) {
-                            fillColor = 'orange';
-                        } else if (nilai == 0) {
-                            fillColor = 'white';
-                        } else if (nilai < 65.0) {
-                            fillColor = 'red';
-                        }
-                    }
-
-                    // Assign the color to the outline of the current feature based on its "afdeling" property
-                    var outlineColor = afdelingColors[afdeling] || 'gray';
-
-                    return {
-                        color: outlineColor,
-                        fillColor: fillColor,
-                        fillOpacity: 1,
-                        opacity: 0.3,
-                    };
-                },
-                onEachFeature: function(feature, layer) {
-                    layer.myTag = 'BlokMarker';
-                    layer.bindPopup(
-                        "<p><b>Blok Database</b>: " +
-                        feature.properties.blok +
-                        '</p> ' +
-                        "<p><b>Blok Sidak</b>: " +
-                        feature.properties.blok_asli +
-                        '</p> ' +
-                        "<p><b>Afdeling</b>: " +
-                        feature.properties.afdeling +
-                        '</p>'
-                    );
-
-                    var label = L.marker(layer.getBounds().getCenter(), {
-                        icon: L.divIcon({
-                            className: 'label-blok',
-                            html: feature.properties.nilai,
-                            iconSize: [50, 10],
-                        }),
-                    }).addTo(map);
-
-                    titleBlok.push(label);
-
-                    layer.on('click', function(e) {
-                        handleFeatureClick(e);
-                        layer.openPopup();
-                    });
-                },
+        function initializeMap() {
+            // Initialize the map
+            map = L.map('map').setView([-2.3100466245353, 111.66031800302], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
             }).addTo(map);
-
-
-            legendContainer.addTo(map);
-
-
-            if (test.getBounds().isValid()) {
-                map.fitBounds(test.getBounds());
-            } else {
-                console.error('Invalid bounds:', test.getBounds());
-            }
+            layerGroup = L.layerGroup().addTo(map);
         }
-        var titleEstate = new Array();
-
-        function drawEstatePlot(est, plot) {
-
-            if (typeof est === 'undefined') {
-
-            } else {
-                var geoJsonEst = '{"type"'
-                geoJsonEst += ":"
-                geoJsonEst += '"FeatureCollection",'
-                geoJsonEst += '"features"'
-                geoJsonEst += ":"
-                geoJsonEst += '['
-
-                geoJsonEst += '{"type"'
-                geoJsonEst += ":"
-                geoJsonEst += '"Feature",'
-                geoJsonEst += '"properties"'
-                geoJsonEst += ":"
-                geoJsonEst += '{"estate"'
-                geoJsonEst += ":"
-                geoJsonEst += '"' + est + '"},'
-                geoJsonEst += '"geometry"'
-                geoJsonEst += ":"
-                geoJsonEst += '{"coordinates"'
-                geoJsonEst += ":"
-                geoJsonEst += '[['
-                geoJsonEst += plot
-                geoJsonEst += ']],"type"'
-                geoJsonEst += ":"
-                geoJsonEst += '"Polygon"'
-                geoJsonEst += '}},'
-
-                geoJsonEst = geoJsonEst.substring(0, geoJsonEst.length - 1);
-                geoJsonEst += ']}'
-
-                var estate = JSON.parse(geoJsonEst)
-
-                var estateObj = L.geoJSON(estate, {
-                        onEachFeature: function(feature, layer) {
-                            layer.myTag = 'EstateMarker'
-                            var label = L.marker(layer.getBounds().getCenter(), {
-                                icon: L.divIcon({
-                                    className: 'label-estate',
-                                    html: feature.properties.estate,
-                                    iconSize: [100, 20]
-                                })
-                            }).addTo(map);
-                            titleEstate.push(label)
-                            layer.addTo(map);
-                        }
-                    })
-                    .addTo(map);
-
-                map.fitBounds(estateObj.getBounds());
-            }
-        }
-
-        var titleBlok = new Array();
-
-
-
-        var test;
-        // Declare a variable to store the previous Lottie animation instance
-        let previousAnimation = null;
-
-        function showLottieAlert(animationPath, callback) {
-            // Get the Lottie container and animation elements
-            const lottieContainer = document.getElementById('lottie-container');
-            const lottieAnimation = document.getElementById('lottie-animation');
-
-            // Destroy the previous Lottie animation instance if it exists
-            if (previousAnimation) {
-                previousAnimation.destroy();
-            }
-
-            // Show the Lottie container
-            lottieContainer.style.display = 'flex';
-
-            // Load and play the Lottie animation
-            const animation = lottie.loadAnimation({
-                container: lottieAnimation,
-                renderer: 'svg',
-                loop: false,
-                autoplay: true,
-                path: animationPath
-            });
-
-            // Save the current Lottie animation instance as the previous one
-            previousAnimation = animation;
-
-            // Hide the Lottie container after the animation is completed
-            animation.addEventListener('complete', () => {
-                if (callback) {
-                    callback();
-                }
-                lottieContainer.style.display = 'none';
-            });
-        }
-
-
-        var removeMarkers = function() {
-            map.eachLayer(function(layer) {
-                if (layer.myTag && layer.myTag === "EstateMarker") {
-                    map.removeLayer(layer);
-                }
-                if (layer.myTag && layer.myTag === "BlokMarker") {
-                    map.removeLayer(layer);
-                }
-            });
-
-            var i; // Declare i here
-
-            for (i = 0; i < titleBlok.length; i++) {
-                map.removeLayer(titleBlok[i]);
-            }
-            for (i = 0; i < titleEstate.length; i++) {
-                map.removeLayer(titleEstate[i]);
-            }
-        }
-
-
-
-        let waktuini = @json($datenow);
-
-        // console.log(waktuini);
 
         function getPlotBlok() {
             var _token = $('input[name="_token"]').val();
             var estData = $("#estDataMap").val();
             var regData = $("#regDataMap").val();
-            var date = waktuini
-            const params = new URLSearchParams(window.location.search)
-            var paramArr = [];
-            for (const param of params) {
-                paramArr = param
-            }
+            var date = waktuini;
 
             $.ajax({
                 url: "{{ route('plotBlok') }}",
@@ -2307,56 +1908,202 @@
                 },
                 success: function(result) {
                     Swal.close();
-                    var plot = JSON.parse(result);
-                    const blokResult = Object.entries(plot['blok']);
-                    const lgd = Object.entries(plot['legend']);
-                    const lowest = Object.entries(plot['lowest']);
-                    const highest = Object.entries(plot['highest']);
+                    const blokResult = result['blok'];
+                    const lgd = result['legend'];
+                    const lowest = result['lowest'];
+                    const highest = result['highest'];
+                    console.log(lgd);
+                    console.log(lowest);
+                    console.log(highest);
+                    // Remove old map instance if it exists
+                    if (map) {
+                        map.remove();
+                    }
 
-                    // console.log(lgd);
-                    drawBlokPlot(blokResult)
+                    // Initialize a new map
+                    initializeMap();
+
+                    // Draw the new blocks
+                    drawmapsblok(blokResult);
+
+                    // Populate the filters
+                    populateFilters(blokResult);
 
                     var legend = L.control({
                         position: "bottomleft"
                     });
                     legend.onAdd = function(map) {
                         var div = L.DomUtil.create("div", "legend");
-                        div.innerHTML += '<table class="table table-bordered text-center" style="height:fit-content; font-size: 14px;"> <thead> <tr bgcolor="lightgrey"> <th rowspan="2" class="align-middle">Score</th><th colspan="2">Blok</th> </tr> <tr bgcolor="lightgrey"> <th>Jumlah</th> <th>%</th> </tr> </thead> <tbody><tr><td bgcolor="#4874c4">Excellent > 95</td><td>' + lgd[0][1] + '</td><td>' + lgd[6][1] + '</td></tr><tr><td bgcolor="#00ff2e">Good > 85</td><td>' + lgd[1][1] + '</td><td>' + lgd[7][1] + '</td></tr><tr><td bgcolor="yellow">Satisfactory > 75</td><td>' + lgd[2][1] + '</td><td>' + lgd[8][1] + '</td></tr><tr><td bgcolor="orange">Fair > 65</td><td>' + lgd[3][1] + '</td><td>' + lgd[9][1] + '</td></tr><tr><td bgcolor="red">Poor < 65</td><td>' + lgd[4][1] + '</td><td>' + lgd[10][1] + '</td></tr><tr><td>Belum Sidak</td><td>' + lgd[5][1] + '</td><td>' + lgd[12][1] + '</td></tr><tr bgcolor="lightgrey"><td>TOTAL</td><td colspan="2">' + lgd[6][1] + '</td></tr><tr bgcolor="lightgrey"><td>Highest</td><td colspan="2">' + highest[2][1] + '</td></tr><tr bgcolor="lightgrey"><td>Lowest</td><td colspan="2">' + lowest[2][1] + '</td></tr></tbody></table>';
+                        div.innerHTML += '<table class="table table-bordered text-center" style="height:fit-content; font-size: 14px;"> <thead> <tr bgcolor="lightgrey"> <th rowspan="2" class="align-middle">Score</th><th colspan="2">Blok</th> </tr> <tr bgcolor="lightgrey"> <th>Jumlah</th> <th>%</th> </tr> </thead> <tbody><tr><td bgcolor="#4874c4">Excellent > 95</td><td>' + lgd['excellent'] + '</td><td>' + lgd['perExc'] + '</td></tr><tr><td bgcolor="#00ff2e">Good > 85</td><td>' + lgd['good'] + '</td><td>' + lgd['perGood'] + '</td></tr><tr><td bgcolor="yellow">Satisfactory > 75</td><td>' + lgd['satis'] + '</td><td>' + lgd['perSatis'] + '</td></tr><tr><td bgcolor="orange">Fair > 65</td><td>' + lgd['fair'] + '</td><td>' + lgd['perFair'] + '</td></tr><tr><td bgcolor="red">Poor < 65</td><td>' + lgd['poor'] + '</td><td>' + lgd['perPoor'] + '</td></tr><tr><td>Belum Sidak</td><td>' + lgd['excellent'] + '</td><td>' + lgd['excellent'] + '</td></tr><tr bgcolor="lightgrey"><td>TOTAL</td><td colspan="2">' + lgd['total'] + '</td></tr><tr bgcolor="lightgrey"><td>Highest</td><td colspan="2">' + highest['nilai'] + '</td></tr><tr bgcolor="lightgrey"><td>Lowest</td><td colspan="2">' + lowest['nilai'] + '</td></tr></tbody></table>';
 
                         return div;
                     };
                     legend.addTo(map);
 
-                    legendVar = legend;
+                    // legendVar = legend;
                 }
-            })
+            });
         }
 
-        function getPlotEstate() {
-            var _token = $('input[name="_token"]').val();
-            var estData = $("#estDataMap").val();
-            const params = new URLSearchParams(window.location.search)
-            var paramArr = [];
-            for (const param of params) {
-                paramArr = param
+        function drawmapsblok(blok) {
+            console.log('Drawing maps block...');
+            layerGroup.clearLayers();
+
+            // Create a LatLngBounds object to store the bounds of all polygons
+            let bounds = L.latLngBounds([]);
+
+            let hasValidData = false;
+
+            for (let key in blok) {
+                // Parse the latln value
+                let latlnArray = blok[key].latln
+                    .slice(1, -1) // Remove the outer square brackets
+                    .split('],[') // Split by the coordinates
+                    .map(coord => {
+                        let [lat, lng] = coord.split(',').map(Number); // Split lat and lng, and convert to number
+                        return [lng, lat]; // Leaflet uses [lng, lat]
+                    });
+
+                // Skip invalid data
+                if (latlnArray.length < 3) continue;
+
+                var nilai = blok[key].nilai;
+
+                // Determine fill color based on nilai
+                let fillColor;
+                if (nilai >= 95.0 && nilai <= 100.0) {
+                    fillColor = '#4874c4'; // Blue
+                } else if (nilai >= 85.0 && nilai < 95.0) {
+                    fillColor = '#00ff2e'; // Green
+                } else if (nilai >= 75.0 && nilai < 85.0) {
+                    fillColor = 'yellow'; // Yellow
+                } else if (nilai >= 65.0 && nilai < 75.0) {
+                    fillColor = 'orange'; // Orange
+                } else if (nilai == 0) {
+                    fillColor = 'white'; // White
+                } else if (nilai < 65.0) {
+                    fillColor = 'red'; // Red
+                }
+
+                // Ensure the polygon is closed
+                if (latlnArray.length > 0 && !latlnArray[0].every((val, index) => val === latlnArray[latlnArray.length - 1][index])) {
+                    latlnArray.push(latlnArray[0]);
+                }
+
+                // Draw the polygon
+                const polygon = L.polygon(latlnArray, {
+                    color: 'blue', // Outline color
+                    fillColor: fillColor, // Background color based on nilai
+                    fillOpacity: 0.5 // Set opacity for the fill color
+                }).addTo(layerGroup).bindPopup(`
+            <div>
+                <strong>Blok Sidak:</strong> ${blok[key].blok}<br>
+                <strong>Afdeling:</strong> ${blok[key].afdeling}<br>
+                <strong>Nilai:</strong> ${blok[key].nilai}<br>
+                <strong>Kategori:</strong> ${blok[key].kategori}
+            </div>
+        `);
+
+                // Calculate the center of the polygon
+                let latlngs = polygon.getLatLngs()[0];
+                let latSum = 0,
+                    lngSum = 0,
+                    len = latlngs.length;
+
+                for (let i = 0; i < len; i++) {
+                    latSum += latlngs[i].lat;
+                    lngSum += latlngs[i].lng;
+                }
+
+                let centerLat = latSum / len;
+                let centerLng = lngSum / len;
+
+                // Add a label in the middle
+                L.marker([centerLat, centerLng], {
+                    icon: L.divIcon({
+                        className: 'label-estate',
+                        html: `<div>${blok[key].blok}</div>`,
+                        iconSize: [100, 20]
+                    })
+                }).addTo(layerGroup);
+
+                // Extend bounds to include the current polygon
+                bounds.extend(polygon.getBounds());
+
+                hasValidData = true;
             }
-            $.ajax({
-                url: "{{ route('plotEstate') }}",
-                method: "POST",
-                data: {
-                    est: estData,
-                    _token: _token
-                },
-                success: function(result) {
-                    var estate = JSON.parse(result);
 
-                    // console.log(estate);
-
-
-                    drawEstatePlot(estate['est'], estate['plot'])
-                }
-            })
+            // Fit bounds to the accumulated bounds only if there is valid data
+            if (hasValidData) {
+                map.fitBounds(bounds);
+            }
         }
+
+        function populateFilters(blok) {
+            const afdelingMap = new Map(); // Map to store afdeling and associated blok
+
+            // Populate afdeling and blokMap
+            for (let key in blok) {
+                let afdeling = blok[key].afdeling;
+                let blokValue = blok[key].blok;
+
+                if (!afdelingMap.has(afdeling)) {
+                    afdelingMap.set(afdeling, []);
+                }
+                afdelingMap.get(afdeling).push(blokValue);
+            }
+
+            const afdelingFilter = $('#afdelingFilter');
+            const blokFilter = $('#blokFilter');
+
+            afdelingFilter.empty().append('<option value="">Select Afdeling</option>');
+            blokFilter.empty().append('<option value="">Select Blok</option>').prop('disabled', true);
+
+            afdelingMap.forEach((bloks, afdeling) => {
+                afdelingFilter.append(`<option value="${afdeling}">${afdeling}</option>`);
+            });
+
+            afdelingFilter.on('change', function() {
+                const selectedAfdeling = $(this).val();
+
+                // Enable and update the blokFilter based on selected afdeling
+                if (selectedAfdeling) {
+                    const bloks = afdelingMap.get(selectedAfdeling) || [];
+                    blokFilter.empty().append('<option value="">Select Blok</option>').prop('disabled', false);
+                    bloks.forEach(blok => {
+                        blokFilter.append(`<option value="${blok}">${blok}</option>`);
+                    });
+                } else {
+                    blokFilter.empty().append('<option value="">Select Blok</option>').prop('disabled', true);
+                }
+
+                // Draw maps based on selected filters
+                const filteredBlok = Object.keys(blok).reduce((acc, key) => {
+                    if (!selectedAfdeling || blok[key].afdeling === selectedAfdeling) {
+                        acc[key] = blok[key];
+                    }
+                    return acc;
+                }, {});
+                drawmapsblok(filteredBlok);
+            });
+
+            blokFilter.on('change', function() {
+                const selectedBlok = $(this).val();
+                const selectedAfdeling = afdelingFilter.val();
+                const filteredBlok = Object.keys(blok).reduce((acc, key) => {
+                    if ((blok[key].blok === selectedBlok || !selectedBlok) &&
+                        (blok[key].afdeling === selectedAfdeling || !selectedAfdeling)) {
+                        acc[key] = blok[key];
+                    }
+                    return acc;
+                }, {});
+                drawmapsblok(filteredBlok);
+            });
+        }
+
+        // Initialize map when the document is ready
+        initializeMap();
+
 
         function changeData() {
             var regIns = $("#regDataIns").val();
@@ -2867,7 +2614,7 @@
                     let table2_wil = rekap_per_wil[2] ?? rekap_per_wil[5] ?? rekap_per_wil[8] ?? rekap_per_wil[11]
                     let table3_wil = rekap_per_wil[3] ?? rekap_per_wil[6] ?? []
                     let theadreg = document.getElementById('theadreg');
-                    console.log(rekap_per_estate);
+                    // console.log(rekap_per_estate);
                     TableForWilReg(table1_wil, tbody1);
                     TableForWilReg(table2_wil, tbody2);
                     TableForWilReg(table3_wil, tbody3);
