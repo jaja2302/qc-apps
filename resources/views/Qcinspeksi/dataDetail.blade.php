@@ -327,6 +327,7 @@
         <div class="card table_wrapper">
             <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark ">
                 <h2>REKAP HARIAN SIDAK INPEKSI </h2>
+                <!-- <h1>{{auth()->user()->id_jabatan}}</h1> -->
             </div>
             <div class="alert alert-danger d-none d-flex flex-column align-items-start justify-content-between" role="alert" id="notverif">
                 <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
@@ -335,7 +336,7 @@
                 <div>
                     Data belum Tervertifikasi oleh Manager/Askep/Asisten
                 </div>
-                @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' || session('jabatan') == 'Asisten Afdeling' )
+                @if (can_edit_all_atasan())
                 <div>
                     <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
                 </div>
@@ -349,7 +350,7 @@
                 <div>
                     Asisten Belum melakukan Aprroval
                 </div>
-                @if (session('jabatan') == 'Asisten' || session('jabatan') == 'Asisten Afdeling')
+                @if (can_edit_asisten())
 
                 <div>
                     <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
@@ -364,7 +365,7 @@
                 <div>
                     Askep/Manager Belum melakukan Aprroval
                 </div>
-                @if (session('jabatan') == 'Askep' || session('jabatan') == 'Manager')
+                @if (can_edit_mananger_askep())
 
                 <div>
                     <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
@@ -443,7 +444,7 @@
             <!-- end animasi -->
         </div>
         <div class="d-flex justify-content-end mt-3 mb-2 ml-3 mr-3">
-            @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten'|| session('jabatan') == 'Askep/Asisten' )
+            @if (can_edit_all_atasan() )
 
             <button id="moveDataButton" class="btn btn-primary mr-3" disabled>Pindah Data</button>
             @endif
@@ -3426,6 +3427,7 @@
         }
         var departemen = "{{ session('departemen') }}";
         var lokasikerja = "{{ session('lok') }}";
+        var user_id = "{{ auth()->user()->user_id }}";
 
         function verifbutton() {
             Swal.fire({
@@ -3456,6 +3458,7 @@
                             departemen: departemen,
                             lokasikerja: lokasikerja,
                             tanggal_approve: tanggal_approve,
+                            user_id: user_id,
                             action: 'approve',
                             _token: '{{ csrf_token() }}'
                         },

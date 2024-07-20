@@ -1003,6 +1003,7 @@ if (!function_exists('formatPhoneNumber')) {
     }
 }
 
+// manager askep asisten bisa edit dengan departemen khusus QC
 if (!function_exists('can_edit')) {
     function can_edit()
     {
@@ -1031,7 +1032,83 @@ if (!function_exists('can_edit')) {
         return false;
     }
 }
+// cuma manager dan askep bisa edit tanpa depertement
+if (!function_exists('can_edit_mananger_askep')) {
+    function can_edit_mananger_askep()
+    {
+        $user = auth()->user();
+        $newJabatan = $user->id_jabatan;
+        $oldJabatan = $user->jabatan;
+        $allowedJabatan = ['6', '15', '5'];
 
+
+        // Check new department and position
+        if ($newJabatan !== null && in_array($newJabatan, $allowedJabatan)) {
+            return true;
+        }
+
+        // Check old department and position
+        $allowedOldJabatan = ['Askep', 'Manager', 'Askep/Asisten'];
+
+
+        if ($newJabatan === null &&  in_array($oldJabatan, $allowedOldJabatan)) {
+            return true;
+        }
+
+        return false;
+    }
+}
+// cuma manager/askep/asisten/asisten afdeling  bisa edit tanpa depertement
+if (!function_exists('can_edit_all_atasan')) {
+    function can_edit_all_atasan()
+    {
+        $user = auth()->user();
+        $newJabatan = $user->id_jabatan;
+        $oldJabatan = $user->jabatan;
+        $allowedJabatan = ['6', '15', '5', '3', '7'];
+
+
+        // Check new department and position
+        if ($newJabatan !== null && in_array($newJabatan, $allowedJabatan)) {
+            return true;
+        }
+
+        // Check old department and position
+        $allowedOldJabatan = ['Askep', 'Manager', 'Askep/Asisten', 'Asisten Afdeling'];
+
+
+        if ($newJabatan === null &&  in_array($oldJabatan, $allowedOldJabatan)) {
+            return true;
+        }
+
+        return false;
+    }
+}
+if (!function_exists('can_edit_asisten')) {
+    function can_edit_asisten()
+    {
+        $user = auth()->user();
+        $newJabatan = $user->id_jabatan;
+        $oldJabatan = $user->jabatan;
+        $allowedJabatan = ['7', '3'];
+
+
+        // Check new department and position
+        if ($newJabatan !== null && in_array($newJabatan, $allowedJabatan)) {
+            return true;
+        }
+
+        // Check old department and position
+        $allowedOldJabatan = ['Asisten', 'Askep/Asisten', 'Asisten Afdeling'];
+
+
+        if ($newJabatan === null &&  in_array($oldJabatan, $allowedOldJabatan)) {
+            return true;
+        }
+
+        return false;
+    }
+}
 
 if (!function_exists('fetchDataByMonthAndGroupInChunks')) {
     function fetchDataByMonthAndGroupInChunks($table, $RegData, $year, $month)

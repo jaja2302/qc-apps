@@ -356,7 +356,7 @@
                 <div>
                     Data belum Tervertifikasi oleh Manager/Askep
                 </div>
-                @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' )
+                @if (can_edit_mananger_askep())
                 <div>
                     <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
                 </div>
@@ -934,6 +934,7 @@
             var departemen = "{{ session('departemen') }}";
             var lokasikerja = "{{ session('lok') }}";
             var user_name = "{{ session('user_name') }}";
+            var user_id = "{{ auth()->user()->user_id }}";
 
             function verifbutton() {
                 Swal.fire({
@@ -964,6 +965,7 @@
                                 departemen: departemen,
                                 lokasikerja: lokasikerja,
                                 tanggal_approve: tanggal_approve,
+                                user_id: user_id,
                                 action: 'approve',
                                 _token: '{{ csrf_token() }}'
                             },

@@ -13,6 +13,7 @@ use App\Models\mutu_ancak;
 use Yajra\DataTables\Facades\Datatables;
 use App\Exports\Exportqcinspeksi;
 use App\Exports\Exportqcinspeksiba;
+use App\Models\Pengguna;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -8330,9 +8331,16 @@ class inspectController extends Controller
         $menu = $request->input('menu');
 
         // dd($afd);
+
+        if ($afd === 'ESTATE') {
+            $new_afd = 'ESTAT';
+        } else {
+            $new_afd = $afd;
+        }
+
         $status = DB::connection('mysql2')->table('verification')
             ->where('est', $est)
-            ->where('afd', $afd)
+            ->where('afd', $new_afd)
             ->where('menu', $menu)
             ->where('datetime', 'LIKE', '%' . $Tanggal . '%')
             ->get();
@@ -8382,6 +8390,7 @@ class inspectController extends Controller
     {
         // Retrieve input values from the request
         $Tanggal = $request->input('Tanggal');
+        $user_id = $request->input('user_id');
         $est = $request->input('est');
         $afd = $request->input('afd');
         $menu = $request->input('menu');
@@ -8391,6 +8400,10 @@ class inspectController extends Controller
         $tanggal_approve = $request->input('tanggal_approve');
         $departemen = $request->input('departemen');
         $lokasikerja = $request->input('lokasikerja');
+
+        $data_user = Pengguna::where('user_id', $user_id)->with(['Jabatan', 'Departement'])->first();
+
+        // dd($data_user);
         // dd($Tanggal, $est, $afd,$menu,$jabatan,$nama,$action,$tanggal_approve,$departemen,$lokasikerja);
         try {
             DB::beginTransaction();
@@ -8402,13 +8415,19 @@ class inspectController extends Controller
                 ->where('menu', $menu)
                 ->first();
 
-            // dd($currentStatus);
-
-            $verifby_askep = $jabatan === 'Askep' ? 1 : 0;
-            $verifby_manager = $jabatan === 'Manager' ? 1 : 0;
-            $verifby_asisten = ($jabatan === 'Asisten' || $jabatan === 'Asisten Afdeling') ? 1 : 0;
+            // dd($est, $afd, $menu, $currentStatus);
+            if ($data_user->id_jabatan !== null && $data_user->id_departement !== null) {
+                $verifby_askep = $data_user->Jabatan->nama === 'Askep' ? 1 : 0;
+                $verifby_manager = $data_user->Jabatan->nama === 'Manager' ? 1 : 0;
+                $verifby_asisten = ($data_user->Jabatan->nama === 'Asisten' || $data_user->Jabatan->nama === 'Asisten Afdeling') ? 1 : 0;
+            } else {
+                $verifby_askep = $jabatan === 'Askep' ? 1 : 0;
+                $verifby_manager = $jabatan === 'Manager' ? 1 : 0;
+                $verifby_asisten = ($jabatan === 'Asisten' || $jabatan === 'Asisten Afdeling') ? 1 : 0;
+            }
 
             if ($currentStatus == null) {
+
                 $data = [
                     'est' => $est,
                     'afd' => $afd,
@@ -8438,12 +8457,12 @@ class inspectController extends Controller
                 }
 
                 DB::connection('mysql2')->table('verification')->insert($data);
-                dd('case1');
+                // dd('case1');
 
                 DB::commit();
                 return response()->json('success', 200);
             } else {
-                // dd($jabatan);
+                // dd('ada');
                 if ($jabatan === 'Askep') {
                     DB::connection('mysql2')->table('verification')->where('id', $currentStatus->id)->update([
                         'verifby_askep' => $verifby_askep,

@@ -4444,7 +4444,7 @@ class mutubuahController extends Controller
         $sidakblok = array();
         $status = DB::connection('mysql2')->table('verification')
             ->where('est', $est)
-            ->where('afd', 'EST')
+            ->whereIn('afd', ['EST', 'ESTATE', 'ESTAT'])
             ->where('menu', 'sidakmutubuah')
             ->where('datetime', 'LIKE', '%' . $date . '%')
             ->get();

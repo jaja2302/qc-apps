@@ -373,11 +373,10 @@
                 <div>
                     Data belum Tervertifikasi oleh Manager/Askep
                 </div>
-                @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' )
+                @if (can_edit_mananger_askep())
                 <div>
                     <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
                 </div>
-
                 @endif
             </div>
             <div class="alert alert-warning d-none d-flex align-items-center" role="alert" id="condition_not_met">
@@ -755,6 +754,7 @@
         const canedit = @json(can_edit());
 
         var currentUserName = "{{ session('jabatan') }}";
+        var user_id = "{{ auth()->user()->user_id }}";
         var user_name = "{{ session('user_name') }}";
         document.addEventListener("DOMContentLoaded", function() {
             var inputDate = document.getElementById("inputDate");
@@ -879,7 +879,7 @@
                     let tanggal_approve = hariini();
                     $.ajax({
                         url: "{{ route('verifaction') }}",
-                        method: "POST",
+                        method: "post",
                         data: {
                             Tanggal: Tanggal,
                             est: est,
@@ -890,6 +890,7 @@
                             departemen: departemen,
                             lokasikerja: lokasikerja,
                             tanggal_approve: tanggal_approve,
+                            user_id: user_id,
                             action: 'approve',
                             _token: '{{ csrf_token() }}'
                         },
