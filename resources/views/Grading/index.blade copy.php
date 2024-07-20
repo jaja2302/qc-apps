@@ -343,6 +343,8 @@
                 </table>
             </div>
         </div>
+
+        <!-- rekap perhari  -->
         <div class="tab-pane fade" id="nav-perhari" role="tabpanel" aria-labelledby="nav-perhari-tab">
             <div class="text-center border border-3 mt-4 ml-3 mr-3 mb-10">
                 <h1>REKAPITULASI LAPORAN GRADING PKS</h1>
@@ -574,7 +576,18 @@
             getrekapmill();
         }
 
-
+        document.getElementById('rekap_perhari').onclick = function() {
+            Swal.fire({
+                title: 'Loading',
+                html: '<span class="loading-text">Mohon Tunggu...</span>',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            getrekapperhari();
+        }
         document.getElementById('rekap_perfadeling').onclick = function() {
             Swal.fire({
                 title: 'Loading',
@@ -631,33 +644,33 @@
 
                         // Assign text values to each itemElement
                         itemElements[0].innerText = key;
-                        itemElements[1].innerText = value['regional']['jumlah_janjang_grading'].toLocaleString('id-ID');
-                        itemElements[2].innerText = value['regional']['tonase'].toLocaleString('id-ID');
-                        itemElements[3].innerText = value['regional']['ripeness'].toLocaleString('id-ID');
+                        itemElements[1].innerText = value['regional']['jumlah_janjang_grading'];
+                        itemElements[2].innerText = value['regional']['tonase'];
+                        itemElements[3].innerText = value['regional']['ripeness'];
                         itemElements[4].innerText = value['regional']['percentage_ripeness'].toFixed(2);
-                        itemElements[5].innerText = value['regional']['unripe'].toLocaleString('id-ID');
+                        itemElements[5].innerText = value['regional']['unripe'];
                         itemElements[6].innerText = value['regional']['percentage_unripe'].toFixed(2);
-                        itemElements[7].innerText = value['regional']['overripe'].toLocaleString('id-ID');
+                        itemElements[7].innerText = value['regional']['overripe'];
                         itemElements[8].innerText = value['regional']['percentage_overripe'].toFixed(2);
-                        itemElements[9].innerText = value['regional']['empty_bunch'].toLocaleString('id-ID');
+                        itemElements[9].innerText = value['regional']['empty_bunch'];
                         itemElements[10].innerText = value['regional']['percentage_empty_bunch'].toFixed(2);
-                        itemElements[11].innerText = value['regional']['rotten_bunch'].toLocaleString('id-ID');
+                        itemElements[11].innerText = value['regional']['rotten_bunch'];
                         itemElements[12].innerText = value['regional']['percentage_rotten_bunch'].toFixed(2);
-                        itemElements[13].innerText = value['regional']['abnormal'].toLocaleString('id-ID');
+                        itemElements[13].innerText = value['regional']['abnormal'];
                         itemElements[14].innerText = value['regional']['percentage_abnormal'].toFixed(2);
-                        itemElements[15].innerText = value['regional']['longstalk'].toLocaleString('id-ID');
+                        itemElements[15].innerText = value['regional']['longstalk'];
                         itemElements[16].innerText = value['regional']['percentage_longstalk'].toFixed(2);
                         itemElements[17].innerText = value['regional']['vcut'];
                         itemElements[18].innerText = value['regional']['percentage_vcut'].toFixed(2);
-                        itemElements[19].innerText = value['regional']['dirt_kg'].toLocaleString('id-ID');
+                        itemElements[19].innerText = value['regional']['dirt_kg'];
                         itemElements[20].innerText = value['regional']['percentage_dirt'].toFixed(2);
-                        itemElements[21].innerText = value['regional']['loose_fruit_kg'].toLocaleString('id-ID');
+                        itemElements[21].innerText = value['regional']['loose_fruit_kg'];
                         itemElements[22].innerText = value['regional']['percentage_loose_fruit'].toFixed(2);
-                        itemElements[23].innerText = value['regional']['kelas_c'].toLocaleString('id-ID');
-                        itemElements[24].innerText = value['regional']['percentage_kelas_c'].toFixed(2);
-                        itemElements[25].innerText = value['regional']['kelas_b'].toLocaleString('id-ID');
-                        itemElements[26].innerText = value['regional']['percentage_kelas_b'].toFixed(2);
-                        itemElements[27].innerText = value['regional']['kelas_a'].toLocaleString('id-ID')
+                        itemElements[23].innerText = value['regional']['kelas_a'];
+                        itemElements[24].innerText = value['regional']['percentage_kelas_a'].toFixed(2);
+                        itemElements[25].innerText = value['regional']['kelas_b'];
+                        itemElements[26].innerText = value['regional']['percentage_kelas_a'].toFixed(2);
+                        itemElements[27].innerText = value['regional']['kelas_c'];
                         itemElements[28].innerText = value['regional']['percentage_kelas_a'].toFixed(2);
 
                         // Append each itemElement to the tr
@@ -680,33 +693,33 @@
 
                         // Assign text values to each itemElement
                         itemElements[0].innerText = key;
-                        itemElements[1].innerText = value['wil']['jumlah_janjang_grading'].toLocaleString('id-ID');
-                        itemElements[2].innerText = value['wil']['tonase'].toLocaleString('id-ID');
-                        itemElements[3].innerText = value['wil']['ripeness'].toLocaleString('id-ID');
+                        itemElements[1].innerText = value['wil']['jumlah_janjang_grading'];
+                        itemElements[2].innerText = value['wil']['tonase'];
+                        itemElements[3].innerText = value['wil']['ripeness'];
                         itemElements[4].innerText = value['wil']['percentage_ripeness'].toFixed(2);
-                        itemElements[5].innerText = value['wil']['unripe'].toLocaleString('id-ID');
+                        itemElements[5].innerText = value['wil']['unripe'];
                         itemElements[6].innerText = value['wil']['percentage_unripe'].toFixed(2);
-                        itemElements[7].innerText = value['wil']['overripe'].toLocaleString('id-ID');
+                        itemElements[7].innerText = value['wil']['overripe'];
                         itemElements[8].innerText = value['wil']['percentage_overripe'].toFixed(2);
-                        itemElements[9].innerText = value['wil']['empty_bunch'].toLocaleString('id-ID');
+                        itemElements[9].innerText = value['wil']['empty_bunch'];
                         itemElements[10].innerText = value['wil']['percentage_empty_bunch'].toFixed(2);
-                        itemElements[11].innerText = value['wil']['rotten_bunch'].toLocaleString('id-ID');
+                        itemElements[11].innerText = value['wil']['rotten_bunch'];
                         itemElements[12].innerText = value['wil']['percentage_rotten_bunch'].toFixed(2);
-                        itemElements[13].innerText = value['wil']['abnormal'].toLocaleString('id-ID');
+                        itemElements[13].innerText = value['wil']['abnormal'];
                         itemElements[14].innerText = value['wil']['percentage_abnormal'].toFixed(2);
-                        itemElements[15].innerText = value['wil']['longstalk'].toLocaleString('id-ID');
+                        itemElements[15].innerText = value['wil']['longstalk'];
                         itemElements[16].innerText = value['wil']['percentage_longstalk'].toFixed(2);
-                        itemElements[17].innerText = value['wil']['vcut'].toLocaleString('id-ID');
+                        itemElements[17].innerText = value['wil']['vcut'];
                         itemElements[18].innerText = value['wil']['percentage_vcut'].toFixed(2);
-                        itemElements[19].innerText = value['wil']['dirt_kg'].toLocaleString('id-ID');
+                        itemElements[19].innerText = value['wil']['dirt_kg'];
                         itemElements[20].innerText = value['wil']['percentage_dirt'].toFixed(2);
-                        itemElements[21].innerText = value['wil']['loose_fruit_kg'].toLocaleString('id-ID');
+                        itemElements[21].innerText = value['wil']['loose_fruit_kg'];
                         itemElements[22].innerText = value['wil']['percentage_loose_fruit'].toFixed(2);
-                        itemElements[23].innerText = value['wil']['kelas_c'];
-                        itemElements[24].innerText = value['wil']['percentage_kelas_c'].toFixed(2);
+                        itemElements[23].innerText = value['wil']['kelas_a'];
+                        itemElements[24].innerText = value['wil']['percentage_kelas_a'].toFixed(2);
                         itemElements[25].innerText = value['wil']['kelas_b'];
-                        itemElements[26].innerText = value['wil']['percentage_kelas_b'].toFixed(2);
-                        itemElements[27].innerText = value['wil']['kelas_a'];
+                        itemElements[26].innerText = value['wil']['percentage_kelas_a'].toFixed(2);
+                        itemElements[27].innerText = value['wil']['kelas_c'];
                         itemElements[28].innerText = value['wil']['percentage_kelas_a'].toFixed(2);
 
                         // Append each itemElement to the tr
@@ -729,33 +742,33 @@
                         // Assign text values to each itemElement
                         itemElements[0].innerText = key;
                         itemElements[0].colSpan = 2; // Sets the colspan attribute to 2
-                        itemElements[1].innerText = value['mil']['jumlah_janjang_grading'].toLocaleString('id-ID');
-                        itemElements[2].innerText = value['mil']['tonase'].toLocaleString('id-ID');
-                        itemElements[3].innerText = value['mil']['ripeness'].toLocaleString('id-ID');
+                        itemElements[1].innerText = value['mil']['jumlah_janjang_grading'];
+                        itemElements[2].innerText = value['mil']['tonase'];
+                        itemElements[3].innerText = value['mil']['ripeness'];
                         itemElements[4].innerText = value['mil']['percentage_ripeness'].toFixed(2);
-                        itemElements[5].innerText = value['mil']['unripe'].toLocaleString('id-ID');
+                        itemElements[5].innerText = value['mil']['unripe'];
                         itemElements[6].innerText = value['mil']['percentage_unripe'].toFixed(2);
-                        itemElements[7].innerText = value['mil']['overripe'].toLocaleString('id-ID');
+                        itemElements[7].innerText = value['mil']['overripe'];
                         itemElements[8].innerText = value['mil']['percentage_overripe'].toFixed(2);
-                        itemElements[9].innerText = value['mil']['empty_bunch'].toLocaleString('id-ID');
+                        itemElements[9].innerText = value['mil']['empty_bunch'];
                         itemElements[10].innerText = value['mil']['percentage_empty_bunch'].toFixed(2);
-                        itemElements[11].innerText = value['mil']['rotten_bunch'].toLocaleString('id-ID');
+                        itemElements[11].innerText = value['mil']['rotten_bunch'];
                         itemElements[12].innerText = value['mil']['percentage_rotten_bunch'].toFixed(2);
-                        itemElements[13].innerText = value['mil']['abnormal'].toLocaleString('id-ID');
+                        itemElements[13].innerText = value['mil']['abnormal'];
                         itemElements[14].innerText = value['mil']['percentage_abnormal'].toFixed(2);
-                        itemElements[15].innerText = value['mil']['longstalk'].toLocaleString('id-ID');
+                        itemElements[15].innerText = value['mil']['longstalk'];
                         itemElements[16].innerText = value['mil']['percentage_longstalk'].toFixed(2);
-                        itemElements[17].innerText = value['mil']['vcut'].toLocaleString('id-ID');
+                        itemElements[17].innerText = value['mil']['vcut'];
                         itemElements[18].innerText = value['mil']['percentage_vcut'].toFixed(2);
-                        itemElements[19].innerText = value['mil']['dirt_kg'].toLocaleString('id-ID');
+                        itemElements[19].innerText = value['mil']['dirt_kg'];
                         itemElements[20].innerText = value['mil']['percentage_dirt'].toFixed(2);
-                        itemElements[21].innerText = value['mil']['loose_fruit_kg'].toLocaleString('id-ID');
+                        itemElements[21].innerText = value['mil']['loose_fruit_kg'];
                         itemElements[22].innerText = value['mil']['percentage_loose_fruit'].toFixed(2);
-                        itemElements[23].innerText = value['mil']['kelas_c'];
-                        itemElements[24].innerText = value['mil']['percentage_kelas_c'].toFixed(2);
+                        itemElements[23].innerText = value['mil']['kelas_a'];
+                        itemElements[24].innerText = value['mil']['percentage_kelas_a'].toFixed(2);
                         itemElements[25].innerText = value['mil']['kelas_b'];
-                        itemElements[26].innerText = value['mil']['percentage_kelas_b'].toFixed(2);
-                        itemElements[27].innerText = value['mil']['kelas_a'];
+                        itemElements[26].innerText = value['mil']['percentage_kelas_a'].toFixed(2);
+                        itemElements[27].innerText = value['mil']['kelas_c'];
                         itemElements[28].innerText = value['mil']['percentage_kelas_a'].toFixed(2);
 
                         // Append each itemElement to the tr
@@ -812,33 +825,33 @@
                         // Assign text values to each itemElement
                         itemElements[0].innerText = key;
                         // itemElements[0].colSpan = 2; // Sets the colspan attribute to 2
-                        itemElements[1].innerText = value['mil']['jumlah_janjang_grading'].toLocaleString('id-ID');
-                        itemElements[2].innerText = value['mil']['tonase'].toLocaleString('id-ID');
-                        itemElements[3].innerText = value['mil']['ripeness'].toLocaleString('id-ID');
+                        itemElements[1].innerText = value['mil']['jumlah_janjang_grading'];
+                        itemElements[2].innerText = value['mil']['tonase'];
+                        itemElements[3].innerText = value['mil']['ripeness'];
                         itemElements[4].innerText = value['mil']['percentage_ripeness'].toFixed(2);
-                        itemElements[5].innerText = value['mil']['unripe'].toLocaleString('id-ID');
+                        itemElements[5].innerText = value['mil']['unripe'];
                         itemElements[6].innerText = value['mil']['percentage_unripe'].toFixed(2);
-                        itemElements[7].innerText = value['mil']['overripe'].toLocaleString('id-ID');
+                        itemElements[7].innerText = value['mil']['overripe'];
                         itemElements[8].innerText = value['mil']['percentage_overripe'].toFixed(2);
-                        itemElements[9].innerText = value['mil']['empty_bunch'].toLocaleString('id-ID');
+                        itemElements[9].innerText = value['mil']['empty_bunch'];
                         itemElements[10].innerText = value['mil']['percentage_empty_bunch'].toFixed(2);
-                        itemElements[11].innerText = value['mil']['rotten_bunch'].toLocaleString('id-ID');
+                        itemElements[11].innerText = value['mil']['rotten_bunch'];
                         itemElements[12].innerText = value['mil']['percentage_rotten_bunch'].toFixed(2);
-                        itemElements[13].innerText = value['mil']['abnormal'].toLocaleString('id-ID');
+                        itemElements[13].innerText = value['mil']['abnormal'];
                         itemElements[14].innerText = value['mil']['percentage_abnormal'].toFixed(2);
-                        itemElements[15].innerText = value['mil']['longstalk'].toLocaleString('id-ID');
+                        itemElements[15].innerText = value['mil']['longstalk'];
                         itemElements[16].innerText = value['mil']['percentage_longstalk'].toFixed(2);
                         itemElements[17].innerText = value['mil']['vcut'];
                         itemElements[18].innerText = value['mil']['percentage_vcut'].toFixed(2);
-                        itemElements[19].innerText = value['mil']['dirt_kg'].toLocaleString('id-ID');
+                        itemElements[19].innerText = value['mil']['dirt_kg'];
                         itemElements[20].innerText = value['mil']['percentage_dirt'].toFixed(2);
-                        itemElements[21].innerText = value['mil']['loose_fruit_kg'].toLocaleString('id-ID');
+                        itemElements[21].innerText = value['mil']['loose_fruit_kg'];
                         itemElements[22].innerText = value['mil']['percentage_loose_fruit'].toFixed(2);
-                        itemElements[23].innerText = value['mil']['kelas_c'].toLocaleString('id-ID');
-                        itemElements[24].innerText = value['mil']['percentage_kelas_c'].toFixed(2);
-                        itemElements[25].innerText = value['mil']['kelas_b'].toLocaleString('id-ID');
-                        itemElements[26].innerText = value['mil']['percentage_kelas_b'].toFixed(2);
-                        itemElements[27].innerText = value['mil']['kelas_a'].toLocaleString('id-ID');
+                        itemElements[23].innerText = value['mil']['kelas_a'];
+                        itemElements[24].innerText = value['mil']['percentage_kelas_a'].toFixed(2);
+                        itemElements[25].innerText = value['mil']['kelas_b'];
+                        itemElements[26].innerText = value['mil']['percentage_kelas_a'].toFixed(2);
+                        itemElements[27].innerText = value['mil']['kelas_c'];
                         itemElements[28].innerText = value['mil']['percentage_kelas_a'].toFixed(2);
 
                         // Append each itemElement to the tr
@@ -858,29 +871,15 @@
 
         }
 
-        document.getElementById('rekap_perhari').onclick = function() {
-            Swal.fire({
-                title: 'Loading',
-                html: '<span class="loading-text">Mohon Tunggu...</span>',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                willOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-            getrekapperhari();
-        }
-
         function getrekapperhari() {
             let reg = document.getElementById('rekap_perhari_reg').value;
             let bulan = document.getElementById('input_rekap_perhari').value;
             // let estate = document.getElementById('estate_select').value;
-            // console.log(reg);
             let _token = $('input[name="_token"]').val();
             $('#rekap_perhari_data').empty()
-            console.log('rekap_perhari_data');
+
             $.ajax({
-                url: "{{ route('getrekapperhari_dashboard') }}",
+                url: "{{ route('getrekapperhari') }}",
                 method: "GET",
                 data: {
                     reg: reg,
@@ -992,43 +991,39 @@
                             for (let index = 0; index < 32; index++) {
                                 itemElements[index] = document.createElement('td');
                             }
-                            let link;
-                            link = document.createElement('a');
-                            link.href = 'detailgradingmill/' + key + '/' + key1 + '/' + bulan;
-                            link.target = '_blank';
-                            link.innerText = key1;
+
                             // Assign text values to each itemElement
                             itemElements[0].innerText = key
-                            itemElements[1].appendChild(link); // Append link element to itemElements[1]
-                            itemElements[2].innerText = value1['jumlah_janjang_spb'].toLocaleString('id-ID')
-                            itemElements[3].innerText = value1['jumlah_janjang_grading'].toLocaleString('id-ID');
-                            itemElements[4].innerText = value1['tonase'].toLocaleString('id-ID');
-                            itemElements[5].innerText = value1['bjr'].toFixed(2).toLocaleString('id-ID');
-                            itemElements[6].innerText = value1['ripeness'].toLocaleString('id-ID')
+                            itemElements[1].innerText = key1;
+                            itemElements[2].innerText = value1['tonase'];
+                            itemElements[3].innerText = value1['jumlah_janjang_spb']
+                            itemElements[4].innerText = value1['jumlah_janjang_grading'];
+                            itemElements[5].innerText = value1['bjr'].toFixed(2);
+                            itemElements[6].innerText = value1['ripeness']
                             itemElements[7].innerText = value1['percentage_ripeness'].toFixed(2)
-                            itemElements[8].innerText = value1['unripe'].toLocaleString('id-ID')
+                            itemElements[8].innerText = value1['unripe']
                             itemElements[9].innerText = value1['percentage_unripe'].toFixed(2)
-                            itemElements[10].innerText = value1['overripe'].toLocaleString('id-ID')
+                            itemElements[10].innerText = value1['overripe']
                             itemElements[11].innerText = value1['percentage_overripe'].toFixed(2)
-                            itemElements[12].innerText = value1['empty_bunch'].toLocaleString('id-ID')
+                            itemElements[12].innerText = value1['empty_bunch']
                             itemElements[13].innerText = value1['percentage_empty_bunch'].toFixed(2)
-                            itemElements[14].innerText = value1['rotten_bunch'].toLocaleString('id-ID')
+                            itemElements[14].innerText = value1['rotten_bunch']
                             itemElements[15].innerText = value1['percentage_rotten_bunch'].toFixed(2)
-                            itemElements[16].innerText = value1['abnormal'].toLocaleString('id-ID')
+                            itemElements[16].innerText = value1['abnormal']
                             itemElements[17].innerText = value1['percentage_abnormal'].toFixed(2)
-                            itemElements[18].innerText = value1['longstalk'].toLocaleString('id-ID')
+                            itemElements[18].innerText = value1['longstalk']
                             itemElements[19].innerText = value1['percentage_longstalk'].toFixed(2)
-                            itemElements[20].innerText = value1['vcut'].toLocaleString('id-ID')
+                            itemElements[20].innerText = value1['vcut']
                             itemElements[21].innerText = value1['percentage_vcut'].toFixed(2)
-                            itemElements[22].innerText = value1['dirt_kg'].toLocaleString('id-ID')
+                            itemElements[22].innerText = value1['dirt_kg']
                             itemElements[23].innerText = value1['percentage_dirt'].toFixed(2)
-                            itemElements[24].innerText = value1['loose_fruit_kg'].toLocaleString('id-ID')
+                            itemElements[24].innerText = value1['loose_fruit_kg']
                             itemElements[25].innerText = value1['percentage_loose_fruit'].toFixed(2)
-                            itemElements[26].innerText = value1['kelas_c'].toLocaleString('id-ID')
+                            itemElements[26].innerText = value1['kelas_c']
                             itemElements[27].innerText = value1['percentage_kelas_c'].toFixed(2)
-                            itemElements[28].innerText = value1['kelas_b'].toLocaleString('id-ID')
+                            itemElements[28].innerText = value1['kelas_b']
                             itemElements[29].innerText = value1['percentage_kelas_b'].toFixed(2)
-                            itemElements[30].innerText = value1['kelas_a'].toLocaleString('id-ID')
+                            itemElements[30].innerText = value1['kelas_a']
                             itemElements[31].innerText = value1['percentage_kelas_a'].toFixed(2)
 
                             // Append each itemElement to the tr

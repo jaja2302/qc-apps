@@ -238,6 +238,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/gradingregional', [GradingController::class, 'rekapregional'])->name('gradingregional');
     Route::get('/gradingrekapmill', [GradingController::class, 'gradingrekapmill'])->name('gradingrekapmill');
     Route::get('/getrekapperhari', [GradingController::class, 'getrekapperhari'])->name('getrekapperhari');
+    Route::get('/getrekapperhari_dashboard', [GradingController::class, 'getrekapperhari_dashboard'])->name('getrekapperhari_dashboard');
     Route::get('/getrekapperafdeling', [GradingController::class, 'getrekapperafdeling'])->name('getrekapperafdeling');
     Route::get('detailgradingmill/{est}/{afd}/{bulan}', [GradingController::class, 'detailgradingmill'])->name('detailgradingmill');
     Route::post('/exportpdfgrading', [GradingController::class, 'exportpdfgrading'])->name('exportpdfgrading');

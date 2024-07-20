@@ -62,6 +62,13 @@ class GradingController extends Controller
         $date = $request->input('date');
         $this->getdatamildetail($estate, $afd, $date);
     }
+    public function getrekapperhari_dashboard(Request $request)
+    {
+        $reg = $request->input('reg');
+        $bulan = $request->input('bulan');
+        $type = 'perhari';
+        $this->getdatamill($bulan, $reg, $type);
+    }
 
     public function getrekapperafdeling(Request $request)
     {
@@ -1035,10 +1042,13 @@ class GradingController extends Controller
 
                 // Original datetime string
                 $datetime = $value['datetime'];
+                $getadds = explode(';', $value['app_version']);
 
                 // Create a Carbon instance
                 $date = Carbon::parse($datetime);
-
+                $appvers = $getadds[0] ?? '-';
+                $os_version = $getadds[1] ?? '-';
+                $phone_version = $getadds[2] ?? '-';
                 // Format the date
                 $dayOfWeek = $date->isoFormat('dddd'); // Get the day of the week in Indonesian
                 $formattedDate = $dayOfWeek . ', ' . $date->format('d-m-Y');
@@ -1109,6 +1119,9 @@ class GradingController extends Controller
                     'percentage_kelas_b' => round($persentage_kelas_b, 2),
                     'percentage_kelas_c' =>  round($persentage_kelas_c, 2),
                     'tanggal_titel' => $date->format('d M Y'),
+                    'appvers' => $appvers,
+                    'os_version' => $os_version,
+                    'phone_version' => $phone_version,
                 ];
                 // dd($dataakhir);
                 $pdf = Pdf::loadView('Grading.pdfgrading_api', ['data' => $dataakhir]);
