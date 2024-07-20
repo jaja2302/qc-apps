@@ -956,6 +956,8 @@ class ApiqcController extends Controller
                         'no_hp' => formatPhoneNumber($atasan1_id->no_hp),
                         'tanggal_keluar' =>  Carbon::parse($value['tanggal_keluar'])->format('d-m-Y'),
                         'tanggal_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('d-m-Y'),
+                        'jam_keluar' =>   Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
+                        'jam_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
                         'keperluan' => $value['keperluan'],
                         'lokasi_tujuan' => $value['lokasi_tujuan'],
                     ];
@@ -973,6 +975,8 @@ class ApiqcController extends Controller
                         'no_hp_user' => formatPhoneNumber($user_id->no_hp),
                         'tanggal_keluar' =>  Carbon::parse($value['tanggal_keluar'])->format('d-m-Y'),
                         'tanggal_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('d-m-Y'),
+                        'jam_keluar' =>   Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
+                        'jam_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
                         'keperluan' => $value['keperluan'],
                         'lokasi_tujuan' => $value['lokasi_tujuan'],
                     ];
@@ -989,6 +993,8 @@ class ApiqcController extends Controller
                         'user_request' => $user_id->nama_lengkap,
                         'tanggal_keluar' =>  Carbon::parse($value['tanggal_keluar'])->format('d-m-Y'),
                         'tanggal_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('d-m-Y'),
+                        'jam_keluar' =>   Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
+                        'jam_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
                         'keperluan' => $value['keperluan'],
                         'lokasi_tujuan' => $value['lokasi_tujuan'],
                     ];
@@ -1006,6 +1012,8 @@ class ApiqcController extends Controller
                         'user_request' => $user_id->nama_lengkap,
                         'tanggal_keluar' =>  Carbon::parse($value['tanggal_keluar'])->format('d-m-Y'),
                         'tanggal_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('d-m-Y'),
+                        'jam_keluar' =>   Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
+                        'jam_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
                         'keperluan' => $value['keperluan'],
                         'alasan' => ($value['catatan'] == null) ? '-' : $value['catatan'],
                         'lokasi_tujuan' => $value['lokasi_tujuan'],
@@ -1069,7 +1077,7 @@ class ApiqcController extends Controller
                     } elseif ($answer === 'tidak') {
                         Formijin::where('id', $id)
                             ->update([
-                                'status_bot' => '1$1$1',
+                                'status_bot' => '1$0$0',
                                 'status' => 3,
                             ]);
 
@@ -1081,7 +1089,7 @@ class ApiqcController extends Controller
                     } else {
                         Formijin::where('id', $id)
                             ->update([
-                                'status_bot' => '1$1$0',
+                                'status_bot' => '1$0$0',
                                 'status' => 3,
                                 'catatan' => $answer,
                             ]);
@@ -1120,7 +1128,8 @@ class ApiqcController extends Controller
                     } elseif ($answer === 'tidak') {
                         Formijin::where('id', $id)
                             ->update([
-                                'status_bot' => '1$1$1',
+                                'status_bot' => '1$1$0',
+                                // 'status_send_notif' => '1$0$0',
                                 'status' => 3,
                             ]);
 
@@ -1133,6 +1142,7 @@ class ApiqcController extends Controller
                         Formijin::where('id', $id)
                             ->update([
                                 'status_bot' => '1$1$0',
+                                // 'status_send_notif' => '1$0$0',
                                 'status' => 3,
                                 'catatan' => $answer,
                             ]);

@@ -2025,12 +2025,13 @@
 
                 // Draw the polygon
                 const polygon = L.polygon(latlnArray, {
-                    color: 'blue', // Outline color
+                    color: 'white', // Outline color
                     fillColor: fillColor, // Background color based on nilai
-                    fillOpacity: 0.5 // Set opacity for the fill color
+                    fillOpacity: 0.6 // Set opacity for the fill color
                 }).addTo(layerGroup).bindPopup(`
             <div>
-                <strong>Blok Sidak:</strong> ${blok[key].blok}<br>
+                <strong>Blok Sidak:</strong> ${blok[key].blok_asli}<br>
+                <strong>Blok Database:</strong> ${blok[key].blok}<br>
                 <strong>Afdeling:</strong> ${blok[key].afdeling}<br>
                 <strong>Nilai:</strong> ${blok[key].nilai}<br>
                 <strong>Kategori:</strong> ${blok[key].kategori}
@@ -2055,10 +2056,14 @@
                 L.marker([centerLat, centerLng], {
                     icon: L.divIcon({
                         className: 'label-estate',
-                        html: `<div>${blok[key].blok}</div>`,
+                        html: `<div>
+                   <p style="color: white; display: inline;">${blok[key].blok}</p>
+                   <p style="color: black; display: inline;">(${blok[key].nilai})</p>
+               </div>`,
                         iconSize: [100, 20]
                     })
                 }).addTo(layerGroup);
+
 
                 // Extend bounds to include the current polygon
                 bounds.extend(polygon.getBounds());
