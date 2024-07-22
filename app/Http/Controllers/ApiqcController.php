@@ -915,278 +915,207 @@ class ApiqcController extends Controller
 
     public function getnotif_suratijin()
     {
-        $data = Formijin::query()->where('status_bot', '!=', '1$1$1')->get();
+        $data = Formijin::where('status_send_notif', '!=', '1$1$1')->get();
+
+        if ($data->isEmpty()) {
+            return response()->json(['status' => 'kosong', 'data' => 'kosong'], 200);
+        }
+
+        $responseData = $this->processFormijinData($data);
+
+        return response()->json(['status' => '200', 'data' => $responseData], 200);
+    }
+
+    private function processFormijinData($data)
+    {
         $responseData = [];
-        if (!empty($data)) {
-            foreach ($data as $key => $value) {
-                $status = $value['status_bot'];
-                $status = explode('$', $status);
-                $atasan1 = $status[0];
-                $atasan2 = $status[1];
-                $user = $status[2];
-                $user_id = Pengguna::where('user_id', $value['user_id'])->first();
-                $atasan1_id = Pengguna::where('user_id', $value['atasan_1'])->first();
-                $atasan2_id = Pengguna::where('user_id', $value['atasan_2'])->first();
-                $case = '-';
 
-                if ($atasan1 != 1 && $value['status'] !== '3') {
-                    $case = 'Atasan_1_not_approved';
-                } elseif ($atasan1 == 1 && $atasan2 != 1 && $value['status'] !== '3') {
-                    $case = 'Atasan_2_not_approved';
-                } elseif ($atasan1 == 1 && $atasan2 == 1 && $user != 1 && $value['status'] !== '3') {
-                    $case = 'User_not_sending';
-                } elseif ($value['status'] == '3') {
-                    $case = 'rejected';
+        foreach ($data as $value) {
+            $status = explode('$', $value['status_bot']);
+            $statusSend = explode('$', $value['status_send_notif']);
+            $case = $this->determineCase($status, $value['status']);
+
+            $userData = $this->getUserData($value);
+
+            $notificationData = $this->prepareNotificationData($value, $userData, $case, $statusSend);
+
+            if ($notificationData) {
+                $responseData[] = $notificationData;
+                $this->updateStatusSendNotif($value['id'], $case);
+            }
+        }
+
+        return $responseData;
+    }
+
+    private function determineCase($status, $formStatus)
+    {
+        if ($status[0] != 1 && $formStatus !== '3') return 'Atasan_1_not_approved';
+        if ($status[0] == 1 && $status[1] != 1 && $formStatus !== '3') return 'Atasan_2_not_approved';
+        if ($status[0] == 1 && $status[1] == 1 && $status[2] != 1 && $formStatus !== '3') return 'User_not_sending';
+        if ($formStatus == '3') return 'rejected';
+        return '-';
+    }
+
+    private function getUserData($value)
+    {
+        return [
+            'user' => Pengguna::where('user_id', $value['user_id'])->first(),
+            'atasan1' => Pengguna::where('user_id', $value['atasan_1'])->first(),
+            'atasan2' => Pengguna::where('user_id', $value['atasan_2'])->first(),
+        ];
+    }
+
+    private function prepareNotificationData($value, $userData, $case, $statusSend)
+    {
+        $baseData = [
+            'user_request' => $userData['user']->nama_lengkap,
+            'tanggal_keluar' => Carbon::parse($value['tanggal_keluar'])->format('d-m-Y'),
+            'tanggal_kembali' => Carbon::parse($value['tanggal_kembali'])->format('d-m-Y'),
+            'jam_keluar' => Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
+            'jam_kembali' => Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
+            'keperluan' => $value['keperluan'],
+            'lokasi_tujuan' => $value['lokasi_tujuan'],
+        ];
+
+        switch ($case) {
+            case 'Atasan_1_not_approved':
+                if ($statusSend[0] != 1) {
+                    return array_merge($baseData, [
+                        'id' => $value->id . '/1',
+                        'status' => 'approved',
+                        'atasan_nama' => $userData['atasan1']->nama_lengkap,
+                        'no_hp' => formatPhoneNumber($userData['atasan1']->no_hp),
+                    ]);
                 }
-                // dd($case);
-                // dd($value['status']);
-
-                $status_send = $value['status_send_notif'];
-                $status_send = explode('$', $status_send);
-                $send_atasan1 = $status_send[0];
-                $send_atasan2 = $status_send[1];
-                $send_user = $status_send[2];
-                // dd($status_send);
-                if ($send_atasan1 != 1 && $case === 'Atasan_1_not_approved') {
-                    $responseData[] = [
-                        'id' => $value->id . '/' . '1',
+                break;
+            case 'Atasan_2_not_approved':
+                if ($statusSend[1] != 1) {
+                    return array_merge($baseData, [
+                        'id' => $value->id . '/2',
                         'status' => 'approved',
-                        'user_request' => $user_id->nama_lengkap,
-                        'atasan_nama' => $atasan1_id->nama_lengkap,
-                        'no_hp' => formatPhoneNumber($atasan1_id->no_hp),
-                        'tanggal_keluar' =>  Carbon::parse($value['tanggal_keluar'])->format('d-m-Y'),
-                        'tanggal_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('d-m-Y'),
-                        'jam_keluar' =>   Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
-                        'jam_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
-                        'keperluan' => $value['keperluan'],
-                        'lokasi_tujuan' => $value['lokasi_tujuan'],
-                    ];
-                    Formijin::where('id', $value['id'])
-                        ->update([
-                            'status_send_notif' => '1$0$0',
-                        ]);
-                } else if ($send_atasan2 != 1 && $case === 'Atasan_2_not_approved') {
-                    $responseData[] = [
-                        'id' => $value->id . '/' . '2',
-                        'status' => 'approved',
-                        'user_request' => $user_id->nama_lengkap,
-                        'atasan_nama' => $atasan2_id->nama_lengkap,
-                        'no_hp' => formatPhoneNumber($atasan2_id->no_hp),
-                        'no_hp_user' => formatPhoneNumber($user_id->no_hp),
-                        'tanggal_keluar' =>  Carbon::parse($value['tanggal_keluar'])->format('d-m-Y'),
-                        'tanggal_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('d-m-Y'),
-                        'jam_keluar' =>   Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
-                        'jam_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
-                        'keperluan' => $value['keperluan'],
-                        'lokasi_tujuan' => $value['lokasi_tujuan'],
-                    ];
-                    Formijin::where('id', $value['id'])
-                        ->update([
-                            'status_send_notif' => '1$1$0',
-                        ]);
-                } else if ($send_user != 1 && $case === 'User_not_sending') {
-                    $responseData[] = [
+                        'atasan_nama' => $userData['atasan2']->nama_lengkap,
+                        'no_hp' => formatPhoneNumber($userData['atasan2']->no_hp),
+                        'no_hp_user' => formatPhoneNumber($userData['user']->no_hp),
+                    ]);
+                }
+                break;
+            case 'User_not_sending':
+                if ($statusSend[2] != 1) {
+                    return array_merge($baseData, [
                         'id' => $value->id,
                         'id_atasan' => 3,
                         'status' => 'send_approved',
-                        'no_hp' => formatPhoneNumber($user_id->no_hp),
-                        'user_request' => $user_id->nama_lengkap,
-                        'tanggal_keluar' =>  Carbon::parse($value['tanggal_keluar'])->format('d-m-Y'),
-                        'tanggal_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('d-m-Y'),
-                        'jam_keluar' =>   Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
-                        'jam_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
-                        'keperluan' => $value['keperluan'],
-                        'lokasi_tujuan' => $value['lokasi_tujuan'],
-                    ];
-                    Formijin::where('id', $value['id'])
-                        ->update([
-                            'status_send_notif' => '1$1$1',
-                        ]);
-                } elseif ($case === 'rejected') {
-                    // Send notification to user that ijin got approved
-                    $responseData[] = [
-                        'id' => $value->id,
-                        'id_atasan' => 4,
-                        'status' => 'rejected',
-                        'no_hp' => formatPhoneNumber($user_id->no_hp),
-                        'user_request' => $user_id->nama_lengkap,
-                        'tanggal_keluar' =>  Carbon::parse($value['tanggal_keluar'])->format('d-m-Y'),
-                        'tanggal_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('d-m-Y'),
-                        'jam_keluar' =>   Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
-                        'jam_kembali' =>   Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
-                        'keperluan' => $value['keperluan'],
-                        'alasan' => ($value['catatan'] == null) ? '-' : $value['catatan'],
-                        'lokasi_tujuan' => $value['lokasi_tujuan'],
-                    ];
+                        'no_hp' => formatPhoneNumber($userData['user']->no_hp),
+                    ]);
                 }
-            }
-            // dd($responseData);
-            return response()->json([
-                'status' => '200',
-                'data' => $responseData,
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => 'kosong',
-                'data' => 'kosong'
-            ], 200);
+                break;
+            case 'rejected':
+                return array_merge($baseData, [
+                    'id' => $value->id,
+                    'id_atasan' => 4,
+                    'status' => 'rejected',
+                    'no_hp' => formatPhoneNumber($userData['user']->no_hp),
+                    'alasan' => ($value['catatan'] == null) ? '-' : $value['catatan'],
+                ]);
+        }
+
+        return null;
+    }
+
+    private function updateStatusSendNotif($id, $case)
+    {
+        $statusMap = [
+            'Atasan_1_not_approved' => '1$0$0',
+            'Atasan_2_not_approved' => '1$1$0',
+            'User_not_sending' => '1$1$1',
+            'rejected' => '1$1$1',
+        ];
+
+        if (isset($statusMap[$case])) {
+            Formijin::where('id', $id)->update(['status_send_notif' => $statusMap[$case]]);
         }
     }
 
+
     public function getnotif_suratijin_approved(Request $request): JsonResponse
     {
-        // Get the single 'id' input
         $id = $request->input('id_data');
         $id_atasan = $request->input('id_atasan');
         $answer = $request->input('answer');
 
-        // Check if the record exists
-        $exists = Formijin::query()->where('id', $id)->exists();
+        $formIjin = Formijin::find($id);
 
-        if ($exists) {
-            $data = Formijin::query()->where('id', $id)->first();
+        if (!$formIjin) {
+            return response()->json(['message' => 'No pending messages found.'], 404);
+        }
 
-            $status = $data['status_bot'];
-            $status = explode('$', $status);
-            $atasan1 = $status[0];
-            $atasan2 = $status[1];
-            $user = $status[2];
-            switch ($id_atasan) {
-                case '1':
-                    if ($atasan1 == 1 || $atasan1 === '1') {
-                        return response()->json(['error_validasi' => 'Anda sudah Approval data ini'], 200);
-                    }
-                    $newstatus = [
-                        1,
-                        $atasan2,
-                        $user
-                    ];
-                    $newstatus = implode('$', $newstatus);
-                    if ($answer === 'ya') {
-                        Formijin::where('id', $id)
-                            ->update([
-                                'status_bot' => $newstatus,
-                                'status' => 2,
-                            ]);
+        $status = explode('$', $formIjin->status_bot);
+        $atasan1 = $status[0];
+        $atasan2 = $status[1];
+        $user = $status[2];
 
-                        // Add the code to send WhatsApp message here if needed
-
-                        return response()->json([
-                            'success' => 'Status updated successfully.'
-                        ], 200); // 200 OK
-                    } elseif ($answer === 'tidak') {
-                        Formijin::where('id', $id)
-                            ->update([
-                                'status_bot' => '1$0$0',
-                                'status' => 3,
-                            ]);
-
-                        // Add the code to send WhatsApp message here if needed
-
-                        return response()->json([
-                            'success' => 'Status tidak .'
-                        ], 200); // 200 OK
-                    } else {
-                        Formijin::where('id', $id)
-                            ->update([
-                                'status_bot' => '1$0$0',
-                                'status' => 3,
-                                'catatan' => $answer,
-                            ]);
-
-                        // Add the code to send WhatsApp message here if needed
-
-                        return response()->json([
-                            'success' => 'Status updated successfully.'
-                        ], 200); // 200 OK
-                    }
-
-                    break;
-                case '2':
-                    if ($atasan2 == 1 || $atasan2 === '1') {
-                        return response()->json(['error_validasi' => 'Anda sudah Approval data ini'], 200);
-                    }
-
-                    $newstatus = [
-                        $atasan1,
-                        1,
-                        $user
-                    ];
-
-                    $newstatus = implode('$', $newstatus);
-                    if ($answer === 'ya') {
-
-                        Formijin::where('id', $id)
-                            ->update([
-                                'status_bot' => $newstatus,
-                                'status' => 4,
-                            ]);
-
-                        return response()->json([
-                            'message' => 'Status updated successfully.'
-                        ], 200); // 200 OK
-                    } elseif ($answer === 'tidak') {
-                        Formijin::where('id', $id)
-                            ->update([
-                                'status_bot' => '1$1$0',
-                                // 'status_send_notif' => '1$0$0',
-                                'status' => 3,
-                            ]);
-
-                        // Add the code to send WhatsApp message here if needed
-
-                        return response()->json([
-                            'success' => 'Status updated successfully.'
-                        ], 200); // 200 OK
-                    } else {
-                        Formijin::where('id', $id)
-                            ->update([
-                                'status_bot' => '1$1$0',
-                                // 'status_send_notif' => '1$0$0',
-                                'status' => 3,
-                                'catatan' => $answer,
-                            ]);
-
-                        // Add the code to send WhatsApp message here if needed
-
-                        return response()->json([
-                            'success' => 'Status updated successfully.'
-                        ], 200); // 200 OK
-                    }
-
-                    break;
-                case '3':
-                    $newstatus = [
-                        $atasan1,
-                        $atasan2,
-                        1
-                    ];
-
-                    $newstatus = implode('$', $newstatus);
-                    // dd($newstatus);
-                    Formijin::where('id', $id)
-                        ->update([
-                            'status_bot' => $newstatus
-                        ]);
-                    return response()->json([
-                        'message' => 'Status updated successfully.'
-                    ], 200); // 200 OK
-                    break;
-                default:
-                    return response()->json([
-                        'message' => 'error.'
-                    ], 200); // 200 OK
-                    break;
-            }
-            // If the record exists, update it
-
-        } else {
-            // If the record does not exist, return a message
-            return response()->json([
-                'message' => 'No pending messages found.'
-            ], 404); // 404 Not Found
+        switch ($id_atasan) {
+            case '1':
+                return $this->handleAtasan1Approval($formIjin, $atasan1, $atasan2, $user, $answer);
+            case '2':
+                return $this->handleAtasan2Approval($formIjin, $atasan1, $atasan2, $user, $answer);
+            case '3':
+                return $this->handleUserApproval($formIjin, $atasan1, $atasan2);
+            default:
+                return response()->json(['message' => 'error.'], 200);
         }
     }
+
+    private function handleAtasan1Approval($formIjin, $atasan1, $atasan2, $user, $answer): JsonResponse
+    {
+        if ($atasan1 == 1 || $atasan1 === '1') {
+            return response()->json(['error_validasi' => 'Anda sudah Approval data ini'], 200);
+        }
+
+        $newStatus = implode('$', [1, $atasan2, $user]);
+
+        if ($answer === 'ya') {
+            $formIjin->update(['status_bot' => $newStatus, 'status' => 2]);
+        } else {
+            $formIjin->update([
+                'status_bot' => '1$0$0',
+                'status' => 3,
+                'catatan' => $answer !== 'tidak' ? $answer : null
+            ]);
+        }
+
+        return response()->json(['success' => 'Status updated successfully.'], 200);
+    }
+
+    private function handleAtasan2Approval($formIjin, $atasan1, $atasan2, $user, $answer): JsonResponse
+    {
+        if ($atasan2 == 1 || $atasan2 === '1') {
+            return response()->json(['error_validasi' => 'Anda sudah Approval data ini'], 200);
+        }
+
+        $newStatus = implode('$', [$atasan1, 1, $user]);
+
+        if ($answer === 'ya') {
+            $formIjin->update(['status_bot' => $newStatus, 'status' => 4]);
+        } else {
+            $formIjin->update([
+                'status_bot' => '1$1$0',
+                'status' => 3,
+                'catatan' => $answer !== 'tidak' ? $answer : null
+            ]);
+        }
+
+        return response()->json(['success' => 'Status updated successfully.'], 200);
+    }
+
+    private function handleUserApproval($formIjin, $atasan1, $atasan2): JsonResponse
+    {
+        $newStatus = implode('$', [$atasan1, $atasan2, 1]);
+        $formIjin->update(['status_bot' => $newStatus]);
+        return response()->json(['message' => 'Status updated successfully.'], 200);
+    }
+
 
     public function inputiot_data(Request $request): JsonResponse
     {
