@@ -941,7 +941,7 @@ class ApiqcController extends Controller
 
             if ($notificationData) {
                 $responseData[] = $notificationData;
-                $this->updateStatusSendNotif($value['id'], $case);
+                $this->updateStatusSendNotif($value['id'], $case, $userData);
             }
         }
 
@@ -1023,11 +1023,28 @@ class ApiqcController extends Controller
         return null;
     }
 
-    private function updateStatusSendNotif($id, $case)
+    private function updateStatusSendNotif($id, $case, $userData)
     {
+        // dd($userData);
+        $atasan1 = formatPhoneNumber($userData['atasan1']->no_hp);
+        $atasan2 = formatPhoneNumber($userData['atasan2']->no_hp);
+
+        if ($atasan1 != null) {
+            $atasan1_data = '1$0$0';
+        } else {
+            $atasan1_data = '0$0$0';
+        }
+        if ($atasan2 != null) {
+            $atasan2_data = '1$0$0';
+        } else {
+            $atasan2_data = '0$0$0';
+        }
+        // dd($atasan1, $atasan2);
+
+
         $statusMap = [
-            'Atasan_1_not_approved' => '1$0$0',
-            'Atasan_2_not_approved' => '1$1$0',
+            'Atasan_1_not_approved' => $atasan1_data,
+            'Atasan_2_not_approved' => $atasan2_data,
             'User_not_sending' => '1$1$1',
             'rejected' => '1$1$1',
         ];

@@ -989,19 +989,25 @@ if (!function_exists('formatPhoneNumber')) {
         // Remove any non-numeric characters from the input number
         $number = preg_replace('/\D/', '', $number);
 
-        // Check if the number starts with '0'
-        if (strpos($number, '0') === 0) {
-            // Replace '0' with '62'
+        // Check if the number is less than 9 digits or more than 14 digits
+        if (strlen($number) < 9 || strlen($number) > 14) {
+            return null;
+        }
+
+        // Check for valid Indonesian prefixes
+        $validPrefixes = ['0811', '0812', '0813', '0814', '0815', '0816', '0817', '0818', '0819', '0821', '0822', '0823', '0851', '0852', '0853', '0855', '0856', '0857', '0858', '0859', '0877', '0878', '0881', '0882', '0883', '0884', '0885', '0886', '0887', '0888', '0889'];
+
+        if (in_array(substr($number, 0, 4), $validPrefixes)) {
             return '62' . substr($number, 1);
-        } else if (strpos($number, '8') === 0) {
-            // Replace '0' with '62'
-            return '62' . $number;
-        } else {
-            // If it doesn't start with '0', return as is
+        } elseif (substr($number, 0, 2) === '62' && in_array('0' . substr($number, 2, 3), $validPrefixes)) {
             return $number;
+        } else {
+            // If it doesn't match Indonesian format, return null
+            return null;
         }
     }
 }
+
 
 // manager askep asisten bisa edit dengan departemen khusus QC
 if (!function_exists('can_edit')) {
