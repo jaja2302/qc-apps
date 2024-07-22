@@ -194,7 +194,8 @@
                         estate: estate,
                         afdeling: afdeling,
                         blokasli: blokasli,
-                        blok: blok
+                        blok: blok,
+                        user: "{{ auth()->user()->user_id }}",
                     });
                 }
                 console.log(items);

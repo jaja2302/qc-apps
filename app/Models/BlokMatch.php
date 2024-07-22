@@ -16,5 +16,6 @@ class BlokMatch extends Model
         'afd',
         'blok_asli',
         'blok',
+        'update_by',
     ];
 }

@@ -50,6 +50,7 @@ class Matchingblok extends Controller
                     $data->afd = $item['afdeling'];
                     $data->blok_asli = $item['blokasli'];
                     $data->blok = $item['blok'];
+                    $data->update_by = $item['user'];
                     $data->save();
                 }
             }

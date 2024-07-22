@@ -1313,14 +1313,19 @@ class ApiqcController extends Controller
         $botApiToken = '5428994980:AAFdHrlniyG8UqKZfXw-Cvz_MzjftW5KObY';
         $channelId = '-1001316663954';
         $text = "PC HO Tidak Online";
+        $threadId = '16858';
 
         $response = Http::get("https://api.telegram.org/bot{$botApiToken}/sendMessage", [
             'chat_id' => $channelId,
+            'message_thread_id' => $threadId,
             'text' => $text,
         ]);
 
         if ($response->failed()) {
-            dd('error');
+            // Handle error if needed
+            return false;
         }
+
+        return $response->json();
     }
 }
