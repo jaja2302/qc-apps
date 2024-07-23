@@ -41,8 +41,9 @@
             </div>
             <button type="button" class="btn btn-primary float-right" id="showEstMap">Show</button>
         </div>
+
         <div class="card-body">
-            <h3 class="card-title text-center mb-3">Perbedaan Data Perblok</h3>
+            <h1 class="card-title text-center mb-3">Perbedaan Data Perblok</h1>
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
                     <thead>
@@ -59,7 +60,6 @@
 
                 <tbody id="tbody3"></tbody>
             </div>
-            <h3 class="card-title text-center mb-3">Perbedaan Data Perblok</h3>
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
                     <thead>
@@ -75,7 +75,6 @@
                 </table>
 
             </div>
-            <h3 class="card-title text-center mb-3">Perbedaan Data Perblok</h3>
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
                     <thead>
@@ -91,6 +90,110 @@
                 </table>
             </div>
         </div>
+
+        <div class="card-body">
+            <!-- First Filter and Table -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="key-filter" class="form-label">Filter by Blok Group:</label>
+                        <select id="key-filter" class="form-select">
+                            <option value="">All</option>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive mb-4">
+                <h2 class="mb-3 text-center">Table mutu ancak</h2>
+                <table class="table table-bordered table-hover" id="mutuancak">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Estate</th>
+                            <th>Afdeling</th>
+                            <th>Blok</th>
+                            <th>Petugas</th>
+                            <th>Datetime</th>
+                            <th>Lat Awal</th>
+                            <th>Lon Awal</th>
+                            <th>Lat Akhir</th>
+                            <th>Lon Akhir</th>
+                            <th>SPH</th>
+                            <th>Luas Blok</th>
+                            <th>BR1</th>
+                            <th>BR2</th>
+                            <th>Jalur Masuk</th>
+                            <th>Status Panen</th>
+                            <th>Kemandoran</th>
+                            <th>Ancak Pemanen</th>
+                            <th>Sample</th>
+                            <th>Pokok Kuning</th>
+                            <th>Piringan Semak</th>
+                            <th>Underpruning</th>
+                            <th>Overpruning</th>
+                            <th>JJG</th>
+                            <th>BRTP</th>
+                            <th>BRTK</th>
+                            <th>BRTGL</th>
+                            <th>BHTS</th>
+                            <th>BHTM1</th>
+                            <th>BHTM2</th>
+                            <th>BHTM3</th>
+                            <th>PS</th>
+                            <th>SP</th>
+                            <th>Pokok Panen</th>
+                            <th>App Version</th>
+                            <th>Jenis Input</th>
+                            <th>Skor Akhir</th>
+                            <th>Wil</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Table rows go here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Second Filter and Table -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="key-filtertrans" class="form-label">Filter by Blok Group:</label>
+                        <select id="key-filtertrans" class="form-select">
+                            <option value="">All</option>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <h2 class="mb-3 text-center">Table mutu Transport</h2>
+                <table class="table table-bordered table-hover" id="Transport">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Estate</th>
+                            <th>Afdeling</th>
+                            <th>Blok</th>
+                            <th>Status Panen</th>
+                            <th>Luas Blok</th>
+                            <th>BT</th>
+                            <th>RST</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Table rows go here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
     </div>
 
 
@@ -198,7 +301,7 @@
                         user: "{{ auth()->user()->user_id }}",
                     });
                 }
-                console.log(items);
+                // console.log(items);
                 if (items.length > 0) {
                     $.ajax({
                         url: "{{ route('addmatchblok') }}",
@@ -208,7 +311,7 @@
                             items: items,
                         },
                         success: function(response) {
-                            console.log(response);
+                            // console.log(response);
                             if (response.success) {
                                 // Clear the form or do any other success action
                                 // location.reload();
@@ -375,11 +478,204 @@
 
                         editModal.hide();
                     });
+
+
+                    let data_ancak_bydate = result['data_ancak_bydate'];
+                    let data_trans_bydate = result['data_trans_bydate'];
+                    datatableblok(data_ancak_bydate, 'mutuancak', 'key-filter')
+                    datatableblok(data_trans_bydate, 'Transport', 'key-filtertrans')
+
+                    console.log(data_trans_bydate);
+
                 },
                 error: function(xhr, status, error) {
                     // Handle error situations if needed
                     console.error(xhr.responseText);
                 }
+            });
+        }
+
+        function datatableblok(sourcedata, tbody, filter) {
+            var combinedData = [];
+            var keyOptions = new Set();
+
+            // Collect unique options and combine data
+            $.each(sourcedata, function(key, value) {
+                combinedData = combinedData.concat(value);
+                keyOptions.add(key);
+            });
+
+            // Populate dropdown with key options
+            var $keyFilter = $(`#${filter}`);
+            keyOptions.forEach(function(key) {
+                $keyFilter.append('<option value="' + key + '">' + key + '</option>');
+            });
+
+            // Initialize DataTable
+
+            // Filter table based on selected key
+            if (tbody === 'mutuancak') {
+                var table = $(`#${tbody}`).DataTable({
+                    data: combinedData,
+                    columns: [{
+                            data: 'id'
+                        },
+                        {
+                            data: 'estate'
+                        },
+                        {
+                            data: 'afdeling'
+                        },
+                        {
+                            data: 'blok'
+                        },
+                        {
+                            data: 'petugas'
+                        },
+                        {
+                            data: 'datetime'
+                        },
+                        {
+                            data: 'lat_awal'
+                        },
+                        {
+                            data: 'lon_awal'
+                        },
+                        {
+                            data: 'lat_akhir'
+                        },
+                        {
+                            data: 'lon_akhir'
+                        },
+                        {
+                            data: 'sph'
+                        },
+                        {
+                            data: 'luas_blok'
+                        },
+                        {
+                            data: 'br1'
+                        },
+                        {
+                            data: 'br2'
+                        },
+                        {
+                            data: 'jalur_masuk'
+                        },
+                        {
+                            data: 'status_panen'
+                        },
+                        {
+                            data: 'kemandoran'
+                        },
+                        {
+                            data: 'ancak_pemanen'
+                        },
+                        {
+                            data: 'sample'
+                        },
+                        {
+                            data: 'pokok_kuning'
+                        },
+                        {
+                            data: 'piringan_semak'
+                        },
+                        {
+                            data: 'underpruning'
+                        },
+                        {
+                            data: 'overpruning'
+                        },
+                        {
+                            data: 'jjg'
+                        },
+                        {
+                            data: 'brtp'
+                        },
+                        {
+                            data: 'brtk'
+                        },
+                        {
+                            data: 'brtgl'
+                        },
+                        {
+                            data: 'bhts'
+                        },
+                        {
+                            data: 'bhtm1'
+                        },
+                        {
+                            data: 'bhtm2'
+                        },
+                        {
+                            data: 'bhtm3'
+                        },
+                        {
+                            data: 'ps'
+                        },
+                        {
+                            data: 'sp'
+                        },
+                        {
+                            data: 'pokok_panen'
+                        },
+                        {
+                            data: 'app_version'
+                        },
+                        {
+                            data: 'jenis_input'
+                        },
+                        {
+                            data: 'skor_akhir'
+                        },
+                        {
+                            data: 'wil'
+                        },
+                        {
+                            data: 'date'
+                        }
+                    ]
+                });
+            } else {
+                var table = $(`#${tbody}`).DataTable({
+                    data: combinedData,
+                    columns: [{
+                            data: 'id'
+                        },
+                        {
+                            data: 'estate'
+                        },
+                        {
+                            data: 'afdeling'
+                        },
+                        {
+                            data: 'blok'
+                        },
+                        {
+                            data: 'status_panen'
+                        },
+                        {
+                            data: 'luas_blok'
+                        },
+                        {
+                            data: 'bt'
+                        },
+                        {
+                            data: 'rst'
+                        },
+                        {
+                            data: 'date'
+                        }
+                    ]
+                });
+            }
+
+
+            $(`#${filter}`).on('change', function() {
+                var selectedKey = $(this).val();
+                table.clear().rows.add(combinedData.filter(function(item) {
+                    return selectedKey === "" || item.blok.includes(selectedKey);
+                })).draw();
             });
         }
     </script>

@@ -6,6 +6,8 @@ use App\Models\mutu_ancak;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cookie;
 
+use function App\Http\Controllers\grupwaktu;
+
 if (!function_exists('count_percent')) {
     function count_percent($skor1, $skor2)
     {
@@ -10467,7 +10469,10 @@ if (!function_exists('score_by_maps')) {
             $datamututrans[$normalizedBlock] = array_merge($datamututrans[$normalizedBlock], $data);
         }
 
-        // dd($datamutuancak, $datamututrans);
+        $data_ancak_bydate = $datamutuancak;
+        $data_trans_bydate = $datamututrans;
+        // dd($test);
+        // dd($datamutuancak['O230'], $datamututrans['O230']);
         $QueryEst = DB::connection('mysql2')
             ->table("estate")
             ->join('afdeling', 'afdeling.estate', 'estate.id')
@@ -11235,6 +11240,8 @@ if (!function_exists('score_by_maps')) {
             'afdeling' => $plotBlokAlls,
             'table_newblok' => $table_newblok,
             'master_blok' => $blokLatLnEw,
+            'data_ancak_bydate' => $data_ancak_bydate,
+            'data_trans_bydate' => $data_trans_bydate,
         ];
     }
 }

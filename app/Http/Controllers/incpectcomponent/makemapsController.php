@@ -29,7 +29,7 @@ class makemapsController extends Controller
         $date = $request->get('date');
 
         $result = score_by_maps($est, $regData, $date);
-
+        // dd($result);
         return response()->json($result);
     }
 

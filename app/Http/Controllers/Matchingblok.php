@@ -24,9 +24,13 @@ class Matchingblok extends Controller
         $result = score_by_maps($est, $regData, $date);
         $table = $result['table_newblok'];
         $master_blok = $result['master_blok'];
+        $data_ancak_bydate = $result['data_ancak_bydate'];
+        $data_trans_bydate = $result['data_trans_bydate'];
         $data = array();
         $data['table'] = $table;
         $data['master_blok'] = $master_blok;
+        $data['data_ancak_bydate'] = $data_ancak_bydate;
+        $data['data_trans_bydate'] = $data_trans_bydate;
 
         return response()->json($data);
     }

@@ -1477,49 +1477,49 @@
   <script type="module">
     let checkdata = @json($check);
     let recordsdupt = @json($idduplicate);
-    if (checkdata === 'ada') {
-      // Show Bootstrap modal
-      $('#confirmationModal').modal('show');
+    // if (checkdata === 'ada') {
+    //   // Show Bootstrap modal
+    //   $('#confirmationModal').modal('show');
 
-      // Attach a click event to the "Yes" button
-      $('#confirmBtn').on('click', function() {
-        // User clicked 'Yes', proceed with your actions
-        // console.log('User clicked Yes, proceed with AJAX request here');
-        // console.log(recordsdupt);
+    //   // Attach a click event to the "Yes" button
+    //   $('#confirmBtn').on('click', function() {
+    //     // User clicked 'Yes', proceed with your actions
+    //     // console.log('User clicked Yes, proceed with AJAX request here');
+    //     // console.log(recordsdupt);
 
-        // Hide the Bootstrap modal
-        var _token = $('input[name="_token"]').val();
-        let type = 'sidaktph'
+    //     // Hide the Bootstrap modal
+    //     var _token = $('input[name="_token"]').val();
+    //     let type = 'sidaktph'
 
-        $.ajax({
-          url: '{{ route("duplicatesidakmtb") }}', // Replace with your actual endpoint URL
-          type: 'post',
-          data: {
-            data: recordsdupt,
-            type: type,
-          },
-          headers: {
-            'X-CSRF-TOKEN': _token
-          },
-          success: function(response) {
-            if (response.success) {
-              // Show success alert
-              alert('Data berhasil dihapus');
-              // Reload the page
-              location.reload();
-            } else {
-              // Show error alert
-              alert('Gagal menghapus data');
-            }
-          },
-          error: function(xhr, status, error) {
-            console.error(error);
-          }
-        });
+    //     $.ajax({
+    //       url: '{{ route("duplicatesidakmtb") }}', // Replace with your actual endpoint URL
+    //       type: 'post',
+    //       data: {
+    //         data: recordsdupt,
+    //         type: type,
+    //       },
+    //       headers: {
+    //         'X-CSRF-TOKEN': _token
+    //       },
+    //       success: function(response) {
+    //         if (response.success) {
+    //           // Show success alert
+    //           alert('Data berhasil dihapus');
+    //           // Reload the page
+    //           location.reload();
+    //         } else {
+    //           // Show error alert
+    //           alert('Gagal menghapus data');
+    //         }
+    //       },
+    //       error: function(xhr, status, error) {
+    //         console.error(error);
+    //       }
+    //     });
 
-        $('#confirmationModal').modal('hide');
-      });
-    }
+    //     $('#confirmationModal').modal('hide');
+    //   });
+    // }
 
 
 
