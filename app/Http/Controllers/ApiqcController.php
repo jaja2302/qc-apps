@@ -397,7 +397,7 @@ class ApiqcController extends Controller
 
         // Use the 'like' operator correctly in your query
         $data = Pengguna::where('nama_lengkap', 'like', '%' . $nama . '%')
-            ->whereIn('id_jabatan', ['5', '6', '7', '9', '10', '11', '12', '17', '19', '20'])
+            ->whereIn('id_jabatan', ['3', '1', '5', '6', '9', '10', '11', '12', '17', '19', '20', '21', '25', '26', '27', '28', '29', '32', '18'])
             ->get()
             ->toArray();
 
@@ -418,6 +418,7 @@ class ApiqcController extends Controller
             return response()->json(['message' => 'Nama Atasan tidak ditemukan'], 404);
         }
     }
+
 
     public function getuserinfo(Request $request): JsonResponse
     {
@@ -1035,9 +1036,9 @@ class ApiqcController extends Controller
             $atasan1_data = '0$0$0';
         }
         if ($atasan2 != null) {
-            $atasan2_data = '1$0$0';
+            $atasan2_data = '1$1$0';
         } else {
-            $atasan2_data = '0$0$0';
+            $atasan2_data = '1$0$0';
         }
         // dd($atasan1, $atasan2);
 
@@ -1053,7 +1054,6 @@ class ApiqcController extends Controller
             Formijin::where('id', $id)->update(['status_send_notif' => $statusMap[$case]]);
         }
     }
-
 
     public function getnotif_suratijin_approved(Request $request): JsonResponse
     {

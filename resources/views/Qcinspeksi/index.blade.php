@@ -1266,7 +1266,7 @@
                             </div>
                             <div class="col-auto">
                                 <button class="btn btn-primary mb-2 ml-2" id="showEstMap">Show</button>
-                                @if (strpos(session('departemen'), 'QC') !== false && session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' || session('jabatan') == 'Admin' || auth()->user()->id_departement == '43' && in_array(auth()->user()->id_jabatan, ['10', '15', '20', '4', '5', '6']))
+                                @if (can_edit_all_atasan())
                                 <a class="btn btn-primary mb-2 ml-2" id="otherLink" href="{{ route('crudmatchblok') }}" target="_blank">
                                     <span>Ubah Data Blok</span>
                                 </a>

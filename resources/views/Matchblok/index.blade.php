@@ -330,23 +330,28 @@
 
                         tbody2.appendChild(tr);
                     });
-
                     Object.keys(collect).forEach((key) => {
-                        collect[key].forEach((item, index) => { // Assuming index is available for unique identification
-                            let item1 = item['estate']
+                        console.log(key);
+                        let items = collect[key];
+
+                        if (!Array.isArray(items)) {
+                            items = Object.values(items); // Convert object to array
+                        }
+
+                        items.forEach((item, index) => {
+                            let item1 = item['estate'];
                             let item2 = item['afdeling'];
                             let item3 = item['blok_asli'];
                             let item4 = item['similar_blok'];
 
-                            // Creating table row and cells
                             var tr = document.createElement('tr');
-                            tr.setAttribute('data-row-id', `${key}-${index}`); // Add unique identifier
+                            tr.setAttribute('data-row-id', `${key}-${index}`);
 
                             let itemElement1 = document.createElement('td');
                             let itemElement2 = document.createElement('td');
                             let itemElement3 = document.createElement('td');
                             let itemElement4 = document.createElement('td');
-                            let editButton = document.createElement('button'); // Create Edit button
+                            let editButton = document.createElement('button');
 
                             itemElement1.classList.add("text-center");
                             itemElement1.innerText = item1;
@@ -354,24 +359,21 @@
                             itemElement3.innerText = item3;
                             itemElement4.innerText = item4;
 
-                            editButton.innerText = 'Edit'; // Button text
-                            editButton.classList.add('btn', 'btn-primary', 'btn-sm'); // Bootstrap classes
+                            editButton.innerText = 'Edit';
+                            editButton.classList.add('btn', 'btn-primary', 'btn-sm');
 
                             editButton.addEventListener('click', function() {
-                                // Populate form fields with row data
-                                document.getElementById('edit_row_id').value = index; // Store row index for identification
+                                document.getElementById('edit_row_id').value = index;
                                 document.getElementById('edit_estate').value = item1;
                                 document.getElementById('edit_afdeling').value = item2;
                                 document.getElementById('edit_blok_asli').value = item3;
                                 document.getElementById('edit_blok_database').value = item4;
 
-                                // Populate select dropdown dynamically based on edit_afdeling
                                 let selectOptions = document.getElementById('edit_similar_blok');
-                                selectOptions.innerHTML = ''; // Clear existing options
+                                selectOptions.innerHTML = '';
 
-                                // Filter masterblok based on edit_afdeling
                                 Object.keys(masterblok).forEach((blokKey) => {
-                                    if (masterblok[blokKey].afd === item2) { // Check if afd matches edit_afdeling
+                                    if (masterblok[blokKey].afd === item2) {
                                         let option = document.createElement('option');
                                         option.value = blokKey;
                                         option.innerText = masterblok[blokKey].blok;
@@ -379,19 +381,19 @@
                                     }
                                 });
 
-                                editModal.show(); // Show the modal
+                                editModal.show();
                             });
 
-                            // Append elements to row
                             tr.appendChild(itemElement1);
                             tr.appendChild(itemElement2);
                             tr.appendChild(itemElement3);
                             tr.appendChild(itemElement4);
-                            tr.appendChild(editButton); // Append Edit button to row
+                            tr.appendChild(editButton);
 
-                            tbody1.appendChild(tr); // Append row to table body
+                            tbody1.appendChild(tr);
                         });
                     });
+
 
                     // Handle form submission for editing
                     document.getElementById('editFormModal').addEventListener('submit', function(event) {
