@@ -227,6 +227,15 @@
 
 
             $('#showEstMap').click(function() {
+                Swal.fire({
+                    title: 'Loading',
+                    html: '<span class="loading-text">Mohon Tunggu...</span>',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
                 getPlotBlok();
             });
 
@@ -234,15 +243,13 @@
 
 
         function getPlotBlok() {
-            $('#tbody1').empty()
-            $('#tbody2').empty()
-            $('#tbody3').empty()
+            $('#tbody1').empty();
+            $('#tbody2').empty();
+            $('#tbody3').empty();
             var _token = $('input[name="_token"]').val();
             var estData = $("#estDataMap").val();
             var regData = $("#regDataMap").val();
             var date = new Date().getFullYear(); // Get the current year
-
-
 
             $.ajax({
                 url: "{{ route('tabledatamaps') }}",
@@ -254,39 +261,31 @@
                     _token: _token
                 },
                 success: function(result) {
-                    Swal.close(); // Close SweetAlert if it's open
-                    // console.log(result);
+                    Swal.close();
                     let datatable = result['table'];
                     let masterblok = result['master_blok'];
-                    var collect = datatable['collect']
-                    var not_match = datatable['not_match']
-                    var fix_no_coordintes = datatable['fix_no_coordintes']
-                    // console.log(masterblok);
+                    var collect = datatable['collect'];
+                    var not_match = datatable['not_match'];
+                    var fix_no_coordintes = datatable['fix_no_coordintes'];
 
+                    let tbody1 = document.getElementById('tbody1');
                     let tbody2 = document.getElementById('tbody2');
                     let tbody3 = document.getElementById('tbody3');
                     let editModal = new bootstrap.Modal(document.getElementById('editModal')); // Initialize Bootstrap modal
-                    let tbody1 = document.getElementById('tbody1');
 
-                    // untuk perbadeling 
-
-                    Object.keys(not_match).forEach((key) => {
-                        let item = not_match[key];
-
-                        let item1 = item['estate']
+                    function createTableRow(key, item, tbody) {
+                        let item1 = item['estate'];
                         let item2 = item['afdeling'];
                         let item3 = item['blok_asli'];
                         let item4 = item['similar_blok'];
 
-                        // Creating table row and cells
                         var tr = document.createElement('tr');
-                        tr.setAttribute('data-row-id', key); // Add unique identifier
-
+                        tr.setAttribute('data-row-id', key);
                         let itemElement1 = document.createElement('td');
                         let itemElement2 = document.createElement('td');
                         let itemElement3 = document.createElement('td');
                         let itemElement4 = document.createElement('td');
-                        let editButton = document.createElement('button'); // Create Edit button
+                        let editButton = document.createElement('button');
 
                         itemElement1.classList.add("text-center");
                         itemElement1.innerText = item1;
@@ -294,24 +293,21 @@
                         itemElement3.innerText = item3;
                         itemElement4.innerText = item4;
 
-                        editButton.innerText = 'Edit'; // Button text
-                        editButton.classList.add('btn', 'btn-primary', 'btn-sm'); // Bootstrap classes
+                        editButton.innerText = 'Edit';
+                        editButton.classList.add('btn', 'btn-primary', 'btn-sm');
 
                         editButton.addEventListener('click', function() {
-                            // Populate form fields with row data
-                            document.getElementById('edit_row_id').value = key; // Store row index for identification
+                            document.getElementById('edit_row_id').value = key;
                             document.getElementById('edit_estate').value = item1;
                             document.getElementById('edit_afdeling').value = item2;
                             document.getElementById('edit_blok_asli').value = item3;
                             document.getElementById('edit_blok_database').value = item4;
 
-                            // Populate select dropdown dynamically based on edit_afdeling
                             let selectOptions = document.getElementById('edit_similar_blok');
-                            selectOptions.innerHTML = ''; // Clear existing options
+                            selectOptions.innerHTML = '';
 
-                            // Filter masterblok based on edit_afdeling
                             Object.keys(masterblok).forEach((blokKey) => {
-                                if (masterblok[blokKey].afd === item2) { // Check if afd matches edit_afdeling
+                                if (masterblok[blokKey].afd === item2) {
                                     let option = document.createElement('option');
                                     option.value = blokKey;
                                     option.innerText = masterblok[blokKey].blok;
@@ -319,124 +315,66 @@
                                 }
                             });
 
-                            editModal.show(); // Show the modal
+                            editModal.show();
                         });
 
                         tr.appendChild(itemElement1);
                         tr.appendChild(itemElement2);
                         tr.appendChild(itemElement3);
                         tr.appendChild(itemElement4);
-                        tr.appendChild(editButton); // Append Edit button to row
+                        tr.appendChild(editButton);
 
-                        tbody2.appendChild(tr);
-                    });
+                        tbody.appendChild(tr);
+                    }
+
                     Object.keys(collect).forEach((key) => {
-                        console.log(key);
                         let items = collect[key];
-
                         if (!Array.isArray(items)) {
                             items = Object.values(items); // Convert object to array
                         }
-
                         items.forEach((item, index) => {
-                            let item1 = item['estate'];
-                            let item2 = item['afdeling'];
-                            let item3 = item['blok_asli'];
-                            let item4 = item['similar_blok'];
-
-                            var tr = document.createElement('tr');
-                            tr.setAttribute('data-row-id', `${key}-${index}`);
-
-                            let itemElement1 = document.createElement('td');
-                            let itemElement2 = document.createElement('td');
-                            let itemElement3 = document.createElement('td');
-                            let itemElement4 = document.createElement('td');
-                            let editButton = document.createElement('button');
-
-                            itemElement1.classList.add("text-center");
-                            itemElement1.innerText = item1;
-                            itemElement2.innerText = item2;
-                            itemElement3.innerText = item3;
-                            itemElement4.innerText = item4;
-
-                            editButton.innerText = 'Edit';
-                            editButton.classList.add('btn', 'btn-primary', 'btn-sm');
-
-                            editButton.addEventListener('click', function() {
-                                document.getElementById('edit_row_id').value = index;
-                                document.getElementById('edit_estate').value = item1;
-                                document.getElementById('edit_afdeling').value = item2;
-                                document.getElementById('edit_blok_asli').value = item3;
-                                document.getElementById('edit_blok_database').value = item4;
-
-                                let selectOptions = document.getElementById('edit_similar_blok');
-                                selectOptions.innerHTML = '';
-
-                                Object.keys(masterblok).forEach((blokKey) => {
-                                    if (masterblok[blokKey].afd === item2) {
-                                        let option = document.createElement('option');
-                                        option.value = blokKey;
-                                        option.innerText = masterblok[blokKey].blok;
-                                        selectOptions.appendChild(option);
-                                    }
-                                });
-
-                                editModal.show();
-                            });
-
-                            tr.appendChild(itemElement1);
-                            tr.appendChild(itemElement2);
-                            tr.appendChild(itemElement3);
-                            tr.appendChild(itemElement4);
-                            tr.appendChild(editButton);
-
-                            tbody1.appendChild(tr);
+                            createTableRow(key + '-' + index, item, tbody1); // Add unique identifier
                         });
                     });
 
+                    Object.keys(not_match).forEach((key) => {
+                        let item = not_match[key];
+                        createTableRow('not-match-' + key, item, tbody2); // Add unique identifier
+                    });
+
+                    function updateRowContent(row, editedData) {
+                        row.children[0].innerText = editedData.estate;
+                        row.children[1].innerText = editedData.afdeling;
+                        row.children[2].innerText = editedData.blokAsli;
+                        row.children[3].innerText = editedData.similarBlok;
+
+                        // Highlight edited cells
+                        for (let i = 0; i < 4; i++) {
+                            row.children[i].classList.add('highlight');
+                        }
+                    }
 
                     // Handle form submission for editing
                     document.getElementById('editFormModal').addEventListener('submit', function(event) {
                         event.preventDefault();
 
-                        // Get form values
-                        let rowIndex = document.getElementById('edit_row_id').value;
-                        let editedEstate = document.getElementById('edit_estate').value;
-                        let editedAfdeling = document.getElementById('edit_afdeling').value;
-                        let editedBlokAsli = document.getElementById('edit_blok_asli').value;
-                        let editedSimilarBlok = document.getElementById('edit_similar_blok').value;
+                        let rowId = document.getElementById('edit_row_id').value;
+                        let editedData = {
+                            estate: document.getElementById('edit_estate').value,
+                            afdeling: document.getElementById('edit_afdeling').value,
+                            blokAsli: document.getElementById('edit_blok_asli').value,
+                            similarBlok: document.getElementById('edit_similar_blok').value
+                        };
 
-                        // Determine which tbody to update
-                        let row = document.querySelector(`tr[data-row-id="${rowIndex}"]`);
+                        let row = document.querySelector(`tr[data-row-id="${rowId}"]`);
                         if (row) {
-                            // Update the table cells
-                            row.children[0].innerText = editedEstate;
-                            row.children[1].innerText = editedAfdeling;
-                            row.children[2].innerText = editedBlokAsli;
-                            row.children[3].innerText = editedSimilarBlok;
-
-                            // Highlight edited cells
-                            row.children[0].classList.add('highlight');
-                            row.children[1].classList.add('highlight');
-                            row.children[2].classList.add('highlight');
-                            row.children[3].classList.add('highlight');
+                            updateRowContent(row, editedData);
                         } else {
                             console.error('Row not found');
                         }
 
-                        // Show the reminder text
-                        let reminder = document.getElementById('reminder');
-                        if (!reminder) {
-                            reminder = document.createElement('div');
-                            reminder.id = 'reminder';
-                            reminder.innerText = 'Please reload to see the changes.';
-                            document.body.appendChild(reminder);
-                        }
-
-                        // Close modal
                         editModal.hide();
                     });
-
                 },
                 error: function(xhr, status, error) {
                     // Handle error situations if needed
@@ -445,5 +383,4 @@
             });
         }
     </script>
-    </div>
 </x-layout.app>
