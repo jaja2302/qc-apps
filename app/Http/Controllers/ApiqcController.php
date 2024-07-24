@@ -527,7 +527,8 @@ class ApiqcController extends Controller
                 $today = Carbon::now();
                 $carbon_tanggal_keluar = Carbon::createFromFormat('d-m-Y', $request->input('pergi'));
                 $carbon_tanggal_kembali = Carbon::createFromFormat('d-m-Y', $request->input('kembali'));
-
+                $carbon_jam_keluar = Carbon::createFromFormat('H:i', $request->input('jam_keluar'));
+                $carbot_jam_kembali = Carbon::createFromFormat('H:i', $request->input('jam_kembali'));
                 // Check if tanggal_kembali is before tanggal_keluar
                 if ($carbon_tanggal_keluar->lessThan($today)) {
                     return response()->json(['error_validasi' => 'Tanggal keluar tidak boleh di masa lalu'], 200);
@@ -539,9 +540,9 @@ class ApiqcController extends Controller
                 }
 
                 // Check if tanggal_keluar and tanggal_kembali are the same
-                if ($carbon_tanggal_keluar->equalTo($carbon_tanggal_kembali)) {
-                    return response()->json(['error_validasi' => 'Tanggal keluar dan tanggal kembali tidak boleh sama'], 200);
-                }
+                // if ($carbon_tanggal_keluar->equalTo($carbon_tanggal_kembali)) {
+                //     return response()->json(['error_validasi' => 'Tanggal keluar dan tanggal kembali tidak boleh sama'], 200);
+                // }
 
                 // Check if tanggal_kembali is before tanggal_keluar
                 if ($carbon_tanggal_kembali->lessThan($carbon_tanggal_keluar)) {
@@ -563,15 +564,19 @@ class ApiqcController extends Controller
                 } else {
                     $plat_nomor = $request->input('plat_nomor');
                 }
-                // Format the dates to datetime format for storing in the database
-                $tanggal_keluar = $carbon_tanggal_keluar->format('Y-m-d H:i:s');
-                $tanggal_kembali = $carbon_tanggal_kembali->format('Y-m-d H:i:s');
+
+                // combine tanggal keluar with jam_keluar
+                $tanggal_keluar = $carbon_tanggal_keluar->format('Y-m-d') . ' ' . $carbon_jam_keluar->format('H:i:s');
+                $tanggal_kembali = $carbon_tanggal_kembali->format('Y-m-d') . ' ' . $carbot_jam_kembali->format('H:i:s');
+
+                // // Format the dates to datetime format for storing in the database
+                // $tanggal_keluar = $carbon_tanggal_keluar->format('Y-m-d H:i:s');
+                // $tanggal_kembali = $carbon_tanggal_kembali->format('Y-m-d H:i:s');
 
                 // return response()->json(['success' => $request->input('unit_kerja')], 200);
                 // Prepare the data for insertion
                 $data = [
                     'user_id' => $request->input('name'),
-                    // 'list_units_id' => $request->input('unit_kerja'),
                     'tanggal_keluar' => $tanggal_keluar,
                     'tanggal_kembali' => $tanggal_kembali,
                     'lokasi_tujuan' => $request->input('tujuan'),

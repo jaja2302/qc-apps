@@ -1,52 +1,84 @@
 <x-layout.app>
-    <div class="card shadow-sm border">
-        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+    <style>
+        .card-header {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .table-responsive {
+            margin-bottom: 2rem;
+        }
+
+        .table thead {
+            background-color: #f8f9fa;
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
+        .mb-4 {
+            margin-bottom: 1.5rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        h1,
+        h2,
+        h5 {
+            font-weight: 600;
+        }
+    </style>
+
+    <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Perbaikan Blok Berbeda dengan Database</h5>
-            <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="collapse" data-target="#collapseInstructions">
-                <i class="fas fa-info-circle"></i> Petunjuk
+            <button class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructions" aria-expanded="false" aria-controls="collapseInstructions">
+                <i class="bi bi-info-circle"></i> Petunjuk
             </button>
         </div>
-        <div id="collapseInstructions" class="collapse">
-            <div class="card-body">
-                <ul class="list-group mb-3">
-                    <li class="list-group-item">-Harap Perhatikan untuk Mengubah Blok Sidak Semirip Mungkin dengan Blok yang Ada di Database Kami</li>
-                    <li class="list-group-item">-Harap untuk Merefresh Halaman Jika Sudah Selesai Mengedit Semua untuk Menerapkan Perubahan</li>
-                    <li class="list-group-item">-Jika di temukan ada blok sidak yang namanya sama atau blok sidak yang terdouble namanya, silahkan sampaikan ke kami untuk pengecekan</li>
-                    <li class="list-group-item">-Untuk Pertanyaan lebih lanjut terkait silahkan hubungi tim kami.</li>
+
+        <div class="collapse" id="collapseInstructions">
+            <div class="card-body bg-light">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-transparent">Harap Perhatikan untuk Mengubah Blok Sidak Semirip Mungkin dengan Blok yang Ada di Database Kami</li>
+                    <li class="list-group-item bg-transparent">Harap untuk Merefresh Halaman Jika Sudah Selesai Mengedit Semua untuk Menerapkan Perubahan</li>
+                    <li class="list-group-item bg-transparent">Jika di temukan ada blok sidak yang namanya sama atau blok sidak yang terdouble namanya, silahkan sampaikan ke kami untuk pengecekan</li>
+                    <li class="list-group-item bg-transparent">Untuk Pertanyaan lebih lanjut terkait silahkan hubungi tim kami.</li>
                 </ul>
             </div>
         </div>
-        <div class="card-body">
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="regDataMap">Pilih REG:</label>
-                        <select class="form-control" id="regDataMap">
-                            <option value="" disabled>Pilih REG</option>
-                            <option value="1,2,3" selected>Region 1</option>
-                            <option value="4,5,6">Region 2</option>
-                            <option value="7,8">Region 3</option>
-                            <option value="10,11">Region 4</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="estDataMap">Pilih EST (Disabled):</label>
-                        <select class="form-control" id="estDataMap" disabled>
-                            <option value="" disabled>Pilih EST</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <button type="button" class="btn btn-primary float-right" id="showEstMap">Show</button>
-        </div>
 
         <div class="card-body">
-            <h1 class="card-title text-center mb-3">Perbedaan Data Perblok</h1>
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                    <thead>
+            <div class="row g-3 mb-4">
+                <div class="col-md-6 col-lg-4">
+                    <label for="regDataMap" class="form-label">Pilih REG:</label>
+                    <select class="form-select" id="regDataMap">
+                        <option value="" disabled>Pilih REG</option>
+                        <option value="1,2,3" selected>Region 1</option>
+                        <option value="4,5,6">Region 2</option>
+                        <option value="7,8">Region 3</option>
+                        <option value="10,11">Region 4</option>
+                    </select>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <label for="estDataMap" class="form-label">Pilih EST:</label>
+                    <select class="form-select" id="estDataMap" disabled>
+                        <option value="" disabled>Pilih EST</option>
+                    </select>
+                </div>
+                <div class="col-md-12 col-lg-4 d-flex align-items-end">
+                    <button type="button" class="btn btn-primary w-100" id="showEstMap">Show</button>
+                </div>
+            </div>
+
+            <h2 class="text-center mb-4">Perbedaan Data Perblok</h2>
+
+            <div class="table-responsive mb-4">
+                <table class="table table-striped table-hover">
+                    <thead class="table-light">
                         <tr>
                             <th>Est</th>
                             <th>Afdeling</th>
@@ -57,12 +89,11 @@
                     </thead>
                     <tbody id="tbody1"></tbody>
                 </table>
-
-                <tbody id="tbody3"></tbody>
             </div>
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                    <thead>
+
+            <div class="table-responsive mb-4">
+                <table class="table table-striped table-hover">
+                    <thead class="table-light">
                         <tr>
                             <th>Est</th>
                             <th>Afdeling</th>
@@ -73,11 +104,11 @@
                     </thead>
                     <tbody id="tbody2"></tbody>
                 </table>
-
             </div>
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                    <thead>
+
+            <div class="table-responsive mb-4">
+                <table class="table table-striped table-hover">
+                    <thead class="table-light">
                         <tr>
                             <th>Est</th>
                             <th>Afdeling</th>
@@ -89,25 +120,20 @@
                     <tbody id="tbody3"></tbody>
                 </table>
             </div>
-        </div>
 
-        <div class="card-body">
-            <!-- First Filter and Table -->
-            <div class="row mb-4">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="key-filter" class="form-label">Filter by Blok Group:</label>
-                        <select id="key-filter" class="form-select">
-                            <option value="">All</option>
-                            <!-- Options will be populated dynamically -->
-                        </select>
-                    </div>
+            <h1 class="text-center mb-4">Table Untuk Detail perblok dalam satu tahun</h1>
+            <div class="row g-3 mb-4">
+                <div class="col-md-6 col-lg-4">
+                    <label for="key-filter" class="form-label">Filter by Blok Group:</label>
+                    <select id="key-filter" class="form-select">
+                        <option value="">All</option>
+                    </select>
                 </div>
             </div>
 
-            <div class="table-responsive mb-4">
-                <h2 class="mb-3 text-center">Table mutu ancak</h2>
-                <table class="table table-bordered table-hover" id="mutuancak">
+            <h2 class="text-center mb-4">Table mutu ancak</h2>
+            <div class="table-responsive mb-5">
+                <table class="table table-striped table-hover" id="mutuancak">
                     <thead class="table-light">
                         <tr>
                             <th>ID</th>
@@ -152,27 +178,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Table rows go here -->
+                        <!-- Table rows will be populated dynamically -->
                     </tbody>
                 </table>
             </div>
 
-            <!-- Second Filter and Table -->
-            <div class="row mb-4">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="key-filtertrans" class="form-label">Filter by Blok Group:</label>
-                        <select id="key-filtertrans" class="form-select">
-                            <option value="">All</option>
-                            <!-- Options will be populated dynamically -->
-                        </select>
-                    </div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-6 col-lg-4">
+                    <label for="key-filtertrans" class="form-label">Filter by Blok Group:</label>
+                    <select id="key-filtertrans" class="form-select">
+                        <option value="">All</option>
+                        <!-- Options will be populated dynamically -->
+                    </select>
                 </div>
             </div>
 
+            <h2 class="text-center mb-4">Table mutu Transport</h2>
             <div class="table-responsive">
-                <h2 class="mb-3 text-center">Table mutu Transport</h2>
-                <table class="table table-bordered table-hover" id="Transport">
+                <table class="table table-striped table-hover" id="Transport">
                     <thead class="table-light">
                         <tr>
                             <th>ID</th>
@@ -187,15 +210,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Table rows go here -->
+                        <!-- Table rows will be populated dynamically -->
                     </tbody>
                 </table>
             </div>
         </div>
-
-
     </div>
-
 
 
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
@@ -505,9 +525,12 @@
                 keyOptions.add(key);
             });
 
-            // Populate dropdown with key options
+            // Convert Set to array and sort in descending order
+            var sortedKeyOptions = Array.from(keyOptions).sort((a, b) => b.localeCompare(a));
+
+            // Populate dropdown with sorted key options
             var $keyFilter = $(`#${filter}`);
-            keyOptions.forEach(function(key) {
+            sortedKeyOptions.forEach(function(key) {
                 $keyFilter.append('<option value="' + key + '">' + key + '</option>');
             });
 
@@ -669,7 +692,6 @@
                     ]
                 });
             }
-
 
             $(`#${filter}`).on('change', function() {
                 var selectedKey = $(this).val();
