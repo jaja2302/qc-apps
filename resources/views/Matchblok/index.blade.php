@@ -505,7 +505,7 @@
                     datatableblok(data_ancak_bydate, 'mutuancak', 'key-filter')
                     datatableblok(data_trans_bydate, 'Transport', 'key-filtertrans')
 
-                    console.log(data_trans_bydate);
+                    console.log(data_ancak_bydate);
 
                 },
                 error: function(xhr, status, error) {
@@ -695,10 +695,9 @@
 
             $(`#${filter}`).on('change', function() {
                 var selectedKey = $(this).val();
-                table.clear().rows.add(combinedData.filter(function(item) {
-                    return selectedKey === "" || item.blok.includes(selectedKey);
-                })).draw();
+                table.clear().rows.add(selectedKey === "" ? combinedData : sourcedata[selectedKey] || []).draw();
             });
+
         }
     </script>
 </x-layout.app>

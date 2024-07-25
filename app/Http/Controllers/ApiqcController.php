@@ -978,7 +978,7 @@ class ApiqcController extends Controller
             'user_request' => $userData['user']->nama_lengkap,
             'tanggal_keluar' => Carbon::parse($value['tanggal_keluar'])->format('d-m-Y'),
             'tanggal_kembali' => Carbon::parse($value['tanggal_kembali'])->format('d-m-Y'),
-            'jam_keluar' => Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
+            'jam_keluar' => Carbon::parse($value['tanggal_keluar'])->format('H:i:s'),
             'jam_kembali' => Carbon::parse($value['tanggal_kembali'])->format('H:i:s'),
             'keperluan' => $value['keperluan'],
             'lokasi_tujuan' => $value['lokasi_tujuan'],

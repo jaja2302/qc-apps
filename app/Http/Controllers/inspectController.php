@@ -1030,6 +1030,8 @@ class inspectController extends Controller
         // $mutuAncak = $mutuAncak->groupBy(['blok']);
         $mutuAncak = json_decode($mutuAncak, true);
 
+        // dd($mutuAncak);
+
 
         $mutuAncak2 = DB::connection('mysql2')->table('mutu_ancak_new')
             ->select("mutu_ancak_new.*", DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%Y") as tahun'))
