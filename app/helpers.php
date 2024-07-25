@@ -10741,6 +10741,7 @@ if (!function_exists('score_by_maps')) {
             $ancakRegss2 = array();
             $sum = 0; // Initialize sum variable
             $count = 0; // Initialize count variable
+            // dd($new_ancakdata['F19'], $new_transdata);
             foreach ($new_ancakdata as $key => $value) {
                 $listBlok = array();
                 $firstEntry = $value[0];
@@ -10763,14 +10764,21 @@ if (!function_exists('score_by_maps')) {
                     $sum += $first;
                     $count++;
                 }
+                // $transNewdata[$key]['latin'] = $value['lat_awal'] . ',' . $value['lon_awal'];
                 $ancakRegss2[$key]['luas_blok'] = $first;
-                if ($regional === '2') {
+                $ancakRegss2[$key]['estate'] = $value2['estate'];
+                $ancakRegss2[$key]['afdeling'] = $value2['afdeling'];
+                $ancakRegss2[$key]['lat_awal'] = $value2['lat_awal'];
+                $ancakRegss2[$key]['lon_awal'] = $value2['lon_awal'];
+                if ($regional == '2') {
                     $status_panen = explode(",", $value2['status_panen']);
                     $ancakRegss2[$key]['status_panen'] = $status_panen[0];
                 } else {
                     $ancakRegss2[$key]['status_panen'] = $value2['status_panen'];
                 }
             }
+
+            // dd($regional == '2');
             $transNewdata = array();
             foreach ($new_transdata as $key => $value) {
                 $sum_bt = 0;
@@ -10812,55 +10820,57 @@ if (!function_exists('score_by_maps')) {
                 $transNewdata[$key]['afdeling'] = $value1['afdeling'];
                 $transNewdata[$key]['estate'] = $value1['estate'];
                 $transNewdata[$key]['date'] = $value1['date'];
+                $transNewdata[$key]['bt'] = $sum_bt;
+                $transNewdata[$key]['rst'] = $sum_Restan;
+                $transNewdata[$key]['latin'] = $value1['lat'] . ',' . $value1['lon'];
             }
+
+            // dd($transNewdata);
+            // dd($ancakRegss2);
             $tph_tod = 0;
             foreach ($ancakRegss2 as $key => $value) {
                 if (!isset($transNewdata[$key])) {
                     $transNewdata[$key] = $value;
-
+                    // dd($value);
                     if ($value['status_panen'] <= 3) {
                         $transNewdata[$key]['tph_sample'] = round(floatval($value['luas_blok']) * 1.3, 3);
                     } else {
                         $transNewdata[$key]['tph_sample'] = 0;
                     }
+                    $transNewdata[$key]['rst'] = 0;
+                    $transNewdata[$key]['bt'] = 0;
+                    $transNewdata[$key]['estate'] = $value['estate'];
+                    $transNewdata[$key]['afdeling'] = $value['afdeling'];
+                    $transNewdata[$key]['latin'] = $value['lat_awal'] . ',' . $value['lon_awal'];
                 }
-                // If 'tph_sample' key exists, add its value to $tph_tod
+                // // If 'tph_sample' key exists, add its value to $tph_tod
                 if (isset($value['tph_sample'])) {
                     $tph_tod += $value['tph_sample'];
                 }
             }
-            // dd($transNewdata, $new_transdata);
-            foreach ($new_transdata as $key => $value) {
-                $sum_bt = 0;
-                $sum_Restan = 0;
-                $tph_sample = 0;
-                $listBlokPerAfd = array();
 
-                foreach ($value as $key2 => $value2) {
-                    $listBlokPerAfd[] = $value2['estate'] . ' ' . $value2['afdeling'] . ' ' . $value2['blok'];
+            // dd($transNewdata);
+            $sum_bt = 0;
+            $sum_Restan = 0;
+            $tph_sample = 0;
+            foreach ($transNewdata as $key => $value) {
 
-                    // Check if the key exists in transNewdata and get the tph_sample value
-                    if (isset($transNewdata[$key])) {
-                        $tph_sample = $transNewdata[$key]['tph_sample'];
-                    }
-
-                    $sum_Restan += $value2['rst'];
-                    $sum_bt += $value2['bt'];
-                }
-
-                // Calculate the skorTrans only if tph_sample is not zero to avoid division by zero
+                $tph_sample = $value['tph_sample'];
+                $sum_Restan = $value['rst'];
+                $sum_bt = $value['bt'];
                 if ($tph_sample > 0) {
                     $skorTrans = skor_brd_tinggal(round($sum_bt / $tph_sample, 2)) + skor_buah_tinggal(round($sum_Restan / $tph_sample, 2));
                 } else {
-                    $skorTrans = 0; // or handle this case as needed
+                    $skorTrans = 0;
                 }
 
                 $dataSkor[$key][0]['skorTrans'] = $skorTrans;
                 $dataSkor[$key][0]['tph_sample'] = $tph_sample;
                 $dataSkor[$key][0]['sum_Restan'] = $sum_Restan;
                 $dataSkor[$key][0]['sum_bt'] = $sum_bt;
-                $dataSkor[$key][0]['latin'] = $value2['lat'] . ',' . $value2['lon'];
+                $dataSkor[$key][0]['latin'] = $value['latin'];
             }
+
 
             // dd($dataSkor);
             foreach ($new_ancakdata as $key => $value) {
@@ -11018,11 +11028,6 @@ if (!function_exists('score_by_maps')) {
             }
         }
         // dd($dataSkorResult);
-
-        // dd($dataSkorResult);
-        // dd($dataSkorResult['M180']);
-
-        // dd($dataSkor['O27017']);
 
 
 
