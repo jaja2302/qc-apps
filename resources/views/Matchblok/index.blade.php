@@ -373,7 +373,21 @@
             var estData = $("#estDataMap").val();
             var regData = $("#regDataMap").val();
             var date = new Date().getFullYear(); // Get the current year
-
+            if ($.fn.DataTable.isDataTable('#tbody1')) {
+                $('#tbody1').DataTable().destroy();
+            }
+            if ($.fn.DataTable.isDataTable('#tbody2')) {
+                $('#tbody2').DataTable().destroy();
+            }
+            if ($.fn.DataTable.isDataTable('#tbody3')) {
+                $('#tbody3').DataTable().destroy();
+            }
+            if ($.fn.DataTable.isDataTable('#mutuancak')) {
+                $('#mutuancak').DataTable().destroy();
+            }
+            if ($.fn.DataTable.isDataTable('#Transport')) {
+                $('#Transport').DataTable().destroy();
+            }
             $.ajax({
                 url: "{{ route('tabledatamaps') }}",
                 method: "get",
@@ -505,7 +519,7 @@
                     datatableblok(data_ancak_bydate, 'mutuancak', 'key-filter')
                     datatableblok(data_trans_bydate, 'Transport', 'key-filtertrans')
 
-                    console.log(data_ancak_bydate);
+                    // console.log(data_ancak_bydate);
 
                 },
                 error: function(xhr, status, error) {

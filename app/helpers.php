@@ -3,6 +3,7 @@
 
 use App\Models\BlokMatch;
 use App\Models\mutu_ancak;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cookie;
 
@@ -10404,14 +10405,18 @@ if (!function_exists('score_by_maps')) {
             ->whereYear('mutu_transport.datetime', $date)
             ->get();
 
-        if ($regional !== 3) {
+        if ($regional !== 3 && $regional !== 2) {
             $DataEstate = $queryTrans->groupBy(['blok']);
+            // dd('aaa');
         } else {
+            // dd('caca');
             $DataEstate = $queryTrans->groupBy(['blok', 'date']);
+            $blokasli_trans = $queryTrans->groupBy(['blok']);
         }
+
         $DataEstate = json_decode($DataEstate, true);
 
-
+        // dd($DataEstate, $regional);
         $queryAncak = DB::connection('mysql2')->table("mutu_ancak_new")
             ->select("mutu_ancak_new.*", "estate.wil", DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%Y-%m-%d") as date'))
             ->join('estate', 'estate.est', '=', 'mutu_ancak_new.estate')
@@ -10420,17 +10425,18 @@ if (!function_exists('score_by_maps')) {
             ->orderBy('blok', 'desc')
             ->get();
 
-        if ($regional !== 3) {
+        if ($regional !== 3 && $regional !== 2) {
             $DataMTAncak = $queryAncak->groupBy(['blok']);
         } else {
             $DataMTAncak = $queryAncak->groupBy(['blok', 'date']);
+            $blokasli_ancak = $queryAncak->groupBy(['blok']);
         }
 
 
         $DataMTAncak = json_decode($DataMTAncak, true);
-        // dd($DataMTAncak);
+        $blokasli_trans = json_decode($blokasli_trans, true);
+        $blokasli_ancak = json_decode($blokasli_ancak, true);
 
-        // dd($DataMTAncak['I03411'], $DataEstate);
         function normalizeBlock($block)
         {
             // Remove "P-" prefix if present
@@ -10455,7 +10461,7 @@ if (!function_exists('score_by_maps')) {
             return $block;
         }
 
-
+        // dd($DataEstate, $DataMTAncak);
 
         // Step 3: Normalize the block identifiers
         $datamutuancak = [];
@@ -10485,6 +10491,42 @@ if (!function_exists('score_by_maps')) {
             $datamututrans[$normalizedBlock] = array_merge($datamututrans[$normalizedBlock], $data);
         }
 
+
+
+        if ($regional == 3 || $regional == 2) {
+            $data_ancak_bydate = [];
+            foreach ($blokasli_ancak as $block => $data) {
+                // Normalize the block identifier
+                $normalizedBlock = normalizeBlock($block);
+
+                // Initialize the array for this normalized block if not exists
+                if (!isset($data_ancak_bydate[$normalizedBlock])) {
+                    $data_ancak_bydate[$normalizedBlock] = [];
+                }
+
+                // Merge the data
+                $data_ancak_bydate[$normalizedBlock] = array_merge($data_ancak_bydate[$normalizedBlock], $data);
+            }
+            $data_trans_bydate = [];
+            foreach ($blokasli_trans as $block => $data) {
+                // Normalize the block identifier
+                $normalizedBlock = normalizeBlock($block);
+
+                // Initialize the array for this normalized block if not exists
+                if (!isset($data_trans_bydate[$normalizedBlock])) {
+                    $data_trans_bydate[$normalizedBlock] = [];
+                }
+
+                // Merge the data
+                $data_trans_bydate[$normalizedBlock] = array_merge($data_trans_bydate[$normalizedBlock], $data);
+            }
+        } else {
+            $data_ancak_bydate = $datamutuancak;
+            $data_trans_bydate = $datamututrans;
+        }
+
+
+        // dd($datamutuancak, $datamututrans);
         if ($regional === 3) {
             foreach ($datamutuancak as $key => $dates) {
                 if (isset($datamututrans[$key])) {
@@ -10539,16 +10581,96 @@ if (!function_exists('score_by_maps')) {
 
             $datamutuancak = ungroupByDate($datamutuancak);
             $datamututrans = ungroupByDate($datamututrans);
+        } else if ($regional == 2) {
+            function getNewestDate($array)
+            {
+                $newestDate = null;
+                foreach ($array as $date => $values) {
+                    $currentDate = Carbon::parse($date);
+                    if ($newestDate === null || $currentDate->greaterThan($newestDate)) {
+                        $newestDate = $currentDate;
+                    }
+                }
+                return $newestDate;
+            }
+
+            function filterDates(&$array, $newestDate)
+            {
+                foreach ($array as $date => $values) {
+                    $currentDate = Carbon::parse($date);
+                    if (!$currentDate->isSameMonth($newestDate)) {
+                        unset($array[$date]);
+                    }
+                }
+            }
+
+            foreach ($datamutuancak as $key => &$dates) {
+                if (isset($datamututrans[$key])) {
+                    $newestDateCak = getNewestDate($dates);
+                    $newestDateTrans = getNewestDate($datamututrans[$key]);
+
+                    if ($newestDateCak && (!$newestDateTrans || $newestDateCak->greaterThanOrEqualTo($newestDateTrans))) {
+                        filterDates($dates, $newestDateCak);
+                        if ($newestDateTrans) {
+                            unset($datamututrans[$key][$newestDateTrans->toDateString()]);
+                        }
+                    } elseif ($newestDateTrans) {
+                        filterDates($dates, $newestDateTrans);
+                    }
+                } else {
+                    $newestDateCak = getNewestDate($dates);
+                    filterDates($dates, $newestDateCak);
+                }
+            }
+
+            foreach ($datamututrans as $key => &$dates) {
+                if (isset($datamutuancak[$key])) {
+                    $newestDateTrans = getNewestDate($dates);
+                    $newestDateCak = getNewestDate($datamutuancak[$key]);
+
+                    if ($newestDateTrans && (!$newestDateCak || $newestDateTrans->greaterThanOrEqualTo($newestDateCak))) {
+                        filterDates($dates, $newestDateTrans);
+                        if ($newestDateCak) {
+                            unset($datamutuancak[$key][$newestDateCak->toDateString()]);
+                        }
+                    }
+                } else {
+                    $newestDateTrans = getNewestDate($dates);
+                    filterDates($dates, $newestDateTrans);
+                }
+            }
+
+            foreach ($datamutuancak as $key => $dates) {
+                if (empty($dates)) {
+                    unset($datamutuancak[$key]);
+                }
+            }
+
+            foreach ($datamututrans as $key => $dates) {
+                if (empty($dates)) {
+                    unset($datamututrans[$key]);
+                }
+            }
+
+            function ungroupByDate($array)
+            {
+                $result = [];
+
+                foreach ($array as $blok => $dates) {
+                    foreach ($dates as $date => $values) {
+                        foreach ($values as $value) {
+                            $result[$blok][] = $value;
+                        }
+                    }
+                }
+
+                return $result;
+            }
+
+            $datamutuancak = ungroupByDate($datamutuancak);
+            $datamututrans = ungroupByDate($datamututrans);
         }
 
-        // dd($datamutuancak, $datamututrans);
-
-
-        // dd($datamutuancak['I34']);
-        $data_ancak_bydate = $datamutuancak;
-        $data_trans_bydate = $datamututrans;
-        // dd($test);
-        // dd($datamutuancak['O230'], $datamututrans['O230']);
         $QueryEst = DB::connection('mysql2')
             ->table("estate")
             ->join('afdeling', 'afdeling.estate', 'estate.id')
@@ -10590,31 +10712,10 @@ if (!function_exists('score_by_maps')) {
             $coordinates[$key] = $coords;
         }
 
-        // dd($datamututrans);
-        // $grouped = collect($datamutuancak['R009'])->groupBy('date');
-        // dd($grouped);
 
-        function getLatestEntries($data)
-        {
-            foreach ($data as $key => &$entries) {
-                // Sort the sub-array by the 'date' field in descending order
-                usort($entries, function ($a, $b) {
-                    return strtotime($b['date']) - strtotime($a['date']);
-                });
 
-                // Get the latest date
-                $latestDate = $entries[0]['date'];
 
-                // Filter the entries to keep only those with the latest date
-                $entries = array_filter($entries, function ($entry) use ($latestDate) {
-                    return $entry['date'] === $latestDate;
-                });
-
-                // Re-index the array to maintain consistency
-                $entries = array_values($entries);
-            }
-            return $data;
-        }
+        // dd($datamutuancak['G19'], $datamututrans);
 
         $dataSkor = array();
         // dd($regional);
@@ -10736,8 +10837,12 @@ if (!function_exists('score_by_maps')) {
             // dd($dataSkor['D13']);
 
         } else {
-            $new_transdata = getLatestEntries($datamututrans);
-            $new_ancakdata = getLatestEntries($datamutuancak);
+            // $new_transdata = getLatestEntries($datamututrans);
+            // $new_ancakdata = getLatestEntries($datamutuancak);
+            $new_transdata = $datamututrans;
+            $new_ancakdata = $datamutuancak;
+
+            // dd($new_ancakdata['G19'], $new_transdata['G19']);
             $ancakRegss2 = array();
             $sum = 0; // Initialize sum variable
             $count = 0; // Initialize count variable
@@ -10777,7 +10882,7 @@ if (!function_exists('score_by_maps')) {
                     $ancakRegss2[$key]['status_panen'] = $value2['status_panen'];
                 }
             }
-
+            // dd($ancakRegss2);
             // dd($regional == '2');
             $transNewdata = array();
             foreach ($new_transdata as $key => $value) {
@@ -10854,7 +10959,7 @@ if (!function_exists('score_by_maps')) {
             $sum_Restan = 0;
             $tph_sample = 0;
             foreach ($transNewdata as $key => $value) {
-
+                // dd($value);
                 $tph_sample = $value['tph_sample'];
                 $sum_Restan = $value['rst'];
                 $sum_bt = $value['bt'];
@@ -10865,6 +10970,7 @@ if (!function_exists('score_by_maps')) {
                 }
 
                 $dataSkor[$key][0]['skorTrans'] = $skorTrans;
+                $dataSkor[$key][0]['afdeling'] = $value['afdeling'];
                 $dataSkor[$key][0]['tph_sample'] = $tph_sample;
                 $dataSkor[$key][0]['sum_Restan'] = $sum_Restan;
                 $dataSkor[$key][0]['sum_bt'] = $sum_bt;
@@ -10955,6 +11061,7 @@ if (!function_exists('score_by_maps')) {
 
                 $dataSkor[$key][0]['Ancak'] = '=======================================================';
                 $dataSkor[$key][0]['skorAncak'] = $ttlSkorMA;
+                $dataSkor[$key][0]['afdeling'] = $value2['afdeling'];
                 $dataSkor[$key][0]['tot_brd'] = $brdPerjjg;
                 $dataSkor[$key][0]['total_brd'] = $skor_bTinggal;
                 $dataSkor[$key][0]['sumBH'] = $sumBH;
@@ -10970,22 +11077,32 @@ if (!function_exists('score_by_maps')) {
         $dataSkorResult = array();
         foreach ($dataSkor as $key => $value) {
             foreach ($value as $key1 => $value1) {
-                // dd($key);
+                // dd($value1);
 
 
                 $skorTrans = check_array('skorTrans', $value1);
                 $skorAncak = check_array('skorAncak', $value1);
-
-
-                if ($regional !== 3) {
-
+                if ($regional == 3) {
 
                     if ($skorTrans != 0 && $skorAncak != 0) {
                         $skorAkhir = (int) round((($skorTrans + $skorAncak) * 100) / 65 - 1);
                     } elseif ($skorTrans != 0) {
-                        $skorAkhir = (int)round(($skorTrans * 100) / 65 - 1);
+                        $skorAkhir = 0;
                     } elseif ($skorAncak != 0) {
-                        $skorAkhir = (int) round(($skorAncak * 100) / 65 - 1);
+                        $skorAkhir = 0;
+                    } else {
+                        $skorAkhir = 0;
+                    }
+                } else if ($regional == 2) {
+                    if ($skorTrans != 0 && $skorAncak != 0) {
+                        $total = (int) round((($skorTrans + $skorAncak) * 100) / 65);
+                        $skorAkhir = ($total != 100) ? $total : $total - 1;
+                    } elseif ($skorTrans != 0) {
+                        $total = (int) round(($skorTrans  * 100) / 65);
+                        $skorAkhir = ($total != 100) ? $total : $total - 1;
+                    } elseif ($skorAncak != 0) {
+                        $total = (int) round(($skorAncak  * 100) / 65);
+                        $skorAkhir = ($total != 100) ? $total : $total - 1;
                     } else {
                         $skorAkhir = 0;
                     }
@@ -10993,9 +11110,9 @@ if (!function_exists('score_by_maps')) {
                     if ($skorTrans != 0 && $skorAncak != 0) {
                         $skorAkhir = (int) round((($skorTrans + $skorAncak) * 100) / 65 - 1);
                     } elseif ($skorTrans != 0) {
-                        $skorAkhir = 0;
+                        $skorAkhir = (int)round(($skorTrans * 100) / 65 - 1);
                     } elseif ($skorAncak != 0) {
-                        $skorAkhir = 0;
+                        $skorAkhir = (int) round(($skorAncak * 100) / 65 - 1);
                     } else {
                         $skorAkhir = 0;
                     }
@@ -11018,6 +11135,7 @@ if (!function_exists('score_by_maps')) {
 
 
                 $dataSkorResult[$key]['estate'] = $est;
+                $dataSkorResult[$key]['afdeling'] = $value1['afdeling'];
                 $dataSkorResult[$key]['skorTrans'] = $skorTrans;
                 $dataSkorResult[$key]['skorAncak'] = $skorAncak;
                 $dataSkorResult[$key]['blok'] = $key;
@@ -11103,6 +11221,7 @@ if (!function_exists('score_by_maps')) {
         // dd($dataSkorResult);
 
         foreach ($dataSkorResult as $markerKey => $marker) {
+            // dd($marker);
             $found = false; // Flag to check if the marker is found in any polygon
             $blok_asli = $marker['blok'];
 
@@ -11129,7 +11248,7 @@ if (!function_exists('score_by_maps')) {
                     'estate' => $marker['estate'],
                     'latln' => 'no_coordinates',
                     'nilai' => $marker['skorAkhir'],
-                    'afdeling' => '-', // or other appropriate default value
+                    'afdeling' => $marker['afdeling'],
                     'kategori' => $marker['text'],
                 ];
             }
@@ -11452,7 +11571,7 @@ if (!function_exists('score_by_maps')) {
         // dd($fix_no_coordintes);
         // dd($finalLatln, $fix_no_coordintes, $new_blok2);
         $finalLatln = array_merge($finalLatln, $new_blok2, $fix_no_coordintes);
-
+        // dd($finalLatln);
         // dd($finalLatln, $fix_no_coordintes);
         // dd($finalLatln, $not_include_key);
 
