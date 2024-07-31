@@ -7129,6 +7129,7 @@ if (!function_exists('get_sidaktph_perbulan')) {
                 $newpembagi1 = 0;
                 $tot_brd3 = 0;
                 $tod_janjang3 = 0;
+                $v2check4 = 0;
                 foreach ($value2 as $key2 => $value3) {
 
 
@@ -7321,6 +7322,7 @@ if (!function_exists('get_sidaktph_perbulan')) {
                     $newpembagi1 += $newpembagi;
                     $tot_brd3 += $tot_brdxm;
                     $tod_janjang3 += $tod_janjangxm;
+                    $v2check4 += $v2check3;
                 }
 
 
@@ -7348,7 +7350,11 @@ if (!function_exists('get_sidaktph_perbulan')) {
                 } else {
                     $estbagi = 0;
                 }
-
+                if ($v2check4 == 0) {
+                    $newdivsafd = 0;
+                } else {
+                    $newdivsafd = 1;
+                }
                 // $newSidak[$key][$key1]['deviden'] = $deviden;
                 $newSidak[$key][$key1]['afdeling'] = [
                     'total_score' => $tot_afdscore,
@@ -7360,6 +7366,7 @@ if (!function_exists('get_sidaktph_perbulan')) {
                     'est' => $key,
                     'afd' => $key1,
                     'devidenest' => $devest,
+                    'newdivsafd' => $newdivsafd,
                 ];
 
 
@@ -7424,7 +7431,7 @@ if (!function_exists('get_sidaktph_perbulan')) {
             ];
         }
 
-
+        // dd($newSidak);
 
         $week1 = []; // Initialize the new array
         foreach ($newSidak as $key => $value) {
@@ -8270,27 +8277,67 @@ if (!function_exists('get_sidaktph_perbulan')) {
         }
 
         $rekap_perwill_groupwil = [];
-
-        foreach ($rekap_estate_ori as $key => $value) {
-            $get_score = 0;
-            $get_deviden = 0;
-            $brd = 0;
-            $buah = 0;
-            foreach ($value as $key1 => $value1) {
-                $get_score += $value1['score_estate'];
-                $get_deviden += $value1['deviden'];
-                $brd += $value1['brd'];
-                $buah += $value1['buah'];
+        // dd($rekap_perafdeling_groupwil, $rekap_estate_ori);
+        if ($regional === '3') {
+            foreach ($rekap_perafdeling_groupwil as $key => $value) {
+                $get_score2 = 0;
+                $get_deviden2 = 0;
+                $brd2 = 0;
+                $buah2 = 0;
+                foreach ($value as $key1 => $value1) {
+                    $get_score = 0;
+                    $get_deviden = 0;
+                    $brd = 0;
+                    $buah = 0;
+                    $test1 = [];
+                    foreach ($value1 as $key2 => $value2) {
+                        $get_score += $value2['total_score'];
+                        $get_deviden += $value2['newdivsafd'];
+                        $brd += $value2['total_brd'];
+                        $buah += $value2['total_janjang'];
+                    }
+                    $get_score2 += $get_score;
+                    $get_deviden2 += $get_deviden;
+                    $brd2 += $brd;
+                    $buah2 += $buah;
+                }
+                $total_score = ($get_deviden2 != 0) ? $get_score2 / $get_deviden2 : 0;
+                $deviden = ($get_deviden2 != 0) ? 1 : 0;
+                $rekap_perwill_groupwil[$key]['deviden'] = $deviden;
+                $rekap_perwill_groupwil[$key]['get_deviden2'] = $get_deviden2;
+                $rekap_perwill_groupwil[$key]['brd'] = $brd2;
+                $rekap_perwill_groupwil[$key]['buah'] = $buah2;
+                $rekap_perwill_groupwil[$key]['skor'] = $total_score;
+                $rekap_perwill_groupwil[$key]['wil'] = convertToRoman($key);
+                $rekap_perwill_groupwil[$key]['gm'] = get_nama_gm($key);
+                $rekap_perwill_groupwil[$key]['Status_Reg'] = 'Regional 3';
             }
-            $total_score = ($get_deviden != 0) ? $get_score / $get_deviden : 0;
-            $deviden = ($get_deviden != 0) ? 1 : 0;
-            $rekap_perwill_groupwil[$key]['deviden'] = $deviden;
-            $rekap_perwill_groupwil[$key]['brd'] = $brd;
-            $rekap_perwill_groupwil[$key]['buah'] = $buah;
-            $rekap_perwill_groupwil[$key]['skor'] = $total_score;
-            $rekap_perwill_groupwil[$key]['wil'] = convertToRoman($key);
-            $rekap_perwill_groupwil[$key]['gm'] = get_nama_gm($key);
+        } else {
+            foreach ($rekap_estate_ori as $key => $value) {
+                $get_score = 0;
+                $get_deviden = 0;
+                $brd = 0;
+                $buah = 0;
+                foreach ($value as $key1 => $value1) {
+                    $get_score += $value1['score_estate'];
+                    $get_deviden += $value1['deviden'];
+                    $brd += $value1['brd'];
+                    $buah += $value1['buah'];
+                    // $newdivsafd += $value1['newdivsafd'];
+                }
+                $total_score = ($get_deviden != 0) ? $get_score / $get_deviden : 0;
+                $deviden = ($get_deviden != 0) ? 1 : 0;
+                $rekap_perwill_groupwil[$key]['deviden'] = $deviden;
+                $rekap_perwill_groupwil[$key]['brd'] = $brd;
+                $rekap_perwill_groupwil[$key]['buah'] = $buah;
+                $rekap_perwill_groupwil[$key]['skor'] = $total_score;
+                $rekap_perwill_groupwil[$key]['wil'] = convertToRoman($key);
+                $rekap_perwill_groupwil[$key]['gm'] = get_nama_gm($key);
+                $rekap_perwill_groupwil[$key]['Status_Reg'] = 'Regional tidak 3';
+            }
         }
+
+        // dd($rekap_perwill_groupwil, $rekap_perafdeling_groupwil, $regional);
         $rekap_rh = [];
         $get_score_rh = 0;
         $get_deviden_rh = 0;
@@ -8304,7 +8351,7 @@ if (!function_exists('get_sidaktph_perbulan')) {
         $rekap_rh['skor'] = $total_score_rh;
         $rekap_rh['wil'] = convertToRoman($regional);
         $rekap_rh['rh'] = get_nama_rh($regional);
-        // dd($rekap_rh);
+        // dd($rekap_perestate_groupwill);
         // dd($rekap_perafdeling_groupwil, $rekap_perestate_groupwill);
 
         // untuk dapatkan mua regional 1 
@@ -8784,7 +8831,7 @@ if (!function_exists('get_sidaktph_perbulan')) {
             }
         }
 
-        // dd($datachart_est);
+        // dd($rekap_perwill_groupwil);
         return [
             'week1' => $week1,
             'week2' => $week2,
@@ -10411,7 +10458,6 @@ if (!function_exists('score_by_maps')) {
         } else {
             // dd('caca');
             $DataEstate = $queryTrans->groupBy(['blok', 'date']);
-            $blokasli_trans = $queryTrans->groupBy(['blok']);
         }
 
         $DataEstate = json_decode($DataEstate, true);
@@ -10429,13 +10475,31 @@ if (!function_exists('score_by_maps')) {
             $DataMTAncak = $queryAncak->groupBy(['blok']);
         } else {
             $DataMTAncak = $queryAncak->groupBy(['blok', 'date']);
-            $blokasli_ancak = $queryAncak->groupBy(['blok']);
         }
 
 
         $DataMTAncak = json_decode($DataMTAncak, true);
-        $blokasli_trans = json_decode($blokasli_trans, true);
-        $blokasli_ancak = json_decode($blokasli_ancak, true);
+
+        $queryAncak2 = DB::connection('mysql2')->table("mutu_ancak_new")
+            ->select("mutu_ancak_new.*", "estate.wil", DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%Y-%m-%d") as date'))
+            ->join('estate', 'estate.est', '=', 'mutu_ancak_new.estate')
+            ->where('mutu_ancak_new.estate', $est)
+            ->whereYear('mutu_ancak_new.datetime', $date)
+            ->orderBy('blok', 'desc')
+            ->get();
+        $queryAncak2 = $queryAncak2->groupBy(['blok']);
+        $blokasli_ancak = json_decode($queryAncak2, true);
+
+        $queryTrans2 = DB::connection('mysql2')->table("mutu_transport")
+            // ->select("mutu_transport.*", "estate.wil")
+            ->select("mutu_transport.*", "estate.wil", DB::raw('DATE_FORMAT(mutu_transport.datetime, "%Y-%m-%d") as date'))
+            ->join('estate', 'estate.est', '=', 'mutu_transport.estate')
+            ->where('mutu_transport.estate', $est)
+            ->whereYear('mutu_transport.datetime', $date)
+            ->get();
+        $queryTrans2 = $queryTrans2->groupBy(['blok']);
+        $blokasli_trans = json_decode($queryTrans2, true);
+
 
         function normalizeBlock($block)
         {
@@ -10736,6 +10800,7 @@ if (!function_exists('score_by_maps')) {
                 $dataSkor[$key][0]['skorTrans'] = $skorTrans;
                 $dataSkor[$key][0]['tph_sample'] = $tph_sample;
                 $dataSkor[$key][0]['sum_Restan'] = $sum_Restan;
+                $dataSkor[$key][0]['afdeling'] = $value2['afdeling'];
                 $dataSkor[$key][0]['sum_bt'] = $sum_bt;
                 $dataSkor[$key][0]['latin'] = $value2['lat'] . ',' . $value2['lon'];
                 $dataSkor[$key][0]['check_datatrans'] = 'ada';
@@ -10818,6 +10883,7 @@ if (!function_exists('score_by_maps')) {
 
                 $dataSkor[$key][0]['Ancak'] = '=======================================================';
                 $dataSkor[$key][0]['skorAncak'] = $ttlSkorMA;
+                $dataSkor[$key][0]['afdeling'] = $value2['afdeling'];
                 $dataSkor[$key][0]['tot_brd'] = $brdPerjjg;
                 $dataSkor[$key][0]['total_brd'] = $skor_bTinggal;
                 $dataSkor[$key][0]['sumBH'] = $sumBH;
