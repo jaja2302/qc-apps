@@ -40,4 +40,5 @@ Route::middleware([WhitelistIpMiddleware::class])->group(function () {
     Route::post('/deletemsgsmartlabs', [ApiqcController::class, 'deletemsgsmartlabs']);
     Route::post('/updatestatusbot', [ApiqcController::class, 'updatestatusbot']);
     Route::get('/checkPcStatus', [ApiqcController::class, 'checkPcStatus']);
+    Route::get('/getlistestate', [ApiqcController::class, 'getlistestate']);
 });

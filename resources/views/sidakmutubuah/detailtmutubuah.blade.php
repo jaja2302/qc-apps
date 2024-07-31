@@ -429,8 +429,7 @@
         </div>
 
         <div class="d-flex justify-content-end mt-3 mb-2 ml-3 mr-3">
-            @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten'|| session('jabatan') == 'Askep/Asisten' )
-
+            @if (can_edit_mananger_askep())
             <button id="moveDataButton" class="btn btn-primary mr-3" disabled>Pindah Data</button>
             @endif
 

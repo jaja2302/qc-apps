@@ -433,8 +433,7 @@
             <!-- end animasi -->
         </div>
         <div class="d-flex justify-content-end mt-3 mb-2 ml-3 mr-3">
-            @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten'|| session('jabatan') == 'Askep/Asisten' )
-
+            @if (can_edit_mananger_askep())
             <button id="moveDataButton" class="btn btn-primary mr-3" disabled>Pindah Data</button>
             @endif
 
@@ -752,6 +751,7 @@
 
     <script type="text/javascript">
         const canedit = @json(can_edit());
+        const can_edit_mananger_askep = @json(can_edit_mananger_askep());
 
         var currentUserName = "{{ session('jabatan') }}";
         var user_id = "{{ auth()->user()->user_id }}";
@@ -776,7 +776,7 @@
         });
 
         document.getElementById('showFindingYear').addEventListener('click', function() {
-            if (currentUserName === 'Askep' || currentUserName === 'Manager') {
+            if (can_edit_mananger_askep) {
                 document.getElementById('moveDataButton').disabled = false;
             }
 
@@ -1766,7 +1766,7 @@
                 }
             });
         }
-        if (currentUserName === 'Askep' || currentUserName === 'Manager') {
+        if (can_edit_mananger_askep) {
             document.getElementById("moveDataButton").addEventListener("click", selectDate);
         }
         // Attach click event listener to the button

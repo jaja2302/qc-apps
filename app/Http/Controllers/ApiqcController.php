@@ -935,7 +935,6 @@ class ApiqcController extends Controller
     private function processFormijinData($data)
     {
         $responseData = [];
-
         foreach ($data as $value) {
             $status = explode('$', $value['status_bot']);
             $statusSend = explode('$', $value['status_send_notif']);
@@ -943,16 +942,19 @@ class ApiqcController extends Controller
 
             $userData = $this->getUserData($value);
 
-            $notificationData = $this->prepareNotificationData($value, $userData, $case, $statusSend);
+            if ($userData['user'] && $userData['user']->nama_lengkap != null) {
+                $notificationData = $this->prepareNotificationData($value, $userData, $case, $statusSend);
 
-            if ($notificationData) {
-                $responseData[] = $notificationData;
-                $this->updateStatusSendNotif($value['id'], $case, $userData);
+                if ($notificationData) {
+                    $responseData[] = $notificationData;
+                    $this->updateStatusSendNotif($value['id'], $case, $userData);
+                }
             }
         }
 
         return $responseData;
     }
+
 
     private function determineCase($status, $formStatus)
     {
@@ -1332,5 +1334,16 @@ class ApiqcController extends Controller
         }
 
         return $response->json();
+    }
+
+
+    public function getlistestate(): JsonResponse
+    {
+        $data = DB::connection('mysql2')->table('estate')
+            ->select('*')
+            ->where('estate.emp', '!=', '01')
+            ->get();
+
+        return response()->json(['data' => $data], 200);
     }
 }
