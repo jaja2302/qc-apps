@@ -2630,6 +2630,7 @@
                     var rekap_per_reg = result['rekap_per_reg']
                     var datachart = result['datachart']
 
+                    // console.log(rekapafd);
                     // untuk perbadeling 
                     let table1 = rekapafd[1] ?? rekapafd[4] ?? rekapafd[7] ?? rekapafd[10]
                     let table2 = rekapafd[2] ?? rekapafd[5] ?? rekapafd[8] ?? rekapafd[11]
@@ -2652,7 +2653,7 @@
                     let table2_wil = rekap_per_wil[2] ?? rekap_per_wil[5] ?? rekap_per_wil[8] ?? rekap_per_wil[11]
                     let table3_wil = rekap_per_wil[3] ?? rekap_per_wil[6] ?? []
                     let theadreg = document.getElementById('theadreg');
-                    // console.log(rekap_per_estate);
+                    // console.log(rekap_per_wil);
                     TableForWilReg(table1_wil, tbody1);
                     TableForWilReg(table2_wil, tbody2);
                     TableForWilReg(table3_wil, tbody3);

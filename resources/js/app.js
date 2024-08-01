@@ -81,8 +81,13 @@ function calculateRanks(data) {
 
         Object.keys(estate).forEach((afdelingKey) => {
             let afdeling = estate[afdelingKey];
-
-            let total = afdeling.TOTAL_SKORbh + afdeling.totalSkortrans + afdeling.skor_akhircak;
+            let total;
+            if (afdeling.check_databh === "kosong" && afdeling.check_datacak === "kosong" & afdeling.check_datatrans === "kosong") {
+                 total = 0;
+            }else{
+                 total = afdeling.TOTAL_SKORbh + afdeling.totalSkortrans + afdeling.skor_akhircak;
+            }
+            // let total = afdeling.TOTAL_SKORbh + afdeling.totalSkortrans + afdeling.skor_akhircak;
             totals.push({
                 estateName,
                 afdelingKey,
@@ -115,7 +120,11 @@ function populateTableWithRanks(tableData, tableBody) {
             let total;
 
             if (afdeling.TOTAL_SKORbh !== undefined) {
-                total = afdeling.TOTAL_SKORbh + afdeling.totalSkortrans + afdeling.skor_akhircak;
+                if (afdeling.check_databh === "kosong" && afdeling.check_datacak === "kosong" & afdeling.check_datatrans === "kosong") {
+                    total = '-';
+                }else{
+                    total = afdeling.TOTAL_SKORbh + afdeling.totalSkortrans + afdeling.skor_akhircak;
+                }
             } 
             if (afdeling.total_score !== undefined) {
                 total = afdeling.total_score;
@@ -159,7 +168,7 @@ function populateTableWithRanks(tableData, tableBody) {
             tr.appendChild(itemElement4);
             tr.appendChild(itemElement5);
 
-            tableBody.appendChild(tr); // Append the row to the table body
+            tableBody.appendChild(tr); 
         });
     });
 }
@@ -202,7 +211,12 @@ function TableForWilReg(data, tableBody) {
     let item3 = data['gm'] ?? data['rh'] ?? '-';
     let item4;
     if (data['TOTAL_SKORbh'] !== undefined) {
-        item4 = data['TOTAL_SKORbh'] + data['totalSkortrans'] + data['skor_akhircak'];
+        if (data['check_databh'] === "kosong" && data['check_datacak'] === "kosong" & data['check_datatrans'] === "kosong") {
+            item4 = '-';
+        }else{
+            item4 = data['TOTAL_SKORbh'] + data['totalSkortrans'] + data['skor_akhircak'];
+        }
+      
     }else{
         item4 = data['skor'].toFixed(2) ;
     }
