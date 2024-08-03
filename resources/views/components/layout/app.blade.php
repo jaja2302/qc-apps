@@ -164,19 +164,6 @@
 
 
                         <div class="fixed-bottom mb-3" style="position: absolute;">
-
-                            @if (strpos(session('departemen'), 'QC') !== false && session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' || session('jabatan') == 'Admin' || auth()->user()->id_departement == '43' && in_array(auth()->user()->id_jabatan, ['10', '15', '20', '4', '5', '6']))
-                            <li class="nav-item">
-                                <a href="{{ route('user.show') }}" class="nav-link">
-
-                                    <div class="nav-icon lottie-animation" data-animation-path="https://assets9.lottiefiles.com/packages/lf20_8y92hieq.json">
-                                    </div>
-                                    <p style="font-size: 15px;">
-                                        User QC
-                                    </p>
-                                </a>
-                            </li>
-                            @endif
                             <li class="nav-item">
                                 <a href="{{ route('logout') }}" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <i class="nav-icon fa fa-sign-out-alt"></i>

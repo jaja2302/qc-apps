@@ -150,14 +150,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/deleteBA_mutubuah', [MutubuahController::class, 'deleteBA_mutubuah'])->name('deleteBA_mutubuah');
     Route::post('/pdfBA_sidakbuah', [MutubuahController::class, 'pdfBA_sidakbuah'])->name('pdfBA_sidakbuah');
 
-    Route::get('/User/user', [userNewController::class, 'showUser'])->name('user.show');
-    Route::post('/getuser', [userNewController::class, 'getuser'])->name('getuser');
-    Route::post('/update_user', [userNewController::class, 'update_user'])->name('update_user');
-    Route::get('/listAsisten2', [userNewController::class, 'listAsisten2'])->name('listAsisten2');
-    Route::post('/updateAsisten', [userNewController::class, 'updateAsisten'])->name('updateAsisten');
-    Route::post('/deleteAsisten', [userNewController::class, 'deleteAsisten'])->name('deleteAsisten');
-    Route::post('/storeAsisten', [userNewController::class, 'storeAsisten'])->name('storeAsisten');
-
+  
 
     Route::get('/getWeekInpeksi', [inspectController::class, 'getWeekInpeksi'])->name('getWeekInpeksi');
     Route::post('/pdfBA_excel', [inspectController::class, 'pdfBA_excel'])->name('pdfBA_excel');
@@ -189,6 +182,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/listqc', [adminpanelController::class, 'listqc'])->name('listqc');
     Route::post('/updateUserqc', [adminpanelController::class, 'updateUserqc'])->name('updateUserqc');
     Route::get('/editkom', [emplacementsController::class, 'editkom'])->name('editkom');
+    // Route::get('/User/user', [userNewController::class, 'showUser'])->name('user.show');
+    Route::post('/getuser', [adminpanelController::class, 'getuser'])->name('getuser');
+    Route::post('/update_user', [adminpanelController::class, 'update_user'])->name('update_user');
+    Route::get('/listAsisten2', [adminpanelController::class, 'listAsisten2'])->name('listAsisten2');
+    Route::post('/updateAsisten', [adminpanelController::class, 'updateAsisten'])->name('updateAsisten');
+    Route::post('/deleteAsisten', [adminpanelController::class, 'deleteAsisten'])->name('deleteAsisten');
+    Route::post('/storeAsisten', [adminpanelController::class, 'storeAsisten'])->name('storeAsisten');
 
 
     Route::post('/downloadMaptahun', [makemapsController::class, 'downloadMaptahun'])->name('downloadMaptahun');
