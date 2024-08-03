@@ -66,7 +66,7 @@ class GradingController extends Controller
     {
         $reg = $request->input('reg');
         $bulan = $request->input('bulan');
-        $type = 'perhari';
+        $type = 'perbulan';
         $this->getdatamill($bulan, $reg, $type);
     }
 
