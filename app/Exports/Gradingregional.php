@@ -17,24 +17,26 @@ class Gradingregional implements FromView, WithMultipleSheets
      * @return \Illuminate\Support\Collection
      */
     protected $data;
+    protected $tipe;
 
     use Exportable;
-    public function __construct(array $arrView)
+    public function __construct(array $arrView, string $tipe)
     {
         $this->data = $arrView;
+        $this->tipe = $tipe;
+        // dd($tipe);
     }
     public function view(): View
     {
-
-        // dd($this->data);
-        return view('Grading.Exportexcel', ['data' => $this->data, 'type' => 'rekap_regional']);
+        return view('Grading.Exportexcel', ['data' => $this->data, 'type' => $this->tipe]);
     }
+
     public function sheets(): array
     {
         $sheets = [];
         $title = 'Rekap Regional';
         foreach ($this->data as $week => $data) {
-            $sheets[$week] = new Gradingregional($data);
+            $sheets[$week] = new Gradingregional($data, $this->tipe);
         }
 
         return $sheets;

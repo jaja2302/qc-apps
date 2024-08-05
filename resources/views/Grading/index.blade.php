@@ -37,6 +37,7 @@
                                     @csrf
                                     <input type="hidden" id="getregional" name="getregional">
                                     <input type="hidden" id="getdate" name="getdate">
+                                    <input type="hidden" name="tipedata" value="rekapsatu">
                                     <button type="submit" class="btn btn-primary">Export</button>
                                 </form>
                             </div>
@@ -258,7 +259,13 @@
                                 <button type="submit" class="btn btn-primary ml-2" id="rekapmill">Show</button>
                             </div>
                             <div class="col-auto">
-                                <button type="button" class="btn btn-primary">Excel</button>
+                                <form id="exportFormdua" action="{{ route('exportgrading') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" id="getregionaldua" name="getregionaldua">
+                                    <input type="hidden" id="getdatedua" name="getdatedua">
+                                    <input type="hidden" name="tipedata" value="rekapdua">
+                                    <button type="submit" class="btn btn-primary">Export</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -346,19 +353,17 @@
                                     @endforeach
                                 </select>
                             </div>
-                            {{--<<div class="col-md">
-                            <select class="form-select mb-2 mb-md-0" aria-label="Default select example">
-                                <option selected>Est</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </div>>--}}
                             <div class="col-auto">
                                 <button type="submit" class="btn btn-primary ml-2" id="rekap_perhari">Show</button>
                             </div>
                             <div class="col-auto">
-                                <button type="button" class="btn btn-primary">Excel</button>
+                                <form id="exportFormtiga" action="{{ route('exportgrading') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" id="getregionaltiga" name="getregionaltiga">
+                                    <input type="hidden" id="getdatetiga" name="getdatetiga">
+                                    <input type="hidden" name="tipedata" value="rekaptiga">
+                                    <button type="submit" class="btn btn-primary">Export</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -505,19 +510,17 @@
                                     @endforeach
                                 </select>
                             </div>
-                            {{--<<div class="col-md">
-                            <select class="form-select mb-2 mb-md-0" aria-label="Default select example">
-                                <option selected>Est</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </div>>--}}
                             <div class="col-auto">
                                 <button type="submit" class="btn btn-primary ml-2" id="rekap_perfadeling">Show</button>
                             </div>
                             <div class="col-auto">
-                                <button type="button" class="btn btn-primary">Excel</button>
+                                <form id="exportFormempat" action="{{ route('exportgrading') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" id="getregionalempat" name="getregionalempat">
+                                    <input type="hidden" id="getdateempat" name="getdateempat">
+                                    <input type="hidden" name="tipedata" value="rekapempat">
+                                    <button type="submit" class="btn btn-primary">Export</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -1019,7 +1022,7 @@
                     let parseResult = JSON.parse(result)
                     let rekap = parseResult['data_pperafd']
                     let tbody = document.getElementById('rekap_afdeling_data');
-                    console.log(rekap);
+                    // console.log(rekap);
                     Object.entries(rekap).forEach(([key, value]) => {
                         Object.entries(value).forEach(([key1, value1]) => {
                             let tr = document.createElement('tr');
@@ -1087,27 +1090,34 @@
 
 
         }
-        document.getElementById('exportForm').addEventListener('submit', function(event) {
-            // Prevent the default form submission
+
+        function handleExportSubmit(event, formId, regionalSelectId, dateInputId, hiddenRegionalId, hiddenDateId) {
             event.preventDefault();
 
-            // Get the selected value from regDataIns select element
-            var regDataInsValue = document.getElementById('regional_select').value;
+            const regionalValue = document.getElementById(regionalSelectId).value;
+            const dateValue = document.getElementById(dateInputId).value;
 
-            // Get the value from dateDataIns input element
-            var dateDataInsValue = document.getElementById('inputbulan').value;
+            document.getElementById(hiddenRegionalId).value = regionalValue;
+            document.getElementById(hiddenDateId).value = dateValue;
 
-            // Set the values to the hidden inputs
-            document.getElementById('getregional').value = regDataInsValue;
-            document.getElementById('getdate').value = dateDataInsValue;
-
-            // Open a new tab/window and submit the form there
-            var newWindow = window.open('', '_blank');
-            this.target = '_blank';
-            this.submit();
-
-            // Close the new tab/window after submission (optional)
+            const newWindow = window.open('', '_blank');
+            document.getElementById(formId).target = '_blank';
+            document.getElementById(formId).submit();
             newWindow.close();
+        }
+
+        document.getElementById('exportForm').addEventListener('submit', function(event) {
+            handleExportSubmit(event, 'exportForm', 'regional_select', 'inputbulan', 'getregional', 'getdate');
+        });
+
+        document.getElementById('exportFormdua').addEventListener('submit', function(event) {
+            handleExportSubmit(event, 'exportFormdua', 'regional_select_mill', 'inputbulan_mill', 'getregionaldua', 'getdatedua');
+        });
+        document.getElementById('exportFormtiga').addEventListener('submit', function(event) {
+            handleExportSubmit(event, 'exportFormtiga', 'rekap_perhari_reg', 'input_rekap_perhari', 'getregionaltiga', 'getdatetiga');
+        });
+        document.getElementById('exportFormempat').addEventListener('submit', function(event) {
+            handleExportSubmit(event, 'exportFormempat', 'rekap_perfadeling_reg', 'input_rekap_perfadeling', 'getregionalempat', 'getdateempat');
         });
     </script>
 </x-layout.app>

@@ -317,15 +317,37 @@ class GradingController extends Controller
 
     public function exportgrading(Request $request)
     {
-        $date = $request->input('getdate'); // 'bulan' should match the input name in the HTML form
-        $reg = $request->input('getregional');    // 'reg' should match the input name in the HTML form
-        $type = 'perbulan';
 
-        // Debugging output
-        // dd($date, $reg, $type);
+        $check = $request->input('tipedata');
 
-        $result = getdatamill($date, $reg, $type);
-        // dd($result, $date, $reg, $type);
-        return Excel::download(new Gradingregional($result), 'Excel Grading Regional-' . $date . '-' . 'Bulan-' . $reg . '.xlsx');
+        if ($check == 'rekapsatu') {
+            $date = $request->input('getdate');
+            $reg = $request->input('getregional');
+            $type = 'perbulan';
+            $result = getdatamill($date, $reg, $type);
+        } else if ($check == 'rekapdua') {
+            $date = $request->input('getdatedua');
+            $reg = $request->input('getregionaldua');
+            $type = 'perbulan';
+            $data = getdatamill($date, $reg, $type);
+            // dd($data);
+
+            $result['data_mill'] = $data['data_mill'];
+        } else if ($check == 'rekaptiga') {
+            $date = $request->input('getdatetiga');
+            $reg = $request->input('getregionaltiga');
+            $type = 'perbulan';
+            $data = getdatamill($date, $reg, $type);
+            // dd($data);
+
+            $result['data_mill'] = $data['data_mill'];
+        } else {
+            $date = $request->input('getdateempat');
+            $reg = $request->input('getregionalempat');
+            $type = 'perafdeling';
+            $result = getdatamill($date, $reg, $type);
+            // dd($data);
+        }
+        return Excel::download(new Gradingregional($result, $type), 'Excel Grading Regional-' . $date . '-' . 'Bulan-' . $reg . '.xlsx');
     }
 }
