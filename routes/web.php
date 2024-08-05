@@ -150,7 +150,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/deleteBA_mutubuah', [MutubuahController::class, 'deleteBA_mutubuah'])->name('deleteBA_mutubuah');
     Route::post('/pdfBA_sidakbuah', [MutubuahController::class, 'pdfBA_sidakbuah'])->name('pdfBA_sidakbuah');
 
-  
+
 
     Route::get('/getWeekInpeksi', [inspectController::class, 'getWeekInpeksi'])->name('getWeekInpeksi');
     Route::post('/pdfBA_excel', [inspectController::class, 'pdfBA_excel'])->name('pdfBA_excel');
@@ -248,6 +248,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/crudmatchblok', [Matchingblok::class, 'dashboard'])->name('crudmatchblok');
     Route::get('/tabledatamaps', [Matchingblok::class, 'tabledata'])->name('tabledatamaps');
     Route::post('/addmatchblok', [Matchingblok::class, 'addmatchblok'])->name('addmatchblok');
+    Route::post('/exportgrading', [GradingController::class, 'exportgrading'])->name('exportgrading');
 });
 Route::get('/memory-limit', function () {
     $memoryLimit = ini_get('memory_limit');
