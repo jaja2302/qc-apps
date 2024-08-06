@@ -12607,3 +12607,220 @@ if (!function_exists('getdatamildetail')) {
         // exit();
     }
 }
+
+if (!function_exists('cetakPDFFI')) {
+    function cetakPDFFI($id, $est, $tgl)
+    {
+        if ($est == 'Pla') {
+            $est = 'Plasma1';
+        }
+        $date = Carbon::parse($tgl)->format('F Y');
+
+
+
+        // buat baru  
+
+        // dd($est);
+
+        $getwill = DB::connection('mysql2')->table('estate')
+            ->select('estate.*')
+            ->where('est', $est)
+            ->get();
+        // dd($getwill);
+
+        $mtTrans = DB::connection('mysql2')->table('mutu_transport')
+            ->selectRaw("mutu_transport.*, DATE_FORMAT(datetime, '%Y-%m-%d') AS formatted_date")
+            ->where('estate', $est)
+            ->where('datetime', 'like', '%' . $tgl . '%')
+            ->where('foto_temuan', '!=', ' ')
+            ->orderBy('formatted_date', 'asc')
+            ->orderBy('estate', 'asc')
+            ->orderBy('afdeling', 'asc')
+            ->orderBy('blok', 'asc')
+
+            ->get();
+        // dd($mtTrans);
+
+        $mtTrans = $mtTrans->groupBy(['formatted_date', 'afdeling', 'blok']);
+        $mtTrans = json_decode($mtTrans, true);
+
+
+        $mtbuah = DB::connection('mysql2')->table('mutu_buah')
+            ->selectRaw("mutu_buah.*, DATE_FORMAT(datetime, '%Y-%m-%d') AS formatted_date")
+            ->where('estate', $est)
+            ->where('datetime', 'like', '%' . $tgl . '%')
+            ->where('foto_temuan', '!=', ' ')
+            ->orderBy('formatted_date', 'asc')
+            ->orderBy('estate', 'asc')
+            ->orderBy('afdeling', 'asc')
+            ->orderBy('blok', 'asc')
+
+            ->get();
+
+        $mtbuah = $mtbuah->groupBy(['formatted_date', 'afdeling', 'blok']);
+        $mtbuah = json_decode($mtbuah, true);
+
+
+
+        $mtancak = DB::connection('mysql2')->table('follow_up_ma')
+            ->selectRaw("follow_up_ma.*, DATE_FORMAT(waktu_temuan, '%Y-%m-%d') AS formatted_date")
+            ->where('estate', $est)
+            ->where('waktu_temuan', 'like', '%' . $tgl . '%')
+            ->orderBy('formatted_date', 'asc')
+            ->orderBy('estate', 'asc')
+            ->orderBy('afdeling', 'asc')
+            ->orderBy('blok', 'asc')
+            ->get();
+
+        $mtancak = $mtancak->groupBy(['formatted_date', 'afdeling', 'blok']);
+        $mtancak = json_decode($mtancak, true);
+
+        // dd($mtbuah, $mtancak, $mtTrans);
+
+        // $inc = 1;
+        $allDates = [];
+
+        foreach ($mtTrans as $key => $value) {
+            $allDates[$key] = ['dates' => $key];
+        }
+
+        foreach ($mtancak as $key => $value) {
+            $allDates[$key] = ['dates' => $key];
+        }
+
+        foreach ($mtbuah as $key => $value) {
+            $allDates[$key] = ['dates' => $key];
+        }
+
+        // To remove duplicate dates and reindex the array keys
+        $uniqueDates = array_values(array_unique(array_column($allDates, 'dates')));
+
+
+        usort($uniqueDates, function ($a, $b) {
+            return strtotime($a) - strtotime($b);
+        });
+        // dd($uniqueDates[0]);
+
+
+
+        // dd($uniqueDates);
+        // dd($getwill[0]->wil);
+        if ($getwill[0]->wil == 7 || $getwill[0]->wil == 8) {
+            # code...
+            $start_date = Carbon::createFromDate($uniqueDates[0]); // Replace this with your dynamic date
+            $current_date = $start_date->copy();
+
+            $month = $start_date->month;
+            $week_number = 1;
+
+            $getdate = [];
+
+            while ($current_date->month == $month) {
+                $getdate[$current_date->format('Y-m-d')] = $week_number;
+
+                $current_date->addDay();
+
+                // Increment week number after every 7 days
+                if ($current_date->diffInDays($start_date) % 7 === 0) {
+                    $week_number++;
+                }
+            }
+        } else {
+            $inc = 1;
+            foreach ($uniqueDates as $key => $value) {
+                # code...
+                $getdate[$value] = $inc++;
+            }
+        }
+
+        // dd($getdate);
+
+        $newtrans = array();
+
+        foreach ($mtTrans as $date => $items) {
+            foreach ($items as $category => $categoryItems) {
+                foreach ($categoryItems as $itemKey => $itemData) {
+                    foreach ($itemData as $key => $value) {
+
+                        $newkeyafd = $value['estate'] . ' ' . $value['afdeling'] . ' ' . $value['blok'];
+
+                        // Create the 'visit' array based on the date
+                        foreach ($getdate as $key2 => $value2) {
+                            if ($key2 == $date) {
+                                $value['visit'] = $value2;
+                            }
+                        }
+
+                        $newtrans[$value['estate'] . ' ' . $value['afdeling']][$newkeyafd]['mutu_transport'][] = $value;
+                    }
+                }
+            }
+        }
+
+        $newBuah = array();
+
+        foreach ($mtbuah as $date => $items) {
+            foreach ($items as $category => $categoryItems) {
+                foreach ($categoryItems as $itemKey => $itemData) {
+                    foreach ($itemData as $key => $value) {
+
+                        $newkeyafd = $value['estate'] . ' ' . $value['afdeling'] . ' ' . $value['blok'];
+
+                        // Create the 'visit' array based on the date
+                        foreach ($getdate as $key2 => $value2) {
+                            if ($key2 == $date) {
+                                $value['visit'] = $value2;
+                            }
+                        }
+
+                        $newBuah[$value['estate'] . ' ' . $value['afdeling']][$newkeyafd]['mutu_buah'][] = $value;
+                    }
+                }
+            }
+        }
+
+        $newAncak = array();
+
+        foreach ($mtancak as $date => $items) {
+            foreach ($items as $category => $categoryItems) {
+                foreach ($categoryItems as $itemKey => $itemData) {
+                    foreach ($itemData as $key => $value) {
+
+                        $newkeyafd = $value['estate'] . ' ' . $value['afdeling'] . ' ' . $value['blok'];
+
+                        // Create the 'visit' array based on the date
+                        foreach ($getdate as $key2 => $value2) {
+                            if ($key2 == $date) {
+                                $value['visit'] = $value2;
+                            }
+                        }
+
+                        $newAncak[$value['estate'] . ' ' . $value['afdeling']][$newkeyafd]['mutu_ancak'][] = $value;
+                    }
+                }
+            }
+        }
+
+
+        // Merge arrays into one
+        $mergedArrays = array_merge_recursive($newtrans, $newAncak, $newBuah);
+
+        // Iterate through the merged array and fill missing keys with empty arrays
+        foreach ($mergedArrays as $estate => &$estateData) {
+            foreach ($estateData as $category => &$categoryData) {
+                // Ensure all necessary keys exist, else set them as empty arrays
+                $categoryData += [
+                    'mutu_transport' => [],
+                    'mutu_ancak' => [],
+                    'mutu_buah' => [],
+                ];
+            }
+        }
+
+        // Unset references
+        unset($estateData, $categoryData);
+        // dd($mergedArrays);
+
+        return $mergedArrays;
+    }
+}

@@ -93,6 +93,7 @@ Route::middleware(['auth'])->group(function () {
 
     // yang di ubah 
     Route::get('/cetakPDFFI/{id}/{est}/{tgl}', [pdfgenerateController::class, 'cetakPDFFI'])->name('cetakPDFFI');
+    Route::get('/exportExcel/{id}/{est}/{tgl}', [pdfgenerateController::class, 'exportExcel'])->name('exportExcel');
     Route::get('/filter', [inspeksidashController::class, 'filterv2'])->name('filter');
     Route::get('/graphfilter', [inspeksidashController::class, 'graphfilter'])->name('graphfilter');
     Route::get('/filterTahun', [inspeksidashController::class, 'filterTahun'])->name('filterTahun');

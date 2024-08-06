@@ -2263,21 +2263,33 @@
 
                         for (let i = 1; i <= maxVisits; i++) {
                             let itemElement = document.createElement('td');
+                            let pdfButton = '<a href="/cetakPDFFI/' + i + '/' + item1 + '/' + date + '" class="btn btn-primary" target="_blank"><i class="bi bi-filetype-pdf"></i></a>';
+                            let excelButton = '<a href="/exportExcel/' + i + '/' + item1 + '/' + date + '" class="btn btn-success" target="_blank"><i class="bi bi-file-earmark-excel"></i></a>';
+
                             if (i <= visit) {
-                                itemElement.innerHTML = '<a href="/cetakPDFFI/' + i + '/' + item1 + '/' + date + '" class="btn btn-primary" target="_blank"><i class="bi bi-filetype-pdf"></i></a>';
+                                itemElement.innerHTML = pdfButton + ' ' + excelButton;
                             } else {
-                                itemElement.innerHTML = '<a href="#" class="btn btn-secondary" disabled><i class="bi bi-filetype-pdf"></i></a>';
+                                pdfButton = '<a href="#" class="btn btn-secondary" disabled><i class="bi bi-filetype-pdf"></i></a>';
+                                excelButton = '<a href="#" class="btn btn-secondary" disabled><i class="bi bi-file-earmark-excel"></i></a>';
+                                itemElement.innerHTML = pdfButton + ' ' + excelButton;
                             }
                             tr.appendChild(itemElement);
                         }
 
+
                         // Check if visit is more than 1, if so, create a new button with ID 4
                         let itemElement7 = document.createElement('td');
+                        let pdfButton = '<a href="/cetakPDFFI/4/' + item1 + '/' + date + '" class="btn btn-primary" target="_blank" id="4"><i class="bi bi-filetype-pdf"></i></a>';
+                        let excelButton = '<a href="/exportExcel/4/' + item1 + '/' + date + '" class="btn btn-success" target="_blank" id="4"><i class="bi bi-file-earmark-excel"></i></a>';
+
                         if (visit > 1) {
-                            itemElement7.innerHTML = '<a href="/cetakPDFFI/4/' + item1 + '/' + date + '" class="btn btn-primary" target="_blank" id="4"><i class="bi bi-filetype-pdf"></i></a>';
+                            itemElement7.innerHTML = pdfButton + ' ' + excelButton;
                         } else {
-                            itemElement7.innerHTML = '<a href="#" class="btn btn-secondary" disabled><i class="bi bi-filetype-pdf"></i></a>';
+                            pdfButton = '<a href="#" class="btn btn-secondary" disabled><i class="bi bi-filetype-pdf"></i></a>';
+                            excelButton = '<a href="#" class="btn btn-secondary" disabled><i class="bi bi-file-earmark-excel"></i></a>';
+                            itemElement7.innerHTML = pdfButton + ' ' + excelButton;
                         }
+
                         tr.appendChild(itemElement7)
 
                         tbody1.appendChild(tr)
