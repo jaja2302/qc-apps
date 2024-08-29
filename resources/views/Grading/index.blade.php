@@ -370,64 +370,6 @@
                 </div>
                 <div class="mt-4 ml-3 mr-3 mb-10 text-center">
                     <table class="table table-responsive table-striped table-bordered">
-                        <!-- <thead>
-                        <tr>
-                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Estate</th>
-                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Afdeling</th>
-                            <th style="background-color: #f0ecec;" colspan="6">UNIT SORTASI</th>
-                            <th style="background-color: #88e48c;" colspan="20">HASIL GRADING</th>
-                            <th style="background-color: #f8c4ac;" colspan="6">KELAS JANJANG</th>
-                        </tr>
-                        <tr>
-                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">NO POLISI</th>
-                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">WAKTU GRADING</th>
-                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG SPB</th>
-                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG GRADING</th>
-                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">TONASE (KG)</th>
-                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">BJR(KG)</th>
-                            <th style="background-color: #88e48c;" colspan="2">RIPENESS</th>
-                            <th style="background-color: #88e48c;" colspan="2">UNRIPE</th>
-                            <th style="background-color: #88e48c;" colspan="2">OVERRIPE</th>
-                            <th style="background-color: #88e48c;" colspan="2">EMPTY BUNCH</th>
-                            <th style="background-color: #88e48c;" colspan="2">ROTTEN BUNCH</th>
-                            <th style="background-color: #88e48c;" colspan="2">ABNORMAL</th>
-                            <th style="background-color: #88e48c;" colspan="2">LONG STALK</th>
-                            <th style="background-color: #88e48c;" colspan="2">V-CUT</th>
-                            <th style="background-color: #88e48c;" colspan="2">DIRT</th>
-                            <th style="background-color: #88e48c;" colspan="2">LOOSE FRUIT</th>
-                            <th style="background-color: #f8c4ac;" colspan="2">KELAS C</th>
-                            <th style="background-color: #f8c4ac;" colspan="2">KELAS B</th>
-                            <th style="background-color: #f8c4ac;" colspan="2">KELAS A</th>
-                        </tr>
-                        <tr>
-                            <th style="background-color: #88e48c;">JJG</th>
-                            <th style="background-color: #88e48c;">%</th>
-                            <th style="background-color: #88e48c;">JJG</th>
-                            <th style="background-color: #88e48c;">%</th>
-                            <th style="background-color: #88e48c;">JJG</th>
-                            <th style="background-color: #88e48c;">%</th>
-                            <th style="background-color: #88e48c;">JJG</th>
-                            <th style="background-color: #88e48c;">%</th>
-                            <th style="background-color: #88e48c;">JJG</th>
-                            <th style="background-color: #88e48c;">%</th>
-                            <th style="background-color: #88e48c;">JJG</th>
-                            <th style="background-color: #88e48c;">%</th>
-                            <th style="background-color: #88e48c;">JJG</th>
-                            <th style="background-color: #88e48c;">%</th>
-                            <th style="background-color: #88e48c;">JJG</th>
-                            <th style="background-color: #88e48c;">%</th>
-                            <th style="background-color: #88e48c;">JJG</th>
-                            <th style="background-color: #88e48c;">%</th>
-                            <th style="background-color: #88e48c;">JJG</th>
-                            <th style="background-color: #88e48c;">%</th>
-                            <th style="background-color: #f8c4ac;">JJG</th>
-                            <th style="background-color: #f8c4ac;">%</th>
-                            <th style="background-color: #f8c4ac;">JJG</th>
-                            <th style="background-color: #f8c4ac;">%</th>
-                            <th style="background-color: #f8c4ac;">JJG</th>
-                            <th style="background-color: #f8c4ac;">%</th>
-                        </tr>
-                    </thead> -->
                         <thead>
                             <tr>
                                 <th colspan="31" style="background-color: #c8e4f4;">BERDASARKAN ESTATE</th>

@@ -75,7 +75,10 @@ class GradingController extends Controller
         $reg = $request->input('reg');
         $bulan = $request->input('bulan');
         $type = 'perbulan';
+
+
         $result = getdatamill($bulan, $reg, $type);
+        // dd($result);
         echo json_encode($result);
         exit();
     }

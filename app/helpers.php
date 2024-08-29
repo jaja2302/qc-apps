@@ -11770,6 +11770,7 @@ if (!function_exists('getdatamill')) {
         // dd($get_type);
         if ($get_type === 'perbulan') {
             $data = DB::connection('mysql2')->table('grading_mill')
+                ->select('grading_mill.*', 'grading_mill.id as id_data')
                 ->join('estate', 'estate.est', '=', 'grading_mill.estate')
                 ->join('wil', 'wil.id', '=', 'estate.wil')
                 ->where('estate.emp', '!=', 1)
@@ -11825,7 +11826,7 @@ if (!function_exists('getdatamill')) {
                     }
                 }
             }
-            // dd($mil, $data_mill);
+            // dd($data, $mil, $data_mill);
             // dd($wil, $data_wil);
             $result = [];
             if (!empty($data)) {
