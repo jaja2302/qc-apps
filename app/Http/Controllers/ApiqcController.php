@@ -304,6 +304,7 @@ class ApiqcController extends Controller
         $getdatacron = DB::connection('mysql2')->table('crontab')
             ->select('*')
             ->where('status', 1)
+            ->where('estate', '!=', 'NBE')
             ->whereBetween('triger_time', [$startTime, $hours])
             ->get();
 
