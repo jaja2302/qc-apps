@@ -347,12 +347,15 @@
                             </div>
                             <div class="col-md">
                                 <select class="form-select mb-2 mb-md-0" name="regional_id" id="rekap_perhari_reg" aria-label="Default select example">
-
-                                    @foreach ($regional as $items)
-                                    <option value="{{$items['id']}}">{{$items['nama']}}</option>
-                                    @endforeach
+                                    <option value="">Select Regional</option>
                                 </select>
                             </div>
+                            <div class="col-md">
+                                <select class="form-select mb-2 mb-md-0" name="mill_id" id="mill_id" aria-label="Default select example">
+                                    <option value="">Select Mill</option>
+                                </select>
+                            </div>
+
                             <div class="col-auto">
                                 <button type="submit" class="btn btn-primary ml-2" id="rekap_perhari">Show</button>
                             </div>
@@ -372,17 +375,20 @@
                     <table class="table table-responsive table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th colspan="31" style="background-color: #c8e4f4;">BERDASARKAN ESTATE</th>
+                                <th colspan="33" style="background-color: #c8e4f4;">BERDASARKAN ESTATE</th>
                             </tr>
                             <tr>
                                 <th rowspan="3" class="align-middle" style="background-color: #f0ecec;">Estate</th>
-                                <th style="background-color: #f0ecec;" colspan="2">UNIT SORTASI</th>
+                                <th rowspan="3" class="align-middle" style="background-color: #f0ecec;">Afdeling</th>
+                                <th style="background-color: #f0ecec;" colspan="4">UNIT SORTASI</th>
                                 <th style="background-color: #88e48c;" colspan="20">HASIL GRADING</th>
                                 <th style="background-color: #f8c4ac;" colspan="6">KELAS JANJANG</th>
                             </tr>
                             <tr>
+                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG SPD</th>
                                 <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG GRADING</th>
                                 <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">TONASE(KG)</th>
+                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">BJR(KG)</th>
                                 <th style="background-color: #88e48c;" colspan="2">RIPENESS</th>
                                 <th style="background-color: #88e48c;" colspan="2">UNRIPE</th>
                                 <th style="background-color: #88e48c;" colspan="2">OVERRIPE</th>
@@ -533,6 +539,33 @@
     </div>
 
     <script type="module">
+        $(document).ready(function() {
+            const reg = @json($regional); // Assuming $regional contains your data
+
+            // Populate regional select
+            $.each(reg, function(index, regional) {
+                $('#rekap_perhari_reg').append(
+                    `<option value="${regional.id}">${regional.nama}</option>`
+                );
+            });
+
+            // When regional select changes, populate mill select
+            $('#rekap_perhari_reg').on('change', function() {
+                const selectedRegId = $(this).val();
+                $('#mill_id').empty().append('<option value="">Select Mill</option>'); // Clear previous options
+
+                const selectedRegional = reg.find(region => region.id == selectedRegId);
+
+                if (selectedRegional && selectedRegional.mill.length > 0) {
+                    $.each(selectedRegional.mill, function(index, mill) {
+                        $('#mill_id').append(
+                            `<option value="${mill.id}">${mill.nama_mill}</option>`
+                        );
+                    });
+                }
+            });
+        });
+
         document.getElementById('rekapregional').onclick = function() {
             // console.log('pepek');
 
@@ -860,6 +893,7 @@
         function getrekapperhari() {
             let reg = document.getElementById('rekap_perhari_reg').value;
             let bulan = document.getElementById('input_rekap_perhari').value;
+            let mill_id = document.getElementById('mill_id').value;
             // let estate = document.getElementById('estate_select').value;
             // console.log(reg);
             let _token = $('input[name="_token"]').val();
@@ -871,6 +905,7 @@
                 data: {
                     reg: reg,
                     bulan: bulan,
+                    mill_id: mill_id,
                     _token: _token
                 },
                 headers: {
@@ -879,58 +914,67 @@
                 success: function(result) {
                     let parseResult = JSON.parse(result)
 
-                    let mill_data = parseResult['data_mill']
-
                     let tbodymill = document.getElementById('rekap_perhari_data');
-                    Object.entries(mill_data).forEach(([key, value]) => {
-                        let tr = document.createElement('tr');
+                    Object.keys(parseResult).forEach(category => {
+                        Object.keys(parseResult[category]).forEach(subcategory => {
+                            const record = parseResult[category][subcategory];
 
-                        // Create an array to hold all the itemElements
-                        let itemElements = [];
+                            // Create a new row
+                            let tr = document.createElement('tr');
 
-                        // Initialize itemElements array with 'td' elements
-                        for (let index = 0; index < 29; index++) {
-                            itemElements[index] = document.createElement('td');
-                        }
+                            // If subcategory is 'Total', set background color to blue
 
-                        // Assign text values to each itemElement
-                        itemElements[0].innerText = key;
-                        // itemElements[0].colSpan = 2; // Sets the colspan attribute to 2
-                        itemElements[1].innerText = value['mil']['jumlah_janjang_grading'].toLocaleString('id-ID');
-                        itemElements[2].innerText = value['mil']['tonase'].toLocaleString('id-ID');
-                        itemElements[3].innerText = value['mil']['ripeness'].toLocaleString('id-ID');
-                        itemElements[4].innerText = value['mil']['percentage_ripeness'].toFixed(2);
-                        itemElements[5].innerText = value['mil']['unripe'].toLocaleString('id-ID');
-                        itemElements[6].innerText = value['mil']['percentage_unripe'].toFixed(2);
-                        itemElements[7].innerText = value['mil']['overripe'].toLocaleString('id-ID');
-                        itemElements[8].innerText = value['mil']['percentage_overripe'].toFixed(2);
-                        itemElements[9].innerText = value['mil']['empty_bunch'].toLocaleString('id-ID');
-                        itemElements[10].innerText = value['mil']['percentage_empty_bunch'].toFixed(2);
-                        itemElements[11].innerText = value['mil']['rotten_bunch'].toLocaleString('id-ID');
-                        itemElements[12].innerText = value['mil']['percentage_rotten_bunch'].toFixed(2);
-                        itemElements[13].innerText = value['mil']['abnormal'].toLocaleString('id-ID');
-                        itemElements[14].innerText = value['mil']['percentage_abnormal'].toFixed(2);
-                        itemElements[15].innerText = value['mil']['longstalk'].toLocaleString('id-ID');
-                        itemElements[16].innerText = value['mil']['percentage_longstalk'].toFixed(2);
-                        itemElements[17].innerText = value['mil']['vcut'];
-                        itemElements[18].innerText = value['mil']['percentage_vcut'].toFixed(2);
-                        itemElements[19].innerText = value['mil']['dirt_kg'].toLocaleString('id-ID');
-                        itemElements[20].innerText = value['mil']['percentage_dirt'].toFixed(2);
-                        itemElements[21].innerText = value['mil']['loose_fruit_kg'].toLocaleString('id-ID');
-                        itemElements[22].innerText = value['mil']['percentage_loose_fruit'].toFixed(2);
-                        itemElements[23].innerText = value['mil']['kelas_c'].toLocaleString('id-ID');
-                        itemElements[24].innerText = value['mil']['percentage_kelas_c'].toFixed(2);
-                        itemElements[25].innerText = value['mil']['kelas_b'].toLocaleString('id-ID');
-                        itemElements[26].innerText = value['mil']['percentage_kelas_b'].toFixed(2);
-                        itemElements[27].innerText = value['mil']['kelas_a'].toLocaleString('id-ID');
-                        itemElements[28].innerText = value['mil']['percentage_kelas_a'].toFixed(2);
+                            // Create an array to hold all the itemElements
+                            let itemElements = [];
 
-                        // Append each itemElement to the tr
-                        itemElements.forEach(itemElement => tr.appendChild(itemElement));
-
-                        // Append the tr to the tbody
-                        tbodymill.appendChild(tr);
+                            // Initialize itemElements array with 'td' elements
+                            for (let index = 0; index < 32; index++) {
+                                itemElements[index] = document.createElement('td');
+                            }
+                            itemElements[0].innerText = category;
+                            itemElements[1].innerText = subcategory;
+                            itemElements[2].innerText = record['jumlah_janjang_spb'];
+                            itemElements[3].innerText = record['jumlah_janjang_grading'];
+                            itemElements[4].innerText = record['tonase'];
+                            itemElements[5].innerText = record['bjr'].toFixed(2);
+                            itemElements[6].innerText = record['ripeness'].toLocaleString('id-ID');
+                            itemElements[7].innerText = record['percentage_ripeness'].toFixed(2);
+                            itemElements[8].innerText = record['unripe'].toLocaleString('id-ID');
+                            itemElements[9].innerText = record['percentage_unripe'].toFixed(2);
+                            itemElements[10].innerText = record['overripe'].toLocaleString('id-ID');
+                            itemElements[11].innerText = record['percentage_overripe'].toFixed(2);
+                            itemElements[12].innerText = record['empty_bunch'].toLocaleString('id-ID');
+                            itemElements[13].innerText = record['percentage_empty_bunch'].toFixed(2);
+                            itemElements[14].innerText = record['rotten_bunch'].toLocaleString('id-ID');
+                            itemElements[15].innerText = record['percentage_rotten_bunch'].toFixed(2);
+                            itemElements[16].innerText = record['abnormal'].toLocaleString('id-ID');
+                            itemElements[17].innerText = record['percentage_abnormal'].toFixed(2);
+                            itemElements[18].innerText = record['longstalk'].toLocaleString('id-ID');
+                            itemElements[19].innerText = record['percentage_longstalk'].toFixed(2);
+                            itemElements[20].innerText = record['vcut'];
+                            itemElements[21].innerText = record['percentage_vcut'].toFixed(2);
+                            itemElements[22].innerText = record['dirt_kg'].toLocaleString('id-ID');
+                            itemElements[23].innerText = record['percentage_dirt'].toFixed(2);
+                            itemElements[24].innerText = record['loose_fruit_kg'].toLocaleString('id-ID');
+                            itemElements[25].innerText = record['percentage_loose_fruit'].toFixed(2);
+                            itemElements[26].innerText = record['kelas_c'].toLocaleString('id-ID');
+                            itemElements[27].innerText = record['percentage_kelas_c'].toFixed(2);
+                            itemElements[28].innerText = record['kelas_b'].toLocaleString('id-ID');
+                            itemElements[29].innerText = record['percentage_kelas_b'].toFixed(2);
+                            itemElements[30].innerText = record['kelas_a'].toLocaleString('id-ID');
+                            itemElements[31].innerText = record['percentage_kelas_a'].toFixed(2);
+                            itemElements.forEach(itemElement => tr.appendChild(itemElement));
+                            if (subcategory === 'Total') {
+                                itemElements.forEach(itemElement => {
+                                    itemElement.style.backgroundColor = "#609cd4"; // Apply background color
+                                    itemElement.style.color = "white"; // Optionally, make the text white for better contrast
+                                });
+                            }
+                            // Append row to the table body
+                            tbodymill.appendChild(tr);
+                        });
                     });
+
 
                     Swal.close();
                 },

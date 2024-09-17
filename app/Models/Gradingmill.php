@@ -21,4 +21,9 @@ class Gradingmill extends Model
     {
         return $this->belongsTo(Estate::class, 'estate', 'est');
     }
+
+    public function Listmill()
+    {
+        return $this->belongsTo(Listmill::class, 'mill', 'mill');
+    }
 }

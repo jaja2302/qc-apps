@@ -17,4 +17,9 @@ class Regional extends Model
     {
         return $this->hasMany(Wilayah::class, 'regional');
     }
+
+    public function Mill()
+    {
+        return $this->hasMany(Listmill::class, 'reg', 'id');
+    }
 }

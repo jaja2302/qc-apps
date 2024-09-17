@@ -20,7 +20,8 @@ class GradingController extends Controller
     public function index(Request $request)
     {
         $regionalId = $request->input('regional_id');
-        $reg = Regional::query()->where('id', '!=', 5)->get();
+        $reg = Regional::query()->where('id', '!=', 5)->with('Mill')->get();
+        // dd($reg);
         $estates = collect(); // Initialize an empty collection
 
         if ($regionalId) {
@@ -73,11 +74,11 @@ class GradingController extends Controller
     public function getrekapperhari_dashboard(Request $request)
     {
         $reg = $request->input('reg');
+        $mill = $request->input('mill_id');
         $bulan = $request->input('bulan');
-        $type = 'perbulan';
+        // dd($reg, $mill);
 
-
-        $result = getdatamill($bulan, $reg, $type);
+        $result = rekap_estate_mill_perbulan_perhari($bulan, $reg, $mill);
         // dd($result);
         echo json_encode($result);
         exit();
