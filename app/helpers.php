@@ -12648,7 +12648,7 @@ if (!function_exists('rekap_estate_mill_perbulan_perhari')) {
                 $tot_abn_sakit = 0;
                 $tot_abn_kastrasi = 0;
                 $tot_loose_fruit = 0;
-
+                $unit = count($values);
                 foreach ($values as $key => $value) {
                     $tonase = 0;
                     $jumlah_janjang_grading = 0;
@@ -12669,6 +12669,7 @@ if (!function_exists('rekap_estate_mill_perbulan_perhari')) {
                     $kelas_a = 0;
                     $kelas_b = 0;
                     $kelas_c = 0;
+
                     foreach ($value as $key2 => $value1) {
                         $tonase += $value1['tonase'];
                         $jumlah_janjang_grading += $value1['jjg_grading'];
@@ -12693,6 +12694,8 @@ if (!function_exists('rekap_estate_mill_perbulan_perhari')) {
                         $kelas_a += $value1['kelas_a'];
                         $kelas_b += $value1['kelas_b'];
                         $kelas_c += $value1['kelas_c'];
+                        $no_plat = $value1['no_plat'];
+                        $units = Carbon::parse($value1['datetime'])->format('H:i');
                     }
                     // dd($value);
                     $abnormal = $abn_partheno + $abn_hard + $abn_sakit +  $abn_kastrasi;
@@ -12754,6 +12757,8 @@ if (!function_exists('rekap_estate_mill_perbulan_perhari')) {
                         'percentage_kelas_a' => $persentage_kelas_a,
                         'percentage_kelas_b' => $persentage_kelas_b,
                         'percentage_kelas_c' => $persentage_kelas_c,
+                        'no_plat' => $no_plat,
+                        'unit' => $units,
                     ];
 
                     $tot_tonase += $tonase;
@@ -12840,6 +12845,8 @@ if (!function_exists('rekap_estate_mill_perbulan_perhari')) {
                     'percentage_kelas_a' => $persentage_kelas_a,
                     'percentage_kelas_b' => $persentage_kelas_b,
                     'percentage_kelas_c' => $persentage_kelas_c,
+                    'no_plat' => null,
+                    'unit' => $unit,
                 ];
             }
         }
