@@ -364,6 +364,7 @@
                                     @csrf
                                     <input type="hidden" id="getregionaltiga" name="getregionaltiga">
                                     <input type="hidden" id="getdatetiga" name="getdatetiga">
+                                    <input type="hidden" id="mill_perhari" name="mill_perhari">
                                     <input type="hidden" name="tipedata" value="rekaptiga">
                                     <button type="submit" class="btn btn-primary">Export</button>
                                 </form>
@@ -916,6 +917,7 @@
                 },
                 success: function(result) {
                     let parseResult = JSON.parse(result)
+                    console.log(parseResult);
 
                     let tbodymill = document.getElementById('rekap_perhari_data');
                     Object.keys(parseResult).forEach(category => {
@@ -1098,6 +1100,23 @@
             newWindow.close();
         }
 
+        function handleExportSubmit2(event, formId, regionalSelectId, dateInputId, hiddenRegionalId, hiddenDateId, millID) {
+            event.preventDefault();
+
+            const regionalValue = document.getElementById(regionalSelectId).value;
+            const dateValue = document.getElementById(dateInputId).value;
+            const millValue = document.getElementById('mill_id').value;
+
+            document.getElementById(hiddenRegionalId).value = regionalValue;
+            document.getElementById(hiddenDateId).value = dateValue;
+            document.getElementById(millID).value = millValue;
+
+            const newWindow = window.open('', '_blank');
+            document.getElementById(formId).target = '_blank';
+            document.getElementById(formId).submit();
+            newWindow.close();
+        }
+
         document.getElementById('exportForm').addEventListener('submit', function(event) {
             handleExportSubmit(event, 'exportForm', 'regional_select', 'inputbulan', 'getregional', 'getdate');
         });
@@ -1106,7 +1125,7 @@
             handleExportSubmit(event, 'exportFormdua', 'regional_select_mill', 'inputbulan_mill', 'getregionaldua', 'getdatedua');
         });
         document.getElementById('exportFormtiga').addEventListener('submit', function(event) {
-            handleExportSubmit(event, 'exportFormtiga', 'rekap_perhari_reg', 'input_rekap_perhari', 'getregionaltiga', 'getdatetiga');
+            handleExportSubmit2(event, 'exportFormtiga', 'rekap_perhari_reg', 'input_rekap_perhari', 'getregionaltiga', 'getdatetiga', 'mill_perhari');
         });
         document.getElementById('exportFormempat').addEventListener('submit', function(event) {
             handleExportSubmit(event, 'exportFormempat', 'rekap_perfadeling_reg', 'input_rekap_perfadeling', 'getregionalempat', 'getdateempat');

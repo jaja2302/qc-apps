@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\Gradingperhari;
 use App\Exports\Gradingregional;
 use App\Models\Estate;
 use App\Models\Gradingmill;
@@ -80,7 +81,7 @@ class GradingController extends Controller
 
         $result = rekap_estate_mill_perbulan_perhari($bulan, $reg, $mill);
         // dd($result);
-        echo json_encode($result);
+        echo json_encode($result['result']);
         exit();
     }
 
@@ -323,12 +324,13 @@ class GradingController extends Controller
     {
 
         $check = $request->input('tipedata');
-
+        // dd($check);
         if ($check == 'rekapsatu') {
             $date = $request->input('getdate');
             $reg = $request->input('getregional');
             $type = 'perbulan';
             $result = getdatamill($date, $reg, $type);
+            return Excel::download(new Gradingregional($result, $type), 'Excel Grading Regional-' . $date . '-' . 'Bulan-' . $reg . '.xlsx');
         } else if ($check == 'rekapdua') {
             $date = $request->input('getdatedua');
             $reg = $request->input('getregionaldua');
@@ -337,21 +339,23 @@ class GradingController extends Controller
             // dd($data);
 
             $result['data_mill'] = $data['data_mill'];
+            return Excel::download(new Gradingregional($result, $type), 'Excel Grading Regional-' . $date . '-' . 'Bulan-' . $reg . '.xlsx');
         } else if ($check == 'rekaptiga') {
             $date = $request->input('getdatetiga');
             $reg = $request->input('getregionaltiga');
+            $mill_perhari = $request->input('mill_perhari');
             $type = 'perbulan';
-            $data = getdatamill($date, $reg, $type);
+            // dd($mill_perhari);
+            $data = rekap_estate_mill_perbulan_perhari($date, $reg, $mill_perhari);
             // dd($data);
-
-            $result['data_mill'] = $data['data_mill'];
+            return Excel::download(new Gradingperhari($data), 'Excel Grading Regional-' . $date . '-' . 'Bulan-' . $reg . '.xlsx');
         } else {
             $date = $request->input('getdateempat');
             $reg = $request->input('getregionalempat');
             $type = 'perafdeling';
             $result = getdatamill($date, $reg, $type);
             // dd($data);
+            return Excel::download(new Gradingregional($result, $type), 'Excel Grading Regional-' . $date . '-' . 'Bulan-' . $reg . '.xlsx');
         }
-        return Excel::download(new Gradingregional($result, $type), 'Excel Grading Regional-' . $date . '-' . 'Bulan-' . $reg . '.xlsx');
     }
 }
