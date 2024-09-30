@@ -11,8 +11,9 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class Gradingperhari implements FromView
+class Gradingperhari implements FromView, ShouldAutoSize
 {
     /**
      * @return \Illuminate\Support\Collection

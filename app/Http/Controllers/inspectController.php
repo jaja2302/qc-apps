@@ -8396,16 +8396,22 @@ class inspectController extends Controller
         $est = $request->input('est');
         $afd = $request->input('afd');
         $menu = $request->input('menu');
-        $jabatan = $request->input('jabatan');
+
         $nama = $request->input('nama');
         $action = $request->input('action');
         $tanggal_approve = $request->input('tanggal_approve');
         $departemen = $request->input('departemen');
         $lokasikerja = $request->input('lokasikerja');
 
-        $data_user = Pengguna::where('user_id', $user_id)->with(['Jabatan', 'Departement'])->first();
+        $data_user = Pengguna::where('user_id', $user_id)
+            ->with(['Jabatan', 'Departement'])
+            ->first();
 
-        // dd($data_user);
+        $jabatan = ($request->input('jabatan') === null)
+            ? $data_user->Jabatan->nama
+            : $request->input('jabatan');
+
+        // dd($data_user,$jabatan);
         // dd($Tanggal, $est, $afd,$menu,$jabatan,$nama,$action,$tanggal_approve,$departemen,$lokasikerja);
         try {
             DB::beginTransaction();
@@ -8427,7 +8433,7 @@ class inspectController extends Controller
                 $verifby_manager = $jabatan === 'Manager' ? 1 : 0;
                 $verifby_asisten = ($jabatan === 'Asisten' || $jabatan === 'Asisten Afdeling') ? 1 : 0;
             }
-
+            // dd($verifby_askep, $verifby_manager, $verifby_asisten);
             if ($currentStatus == null) {
 
                 $data = [
@@ -8490,7 +8496,7 @@ class inspectController extends Controller
                         'lok_manager' => $lokasikerja,
                     ]);
                 } else {
-                    //  dd('case2');
+                    //  dd('case2',$jabatan);
                     DB::rollback();
                     return response()->json('error', 400);
                 }
@@ -8499,6 +8505,7 @@ class inspectController extends Controller
                 return response()->json('success', 200);
             }
         } catch (\Throwable $th) {
+            // dd($th);
             DB::rollback();
             return response()->json(['error' => $th->getMessage()], 500);
         }

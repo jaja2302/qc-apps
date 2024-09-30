@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Http;
 class AbsensiController extends Controller
 {
     //
-   public function index(Request $request)
+    public function index(Request $request)
     {
 
         // use Carbon\Carbon;
@@ -25,6 +25,7 @@ class AbsensiController extends Controller
         $userabsen = DB::table('pengguna')
             ->select('pengguna.*')
             ->where('departemen', 'QC')
+            ->orWhere('id_departement', 43)
             ->where('lokasi_kerja', $lok)
             ->where('email', 'like', '%mandor%')
             ->get();
@@ -38,6 +39,7 @@ class AbsensiController extends Controller
         $user_Data = DB::table('pengguna')
             ->select('pengguna.*')
             ->where('departemen', 'QC')
+            ->orWhere('id_departement', 43)
             ->where('lokasi_kerja', $lok)
             ->where('email', 'like', '%mandor%')
             ->get();
@@ -119,6 +121,7 @@ class AbsensiController extends Controller
         $user_Data = DB::table('pengguna')
             ->select('pengguna.*')
             ->where('departemen', 'QC')
+            ->orWhere('id_departement', 43)
             ->where('lokasi_kerja', $regs)
             ->where('email', 'like', '%mandor%')
             ->get();
@@ -137,7 +140,7 @@ class AbsensiController extends Controller
                 $user_default[$key] = [
                     'id' => $value2['user_id'],
                     'nama' => $value2['nama_lengkap'],
-                    'payroll' => '-',
+                    // 'payroll' => '-',
                 ];
 
                 // Loop through $datesnew and add each date with a default value of "-"
@@ -198,7 +201,7 @@ class AbsensiController extends Controller
                 // dd($value2);
                 foreach ($value2 as $key3 => $value3) {
                     $date = $value3['waktu_absensi'];
-                    $formattedTime = date('H:i:s', strtotime($date));
+                    $formattedTime = date('H:i', strtotime($date));
 
 
                     $specificValues = ['Sakit', 'Cuti', 'Izin'];
@@ -606,6 +609,7 @@ class AbsensiController extends Controller
         $user_Data = DB::table('pengguna')
             ->select('pengguna.*')
             ->where('departemen', 'QC')
+            ->orWhere('id_departement', 43)
             ->where('lokasi_kerja', $regs)
             ->where('email', 'like', '%mandor%')
             ->get();
@@ -624,7 +628,7 @@ class AbsensiController extends Controller
                 $user_default[$key] = [
                     'id' => $value2['user_id'],
                     'nama' => $value2['nama_lengkap'],
-                    'payroll' => '-',
+                    // 'payroll' => '-',
                 ];
 
                 // Loop through $datesnew and add each date with a default value of "-"
@@ -685,7 +689,7 @@ class AbsensiController extends Controller
                 // dd($value2);
                 foreach ($value2 as $key3 => $value3) {
                     $date = $value3['waktu_absensi'];
-                    $formattedTime = date('H:i:s', strtotime($date));
+                    $formattedTime = date('H:i', strtotime($date));
 
 
                     $specificValues = ['Sakit', 'Cuti', 'Izin'];
@@ -1000,6 +1004,7 @@ class AbsensiController extends Controller
         $user_Data = DB::table('pengguna')
             ->select('pengguna.*')
             ->where('departemen', 'QC')
+            ->orWhere('id_departement', 43)
             ->where('lokasi_kerja', $lok)
             ->where('email', 'like', '%mandor%')
             ->pluck('user_id');
@@ -1039,7 +1044,7 @@ class AbsensiController extends Controller
                     }
                 }
                 $date = $value1['waktu_absensi'];
-                $formattedTime = date('H:i:s', strtotime($date));
+                $formattedTime = date('H:i', strtotime($date));
 
                 $imgdata[$key]['nama'] = $value1['nama_user'];
                 $imgdata[$key]['foto'] = $value1['foto'];
@@ -1054,7 +1059,7 @@ class AbsensiController extends Controller
         $arrView['data'] = $imgdata; // Ensure it's a string
         return response()->json($arrView); // Laravel's response to JSON
     }
-    
+
     public function getEdit(Request $request)
     {
         $userid = $request->input('userId');
@@ -1099,7 +1104,7 @@ class AbsensiController extends Controller
         return response()->json($table);
     }
 
-   
+
     public function crudAbsensi(Request $request)
     {
         $iddata = $request->input('id');
@@ -1150,7 +1155,7 @@ class AbsensiController extends Controller
                 break;
         }
     }
-   public function creatAbsen(Request $request)
+    public function creatAbsen(Request $request)
     {
 
 
@@ -1256,5 +1261,4 @@ class AbsensiController extends Controller
         $dataarr = 'User:' . $username . ' ' . 'Tanggal:' . Carbon::now() . ' ' . 'Melakukan: Tambah data absensi';
         sendwhatsapp($dataarr);
     }
-
 }

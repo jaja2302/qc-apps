@@ -72,17 +72,7 @@ class inspeksidashController extends Controller
             }
         }
         // dd($rekap_per_wil);
-        $datachart_est = [];
-        foreach ($rekap_per_estate as $key => $value) {
-            foreach ($value as $key1 => $value1) {
-                foreach ($value1 as $key2 => $value2) {
 
-                    $datachart_est[$key1] = $value2;
-                }
-            }
-        }
-        unset($datachart_est['SRE']);
-        unset($datachart_est['LDE']);
         // dd($rekap_per_estate);
         $arr = array();
 
@@ -90,7 +80,7 @@ class inspeksidashController extends Controller
         $arr['rekap_per_estate'] = $rekap_per_estate;
         $arr['rekap_per_wil'] = $rekap_per_wil;
         $arr['rekap_per_reg'] = $result['datareg'];
-        $arr['datachart'] = $datachart_est;
+
 
         // dd($rekap_per_afdeling, $rekap_per_estate);
         // Return JSON response if needed

@@ -11,8 +11,8 @@ class adminpanelController extends Controller
     public function dashboard()
     {
         $query = DB::connection('mysql2')->table('asisten_qc')
-        ->select('asisten_qc.*')
-        ->get();
+            ->select('asisten_qc.*')
+            ->get();
 
         $queryEst = DB::connection('mysql2')->table('estate')->whereIn('wil', [1, 2, 3])->get();
         $queryAfd = DB::connection('mysql2')->table('afdeling')->select('nama')->groupBy('nama')->get();
@@ -28,8 +28,9 @@ class adminpanelController extends Controller
 
         $list_qc = DB::table('pengguna')
             ->select('pengguna.*')
-            ->where('pengguna.lokasi_kerja', '=', $lokasi)
-            ->where('departemen', '=', 'QC')
+            // ->where('pengguna.lokasi_kerja', '=', $lokasi)
+            ->where('email', 'like', '%QC%')
+            ->orwhere('id_departement', 43)
             ->get();
 
         $lokexclaide = ['SULUNG RANCH', 'DEPT IT', 'QC', 'AGROSERVICES', 'MILL', 'Hortikultura', 'Perkebunan'];

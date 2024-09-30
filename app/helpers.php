@@ -12846,8 +12846,9 @@ if (!function_exists('rekap_estate_mill_perbulan_perhari')) {
                     'percentage_kelas_a' => $persentage_kelas_a,
                     'percentage_kelas_b' => $persentage_kelas_b,
                     'percentage_kelas_c' => $persentage_kelas_c,
-                    'no_plat' => null,
-                    'unit' => $unit,
+                    'no_plat' => $unit,
+                    'unit' => null,
+                    'total_test' => $unit,
                     'total' => '----------',
                     'keys' => $keys,
                 ];
@@ -12899,7 +12900,7 @@ if (!function_exists('rekap_estate_mill_perbulan_perhari')) {
             $kelas_a_tod += $value['kelas_a'];
             $kelas_b_tod += $value['kelas_b'];
             $kelas_c_tod += $value['kelas_c'];
-            $unit_tod += $value['unit'];
+            $unit_tod += $value['total_test'];
         }
         $tot_bjr = $jumlah_janjang_grading_tod > 0 ? $tonase_tod / $jumlah_janjang_grading_tod : 0;
 
@@ -13192,5 +13193,20 @@ if (!function_exists('cetakPDFFI')) {
         // dd($mergedArrays);
 
         return $mergedArrays;
+    }
+}
+
+
+if (!function_exists('formatangka')) {
+    function formatangka($value)
+    {
+        return number_format($value, 0, ',', '.');
+    }
+}
+
+if (!function_exists('roundangka_decimal')) {
+    function roundangka_decimal($value)
+    {
+        return round($value, 2);
     }
 }

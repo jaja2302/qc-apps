@@ -47,12 +47,11 @@
         <table style="width: 100%; border-collapse: collapse; border: 1px solid black; font-size : 15px;">
             <thead>
                 <tr>
-                    <th style="background-color: #e8ecdc;border: 1px solid black;" colspan="{{$data['JumlahBulan'] + 3}}">Absensi User QC</th>
+                    <th style="background-color: #e8ecdc;border: 1px solid black;" colspan="{{$data['JumlahBulan'] + 2}}">Absensi User QC</th>
 
                 </tr>
                 <tr>
                     <th style="background-color: #e8ecdc;border: 1px solid black;" rowspan="2">NAMA</th>
-                    <TH style="background-color: #e8ecdc;border: 1px solid black;" rowspan="2">PAYROLL</TH>
                     <TH style="background-color: #e8ecdc;border: 1px solid black;" colspan="{{$data['JumlahBulan']}}">{{$data['header_month']}}</TH>
                     <TH style="background-color: #e8ecdc;border: 1px solid black;" rowspan="2">Total</TH>
                 </tr>
@@ -67,7 +66,6 @@
                 @foreach ($data['Dataabsensi'] as $items)
                 <tr>
                     <td style="border-right: 1px solid black;border-bottom: 1px solid black;width:8%">{{ $items['nama'] }}</td>
-                    <td style="border-bottom: 1px solid black;text-align: center;border-right: 1px solid black;width: 10px">{{ $items['payroll'] }}</td>
                     @php
                     $dateFields = collect($items)->filter(function ($value, $key) {
                     return strpos($key, 'date') === 0;

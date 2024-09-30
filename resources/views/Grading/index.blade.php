@@ -1,4 +1,36 @@
 <x-layout.app>
+    <style>
+        .table {
+            table-layout: auto;
+            /* Allow the table to adjust based on content */
+            width: 100%;
+            /* Ensure the table takes up the full available width */
+        }
+
+        th,
+        td {
+            white-space: nowrap;
+            /* Prevent wrapping text in the cells */
+        }
+
+        th {
+            text-align: center;
+            /* Center align the headers */
+        }
+
+        td {
+            padding: 5px;
+            /* Add some padding for better readability */
+        }
+
+        td:nth-child(3),
+        th:nth-child(3) {
+            width: auto;
+            /* Specifically target the 'NO POLISI' column */
+            min-width: 150px;
+            /* Set a minimum width for 'NO POLISI' */
+        }
+    </style>
     <div class="card">
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -379,23 +411,23 @@
                                 <th colspan="35" style="background-color: #c8e4f4;">BERDASARKAN ESTATE</th>
                             </tr>
                             <tr>
-                                <th rowspan="3" class="align-middle" style="background-color: #f0ecec;">Estate</th>
-                                <th rowspan="3" class="align-middle" style="background-color: #f0ecec;">Afdeling</th>
+                                <th rowspan="3" class="align-middle" style="background-color: #f0ecec;">ESTATE</th>
+                                <th rowspan="3" class="align-middle" style="background-color: #f0ecec;">AFDELING</th>
                                 <th style="background-color: #f0ecec;" colspan="7">UNIT SORTASI</th>
                                 <th style="background-color: #88e48c;" colspan="20">HASIL GRADING</th>
                                 <th style="background-color: #f8c4ac;" colspan="6">KELAS JANJANG</th>
                             </tr>
                             <tr>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">No Polisi</th>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">Waktu Grading</th>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">TONASE Timbangan(KG)</th>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG SPD</th>
+                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">NO POLISI</th>
+                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">WAKTU GRADING</th>
+                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">TONASE TIMBANGAN (KG)</th>
+                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG SPB</th>
                                 <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG GRADING</th>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">TONASE Grading(KG)</th>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">BJR(KG)</th>
+                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">TONASE GRADING (KG)</th>
+                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">BJR (KG)</th>
                                 <th style="background-color: #88e48c;" colspan="2">RIPENESS</th>
                                 <th style="background-color: #88e48c;" colspan="2">UNRIPE</th>
-                                <th style="background-color: #88e48c;" colspan="2">OVERRIPE</th>
+                                <th style="background-color: #88e48c;" colspan="2">OVER-RIPE</th>
                                 <th style="background-color: #88e48c;" colspan="2">EMPTY BUNCH</th>
                                 <th style="background-color: #88e48c;" colspan="2">ROTTEN BUNCH</th>
                                 <th style="background-color: #88e48c;" colspan="2">ABNORMAL</th>
@@ -902,7 +934,7 @@
             // console.log(reg);
             let _token = $('input[name="_token"]').val();
             $('#rekap_perhari_data').empty()
-            console.log('rekap_perhari_data');
+            // console.log('rekap_perhari_data');
             $.ajax({
                 url: "{{ route('getrekapperhari_dashboard') }}",
                 method: "GET",

@@ -178,7 +178,7 @@
                                             <tr>
                                                 <th scope="col" rowspan="3" style="text-align: center; vertical-align: middle;">NAMA</th>
 
-                                                <th scope="col" rowspan="3" style="text-align: center; vertical-align: middle;">PAYROLL</th>
+
                                             </tr>
                                             <tr>
                                                 <th scope="col" colspan="31" style="text-align: center;" id="header_month">{{$header_month}}</th>
