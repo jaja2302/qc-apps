@@ -1,5 +1,23 @@
 <x-layout.app>
     @if (strpos(session('departemen'), 'QC') !== false && session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' || session('jabatan') == 'Admin' || auth()->user()->id_departement == '43' && in_array(auth()->user()->id_jabatan, ['10', '15', '20', '4', '5', '6']))
+    @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    @endif
+
+    @if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ session('error') }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    @endif
+
     <div class="jumbotron">
         <h1 class="display-4">Perhatian</h1>
         <p class="lead">Untuk meningkatkan sistematisasi dan konsistensi sistem, kami mohon agar Anda menggunakan situs web manajemen pengguna yang telah disediakan. Hal ini bertujuan untuk menghindari kesalahan data atau kerusakan.</p>
@@ -158,7 +176,7 @@
                                             @foreach ($asisten as $value)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $value->nama }}</td>
+                                                <td>{{ $value->User->nama_lengkap ?? 'Vacant'}}</td>
                                                 <td>{{ $value->est }}</td>
                                                 <td>{{ $value->afd }}</td>
                                                 <td style="display: inline-flex">
@@ -184,8 +202,12 @@
                                                                 <div class="modal-body">
                                                                     <input type="hidden" name="id" value="{{ $value->id }}">
                                                                     <div class="form-group">
-                                                                        <label for="nama">Nama</label>
-                                                                        <input type="text" class="form-control" id="nama" name="nama" value="{{ $value->nama }}" required>
+                                                                        <label for="nama">User Id</label>
+                                                                        <input type="number" class="form-control" id="user_id" name="user_id" value="{{ $value->user_id }}" required>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="afd">Nama </label>
+                                                                        <input type="text" class="form-control" id="user_nama" name="user_nama" value="{{ $value->User->nama_lengkap ?? 'Vacant' }}" required>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="est">Estate</label>
@@ -194,6 +216,13 @@
                                                                     <div class="form-group">
                                                                         <label for="afd">Afdeling</label>
                                                                         <input type="text" class="form-control" id="afd" name="afd" value="{{ $value->afd }}" required>
+                                                                    </div>
+                                                                    <div>
+                                                                        <label for="">Untuk mengetahui User ID,Silahkan menggunakan akun admin anda di :
+                                                                            <span>
+                                                                                <a href="https://management.srs-ssms.com/" target="_blank">Management users</a>
+                                                                            </span>
+                                                                        </label>
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer">
@@ -219,8 +248,8 @@
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="form-group">
-                                                                        <label for="nama">Nama</label>
-                                                                        <input type="text" class="form-control" id="nama" name="nama" value="" required>
+                                                                        <label for="nama">User ID</label>
+                                                                        <input type="number" class="form-control" id="nama" name="nama" value="" required>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="est">Estate</label>

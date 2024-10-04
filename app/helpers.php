@@ -1,6 +1,7 @@
 <?php
 // Important functions
 
+use App\Models\Asistenqc;
 use App\Models\BlokMatch;
 use App\Models\Gradingmill;
 use App\Models\Listmill;
@@ -3369,10 +3370,7 @@ if (!function_exists('rekap_pertahun')) {
 if (!function_exists('rekap_qcinspeks_perbulan')) {
     function rekap_qcinspeks_perbulan($regional, $bulan)
     {
-        $queryAsisten = DB::connection('mysql2')->table('asisten_qc')
-            ->select('asisten_qc.*')
-            ->get();
-        $queryAsisten = json_decode($queryAsisten, true);
+
         // dd($value2['datetime'], $endDate);
         $queryEste = DB::connection('mysql2')->table('estate')
             ->select('estate.*')
@@ -4000,6 +3998,15 @@ if (!function_exists('rekap_qcinspeks_perbulan')) {
             // $totalWil = $skor_bh + $skor_brd + $skor_ps;
             $totalWil = skor_brd_ma($brdPerwil) + skor_buah_Ma($sumPerBHWil) + skor_palepah_ma($perPiWil);
 
+
+            if ($key == 10) {
+                $news_key = 'Plasma';
+            } else if ($key == 11) {
+                $news_key = 'Inti';
+            } else {
+                $news_key =  convertToRoman($key);
+            }
+
             $rekap[$key]['wil']['wilancak'] = [
                 'wil_Data' => '-----------------------',
                 'data' =>  $data,
@@ -4028,11 +4035,19 @@ if (!function_exists('rekap_qcinspeks_perbulan')) {
                 'skor_brdcak' =>  skor_brd_ma($brdPerwil),
                 'skor_pscak' =>  skor_palepah_ma($perPiWil),
                 'skor_akhircak' =>  $totalWil,
-                'est' => convertToRoman($key),
+                'est' => $news_key,
                 'afd' => 'WIL',
                 'mutuancak' => '-----------------------------------'
             ];
         } else {
+            if ($key == 10) {
+                $news_key = 'Plasma';
+            } else if ($key == 11) {
+                $news_key = 'Inti';
+            } else {
+                $news_key =  convertToRoman($key);
+            }
+
             $rekap[$key]['wil']['wilancak'] = [
                 'wil_Data' => '-----------------------',
                 'pokok_samplecak' => 0,
@@ -4060,7 +4075,7 @@ if (!function_exists('rekap_qcinspeks_perbulan')) {
                 'skor_brdcak' => 0,
                 'skor_pscak' => 0,
                 'skor_akhircak' => 0,
-                'est' => convertToRoman($key),
+                'est' => $news_key,
                 'afd' => 'WIL',
                 'mutuancak' => '-----------------------------------'
             ];
@@ -5745,7 +5760,7 @@ if (!function_exists('rekap_pertahun_mutubuah')) {
 
                     foreach ($queryAsisten as $ast => $asisten) {
                         if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                            $sidak_buah[$key][$key1]['nama_asisten'] = $asisten['nama'];
+                            $sidak_buah[$key][$key1]['nama_asisten'] = $asisten->user->nama;
                         }
                     }
                     $jjg_samplex += $jjg_sample;
@@ -6603,14 +6618,18 @@ if (!function_exists('get_nama_asisten')) {
             $new_afd = $afd;
         }
 
-        $query = DB::connection('mysql2')->table('asisten_qc')
+        // $query = DB::connection('mysql2')->table('asisten_qc')
+        //     ->where('est', $est)
+        //     ->where('afd', $new_afd)
+        //     ->first();
+        $query = Asistenqc::with('User')
             ->where('est', $est)
             ->where('afd', $new_afd)
             ->first();
-
+        // dd($query[0]);
         // Check if the query result is not null
         if ($query !== null) {
-            return $query->nama;
+            return $query->user->nama_lengkap ?? 'Vacant';
         } else {
             return '-';  // Return null or a default value if no record is found
         }
@@ -6625,15 +6644,14 @@ if (!function_exists('get_nama_em')) {
         } else {
             $new_est = $est;
         }
-        $query =  DB::connection('mysql2')->table('asisten_qc')
+        $query = Asistenqc::with('User')
             ->where('est', $new_est)
             ->where('afd', 'EM')
             ->first();
-
         if ($query !== null) {
-            return $query->nama;
+            return $query->user->nama_lengkap ?? 'Vacant';
         } else {
-            return '-';  // Return null or a default value if no record is found
+            return 'Nama tidak ditemukan';
         }
     }
 }
@@ -6642,15 +6660,16 @@ if (!function_exists('get_nama_gm')) {
     {
         $new_will = convertToRoman($wil);
         $new_will = 'WIL-' . $new_will;
-        $query =  DB::connection('mysql2')->table('asisten_qc')
+
+
+        $query = Asistenqc::with('User')
             ->where('est', $new_will)
             ->where('afd', 'GM')
             ->first();
-
         if ($query !== null) {
-            return $query->nama;
+            return $query->user->nama_lengkap ?? 'Vacant';
         } else {
-            return '-';  // Return null or a default value if no record is found
+            return 'Nama tidak ditemukan';
         }
     }
 }
@@ -6659,15 +6678,15 @@ if (!function_exists('get_nama_rh')) {
     {
         $new_will = convertToRoman($rh);
         $new_will = 'REG-' . $new_will;
-        $query =  DB::connection('mysql2')->table('asisten_qc')
+
+        $query = Asistenqc::with('User')
             ->where('est', $new_will)
             ->where('afd', 'RH')
             ->first();
-
         if ($query !== null) {
-            return $query->nama;
+            return $query->user->nama_lengkap ?? 'Vacant';
         } else {
-            return '-';  // Return null or a default value if no record is found
+            return 'Nama tidak ditemukan';
         }
     }
 }

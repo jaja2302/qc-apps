@@ -2258,11 +2258,13 @@
                     let table3_wil = rekap_per_wil[3] ?? rekap_per_wil[6] ?? []
                     let theadreg = document.getElementById('theadreg');
                     // console.log(rekap_per_wil);
+                    // console.log(rekap_per_reg);
+                    TableForWilReg(rekap_per_reg, theadreg);
                     TableForWilReg(table1_wil, tbody1);
                     TableForWilReg(table2_wil, tbody2);
                     TableForWilReg(table3_wil, tbody3);
-                    TableForWilReg(rekap_per_reg, theadreg);
-                    // console.log(datachart);
+
+
 
 
                 }

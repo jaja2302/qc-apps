@@ -22,4 +22,9 @@ class Afdeling extends Model
     {
         return $this->hasMany(Blok::class, 'afdeling');
     }
+
+    public function mutu_transport()
+    {
+        return $this->hasMany(mutu_transport::class, 'nama', 'afdeling');
+    }
 }

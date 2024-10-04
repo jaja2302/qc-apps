@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Asistenqc;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -10,9 +11,9 @@ class adminpanelController extends Controller
     //
     public function dashboard()
     {
-        $query = DB::connection('mysql2')->table('asisten_qc')
-            ->select('asisten_qc.*')
-            ->get();
+        $query = Asistenqc::with('User')->get();
+        // dd($query);
+
 
         $queryEst = DB::connection('mysql2')->table('estate')->whereIn('wil', [1, 2, 3])->get();
         $queryAfd = DB::connection('mysql2')->table('afdeling')->select('nama')->groupBy('nama')->get();
@@ -176,7 +177,7 @@ class adminpanelController extends Controller
 
     public function listAsisten2(Request $request)
     {
-        $query = DB::connection('mysql2')->table('asisten_qc')
+        $query = DB::table('asisten_qc')
             ->select('asisten_qc.*')
             ->get();
 
@@ -189,33 +190,50 @@ class adminpanelController extends Controller
 
     public function updateAsisten(Request $request)
     {
-        // Get the asisten by ID
-        $asisten = DB::connection('mysql2')->table('asisten_qc')->where('id', $request->input('id'))->first();
+        DB::connection('mysql2')->beginTransaction(); // Start the transaction
 
-        if ($asisten) {
-            // Update the asisten record
-            DB::connection('mysql2')->table('asisten_qc')->where('id', $request->input('id'))->update([
-                'nama' => $request->input('nama'),
-                'est' => $request->input('est'),
-                'afd' => $request->input('afd')
-            ]);
+        try {
+            // Get the asisten by ID
+            $asisten = DB::table('asisten_qc')->where('id', $request->input('id'))->first();
 
-            return redirect()->back()->with('success', 'Profile updated successfully');
-        } else {
-            return redirect()->back()->with('error', 'Asisten not found!');
+            if ($asisten) {
+                // Update the asisten record
+                DB::table('asisten_qc')->where('id', $request->input('id'))->update([
+                    'user_id' => $request->input('user_id'),
+                    'est' => $request->input('est'),
+                    'afd' => $request->input('afd')
+                ]);
+
+                // Commit the transaction
+                DB::connection('mysql2')->commit();
+
+                return redirect()->back()->with('success', 'Profile updated successfully');
+            } else {
+                // Rollback the transaction if the asisten is not found
+                DB::connection('mysql2')->rollBack();
+                return redirect()->back()->with('error', 'Asisten not found!');
+            }
+        } catch (\Throwable $th) {
+            // Rollback the transaction if an error occurs
+            DB::connection('mysql2')->rollBack();
+
+            // Log the exception
+
+            // Return back with an error message
+            return redirect()->back()->with('error', 'Failed to update profile. Please try again later.');
         }
     }
 
     public function deleteAsisten(Request $request)
     {
-        DB::connection('mysql2')->table('asisten_qc')->where('id', $request->input('id'))->delete();
+        DB::table('asisten_qc')->where('id', $request->input('id'))->delete();
         return redirect()->back()->with('success', 'Data asisten berhasil dihapus!');
     }
 
     public function storeAsisten(Request $request)
     {
-        DB::connection('mysql2')->table('asisten_qc')->insert([
-            'nama' => $request->input('nama'),
+        DB::table('asisten_qc')->insert([
+            'user_id' => $request->input('nama'),
             'est' => $request->input('est'),
             'afd' => $request->input('afd')
         ]);
