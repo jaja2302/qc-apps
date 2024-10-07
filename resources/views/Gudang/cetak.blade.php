@@ -248,7 +248,7 @@
                 @else
                 <td><img src="{{asset('noimage.png')}}" style="weight:75pt;height:150pt"></td>
                 @endif
-                @if ($data->foto_kebersihan_gudang_2)
+                @if (isset($data->foto_kebersihan_gudang_2))
                 <td class="my-cell"><img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/inspeksi_gudang/{{$data->foto_kebersihan_gudang_2}}" class="img-fluid modal-image"></td>
                 @else
                 <td><img src="{{asset('noimage.png')}}" style="weight:75pt;height:150pt"></td>
@@ -426,7 +426,7 @@
                 @else
                 <td><img src="{{asset('noimage.png')}}" style="weight:75pt;height:150pt"></td>
                 @endif
-                @if ($data->foto_kebersihan_gudang_2)
+                @if (isset($data->foto_kebersihan_gudang_2))
                 <td class="my-cell"><img src="https://mobilepro.srs-ssms.com/storage/app/public/qc/inspeksi_gudang/{{$data->foto_kebersihan_gudang_2}}" class="img-fluid modal-image"></td>
                 @else
                 <td><img src="{{asset('noimage.png')}}" style="weight:75pt;height:150pt"></td>
