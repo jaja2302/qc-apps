@@ -914,6 +914,14 @@ if (!function_exists('list_wil')) {
 if (!function_exists('convertToRoman')) {
     function convertToRoman($number)
     {
+        // Check if the input is a string and return it as is
+        if (is_string($number)) {
+            return $number;
+        }
+
+        // Ensure the number is an integer
+        $number = (int)$number;
+
         $result = '';
 
         $numerals = array(
@@ -942,6 +950,7 @@ if (!function_exists('convertToRoman')) {
         return $result;
     }
 }
+
 
 if (!function_exists('detectDuplicates')) {
     function detectDuplicates($data, $columns)
@@ -2080,15 +2089,16 @@ if (!function_exists('rekap_pertahun')) {
 
                         $totalSkorEst =  skor_brd_ma($brdPerjjgEst) + skor_buah_Ma($sumPerBHEst) + skor_palepah_ma($perPlEst);
                         //PENAMPILAN UNTUK PERESTATE
-                        $namaGM = '-';
-                        foreach ($queryAsisten as $asisten) {
+                        // $namaGM = '-';
+                        // foreach ($queryAsisten as $asisten) {
 
-                            // dd($asisten);
-                            if ($asisten['est'] == $key1 && $asisten['afd'] == 'EM') {
-                                $namaGM = $asisten['nama'];
-                                break;
-                            }
-                        }
+                        //     // dd($asisten);
+                        //     if ($asisten['est'] == $key1 && $asisten['afd'] == 'EM') {
+                        //         $namaGM = $asisten['nama'];
+                        //         break;
+                        //     }
+                        // }
+                        $namaGM =  get_nama_em($key1);
                         // $rekap[$key][$key1][$key2]['pokok_samplecak'] = $totalPokok;
                         $rekap[$key][$key1][$key2][$key3]['estate']['ancak'] = [
                             'bulan' => $key1,
@@ -2177,16 +2187,17 @@ if (!function_exists('rekap_pertahun')) {
                         $check_data = 'kosong';
                     }
                     $totalWil = skor_brd_ma($brdPerwil) + skor_buah_Ma($sumPerBHWil) + skor_palepah_ma($perPiWil);
-                    $namaGM = '-';
+                    // $namaGM = '-';
                     $namewil = 'WIL-' . convertToRoman($key);
-                    foreach ($queryAsisten as $asisten) {
+                    // foreach ($queryAsisten as $asisten) {
 
-                        // dd($asisten);
-                        if ($asisten['est'] == $namewil && $asisten['afd'] == 'GM') {
-                            $namaGM = $asisten['nama'];
-                            break;
-                        }
-                    }
+                    //     // dd($asisten);
+                    //     if ($asisten['est'] == $namewil && $asisten['afd'] == 'GM') {
+                    //         $namaGM = $asisten['nama'];
+                    //         break;
+                    //     }
+                    // }
+                    $namaGM = get_nama_gm($namewil);
                     $rekap[$key][$key1][$key2]['wil']['ancak'] = [
                         'bulan' => $key1,
                         'data' =>  $data,
@@ -2220,7 +2231,7 @@ if (!function_exists('rekap_pertahun')) {
                         'est' => 'WIL',
                         'mutuancak' => '-----------------------------------'
                     ];
-
+                    // dd($rekap);
                     $pokok_panenreg += $pokok_panenWil;
                     $jum_hareg += $jum_haWil;
                     $janjang_panenreg += $janjang_panenWilx;
@@ -2271,16 +2282,17 @@ if (!function_exists('rekap_pertahun')) {
                     $check_data = 'kosong';
                 }
                 $totalWil = skor_brd_ma($brdPerwil) + skor_buah_Ma($sumPerBHWil) + skor_palepah_ma($perPiWil);
-                $namaGM = '-';
+                // $namaGM = '-';
                 $namewil = 'WIL-' . convertToRoman($key);
-                foreach ($queryAsisten as $asisten) {
+                // foreach ($queryAsisten as $asisten) {
 
-                    // dd($asisten);
-                    if ($asisten['est'] == $namewil && $asisten['afd'] == 'GM') {
-                        $namaGM = $asisten['nama'];
-                        break;
-                    }
-                }
+                //     // dd($asisten);
+                //     if ($asisten['est'] == $namewil && $asisten['afd'] == 'GM') {
+                //         $namaGM = $asisten['nama'];
+                //         break;
+                //     }
+                // }
+                $namaGM =    get_nama_gm($namewil);
                 $rekap[$key][$key1]['reg']['ancak'] = [
                     'bulan' => $key1,
                     'data' =>  $data,
@@ -3209,15 +3221,15 @@ if (!function_exists('rekap_pertahun')) {
                 $totalSkorEst =  skor_brd_ma($brdPerjjgEst) + skor_buah_Ma($sumPerBHEst) + skor_palepah_ma($perPlEst);
                 //PENAMPILAN UNTUK PERESTATE
                 $namaGM = '-';
-                foreach ($queryAsisten as $asisten) {
+                // foreach ($queryAsisten as $asisten) {
 
-                    // dd($asisten);
-                    if ($asisten['est'] == $key1 && $asisten['afd'] == 'EM') {
-                        $namaGM = $asisten['nama'];
-                        break;
-                    }
-                }
-
+                //     // dd($asisten);
+                //     if ($asisten['est'] == $key1 && $asisten['afd'] == 'EM') {
+                //         $namaGM = $asisten['nama'];
+                //         break;
+                //     }
+                // }
+                $namaGM = get_nama_em($key1);
                 // sidak mutu buah 
                 if ($sum_krEst != 0) {
                     $total_krEst = $sum_krEst / $jum_haEst;
@@ -5757,12 +5769,12 @@ if (!function_exists('rekap_pertahun_mutubuah')) {
                     $sidak_buah[$key][$key1]['All_skor'] = $allSkor;
                     $sidak_buah[$key][$key1]['csfxr'] = $csfxr;
                     $sidak_buah[$key][$key1]['kategori'] = sidak_akhir($allSkor);
-
-                    foreach ($queryAsisten as $ast => $asisten) {
-                        if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                            $sidak_buah[$key][$key1]['nama_asisten'] = $asisten->user->nama;
-                        }
-                    }
+                    $sidak_buah[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
+                    // foreach ($queryAsisten as $ast => $asisten) {
+                    //     if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
+                    //         $sidak_buah[$key][$key1]['nama_asisten'] = $asisten->user->nama;
+                    //     }
+                    // }
                     $jjg_samplex += $jjg_sample;
                     $tnpBRDx += $tnpBRD;
                     $krgBRDx += $krgBRD;
@@ -5813,11 +5825,12 @@ if (!function_exists('rekap_pertahun_mutubuah')) {
                     $sidak_buah[$key][$key1]['All_skor'] = 0;
                     $sidak_buah[$key][$key1]['kategori'] = 0;
                     $sidak_buah[$key][$key1]['csfxr'] = 0;
-                    foreach ($queryAsisten as $ast => $asisten) {
-                        if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                            $sidak_buah[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                        }
-                    }
+                    $sidak_buah[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
+                    // foreach ($queryAsisten as $ast => $asisten) {
+                    //     if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
+                    //         $sidak_buah[$key][$key1]['nama_asisten'] = $asisten['nama'];
+                    //     }
+                    // }
                 }
             }
             if ($sum_krx != 0) {
@@ -5838,16 +5851,17 @@ if (!function_exists('rekap_pertahun_mutubuah')) {
 
             $allSkor = sidak_brdTotal($skor_total) +  sidak_matangSKOR($skor_jjgMSk) +  sidak_lwtMatang($skor_lewatMTng) + sidak_jjgKosong($skor_jjgKosong) + sidak_tangkaiP($skor_vcut) + sidak_PengBRD($per_kr);
 
-            $em = 'EM';
+            // $em = 'EM';
 
-            $nama_em = '';
+            // $nama_em = '';
 
-            // dd($key1);
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
-                    $nama_em = $asisten['nama'];
-                }
-            }
+            // // dd($key1);
+            // foreach ($queryAsisten as $ast => $asisten) {
+            //     if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
+            //         $nama_em = $asisten['nama'];
+            //     }
+            // }
+            $nama_em = get_nama_em($key1);
             $jjg_mth = $tnpBRDx + $krgBRDx + $overripex + $emptyx;
 
             $skor_jjgMTh = ($jjg_samplex - $abrx != 0) ? round($jjg_mth / ($jjg_samplex - $abrx) * 100, 2) : 0;
@@ -5974,14 +5988,15 @@ if (!function_exists('rekap_pertahun_mutubuah')) {
 
             $em = 'GM';
 
-            $nama_em = '';
+            // $nama_em = '';
             $newkey = 'WIL-' . convertToRoman($key);
-            // dd($newkey);
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ($newkey === $asisten['est'] && $em === $asisten['afd']) {
-                    $nama_em = $asisten['nama'] ?? '-';
-                }
-            }
+            // // dd($newkey);
+            // foreach ($queryAsisten as $ast => $asisten) {
+            //     if ($newkey === $asisten['est'] && $em === $asisten['afd']) {
+            //         $nama_em = $asisten['nama'] ?? '-';
+            //     }
+            // }
+            $nama_em =   get_nama_gm($newkey);
             $jjg_mth = $tnpBRDx + $krgBRDx + $overripex + $emptyx;
 
             $skor_jjgMTh = ($jjg_samplex - $abrx != 0) ? round($jjg_mth / ($jjg_samplex - $abrx) * 100, 3) : 0;
@@ -6072,14 +6087,15 @@ if (!function_exists('rekap_pertahun_mutubuah')) {
 
         $em = 'RH';
 
-        $nama_em = '';
+        // $nama_em = '';
         $newkey = 'REG-' . convertToRoman($regional);
         // dd($newkey);
-        foreach ($queryAsisten as $ast => $asisten) {
-            if ($newkey === $asisten['est'] && $em === $asisten['afd']) {
-                $nama_em = $asisten['nama'] ?? '-';
-            }
-        }
+        // foreach ($queryAsisten as $ast => $asisten) {
+        //     if ($newkey === $asisten['est'] && $em === $asisten['afd']) {
+        //         $nama_em = $asisten['nama'] ?? '-';
+        //     }
+        // }
+        $nama_em = get_nama_rh($newkey);
         $jjg_mth = $tnpBRDxy + $krgBRDxy + $overripexy + $emptyx;
 
         $skor_jjgMTh = ($jjg_samplexy - $abrxy != 0) ? round($jjg_mth / ($jjg_samplexy - $abrxy) * 100, 3) : 0;
@@ -6139,10 +6155,11 @@ if (!function_exists('rekap_pertahun_mutubuah')) {
             foreach ($value as $key1 => $value1) if (is_array($value1)) {
                 // dd($value1);
                 foreach ($value1 as $key2 => $value2) if (is_array($value2)) {
-                    foreach ($queryAsisten as $keyx => $valuex) if ($valuex['est'] === $key1 && $valuex['afd'] === $key2) {
-                        $data[$key][$key1][$key2]['nama'] = $valuex['nama'] ?? '-';
-                        break;
-                    }
+                    // foreach ($queryAsisten as $keyx => $valuex) if ($valuex['est'] === $key1 && $valuex['afd'] === $key2) {
+                    //     $data[$key][$key1][$key2]['nama'] = $valuex['nama'] ?? '-';
+                    //     break;
+                    // }
+                    $data[$key][$key1][$key2]['nama'] = get_nama_asisten($key1, $key2);
                     // $data[$key][$key1][$key2]['nama'] = 'nama';
                     $data[$key][$key1][$key2]['total_score'] = $value2['All_skor'];
                     $data[$key][$key1][$key2]['est'] = $key1;
@@ -6151,11 +6168,12 @@ if (!function_exists('rekap_pertahun_mutubuah')) {
 
                     // $totale = $totalest;
                 }
-                $nama = '-';
-                foreach ($queryAsisten as $keyx => $valuex) if ($valuex['est'] === $key1 && $valuex['afd'] === 'EM') {
-                    $nama = $valuex['nama'] ?? '-';
-                    break;
-                }
+                // $nama = '-';
+                // foreach ($queryAsisten as $keyx => $valuex) if ($valuex['est'] === $key1 && $valuex['afd'] === 'EM') {
+                //     $nama = $valuex['nama'] ?? '-';
+                //     break;
+                // }
+                $nama = get_nama_em($key1);
                 $estate = [
                     'total_score' => $value1['All_skor'],
                     'est' => $key1,
@@ -6311,12 +6329,12 @@ if (!function_exists('rekap_pertahun_mutubuah')) {
                         $sidakbuahmuah[$key][$key1]['All_skor'] = $allSkor;
                         $sidakbuahmuah[$key][$key1]['csfxr'] = $csfxr;
                         $sidakbuahmuah[$key][$key1]['kategori'] = sidak_akhir($allSkor);
-
-                        foreach ($queryAsisten as $ast => $asisten) {
-                            if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                                $sidakbuahmuah[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                            }
-                        }
+                        $sidakbuahmuah[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
+                        // foreach ($queryAsisten as $ast => $asisten) {
+                        //     if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
+                        //         $sidakbuahmuah[$key][$key1]['nama_asisten'] = $asisten['nama'];
+                        //     }
+                        // }
                         $jjg_samplex += $jjg_sample;
                         $tnpBRDx += $tnpBRD;
                         $krgBRDx += $krgBRD;
@@ -6367,11 +6385,7 @@ if (!function_exists('rekap_pertahun_mutubuah')) {
                         $sidakbuahmuah[$key][$key1]['All_skor'] = 0;
                         $sidakbuahmuah[$key][$key1]['kategori'] = 0;
                         $sidakbuahmuah[$key][$key1]['csfxr'] = 0;
-                        foreach ($queryAsisten as $ast => $asisten) {
-                            if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                                $sidakbuahmuah[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                            }
-                        }
+                        $sidakbuahmuah[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
                     }
                 }
                 if ($sum_krx != 0) {
@@ -6392,16 +6406,17 @@ if (!function_exists('rekap_pertahun_mutubuah')) {
 
                 $allSkor = sidak_brdTotal($skor_total) +  sidak_matangSKOR($skor_jjgMSk) +  sidak_lwtMatang($skor_lewatMTng) + sidak_jjgKosong($skor_jjgKosong) + sidak_tangkaiP($skor_vcut) + sidak_PengBRD($per_kr);
 
-                $em = 'EM';
+                // $em = 'EM';
 
-                $nama_em = '';
+                // $nama_em = '';
 
-                // dd($key1);
-                foreach ($queryAsisten as $ast => $asisten) {
-                    if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
-                        $nama_em = $asisten['nama'];
-                    }
-                }
+                // // dd($key1);
+                // foreach ($queryAsisten as $ast => $asisten) {
+                //     if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
+                //         $nama_em = $asisten['nama'];
+                //     }
+                // }
+                $nama_em = get_nama_em($key1);
                 $jjg_mth = $tnpBRDx + $krgBRDx + $overripex + $emptyx;
 
                 $skor_jjgMTh = ($jjg_samplex - $abrx != 0) ? round($jjg_mth / ($jjg_samplex - $abrx) * 100, 2) : 0;
@@ -6489,16 +6504,17 @@ if (!function_exists('rekap_pertahun_mutubuah')) {
 
             $allSkor = sidak_brdTotal($skor_total) +  sidak_matangSKOR($skor_jjgMSk) +  sidak_lwtMatang($skor_lewatMTng) + sidak_jjgKosong($skor_jjgKosong) + sidak_tangkaiP($skor_vcut) + sidak_PengBRD($per_kr);
 
-            $em = 'EM';
+            // $em = 'EM';
 
-            $nama_em = '';
+            // $nama_em = '';
 
-            // dd($key1);
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
-                    $nama_em = $asisten['nama'];
-                }
-            }
+            // // dd($key1);
+            // foreach ($queryAsisten as $ast => $asisten) {
+            //     if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
+            //         $nama_em = $asisten['nama'];
+            //     }
+            // }
+            $nama_em = get_nama_em($key1);
             $jjg_mthxy = $tnpBRDxy + $krgBRDxy + $overripexy + $emptyxy;
 
             $skor_jjgMTh = ($jjg_samplexy - $abrxy != 0) ? round($jjg_mth / ($jjg_samplexy - $abrxy) * 100, 2) : 0;
@@ -7348,15 +7364,16 @@ if (!function_exists('get_sidaktph_perbulan')) {
 
 
 
-                $namaGM = '-';
-                foreach ($asisten_qc as $asisten) {
+                // $namaGM = '-';
+                // foreach ($asisten_qc as $asisten) {
 
-                    // dd($asisten);
-                    if ($asisten['est'] == $key && $asisten['afd'] == $key1) {
-                        $namaGM = $asisten['nama'];
-                        break;
-                    }
-                }
+                //     // dd($asisten);
+                //     if ($asisten['est'] == $key && $asisten['afd'] == $key1) {
+                //         $namaGM = $asisten['nama'];
+                //         break;
+                //     }
+                // }
+                $namaGM = get_nama_asisten($key, $key1);
 
                 $deviden = count($value2);
 
@@ -7398,15 +7415,16 @@ if (!function_exists('get_sidaktph_perbulan')) {
                 $tot_brd4 += $tot_brd3;
                 $tod_janjang4 += $tod_janjang3;
             } else {
-                $namaGM = '-';
-                foreach ($asisten_qc as $asisten) {
+                // $namaGM = '-';
+                // foreach ($asisten_qc as $asisten) {
 
-                    // dd($asisten);
-                    if ($asisten['est'] == $key && $asisten['afd'] == $key1) {
-                        $namaGM = $asisten['nama'];
-                        break;
-                    }
-                }
+                //     // dd($asisten);
+                //     if ($asisten['est'] == $key && $asisten['afd'] == $key1) {
+                //         $namaGM = $asisten['nama'];
+                //         break;
+                //     }
+                // }
+                $namaGM = get_nama_asisten($key, $key1);
                 $newSidak[$key][$key1]['afdeling'] = [
                     'deviden' => 0,
                     'total_score' => 0,
@@ -7424,13 +7442,14 @@ if (!function_exists('get_sidaktph_perbulan')) {
 
             // dd($value);
 
-            $namaGM = '-';
-            foreach ($asisten_qc as $asisten) {
-                if ($asisten['est'] == $key && $asisten['afd'] == 'EM') {
-                    $namaGM = $asisten['nama'];
-                    break;
-                }
-            }
+            // $namaGM = '-';
+            // foreach ($asisten_qc as $asisten) {
+            //     if ($asisten['est'] == $key && $asisten['afd'] == 'EM') {
+            //         $namaGM = $asisten['nama'];
+            //         break;
+            //     }
+            // }
+            $namaGM = get_nama_em($key);
             if ($new_dvdAfdest != 0) {
 
                 $devidens = 1;
@@ -9486,13 +9505,14 @@ if (!function_exists('rekap_pertahun_sidaktph')) {
                         $estatescorx = 0;
                         $newskaxa = '-';
                     }
-                    $ass = '-';
-                    foreach ($queryAsisten as $ast => $asisten) {
-                        if ($key2 === $asisten['est'] && 'OA' === $asisten['afd']) {
-                            $ass = $asisten['nama'];
-                            break;
-                        }
-                    }
+                    // $ass = '-';
+                    // foreach ($queryAsisten as $ast => $asisten) {
+                    //     if ($key2 === $asisten['est'] && 'OA' === $asisten['afd']) {
+                    //         $ass = $asisten['nama'];
+                    //         break;
+                    //     }
+                    // }
+                    $ass = get_nama_asisten($key2, 'OA');
                     // Assign calculated values outside the innermost loop
                     $newsidakendmua[$key][$key2]['deviden'] = $divest;
                     $newsidakendmua[$key][$key2]['v2check5'] = $v2check5;
@@ -9516,13 +9536,14 @@ if (!function_exists('rekap_pertahun_sidaktph')) {
                     $data = 'kosong';
                     $skor = '-';
                 }
-                $namasisten = ''; // Initialize $namasisten before the loop
-                foreach ($queryAsisten as $ast => $asisten) {
-                    if ('PT.MUA' === $asisten['est'] && 'EM' === $asisten['afd']) {
-                        $namasisten = $asisten['nama'];
-                        break;
-                    }
-                }
+                // $namasisten = ''; // Initialize $namasisten before the loop
+                // foreach ($queryAsisten as $ast => $asisten) {
+                //     if ('PT.MUA' === $asisten['est'] && 'EM' === $asisten['afd']) {
+                //         $namasisten = $asisten['nama'];
+                //         break;
+                //     }
+                // }
+                $namasisten = get_nama_em('PT.MUA');
                 // Now $namasisten is defined even if the loop doesn't run
 
                 $newsidakendmua[$key]['PT.MUA'] = [
@@ -9576,14 +9597,15 @@ if (!function_exists('rekap_pertahun_sidaktph')) {
             }
             $em = 'GM';
 
-            $nama_em = '';
+            // $nama_em = '';
             $newkey = 'WIL-' . convertToRoman($key);
-            // dd($newkey);
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ($newkey === $asisten['est'] && $em === $asisten['afd']) {
-                    $nama_em = $asisten['nama'] ?? '-';
-                }
-            }
+            // // dd($newkey);
+            // foreach ($queryAsisten as $ast => $asisten) {
+            //     if ($newkey === $asisten['est'] && $em === $asisten['afd']) {
+            //         $nama_em = $asisten['nama'] ?? '-';
+            //     }
+            // }
+            $nama_em = get_nama_gm($newkey);
             $dividen = array_sum($divest);
 
             $total = $dividen != 0 ? round($skor / $dividen, 2) : 0;
@@ -9610,14 +9632,15 @@ if (!function_exists('rekap_pertahun_sidaktph')) {
         }
         $em = 'RH';
 
-        $nama_em = '';
+        // $nama_em = '';
         $newkey = 'REG-' . convertToRoman($regional);
-        // dd($newkey);
-        foreach ($queryAsisten as $ast => $asisten) {
-            if ($newkey === $asisten['est'] && $em === $asisten['afd']) {
-                $nama_em = $asisten['nama'] ?? '-';
-            }
-        }
+        // // dd($newkey);
+        // foreach ($queryAsisten as $ast => $asisten) {
+        //     if ($newkey === $asisten['est'] && $em === $asisten['afd']) {
+        //         $nama_em = $asisten['nama'] ?? '-';
+        //     }
+        // }
+        $nama_em = get_nama_rh($newkey);
         $dividenrh = array_sum($divestrh);
 
         $totalrh = round($skorrh / $dividenrh, 2);
@@ -9633,21 +9656,23 @@ if (!function_exists('rekap_pertahun_sidaktph')) {
         foreach ($newsidakend as $key => $value) if (is_array($value)) {
             foreach ($value as $key1 => $value1) if (is_array($value1)) {
                 foreach ($value1 as $key2 => $value2) if (is_array($value2)) {
-                    foreach ($queryAsisten as $keyx => $valuex) if ($valuex['est'] === $key1 && $valuex['afd'] === $key2) {
-                        $data[$key][$key1][$key2]['nama'] = $valuex['nama'] ?? '-';
-                        break;
-                    }
+                    // foreach ($queryAsisten as $keyx => $valuex) if ($valuex['est'] === $key1 && $valuex['afd'] === $key2) {
+                    //     $data[$key][$key1][$key2]['nama'] = $valuex['nama'] ?? '-';
+                    //     break;
+                    // }
+                    $data[$key][$key1][$key2]['nama'] = get_nama_asisten($key1, $key2);
                     // $data[$key][$key1][$key2]['nama'] = 'nama';
                     $data[$key][$key1][$key2]['total_score'] = $value2['total_score'];
                     $data[$key][$key1][$key2]['est'] = $key1;
                     $data[$key][$key1][$key2]['afd'] = $key2;
                     $data[$key][$key1][$key2]['bgcolor'] = 'white';
                 }
-                $nama = '-';
-                foreach ($queryAsisten as $keyx => $valuex) if ($valuex['est'] === $key1 && $valuex['afd'] === 'EM') {
-                    $nama = $valuex['nama'] ?? '-';
-                    break;
-                }
+                // $nama = '-';
+                // foreach ($queryAsisten as $keyx => $valuex) if ($valuex['est'] === $key1 && $valuex['afd'] === 'EM') {
+                //     $nama = $valuex['nama'] ?? '-';
+                //     break;
+                // }
+                $nama = get_nama_em($key1);
                 $estate = [
                     'total_score' => $value1['score_estate'],
                     'est' => $key1,
@@ -10043,7 +10068,7 @@ if (!function_exists('rekap_sidakmutubuah_bulan')) {
             $totSkor_total =  ($totBlok2 != 0) ? sidak_brdTotal($totPersenTOtaljjg) : 0;
             $totalskor = $totSkor_kr + $totSkor_Vcut + $totSkor_Empty + $totSkor_Over + $totSkor_jjgMtng + $totSkor_total;
             $totKategor = sidak_akhir($totalskor);
-
+            // dd($key);
             $sidak_mutubuah[$key]['WIL']['WIL-' . convertToRoman($key)] = [
                 'reg' => '',
                 'pt' => '',
@@ -10083,7 +10108,7 @@ if (!function_exists('rekap_sidakmutubuah_bulan')) {
                 'kategori' => $totKategor,
             ];
         }
-
+        // dd($sidak_mutubuah);
         // $data_for_mua = $sidak_mutubuah;
         // dd($sidak_mutubuah);
         if ($regional == 1) {
@@ -10291,15 +10316,17 @@ if (!function_exists('rekap_sidakmutubuah_bulan')) {
 
                 $em = 'EM';
 
-                $nama_em = '';
+                // $nama_em = '';
 
-                // dd($key1);
-                foreach ($queryAsisten as $ast => $asisten) {
-                    if ($key1 === $asisten['est'] && $em === 'OA') {
-                        $nama_em = $asisten['nama'];
-                        break;
-                    }
-                }
+                // // dd($key1);
+                // foreach ($queryAsisten as $ast => $asisten) {
+                //     if ($key1 === $asisten['est'] && $em === 'OA') {
+                //         $nama_em = $asisten['nama'];
+                //         break;
+                //     }
+                // }
+                $nama_em = get_nama_asisten($key1, 'OA');
+
                 $jjg_mth = $tnpBRDx + $krgBRDx + $overripex + $emptyx;
 
                 $skor_jjgMTh = ($jjg_samplex - $abrx != 0) ? round($jjg_mth / ($jjg_samplex - $abrx) * 100, 2) : 0;
@@ -10337,14 +10364,15 @@ if (!function_exists('rekap_sidakmutubuah_bulan')) {
 
             $em = 'EM';
 
-            $nama_em = '';
+            // $nama_em = '';
 
-            // dd($key1);
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ('PT.MUA' === $asisten['est'] && $em === $asisten['afd']) {
-                    $nama_em = $asisten['nama'];
-                }
-            }
+            // // dd($key1);
+            // foreach ($queryAsisten as $ast => $asisten) {
+            //     if ('PT.MUA' === $asisten['est'] && $em === $asisten['afd']) {
+            //         $nama_em = $asisten['nama'];
+            //     }
+            // }
+            $nama_em = get_nama_em('PT.MUA');
             $jjg_mthxy = $tnpBRDxy + $krgBRDxy + $overripexy + $emptyxy;
 
             $skor_jjgMTh = ($jjg_samplexy - $abrxy != 0) ? round($jjg_mth / ($jjg_samplexy - $abrxy) * 100, 2) : 0;

@@ -101,10 +101,27 @@ class mutubuahController extends Controller
             ->whereDate('datetime', today())
             ->get();
         $columns = [
-            'estate', 'afdeling', 'blok', 'petugas', 'tph_baris', 'ancak_pemanen',
-            'jumlah_jjg', 'bmt', 'bmk', 'overripe', 'empty_bunch', 'abnormal',
-            'rd', 'vcut', 'alas_br', 'foto_temuan', 'komentar', 'datetime',
-            'lat', 'lon', 'app_version'
+            'estate',
+            'afdeling',
+            'blok',
+            'petugas',
+            'tph_baris',
+            'ancak_pemanen',
+            'jumlah_jjg',
+            'bmt',
+            'bmk',
+            'overripe',
+            'empty_bunch',
+            'abnormal',
+            'rd',
+            'vcut',
+            'alas_br',
+            'foto_temuan',
+            'komentar',
+            'datetime',
+            'lat',
+            'lon',
+            'app_version'
         ];
 
         $records = detectDuplicates($sidakmtb, $columns);
@@ -345,12 +362,12 @@ class mutubuahController extends Controller
                     $sidak_buah[$key][$key1]['All_skor'] = $allSkor;
                     $sidak_buah[$key][$key1]['csfxr'] = $csfxr;
                     $sidak_buah[$key][$key1]['kategori'] = sidak_akhir($allSkor);
-
-                    foreach ($queryAsisten as $ast => $asisten) {
-                        if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                            $sidak_buah[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                        }
-                    }
+                    $sidak_buah[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
+                    // foreach ($queryAsisten as $ast => $asisten) {
+                    //     if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
+                    //         $sidak_buah[$key][$key1]['nama_asisten'] = $asisten['nama'];
+                    //     }
+                    // }
 
 
                     $totalJJG += $jjg_sample;
@@ -422,11 +439,7 @@ class mutubuahController extends Controller
                     $sidak_buah[$key][$key1]['All_skor'] = 0;
                     $sidak_buah[$key][$key1]['kategori'] = 0;
                     $sidak_buah[$key][$key1]['csfxr'] = 0;
-                    foreach ($queryAsisten as $ast => $asisten) {
-                        if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                            $sidak_buah[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                        }
-                    }
+                    $sidak_buah[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
                 }
             }
         }
@@ -504,14 +517,15 @@ class mutubuahController extends Controller
 
                 $em = 'EM';
 
-                $nama_em = '';
+                // $nama_em = '';
 
                 // dd($key1);
-                foreach ($queryAsisten as $ast => $asisten) {
-                    if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
-                        $nama_em = $asisten['nama'];
-                    }
-                }
+                // foreach ($queryAsisten as $ast => $asisten) {
+                //     if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
+                //         $nama_em = $asisten['nama'];
+                //     }
+                // }
+                $nama_em = get_nama_em($key1);
                 $jjg_mth = $tnpBRD + $krgBRD + $overripe + $empty;
 
 
@@ -619,16 +633,7 @@ class mutubuahController extends Controller
 
                 $allSkor = sidak_brdTotal($skor_total) +  sidak_matangSKOR($skor_jjgMSk) +  sidak_lwtMatang($skor_lewatMTng) + sidak_jjgKosong($skor_jjgKosong) + sidak_tangkaiP($skor_vcut) + sidak_PengBRD($per_kr);
 
-                $em = 'EM';
-
-                $nama_em = '';
-
-                // dd($key1);
-                foreach ($queryAsisten as $ast => $asisten) {
-                    if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
-                        $nama_em = $asisten['nama'];
-                    }
-                }
+                $nama_em = get_nama_em($key1);
                 $jjg_mth = $tnpBRD + $krgBRD + $overripe + $empty;
 
                 $skor_jjgMTh = ($jjg_sample - $abr != 0) ? round($jjg_mth / ($jjg_sample - $abr) * 100, 3) : 0;
@@ -757,16 +762,17 @@ class mutubuahController extends Controller
 
             $wiles = $wil;
 
-            $em = 'GM';
+            // $em = 'GM';
 
-            $nama_em = '';
+            // $nama_em = '';
 
-            // dd($key);
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ($wiles === $asisten['est'] && $em === $asisten['afd']) {
-                    $nama_em = $asisten['nama'];
-                }
-            }
+            // // dd($key);
+            // foreach ($queryAsisten as $ast => $asisten) {
+            //     if ($wiles === $asisten['est'] && $em === $asisten['afd']) {
+            //         $nama_em = $asisten['nama'];
+            //     }
+            // }
+            $nama_em = get_nama_gm($wiles);
             $mutu_bhWil[$key]['TEST'] = $wil;
             $mutu_bhWil[$key]['afd'] = $key1;
             $mutu_bhWil[$key]['nama_staff'] = $nama_em;
@@ -958,16 +964,7 @@ class mutubuahController extends Controller
 
             $wiles = $wil;
 
-            $em = 'GM';
-
-            $nama_em = '';
-
-            // dd($key);
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ($wiles === $asisten['est'] && $em === $asisten['afd']) {
-                    $nama_em = $asisten['nama'];
-                }
-            }
+            $nama_em = get_nama_gm($wiles);
             if ($jjg_sample == 0 && $tnpBRD == 0 &&   $krgBRD == 0 && $abr == 0 && $overripe == 0 && $empty == 0 &&  $vcut == 0 &&  $rd == 0 && $sum_kr == 0) {
                 $mutuBuah_wil[$key]['check_arr'] = 'kosong';
                 $mutuBuah_wil[$key]['All_skor'] = 0;
@@ -1112,11 +1109,12 @@ class mutubuahController extends Controller
             }
             $regArr[$key]['regional'] = $estkey;
             $regArr[$key]['jabatan'] = $estkey2;
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ($estkey === $asisten['est'] && $em === $asisten['afd']) {
-                    $regArr[$key]['nama_asisten'] = $asisten['nama'];
-                }
-            }
+            // foreach ($queryAsisten as $ast => $asisten) {
+            //     if ($estkey === $asisten['est'] && $em === $asisten['afd']) {
+            //         $regArr[$key]['nama_asisten'] = $asisten['nama'];
+            //     }
+            // }
+            $regArr[$key]['nama_asisten'] = get_nama_rh($estkey);
             $regArr[$key]['tnp_brd'] = $tnpBRDEST;
             $regArr[$key]['krg_brd'] = $krgBRDEST;
             $regArr[$key]['persenTNP_brd'] = ($jjg_sampleEST - $abrEST) !== 0 ? round(($krgBRDEST / ($jjg_sampleEST - $abrEST)) * 100, 3) : 0;
@@ -1272,14 +1270,15 @@ class mutubuahController extends Controller
         }
 
         foreach ($regional as $key => $value) {
-            $regional[$key]['nama_rh'] = '-';
-            foreach ($queryAsisten as $ast => $asisten) {
-                // dd($value['nama']);
-                if ($asisten['est'] == $value['nama'] && $asisten['afd'] == 'RH') {
-                    $regional[$key]['nama_rh'] = $asisten['nama'];
-                    break; // exit the inner loop since a match is found
-                }
-            }
+            // $regional[$key]['nama_rh'] = '-';
+            // foreach ($queryAsisten as $ast => $asisten) {
+            //     // dd($value['nama']);
+            //     if ($asisten['est'] == $value['nama'] && $asisten['afd'] == 'RH') {
+            //         $regional[$key]['nama_rh'] = $asisten['nama'];
+            //         break; // exit the inner loop since a match is found
+            //     }
+            // }
+            $regional[$key]['nama_rh'] =  get_nama_rh($value['nama']);
         }
         if ($request->input('reg') == 1) {
 
@@ -1407,12 +1406,12 @@ class mutubuahController extends Controller
                         $sidak_buah_mua[$key][$key1]['All_skor'] = $allSkor;
                         $sidak_buah_mua[$key][$key1]['csfxr'] = $csfxr;
                         $sidak_buah_mua[$key][$key1]['kategori'] = sidak_akhir($allSkor);
-
-                        foreach ($queryAsisten as $ast => $asisten) {
-                            if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                                $sidak_buah_mua[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                            }
-                        }
+                        $sidak_buah_mua[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
+                        // foreach ($queryAsisten as $ast => $asisten) {
+                        //     if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
+                        //         $sidak_buah_mua[$key][$key1]['nama_asisten'] = $asisten['nama'];
+                        //     }
+                        // }
                         $jjg_samplex += $jjg_sample;
                         $tnpBRDx += $tnpBRD;
                         $krgBRDx += $krgBRD;
@@ -1463,11 +1462,7 @@ class mutubuahController extends Controller
                         $sidak_buah_mua[$key][$key1]['All_skor'] = 0;
                         $sidak_buah_mua[$key][$key1]['kategori'] = 0;
                         $sidak_buah_mua[$key][$key1]['csfxr'] = 0;
-                        foreach ($queryAsisten as $ast => $asisten) {
-                            if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                                $sidak_buah_mua[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                            }
-                        }
+                        $sidak_buah_mua[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
                     }
                 }
                 if ($sum_krx != 0) {
@@ -1490,14 +1485,15 @@ class mutubuahController extends Controller
 
                 $em = 'OA';
 
-                $nama_em = '';
+                // $nama_em = '';
 
-                // dd($key);
-                foreach ($queryAsisten as $ast => $asisten) {
-                    if ($key == $asisten['est'] && $em == $asisten['afd']) {
-                        $nama_em = $asisten['nama'];
-                    }
-                }
+                // // dd($key);
+                // foreach ($queryAsisten as $ast => $asisten) {
+                //     if ($key == $asisten['est'] && $em == $asisten['afd']) {
+                //         $nama_em = $asisten['nama'];
+                //     }
+                // }
+                $nama_em = get_nama_asisten($key, $em);
                 $jjg_mth = $tnpBRDx + $krgBRDx + $overripex + $emptyx;
 
                 $skor_jjgMTh = ($jjg_samplex - $abrx != 0) ? round($jjg_mth / ($jjg_samplex - $abrx) * 100, 2) : 0;
@@ -1585,14 +1581,15 @@ class mutubuahController extends Controller
 
             $em = 'EM';
 
-            $nama_em = '';
+            // $nama_em = '';
 
-            // dd($key1);
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ('PT.MUA' === $asisten['est'] && $em === $asisten['afd']) {
-                    $nama_em = $asisten['nama'];
-                }
-            }
+            // // dd($key1);
+            // foreach ($queryAsisten as $ast => $asisten) {
+            //     if ('PT.MUA' === $asisten['est'] && $em === $asisten['afd']) {
+            //         $nama_em = $asisten['nama'];
+            //     }
+            // }
+            $nama_em = get_nama_em('PT.MUA');
             $jjg_mthxy = $tnpBRDxy + $krgBRDxy + $overripexy + $emptyxy;
 
             $skor_jjgMTh = ($jjg_samplexy - $abrxy != 0) ? round($jjg_mth / ($jjg_samplexy - $abrxy) * 100, 2) : 0;
@@ -1896,12 +1893,12 @@ class mutubuahController extends Controller
                     $sidak_buah[$key][$key1]['skor_kr'] = sidak_PengBRD($per_kr);
                     $sidak_buah[$key][$key1]['All_skor'] = $allSkor;
                     $sidak_buah[$key][$key1]['kategori'] = sidak_akhir($allSkor);
-
-                    foreach ($queryAsisten as $ast => $asisten) {
-                        if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                            $sidak_buah[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                        }
-                    }
+                    $sidak_buah[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
+                    // foreach ($queryAsisten as $ast => $asisten) {
+                    //     if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
+                    //         $sidak_buah[$key][$key1]['nama_asisten'] = $asisten['nama'];
+                    //     }
+                    // }
 
 
                     $totalJJG += $jjg_sample;
@@ -1963,11 +1960,7 @@ class mutubuahController extends Controller
                     $sidak_buah[$key][$key1]['skor_kr'] = 0;
                     $sidak_buah[$key][$key1]['All_skor'] = 0;
                     $sidak_buah[$key][$key1]['kategori'] = 0;
-                    foreach ($queryAsisten as $ast => $asisten) {
-                        if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                            $sidak_buah[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                        }
-                    }
+                    $sidak_buah[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
                 }
             }
         }
@@ -2081,16 +2074,17 @@ class mutubuahController extends Controller
 
                 $allSkor = sidak_brdTotal($skor_total) +  sidak_matangSKOR($skor_jjgMSk) +  sidak_lwtMatang($skor_lewatMTng) + sidak_jjgKosong($skor_jjgKosong) + sidak_tangkaiP($skor_vcut) + sidak_PengBRD($per_kr);
 
-                $em = 'EM';
+                // $em = 'EM';
 
-                $nama_em = '';
+                // $nama_em = '';
 
-                // dd($key1);
-                foreach ($queryAsisten as $ast => $asisten) {
-                    if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
-                        $nama_em = $asisten['nama'];
-                    }
-                }
+                // // dd($key1);
+                // foreach ($queryAsisten as $ast => $asisten) {
+                //     if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
+                //         $nama_em = $asisten['nama'];
+                //     }
+                // }
+                $nama_em = get_nama_em($key1);
                 $jjg_mth = $tnpBRD + $krgBRD + $overripe + $empty;
 
                 $skor_jjgMTh = ($jjg_sample - $abr != 0) ? round($jjg_mth / ($jjg_sample - $abr) * 100, 3) : 0;
@@ -2194,16 +2188,7 @@ class mutubuahController extends Controller
 
                 $allSkor = sidak_brdTotal($skor_total) +  sidak_matangSKOR($skor_jjgMSk) +  sidak_lwtMatang($skor_lewatMTng) + sidak_jjgKosong($skor_jjgKosong) + sidak_tangkaiP($skor_vcut) + sidak_PengBRD($per_kr);
 
-                $em = 'EM';
-
-                $nama_em = '';
-
-                // dd($key1);
-                foreach ($queryAsisten as $ast => $asisten) {
-                    if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
-                        $nama_em = $asisten['nama'];
-                    }
-                }
+                $nama_em = get_nama_em($key1);
                 $jjg_mth = $tnpBRD + $krgBRD + $overripe + $empty;
 
                 $skor_jjgMTh = ($jjg_sample - $abr != 0) ? round($jjg_mth / ($jjg_sample - $abr) * 100, 3) : 0;
@@ -2334,14 +2319,16 @@ class mutubuahController extends Controller
 
             $em = 'GM';
 
-            $nama_em = '';
+            // $nama_em = '';
 
-            // dd($key);
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ($wiles === $asisten['est'] && $em === $asisten['afd']) {
-                    $nama_em = $asisten['nama'];
-                }
-            }
+            // // dd($key);
+            // foreach ($queryAsisten as $ast => $asisten) {
+            //     if ($wiles === $asisten['est'] && $em === $asisten['afd']) {
+            //         $nama_em = $asisten['nama'];
+            //     }
+            // }
+            // dd($wiles);
+            $nama_em = get_nama_gm($wiles);
             $mutu_bhWil[$key]['TEST'] = $wil;
             $mutu_bhWil[$key]['afd'] = $key1;
             $mutu_bhWil[$key]['nama_staff'] = $nama_em;
@@ -2535,16 +2522,7 @@ class mutubuahController extends Controller
 
             $wiles = $wil;
 
-            $em = 'GM';
-
-            $nama_em = '';
-
-            // dd($key);
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ($wiles === $asisten['est'] && $em === $asisten['afd']) {
-                    $nama_em = $asisten['nama'];
-                }
-            }
+            $nama_em = get_nama_gm($wiles);
             if ($jjg_sample == 0 && $tnpBRD == 0 &&   $krgBRD == 0 && $abr == 0 && $overripe == 0 && $empty == 0 &&  $vcut == 0 &&  $rd == 0 && $sum_kr == 0) {
                 $mutuBuah_wil[$key]['check_arr'] = 'kosong';
                 $mutuBuah_wil[$key]['All_skor'] = 0;
@@ -2681,11 +2659,12 @@ class mutubuahController extends Controller
             }
             $regArr[$key]['regional'] = $estkey;
             $regArr[$key]['jabatan'] = $estkey2;
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ($estkey === $asisten['est'] && $em === $asisten['afd']) {
-                    $regArr[$key]['nama_asisten'] = $asisten['nama'];
-                }
-            }
+            $regArr[$key]['nama_asisten'] = get_nama_rh($estkey);
+            // foreach ($queryAsisten as $ast => $asisten) {
+            //     if ($estkey === $asisten['est'] && $em === $asisten['afd']) {
+            //         $regArr[$key]['nama_asisten'] = $asisten['nama'];
+            //     }
+            // }
             $regArr[$key]['tnp_brd'] = $tnpBRDEST;
             $regArr[$key]['krg_brd'] = $krgBRDEST;
             $regArr[$key]['persenTNP_brd'] = ($jjg_sampleEST - $abrEST) !== 0 ? round(($krgBRDEST / ($jjg_sampleEST - $abrEST)) * 100, 3) : 0;
@@ -2806,14 +2785,15 @@ class mutubuahController extends Controller
         }
 
         foreach ($regional as $key => $value) {
-            $regional[$key]['nama_rh'] = '-';
-            foreach ($queryAsisten as $ast => $asisten) {
-                // dd($value['nama']);
-                if ($asisten['est'] == $value['nama'] && $asisten['afd'] == 'RH') {
-                    $regional[$key]['nama_rh'] = $asisten['nama'];
-                    break; // exit the inner loop since a match is found
-                }
-            }
+            // $regional[$key]['nama_rh'] = '-';
+            // foreach ($queryAsisten as $ast => $asisten) {
+            //     // dd($value['nama']);
+            //     if ($asisten['est'] == $value['nama'] && $asisten['afd'] == 'RH') {
+            //         $regional[$key]['nama_rh'] = $asisten['nama'];
+            //         break; // exit the inner loop since a match is found
+            //     }
+            // }
+            $regional[$key]['nama_rh'] = get_nama_rh($value['nama']);
         }
 
 
@@ -2953,12 +2933,7 @@ class mutubuahController extends Controller
                         $sidak_buah_mua[$key][$key1]['All_skor'] = $allSkor;
                         $sidak_buah_mua[$key][$key1]['csfxr'] = $csfxr;
                         $sidak_buah_mua[$key][$key1]['kategori'] = sidak_akhir($allSkor);
-
-                        foreach ($queryAsisten as $ast => $asisten) {
-                            if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                                $sidak_buah_mua[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                            }
-                        }
+                        $sidak_buah_mua[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
                         $jjg_samplex += $jjg_sample;
                         $tnpBRDx += $tnpBRD;
                         $krgBRDx += $krgBRD;
@@ -3009,11 +2984,7 @@ class mutubuahController extends Controller
                         $sidak_buah_mua[$key][$key1]['All_skor'] = 0;
                         $sidak_buah_mua[$key][$key1]['kategori'] = 0;
                         $sidak_buah_mua[$key][$key1]['csfxr'] = 0;
-                        foreach ($queryAsisten as $ast => $asisten) {
-                            if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                                $sidak_buah_mua[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                            }
-                        }
+                        $sidak_buah_mua[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
                     }
                 }
                 if ($sum_krx != 0) {
@@ -3034,16 +3005,17 @@ class mutubuahController extends Controller
 
                 $allSkor = sidak_brdTotal($skor_total) +  sidak_matangSKOR($skor_jjgMSk) +  sidak_lwtMatang($skor_lewatMTng) + sidak_jjgKosong($skor_jjgKosong) + sidak_tangkaiP($skor_vcut) + sidak_PengBRD($per_kr);
 
-                $em = 'OA';
+                // $em = 'OA';
 
-                $nama_em = '';
+                // $nama_em = '';
 
-                // dd($key1);
-                foreach ($queryAsisten as $ast => $asisten) {
-                    if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
-                        $nama_em = $asisten['nama'];
-                    }
-                }
+                // // dd($key1);
+                // foreach ($queryAsisten as $ast => $asisten) {
+                //     if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
+                //         $nama_em = $asisten['nama'];
+                //     }
+                // }
+                $nama_em =  get_nama_em($key1);
                 $jjg_mth = $tnpBRDx + $krgBRDx + $overripex + $emptyx;
 
                 $skor_jjgMTh = ($jjg_samplex - $abrx != 0) ? round($jjg_mth / ($jjg_samplex - $abrx) * 100, 2) : 0;
@@ -3129,17 +3101,17 @@ class mutubuahController extends Controller
 
             $allSkor = sidak_brdTotal($skor_total) +  sidak_matangSKOR($skor_jjgMSk) +  sidak_lwtMatang($skor_lewatMTng) + sidak_jjgKosong($skor_jjgKosong) + sidak_tangkaiP($skor_vcut) + sidak_PengBRD($per_kr);
 
-            $em = 'EM';
+            // $em = 'EM';
 
-            $nama_em = '';
+            // $nama_em = '';
 
-            // dd($key1);
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ('PT.MUA' === $asisten['est'] && $em === 'EM') {
-                    $nama_em = $asisten['nama'];
-                }
-            }
-
+            // // dd($key1);
+            // foreach ($queryAsisten as $ast => $asisten) {
+            //     if ('PT.MUA' === $asisten['est'] && $em === 'EM') {
+            //         $nama_em = $asisten['nama'];
+            //     }
+            // }
+            $nama_em =  get_nama_em('PT.MUA');
             // dd($key1);
             $jjg_mthxy = $tnpBRDxy + $krgBRDxy + $overripexy + $emptyxy;
 
@@ -3990,15 +3962,16 @@ class mutubuahController extends Controller
                     $sidak_buah[$key][$key1][$key2]['skor_kr'] = sidak_PengBRD($per_kr);
                     $sidak_buah[$key][$key1][$key2]['All_skor'] = $allSkor;
                     $sidak_buah[$key][$key1][$key2]['kategori'] = sidak_akhir($allSkor);
+                    $sidak_buah[$key][$key1][$key2]['nama_asisten'] = get_nama_asisten($key, $key2);
 
 
-                    foreach ($queryAsisten as $ast => $asisten) {
-                        if ($key === $asisten['est'] && $key2 === $asisten['afd']) {
-                            $sidak_buah[$key][$key1][$key2]['nama_asisten'] = $asisten['nama'];
-                        }
-                    }
+                    // foreach ($queryAsisten as $ast => $asisten) {
+                    //     if ($key === $asisten['est'] && $key2 === $asisten['afd']) {
+                    //         $sidak_buah[$key][$key1][$key2]['nama_asisten'] = $asisten['nama'];
+                    //     }
+                    // }
 
-                    $jjg_sampleEST += $jjg_sample;
+                    // $jjg_sampleEST += $jjg_sample;
                     $blokEST += $dataBLok;
                     $tnpBRDEST +=    $tnpBRD;
                     $krgBRDEST +=    $krgBRD;
@@ -4043,12 +4016,7 @@ class mutubuahController extends Controller
                     $sidak_buah[$key][$key1][$key2]['skor_kr'] = 0;
                     $sidak_buah[$key][$key1][$key2]['All_skor'] = 0;
                     $sidak_buah[$key][$key1][$key2]['kategori'] = 0;
-
-                    foreach ($queryAsisten as $ast => $asisten) {
-                        if ($key === $asisten['est'] && $key2 === $asisten['afd']) {
-                            $sidak_buah[$key][$key1][$key2]['nama_asisten'] = $asisten['nama'];
-                        }
-                    }
+                    $sidak_buah[$key][$key1][$key2]['nama_asisten'] = get_nama_asisten($key, $key2);
                 }
 
                 if ($sum_krEST != 0) {
@@ -4072,11 +4040,12 @@ class mutubuahController extends Controller
 
                 $sidak_buah[$key][$key1]['kode'] = $key;
 
-                foreach ($queryAsisten as $ast => $asisten) {
-                    if ($key === $asisten['est'] && $em === $asisten['afd']) {
-                        $sidak_buah[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                    }
-                }
+                // foreach ($queryAsisten as $ast => $asisten) {
+                //     if ($key === $asisten['est'] && $em === $asisten['afd']) {
+                //         $sidak_buah[$key][$key1]['nama_asisten'] = $asisten['nama'];
+                //     }
+                // }
+                $sidak_buah[$key][$key1]['nama_asisten'] = get_nama_em($key);
                 $sidak_buah[$key][$key1]['tnp_brd'] = $tnpBRDEST;
                 $sidak_buah[$key][$key1]['krg_brd'] = $krgBRDEST;
                 $sidak_buah[$key][$key1]['persenTNP_brd'] = ($jjg_sampleEST - $abrEST) !== 0 ? round(($krgBRDEST / ($jjg_sampleEST - $abrEST)) * 100, 3) : 0;
@@ -5418,11 +5387,12 @@ class mutubuahController extends Controller
                     $weeklyReport[$key][$key1][$key2]['rat_dmg'] = $rd;
                     $weeklyReport[$key][$key1][$key2]['TPH'] = $total_kr;
                     $weeklyReport[$key][$key1][$key2]['persen_krg'] = $per_kr;
-                    foreach ($queryAsisten as $ast => $asisten) {
-                        if ($key1 === $asisten['est'] && $key2 === $asisten['afd']) {
-                            $weeklyReport[$key][$key1][$key2]['nama_asisten'] = $asisten['nama'];
-                        }
-                    }
+                    $weeklyReport[$key][$key1][$key2]['nama_asisten'] = get_nama_asisten($key1, $key2);
+                    // foreach ($queryAsisten as $ast => $asisten) {
+                    //     if ($key1 === $asisten['est'] && $key2 === $asisten['afd']) {
+                    //         $weeklyReport[$key][$key1][$key2]['nama_asisten'] = $asisten['nama'];
+                    //     }
+                    // }
 
                     $blok_est += $dataBLok;
                     $kr_est += $sum_kr;
@@ -5447,12 +5417,13 @@ class mutubuahController extends Controller
                     $skor_jjgKosong = $denominatorEst !== 0 ? round(($emptyeST / $denominatorEst) * 100, 3) : 0;
                     $skor_vcut = $jjg_sampleEst !== 0 ? round(($vcuteST / $jjg_sampleEst) * 100, 3) : 0;
                 }
-                $ass = '-';
-                foreach ($queryAsisten as $ast => $asisten) {
-                    if ($key1 === $asisten['est'] && 'EM' === $asisten['afd']) {
-                        $ass = $asisten['nama'];
-                    }
-                }
+                // $ass = '-';
+                // foreach ($queryAsisten as $ast => $asisten) {
+                //     if ($key1 === $asisten['est'] && 'EM' === $asisten['afd']) {
+                //         $ass = $asisten['nama'];
+                //     }
+                // }
+                $ass = get_nama_em($key1);
                 $weeklyReport[$key][$key1]['nama_asistenEM'] = $ass;
                 $weeklyReport[$key][$key1]['Jumlah_janjang'] = $jjg_sampleEst;
                 $weeklyReport[$key][$key1]['blok'] = $blok_est;
@@ -5531,12 +5502,12 @@ class mutubuahController extends Controller
             $weeklyReport[$key]['rat_dmg'] = $rdWil;
             $weeklyReport[$key]['TPH'] = $total_krWil;
 
-
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ($wil === $asisten['est'] && 'GM' === $asisten['afd']) {
-                    $weeklyReport[$key]['nama_asistenWil'] = $asisten['nama'];
-                }
-            }
+            $weeklyReport[$key]['nama_asistenWil'] = get_nama_gm($wil);
+            // foreach ($queryAsisten as $ast => $asisten) {
+            //     if ($wil === $asisten['est'] && 'GM' === $asisten['afd']) {
+            //         $weeklyReport[$key]['nama_asistenWil'] = $asisten['nama'];
+            //     }
+            // }
         }
 
         $weeklyReportV2 = array();
@@ -5602,11 +5573,12 @@ class mutubuahController extends Controller
                     $weeklyReportV2[$key][$key1][$key2]['rat_dmg'] = $rd;
                     $weeklyReportV2[$key][$key1][$key2]['TPH'] = $total_kr;
                     $weeklyReportV2[$key][$key1][$key2]['persen_krg'] = $per_kr;
-                    foreach ($queryAsisten as $ast => $asisten) {
-                        if ($key1 === $asisten['est'] && $key2 === $asisten['afd']) {
-                            $weeklyReportV2[$key][$key1][$key2]['nama_asisten'] = $asisten['nama'];
-                        }
-                    }
+                    $weeklyReportV2[$key][$key1][$key2]['nama_asisten'] = get_nama_asisten($key1, $key2);
+                    // foreach ($queryAsisten as $ast => $asisten) {
+                    //     if ($key1 === $asisten['est'] && $key2 === $asisten['afd']) {
+                    //         $weeklyReportV2[$key][$key1][$key2]['nama_asisten'] = $asisten['nama'];
+                    //     }
+                    // }
                 }
             }
         }
