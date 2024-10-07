@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Asistenqc;
+use App\Models\Pengguna;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -17,8 +18,25 @@ class adminpanelController extends Controller
 
         $queryEst = DB::connection('mysql2')->table('estate')->whereIn('wil', [1, 2, 3])->get();
         $queryAfd = DB::connection('mysql2')->table('afdeling')->select('nama')->groupBy('nama')->get();
+        // $list_pengguna = Pengguna::query()->where('nama_lengkap', 'like', '%christian%')->get();
+
+        // dd($list_pengguna);
 
         return view('Admin.userqcpanel', ['asisten' => $query, 'estate' => $queryEst, 'afdeling' => $queryAfd]);
+    }
+    public function searchUsers(Request $request)
+    {
+        $search = $request->input('term');
+        // dd($search); // Debugging search input
+
+        $users = Pengguna::query()
+            ->where('nama_lengkap', 'LIKE', "%{$search}%")
+            ->with('Jabatan', 'Departement')
+            ->limit(20) // Limit the result to avoid loading too many users at once
+            ->get();
+        // dd($users);
+
+        return response()->json($users);
     }
 
     public function listqc(Request $request)
@@ -47,6 +65,7 @@ class adminpanelController extends Controller
             ->whereIn('jabatan', ['Asisten', 'Asisten Afdeling'])
             ->get();
         // dd($list_asisten);
+
         $arrView = array();
         $arrView['list_qc'] =  $list_qc;
         $arrView['list_gm'] =  $list_gm;
@@ -195,11 +214,12 @@ class adminpanelController extends Controller
         try {
             // Get the asisten by ID
             $asisten = DB::table('asisten_qc')->where('id', $request->input('id'))->first();
-
+            // dd($request->input('hidden_user_id_option'));
+            // $user_id = $request->in
             if ($asisten) {
                 // Update the asisten record
                 DB::table('asisten_qc')->where('id', $request->input('id'))->update([
-                    'user_id' => $request->input('user_id'),
+                    'user_id' => $request->input('hidden_user_id_option'),
                     'est' => $request->input('est'),
                     'afd' => $request->input('afd')
                 ]);

@@ -250,6 +250,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tabledatamaps', [Matchingblok::class, 'tabledata'])->name('tabledatamaps');
     Route::post('/addmatchblok', [Matchingblok::class, 'addmatchblok'])->name('addmatchblok');
     Route::post('/exportgrading', [GradingController::class, 'exportgrading'])->name('exportgrading');
+
+    Route::get('/searchUsers', [adminpanelController::class, 'searchUsers'])->name('searchUsers');
 });
 Route::get('/memory-limit', function () {
     $memoryLimit = ini_get('memory_limit');

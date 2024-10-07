@@ -1,7 +1,4 @@
 import './bootstrap';
-import $ from "jquery";
-
-
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import 'sweetalert2/src/sweetalert2.scss'
 import 'leaflet-arrowheads';
@@ -32,6 +29,15 @@ import 'datatables.net-searchbuilder-dt';
 import 'datatables.net-searchpanes-dt';
 import 'datatables.net-select-dt';
 import 'datatables.net-staterestore-dt';
+import select2 from 'select2';
+import 'select2/dist/css/select2.css';
+import 'bootstrap-select/dist/css/bootstrap-select.min.css';
+import 'bootstrap-select';
+import 'choices.js/public/assets/styles/choices.min.css';
+import Choices from 'choices.js';
+
+window.select2 = select2;
+window.Choices = Choices;
 window.$ = jQuery;
 window.DataTable = DataTable;
 window.jszip = jszip;

@@ -1,4 +1,6 @@
 <x-layout.app>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     @if (strpos(session('departemen'), 'QC') !== false && session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' || session('jabatan') == 'Admin' || auth()->user()->id_departement == '43' && in_array(auth()->user()->id_jabatan, ['10', '15', '20', '4', '5', '6']))
     @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -201,10 +203,14 @@
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <input type="hidden" name="id" value="{{ $value->id }}">
+                                                                    <input type="hidden" name="hidden_user_id_option" id="hidden_user_id_option">
                                                                     <div class="form-group">
-                                                                        <label for="nama">User Id</label>
-                                                                        <input type="number" class="form-control" id="user_id" name="user_id" value="{{ $value->user_id }}" required>
+                                                                        <label for="user_id_option">Pilih User</label>
+                                                                        <select class="form-control" id="user_id_option" name="user_id_option" required>
+                                                                            <option value="" selected>Cari user</option>
+                                                                        </select>
                                                                     </div>
+
                                                                     <div class="form-group">
                                                                         <label for="afd">Nama </label>
                                                                         <input type="text" class="form-control" id="user_nama" name="user_nama" value="{{ $value->User->nama_lengkap ?? 'Vacant' }}" required>
@@ -334,11 +340,57 @@
     </div>
 
 
-
     <script type="module">
         var currentUserName = "{{ session('jabatan') }}";
         var departemen = "{{ session('departemen') }}";
         $(document).ready(function() {
+            // Select all user_id_option select elements
+            document.querySelectorAll('select[id^="user_id_option"]').forEach((userSelect) => {
+                const choices = new Choices(userSelect, {
+                    searchEnabled: true,
+                    removeItemButton: true,
+                    placeholder: true,
+                    searchPlaceholderValue: 'Cari user',
+                    noResultsText: 'Jika tidak ditemukan hubungi D.A',
+                });
+
+                // Attach a search event listener to the Choices input
+                userSelect.addEventListener('search', function(event) {
+                    const searchTerm = event.detail.value; // Get the search term
+                    fetch(`/searchUsers?term=${searchTerm}`) // Send the search term in the query
+                        .then(response => response.json())
+                        .then(data => {
+                            if (Array.isArray(data) && data.length > 0) {
+                                choices.clearChoices();
+
+                                data.forEach(user => {
+                                    choices.setChoices([{
+                                        value: user.user_id,
+                                        label: `${user.nama_lengkap} - ${user.departemen}`,
+                                        selected: false,
+                                        disabled: false
+                                    }], 'value', 'label', false);
+                                });
+                            } else {
+                                console.log('No users found');
+                                choices.clearChoices();
+                                choices.setChoices([{
+                                    value: '',
+                                    label: 'No users found',
+                                    disabled: true
+                                }]);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching users:', error);
+                        });
+                });
+            });
+
+            document.getElementById('user_id_option').addEventListener('change', function() {
+                document.getElementById('hidden_user_id_option').value = this.value;
+            });
+
             // Get the session values
             var user_name = "{{ session('user_name') }}";
             var lok = "{{ session('lok') }}";
