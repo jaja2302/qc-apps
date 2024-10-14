@@ -252,6 +252,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/exportgrading', [GradingController::class, 'exportgrading'])->name('exportgrading');
 
     Route::get('/searchUsers', [adminpanelController::class, 'searchUsers'])->name('searchUsers');
+    Route::get('/getdataforform', [GradingController::class, 'getdataforform'])->name('getdataforform');
 });
 Route::get('/memory-limit', function () {
     $memoryLimit = ini_get('memory_limit');

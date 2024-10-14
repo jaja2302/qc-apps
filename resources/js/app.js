@@ -1,4 +1,4 @@
-import './bootstrap';
+// import './bootstrap';
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import 'sweetalert2/src/sweetalert2.scss'
 import 'leaflet-arrowheads';
@@ -35,7 +35,10 @@ import 'bootstrap-select/dist/css/bootstrap-select.min.css';
 import 'bootstrap-select';
 import 'choices.js/public/assets/styles/choices.min.css';
 import Choices from 'choices.js';
-
+import { Modal } from 'bootstrap';
+import { createPopper } from '@popperjs/core';
+import * as Popper from "@popperjs/core"
+import * as bootstrap from 'bootstrap'
 window.select2 = select2;
 window.Choices = Choices;
 window.$ = jQuery;
@@ -43,6 +46,7 @@ window.DataTable = DataTable;
 window.jszip = jszip;
 window.pdfmake = pdfmake;
 window.DateTime = DateTime;
+window.modal = Modal;
 // helper 
 window.captureTableScreenshot = (tableId, fileName) => {
     Swal.fire({
@@ -253,7 +257,32 @@ function TableForWilReg(data, tableBody) {
     tableBody.appendChild(tr);
 }
 
+function editRecord(id) {
+    // Handle the edit logic here, e.g., show a form with the record details for editing
+    console.log('Edit record:', id);
+    // You could retrieve the specific record data and populate an edit form
+}
 
+function deleteRecord(id) {
+    if (confirm('Are you sure you want to delete this record?')) {
+        $.ajax({
+            url: "#", // Replace with your actual delete route
+            method: "DELETE",
+            data: {
+                id: id,
+                _token: $('input[name="_token"]').val()
+            },
+            success: function(result) {
+                alert('Record deleted successfully!');
+                // Optionally refresh the data table
+                $('#dataModal').modal('hide'); // Close the modal if desired
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error deleting record:', errorThrown);
+            }
+        });
+    }
+}
 
 // Example usage:
 
@@ -263,3 +292,5 @@ window.populateTableWithRanks = populateTableWithRanks;
 window.setBackgroundColor = setBackgroundColor;
 window.setBackgroundColorCell = setBackgroundColorCell;
 window.TableForWilReg = TableForWilReg;
+window.editRecord = editRecord;
+window.deleteRecord = deleteRecord;

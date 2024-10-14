@@ -10,7 +10,7 @@
         "axios": "^1.6.4",
         "bootstrap": "^5.3.3",
         "laravel-vite-plugin": "^1.0.0",
-        "sass": "^1.76.0",
+        "sass": "^1.79.5",
         "vite": "^5.2.10"
     },
     "dependencies": {
@@ -37,6 +37,7 @@
         "html2canvas": "^1.4.1",
         "install": "^0.13.0",
         "jquery": "^3.7.1",
+        "jquery-modal": "^0.9.2",
         "jszip": "^3.10.1",
         "leaflet-arrowheads": "^1.4.0",
         "leaflet-polylinedecorator": "^1.6.0",

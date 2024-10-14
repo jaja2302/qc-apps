@@ -358,4 +358,25 @@ class GradingController extends Controller
             return Excel::download(new Gradingregional($result, $type), 'Excel Grading Regional-' . $date . '-' . 'Bulan-' . $reg . '.xlsx');
         }
     }
+
+    public function getdataforform(Request $request)
+    {
+        $estate = $request->input('estate');
+        $afdeling = $request->input('afdeling');
+        $date = $request->input('date');
+
+        $data = Gradingmill::query()->where('estate', $estate)
+            ->where('afdeling', $afdeling)
+            ->where('datetime', 'like', '%' . $date . '%')
+            ->get();
+        // dd($data);
+        if (!$data) {
+            return response()->json(['message' => 'Not found'], 404);
+        }
+        return response()->json([
+            'message' => 'success',
+            'data' => $data
+        ], 200);
+        // dd($Data);
+    }
 }

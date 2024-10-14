@@ -7,10 +7,15 @@
             /* Ensure the table takes up the full available width */
         }
 
-        th,
+        /* th,
         td {
             white-space: nowrap;
-            /* Prevent wrapping text in the cells */
+        } */
+
+        th,
+        td {
+            word-wrap: break-word;
+            /* Breaks long text into multiple lines */
         }
 
         th {
@@ -23,12 +28,17 @@
             /* Add some padding for better readability */
         }
 
-        td:nth-child(3),
+        /* td:nth-child(3),
         th:nth-child(3) {
             width: auto;
-            /* Specifically target the 'NO POLISI' column */
+            color: red;
             min-width: 150px;
-            /* Set a minimum width for 'NO POLISI' */
+        } */
+
+        td.no-polisi,
+        th.no-polisi {
+            width: auto;
+            min-width: 150px;
         }
     </style>
     <div class="card">
@@ -409,35 +419,36 @@
                         <thead>
                             <tr>
                                 <th colspan="35" style="background-color: #c8e4f4;">BERDASARKAN ESTATE</th>
+                                <th style="background-color: #f8c4ac;vertical-align:middle" rowspan="4"> Action</th>
                             </tr>
                             <tr>
-                                <th rowspan="3" class="align-middle" style="background-color: #f0ecec;">ESTATE</th>
-                                <th rowspan="3" class="align-middle" style="background-color: #f0ecec;">AFDELING</th>
+                                <th rowspan="3" style="background-color: #f0ecec;">ESTATE</th>
+                                <th rowspan="3" style="background-color: #f0ecec;">AFDELING</th>
                                 <th style="background-color: #f0ecec;" colspan="7">UNIT SORTASI</th>
                                 <th style="background-color: #88e48c;" colspan="20">HASIL GRADING</th>
                                 <th style="background-color: #f8c4ac;" colspan="6">KELAS JANJANG</th>
                             </tr>
                             <tr>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">NO POLISI</th>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">WAKTU GRADING</th>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">TONASE TIMBANGAN (KG)</th>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG SPB</th>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG GRADING</th>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">TONASE GRADING (KG)</th>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">BJR (KG)</th>
-                                <th style="background-color: #88e48c;" colspan="2">RIPENESS</th>
-                                <th style="background-color: #88e48c;" colspan="2">UNRIPE</th>
-                                <th style="background-color: #88e48c;" colspan="2">OVER-RIPE</th>
-                                <th style="background-color: #88e48c;" colspan="2">EMPTY BUNCH</th>
-                                <th style="background-color: #88e48c;" colspan="2">ROTTEN BUNCH</th>
-                                <th style="background-color: #88e48c;" colspan="2">ABNORMAL</th>
-                                <th style="background-color: #88e48c;" colspan="2">LONG STALK</th>
-                                <th style="background-color: #88e48c;" colspan="2">V-CUT</th>
-                                <th style="background-color: #88e48c;" colspan="2">DIRT</th>
-                                <th style="background-color: #88e48c;" colspan="2">LOOSE FRUIT</th>
-                                <th style="background-color: #f8c4ac;" colspan="2">KELAS C</th>
-                                <th style="background-color: #f8c4ac;" colspan="2">KELAS B</th>
-                                <th style="background-color: #f8c4ac;" colspan="2">KELAS A</th>
+                                <th class="no-polisi" style="background-color: #f0ecec;vertical-align: middle;" rowspan="2">NO POLISI</th>
+                                <th style="background-color: #f0ecec;vertical-align: middle;" rowspan="2">WAKTU GRADING</th>
+                                <th style="background-color: #f0ecec;vertical-align: middle;" rowspan="2">TONASE TIMBANGAN (KG)</th>
+                                <th style="background-color: #f0ecec;vertical-align: middle;" rowspan="2">JUMLAH JANJANG SPB</th>
+                                <th style="background-color: #f0ecec;vertical-align: middle;" rowspan="2">JUMLAH JANJANG GRADING</th>
+                                <th style="background-color: #f0ecec;vertical-align: middle;" rowspan="2">TONASE GRADING (KG)</th>
+                                <th style="background-color: #f0ecec;vertical-align: middle;" rowspan="2">BJR (KG)</th>
+                                <th style="background-color: #88e48c;vertical-align: middle;" colspan="2">RIPENESS</th>
+                                <th style="background-color: #88e48c;vertical-align: middle;" colspan="2">UNRIPE</th>
+                                <th style="background-color: #88e48c;vertical-align: middle;" colspan="2">OVER-RIPE</th>
+                                <th style="background-color: #88e48c;vertical-align: middle;" colspan="2">EMPTY BUNCH</th>
+                                <th style="background-color: #88e48c;vertical-align: middle;" colspan="2">ROTTEN BUNCH</th>
+                                <th style="background-color: #88e48c;vertical-align: middle;" colspan="2">ABNORMAL</th>
+                                <th style="background-color: #88e48c;vertical-align: middle;" colspan="2">LONG STALK</th>
+                                <th style="background-color: #88e48c;vertical-align: middle;" colspan="2">V-CUT</th>
+                                <th style="background-color: #88e48c;vertical-align: middle;" colspan="2">DIRT</th>
+                                <th style="background-color: #88e48c;vertical-align: middle;" colspan="2">LOOSE FRUIT</th>
+                                <th style="background-color: #f8c4ac;vertical-align: middle;" colspan="2">KELAS C</th>
+                                <th style="background-color: #f8c4ac;vertical-align: middle;" colspan="2">KELAS B</th>
+                                <th style="background-color: #f8c4ac;vertical-align: middle;" colspan="2">KELAS A</th>
                             </tr>
                             <tr>
                                 <th style="background-color: #88e48c;">JJG</th>
@@ -466,6 +477,7 @@
                                 <th style="background-color: #f8c4ac;">%</th>
                                 <th style="background-color: #f8c4ac;">JJG</th>
                                 <th style="background-color: #f8c4ac;">%</th>
+
                             </tr>
                         </thead>
                         <tbody id="rekap_perhari_data">
@@ -573,6 +585,31 @@
             </div>
         </div>
     </div>
+
+    <!-- modal  -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="dataModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dataModalLabel">Data Table</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table id="data-table" class="table table-striped table-bordered">
+
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script type="module">
         $(document).ready(function() {
@@ -925,6 +962,194 @@
             });
             getrekapperhari();
         }
+        async function getdata_form(estate, afdeling, date) {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: "{{ route('getdataforform') }}",
+                    method: "GET",
+                    data: {
+                        estate: estate,
+                        afdeling: afdeling,
+                        date: date,
+                        _token: $('input[name="_token"]').val() // Moved here to ensure it's always the latest
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('input[name="_token"]').val()
+                    },
+                    success: function(result) {
+                        resolve(result); // Resolve the promise with the result
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        reject(errorThrown); // Reject the promise with the error
+                    }
+                });
+            });
+        }
+
+        async function getform_edit(estate, afdeling, date) {
+            try {
+                let form_data = await getdata_form(estate, afdeling, date);
+                // console.log(form_data);
+
+                // Check if data is returned
+                if (form_data.data && form_data.data.length > 0) {
+                    // If DataTable instance already exists, destroy it before re-initializing
+                    if ($.fn.DataTable.isDataTable('#data-table')) {
+                        $('#data-table').DataTable().clear().destroy();
+                    }
+
+                    // Initialize DataTable with specific columns
+                    $('#data-table').DataTable({
+                        data: form_data.data, // Use fetched data
+                        columns: [{
+                                data: 'id',
+                                title: 'ID'
+                            },
+                            {
+                                data: 'estate',
+                                title: 'Estate'
+                            },
+                            {
+                                data: 'afdeling',
+                                title: 'Afdeling'
+                            },
+                            {
+                                data: 'blok',
+                                title: 'Blok'
+                            },
+                            {
+                                data: 'tonase',
+                                title: 'Tonase'
+                            },
+                            {
+                                data: 'petugas',
+                                title: 'Petugas'
+                            },
+                            {
+                                data: 'datetime',
+                                title: 'Datetime'
+                            },
+                            {
+                                data: 'no_plat',
+                                title: 'No. Plat'
+                            },
+                            {
+                                data: 'jjg_spb',
+                                title: 'Jjg SPB'
+                            },
+                            {
+                                data: 'jjg_grading',
+                                title: 'Jjg Grading'
+                            },
+                            {
+                                data: 'overripe',
+                                title: 'Overripe'
+                            },
+                            {
+                                data: 'empty',
+                                title: 'Empty'
+                            },
+                            {
+                                data: 'rotten',
+                                title: 'Rotten'
+                            },
+                            {
+                                data: 'abn_partheno',
+                                title: 'Abnormal Partheno'
+                            },
+                            {
+                                data: 'abn_hard',
+                                title: 'Abnormal Hard'
+                            },
+                            {
+                                data: 'abn_sakit',
+                                title: 'Abnormal Sakit'
+                            },
+                            {
+                                data: 'tangkai_panjang',
+                                title: 'Tangkai Panjang'
+                            },
+                            {
+                                data: 'vcut',
+                                title: 'V-Cut'
+                            },
+                            {
+                                data: 'dirt',
+                                title: 'Dirt'
+                            },
+                            {
+                                data: 'karung',
+                                title: 'Karung'
+                            },
+                            {
+                                data: 'loose_fruit',
+                                title: 'Loose Fruit'
+                            },
+                            {
+                                data: 'kelas_c',
+                                title: 'Kelas C'
+                            },
+                            {
+                                data: 'kelas_b',
+                                title: 'Kelas B'
+                            },
+                            {
+                                data: 'kelas_a',
+                                title: 'Kelas A'
+                            },
+                            {
+                                data: 'unripe_tanpa_brondol',
+                                title: 'Unripe Without Brondol'
+                            },
+                            {
+                                data: 'unripe_kurang_brondol',
+                                title: 'Unripe Less Brondol'
+                            },
+                            {
+                                data: 'mill',
+                                title: 'Mill'
+                            },
+                            {
+                                data: 'no_pemanen',
+                                title: 'No Pemanen'
+                            },
+                            {
+                                data: 'app_version',
+                                title: 'App Version'
+                            },
+                            {
+                                data: 'status_bot',
+                                title: 'Status Bot'
+                            },
+                            {
+                                data: 'driver',
+                                title: 'Driver'
+                            },
+                            {
+                                title: 'Actions',
+                                render: function(data, type, row, meta) {
+                                    return `
+                                <button class="btn btn-warning" onclick="editRecord(${row.id})">Edit</button>
+                                <button class="btn btn-danger" onclick="deleteRecord(${row.id})">Delete</button>`;
+                                }
+                            }
+                        ],
+                        scrollX: true
+                    });
+
+                    // Show the modal
+                    const myModal = new bootstrap.Modal(document.getElementById('dataModal'));
+                    myModal.show();
+                } else {
+                    console.log('No data found.');
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+
+
 
         function getrekapperhari() {
             let reg = document.getElementById('rekap_perhari_reg').value;
@@ -948,24 +1173,16 @@
                     'X-CSRF-TOKEN': _token
                 },
                 success: function(result) {
-                    let parseResult = JSON.parse(result)
-                    console.log(parseResult);
-
+                    let parseResult = JSON.parse(result);
                     let tbodymill = document.getElementById('rekap_perhari_data');
                     Object.keys(parseResult).forEach(category => {
                         Object.keys(parseResult[category]).forEach(subcategory => {
                             const record = parseResult[category][subcategory];
 
-                            // Create a new row
                             let tr = document.createElement('tr');
-
-                            // If subcategory is 'Total', set background color to blue
-
-                            // Create an array to hold all the itemElements
                             let itemElements = [];
 
-                            // Initialize itemElements array with 'td' elements
-                            for (let index = 0; index < 35; index++) {
+                            for (let index = 0; index < 36; index++) {
                                 itemElements[index] = document.createElement('td');
                             }
                             itemElements[0].innerText = category;
@@ -1003,18 +1220,29 @@
                             itemElements[32].innerText = record['percentage_kelas_b'].toFixed(2);
                             itemElements[33].innerText = record['kelas_a'].toLocaleString('id-ID');
                             itemElements[34].innerText = record['percentage_kelas_a'].toFixed(2);
+
+                            // Create an edit button and append it to itemElements[35]
+                            let editButton = document.createElement('button');
+                            editButton.innerText = 'Edit';
+                            editButton.className = 'btn btn-success mr-2';
+                            editButton.innerHTML = '<i class="bi bi-pencil-square"></i>';
+                            editButton.onclick = function() {
+                                getform_edit(category, subcategory, bulan);
+                            };
+                            itemElements[35].appendChild(editButton);
+
                             itemElements.forEach(itemElement => tr.appendChild(itemElement));
+
                             if (subcategory === 'Total') {
                                 itemElements.forEach(itemElement => {
-                                    itemElement.style.backgroundColor = "#609cd4"; // Apply background color
-                                    itemElement.style.color = "white"; // Optionally, make the text white for better contrast
+                                    itemElement.style.backgroundColor = "#609cd4";
+                                    itemElement.style.color = "white";
                                 });
                             }
-                            // Append row to the table body
+
                             tbodymill.appendChild(tr);
                         });
                     });
-
 
                     Swal.close();
                 },
@@ -1022,6 +1250,7 @@
                     console.error('AJAX Error:', textStatus, errorThrown);
                 }
             });
+
 
 
         }
