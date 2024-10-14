@@ -7818,7 +7818,10 @@ class inspectController extends Controller
             } else {
                 $ancak[$key]['btr_jjg_ma'] = 0;
             }
-            $ancak[$key]['skor_brd'] = skor_brd_ma(round(($tot_brd / $jml_jjg_panen), 2));
+            $ancak[$key]['skor_brd'] = skor_brd_ma(
+                $jml_jjg_panen != 0 ? round(($tot_brd / $jml_jjg_panen), 2) : 0
+            );
+
             $ancak[$key]['bhts_ma'] = $jml_bhts;
             $ancak[$key]['bhtm1_ma'] = $jml_bhtm1;
             $ancak[$key]['bhtm2_ma'] = $jml_bhtm2;
@@ -7829,7 +7832,10 @@ class inspectController extends Controller
             } else {
                 $ancak[$key]['jjg_tgl_ma'] = 0;
             }
-            $ancak[$key]['skor_buah'] = skor_buah_Ma(round(($tot_jjg / ($jml_jjg_panen + $tot_jjg)) * 100, 2));
+            $ancak[$key]['skor_buah'] = skor_buah_Ma(
+                ($jml_jjg_panen + $tot_jjg) != 0 ? round(($tot_jjg / ($jml_jjg_panen + $tot_jjg)) * 100, 2) : 0
+            );
+
             $ancak[$key]['ps_ma'] = $jml_ps;
 
             $ancak[$key]['PerPSMA'] = count_percent($jml_ps, $jumPokok);
@@ -7952,7 +7958,10 @@ class inspectController extends Controller
             } else {
                 $ancakx[$key]['btr_jjg_ma'] = 0;
             }
-            $ancakx[$key]['skor_brd'] = skor_brd_ma(round(($tot_brd / $jml_jjg_panen), 3));
+            $ancakx[$key]['skor_brd'] = skor_brd_ma(
+                $jml_jjg_panen != 0 ? round(($tot_brd / $jml_jjg_panen), 2) : 0
+            );
+
             $ancakx[$key]['bhts_ma'] = $jml_bhts;
             $ancakx[$key]['bhtm1_ma'] = $jml_bhtm1;
             $ancakx[$key]['bhtm2_ma'] = $jml_bhtm2;
@@ -7963,7 +7972,10 @@ class inspectController extends Controller
             } else {
                 $ancakx[$key]['jjg_tgl_ma'] = 0;
             }
-            $ancakx[$key]['skor_buah'] = skor_buah_Ma(round(($tot_jjg / ($jml_jjg_panen + $tot_jjg)) * 100, 3));
+            $ancakx[$key]['skor_buah'] = skor_buah_Ma(
+                ($jml_jjg_panen + $tot_jjg) != 0 ? round(($tot_jjg / ($jml_jjg_panen + $tot_jjg)) * 100, 2) : 0
+            );
+
             $ancakx[$key]['ps_ma'] = $jml_ps;
 
             $ancakx[$key]['PerPSMA'] = count_percent($jml_ps, $jumPokok);
@@ -7978,7 +7990,19 @@ class inspectController extends Controller
             $ancakx[$key]['under'] = ($jumPokok != 0) ? round(($unprun / $jumPokok) * 100, 3) : 0;
             $ancakx[$key]['overprun'] = ($jumPokok != 0) ? round(($over_prun / $jumPokok) * 100, 3) : 0;
             $ancakx[$key]['piringansmk'] = ($jumPokok != 0) ? round(($pr_smak / $jumPokok) * 100, 3) : 0;
-            $ancakx[$key]['totskor_ancak'] = skor_brd_ma(round(($tot_brd / $jml_jjg_panen), 3)) + skor_buah_Ma(round(($tot_jjg / ($jml_jjg_panen + $tot_jjg)) * 100, 3)) + skor_palepah_ma(count_percent($jml_ps, $jumPokok));
+            $brd_ma = skor_brd_ma(
+                $jml_jjg_panen != 0 ? round(($tot_brd / $jml_jjg_panen), 3) : 0
+            );
+
+            $buah_ma = skor_buah_Ma(
+                ($jml_jjg_panen + $tot_jjg) != 0 ? round(($tot_jjg / ($jml_jjg_panen + $tot_jjg)) * 100, 3) : 0
+            );
+
+            $palepah_ma = skor_palepah_ma(
+                $jumPokok != 0 ? count_percent($jml_ps, $jumPokok) : 0
+            );
+
+            $ancakx[$key]['totskor_ancak'] = $brd_ma + $buah_ma + $palepah_ma;
 
 
             if ($first != '-') {
@@ -8145,7 +8169,8 @@ class inspectController extends Controller
                 $gl_ma += $value['gl_ma'] ?? 0;
 
                 $tod_brd = $p_ma + $k_ma + $gl_ma;
-                $brd_jgg = round(($tod_brd / $totpanen), 3);
+                $brd_jgg = $totpanen != 0 ? round(($tod_brd / $totpanen), 3) : 0;
+
                 $skor_brd = skor_brd_ma($brd_jgg);
 
                 $bhts_ma += $value['bhts_ma'] ?? 0;
@@ -8154,7 +8179,8 @@ class inspectController extends Controller
                 $bhtm3_ma += $value['bhtm3_ma'] ?? 0;
 
                 $tod_buah = $bhts_ma + $bhtm1_ma + $bhtm2_ma + $bhtm3_ma;
-                $buah_jjg = round(($tod_buah / ($totpanen + $tod_buah)) * 100, 3);
+                $buah_jjg = ($totpanen + $tod_buah) != 0 ? round(($tod_buah / ($totpanen + $tod_buah)) * 100, 3) : 0;
+
                 $skor_buah = skor_buah_Ma($buah_jjg);
 
                 $ps_ma += $value['ps_ma'] ?? 0;
