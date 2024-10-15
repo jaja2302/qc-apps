@@ -13,6 +13,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "laravel/ui": "^4.5",
+        "livewire/livewire": "*",
         "maatwebsite/excel": "^3.1",
         "twbs/bootstrap": "5.0.2",
         "yajra/laravel-datatables": "10.0",

@@ -1,4 +1,4 @@
-// import './bootstrap';
+import bootstrap from 'bootstrap'
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import 'sweetalert2/src/sweetalert2.scss'
 import 'leaflet-arrowheads';
@@ -35,10 +35,16 @@ import 'bootstrap-select/dist/css/bootstrap-select.min.css';
 import 'bootstrap-select';
 import 'choices.js/public/assets/styles/choices.min.css';
 import Choices from 'choices.js';
-import { Modal } from 'bootstrap';
-import { createPopper } from '@popperjs/core';
-import * as Popper from "@popperjs/core"
-import * as bootstrap from 'bootstrap'
+// import { Modal } from 'bootstrap';
+// import { createPopper } from '@popperjs/core';
+// // import * as Popper from "@popperjs/core"
+// // import * as bootstrap from 'bootstrap'
+// import 'bootstrap';
+
+window.jQuery = jQuery;
+
+
+
 window.select2 = select2;
 window.Choices = Choices;
 window.$ = jQuery;
@@ -46,7 +52,7 @@ window.DataTable = DataTable;
 window.jszip = jszip;
 window.pdfmake = pdfmake;
 window.DateTime = DateTime;
-window.modal = Modal;
+window.bootstrap = bootstrap;
 // helper 
 window.captureTableScreenshot = (tableId, fileName) => {
     Swal.fire({

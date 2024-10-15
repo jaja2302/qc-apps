@@ -11,10 +11,7 @@ class Gradingmill extends Model
 
     protected $table = 'grading_mill';
     protected $connection = 'mysql2';
-
-    protected $fillable = [
-        'status_bot',
-    ];
+    protected $guarded = ['id'];
     public $timestamps = false;
 
     public function Estate()
