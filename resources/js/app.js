@@ -1,13 +1,16 @@
-import bootstrap from 'bootstrap'
-import Swal from 'sweetalert2/dist/sweetalert2.js'
-import 'sweetalert2/src/sweetalert2.scss'
+// Import all Bootstrap components (from Bootstrap 5)
+import * as bootstrap from 'bootstrap';
+
+// Or import only specific components like Modal
+// import { Modal } from 'bootstrap';
+
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+import 'sweetalert2/src/sweetalert2.scss';
 import 'leaflet-arrowheads';
 import 'leaflet-polylinedecorator';
 import 'leaflet-rotatedmarker';
 import html2canvas from 'html2canvas';
-window.html2canvas = html2canvas;
-
-import jQuery from "jquery";
+import jQuery from 'jquery';
 import jszip from 'jszip';
 import pdfmake from 'pdfmake';
 import DataTable from 'datatables.net-dt';
@@ -35,16 +38,8 @@ import 'bootstrap-select/dist/css/bootstrap-select.min.css';
 import 'bootstrap-select';
 import 'choices.js/public/assets/styles/choices.min.css';
 import Choices from 'choices.js';
-// import { Modal } from 'bootstrap';
-// import { createPopper } from '@popperjs/core';
-// // import * as Popper from "@popperjs/core"
-// // import * as bootstrap from 'bootstrap'
-// import 'bootstrap';
-
+window.html2canvas = html2canvas;
 window.jQuery = jQuery;
-
-
-
 window.select2 = select2;
 window.Choices = Choices;
 window.$ = jQuery;
@@ -52,8 +47,8 @@ window.DataTable = DataTable;
 window.jszip = jszip;
 window.pdfmake = pdfmake;
 window.DateTime = DateTime;
-window.bootstrap = bootstrap;
-// helper 
+
+
 window.captureTableScreenshot = (tableId, fileName) => {
     Swal.fire({
         title: 'Loading',

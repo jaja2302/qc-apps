@@ -848,18 +848,7 @@
 
         }
 
-        document.getElementById('rekap_perhari').onclick = function() {
-            Swal.fire({
-                title: 'Loading',
-                html: '<span class="loading-text">Mohon Tunggu...</span>',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                willOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-            getrekapperhari();
-        }
+
         async function getdata_form(estate, afdeling, date) {
             return new Promise((resolve, reject) => {
                 $.ajax({
@@ -1049,109 +1038,6 @@
 
 
 
-        function getrekapperhari() {
-            let reg = document.getElementById('rekap_perhari_reg').value;
-            let bulan = document.getElementById('input_rekap_perhari').value;
-            let mill_id = document.getElementById('mill_id').value;
-            // let estate = document.getElementById('estate_select').value;
-            // console.log(reg);
-            let _token = $('input[name="_token"]').val();
-            $('#rekap_perhari_data').empty()
-            // console.log('rekap_perhari_data');
-            $.ajax({
-                url: "{{ route('getrekapperhari_dashboard') }}",
-                method: "GET",
-                data: {
-                    reg: reg,
-                    bulan: bulan,
-                    mill_id: mill_id,
-                    _token: _token
-                },
-                headers: {
-                    'X-CSRF-TOKEN': _token
-                },
-                success: function(result) {
-                    let parseResult = JSON.parse(result);
-                    let tbodymill = document.getElementById('rekap_perhari_data');
-                    Object.keys(parseResult).forEach(category => {
-                        Object.keys(parseResult[category]).forEach(subcategory => {
-                            const record = parseResult[category][subcategory];
-
-                            let tr = document.createElement('tr');
-                            let itemElements = [];
-
-                            for (let index = 0; index < 36; index++) {
-                                itemElements[index] = document.createElement('td');
-                            }
-                            itemElements[0].innerText = category;
-                            itemElements[1].innerText = subcategory;
-                            itemElements[2].innerText = record['no_plat'];
-                            itemElements[3].innerText = record['unit'];
-                            itemElements[4].innerText = record['tonase'];
-                            itemElements[5].innerText = record['jumlah_janjang_spb'];
-                            itemElements[6].innerText = record['jumlah_janjang_grading'];
-                            itemElements[7].innerText = record['tonase'];
-                            itemElements[8].innerText = record['bjr'].toFixed(2);
-                            itemElements[9].innerText = record['ripeness'].toLocaleString('id-ID');
-                            itemElements[10].innerText = record['percentage_ripeness'].toFixed(2);
-                            itemElements[11].innerText = record['unripe'].toLocaleString('id-ID');
-                            itemElements[12].innerText = record['percentage_unripe'].toFixed(2);
-                            itemElements[13].innerText = record['overripe'].toLocaleString('id-ID');
-                            itemElements[14].innerText = record['percentage_overripe'].toFixed(2);
-                            itemElements[15].innerText = record['empty_bunch'].toLocaleString('id-ID');
-                            itemElements[16].innerText = record['percentage_empty_bunch'].toFixed(2);
-                            itemElements[17].innerText = record['rotten_bunch'].toLocaleString('id-ID');
-                            itemElements[18].innerText = record['percentage_rotten_bunch'].toFixed(2);
-                            itemElements[19].innerText = record['abnormal'].toLocaleString('id-ID');
-                            itemElements[20].innerText = record['percentage_abnormal'].toFixed(2);
-                            itemElements[21].innerText = record['longstalk'].toLocaleString('id-ID');
-                            itemElements[22].innerText = record['percentage_longstalk'].toFixed(2);
-                            itemElements[23].innerText = record['vcut'];
-                            itemElements[24].innerText = record['percentage_vcut'].toFixed(2);
-                            itemElements[25].innerText = record['dirt_kg'].toLocaleString('id-ID');
-                            itemElements[26].innerText = record['percentage_dirt'].toFixed(2);
-                            itemElements[27].innerText = record['loose_fruit_kg'].toLocaleString('id-ID');
-                            itemElements[28].innerText = record['percentage_loose_fruit'].toFixed(2);
-                            itemElements[29].innerText = record['kelas_c'].toLocaleString('id-ID');
-                            itemElements[30].innerText = record['percentage_kelas_c'].toFixed(2);
-                            itemElements[31].innerText = record['kelas_b'].toLocaleString('id-ID');
-                            itemElements[32].innerText = record['percentage_kelas_b'].toFixed(2);
-                            itemElements[33].innerText = record['kelas_a'].toLocaleString('id-ID');
-                            itemElements[34].innerText = record['percentage_kelas_a'].toFixed(2);
-
-                            // Create an edit button and append it to itemElements[35]
-                            let editButton = document.createElement('button');
-                            editButton.innerText = 'Edit';
-                            editButton.className = 'btn btn-success mr-2';
-                            editButton.innerHTML = '<i class="bi bi-pencil-square"></i>';
-                            editButton.onclick = function() {
-                                getform_edit(category, subcategory, bulan);
-                            };
-                            itemElements[35].appendChild(editButton);
-
-                            itemElements.forEach(itemElement => tr.appendChild(itemElement));
-
-                            if (subcategory === 'Total') {
-                                itemElements.forEach(itemElement => {
-                                    itemElement.style.backgroundColor = "#609cd4";
-                                    itemElement.style.color = "white";
-                                });
-                            }
-
-                            tbodymill.appendChild(tr);
-                        });
-                    });
-
-                    Swal.close();
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error('AJAX Error:', textStatus, errorThrown);
-                }
-            });
-
-
-
-        }
 
         function getrekapperafdeling() {
             let reg = document.getElementById('rekap_perfadeling_reg').value;
@@ -1283,9 +1169,7 @@
         document.getElementById('exportFormdua').addEventListener('submit', function(event) {
             handleExportSubmit(event, 'exportFormdua', 'regional_select_mill', 'inputbulan_mill', 'getregionaldua', 'getdatedua');
         });
-        document.getElementById('exportFormtiga').addEventListener('submit', function(event) {
-            handleExportSubmit2(event, 'exportFormtiga', 'rekap_perhari_reg', 'input_rekap_perhari', 'getregionaltiga', 'getdatetiga', 'mill_perhari');
-        });
+
         document.getElementById('exportFormempat').addEventListener('submit', function(event) {
             handleExportSubmit(event, 'exportFormempat', 'rekap_perfadeling_reg', 'input_rekap_perfadeling', 'getregionalempat', 'getdateempat');
         });

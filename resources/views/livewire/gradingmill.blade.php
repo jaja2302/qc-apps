@@ -407,10 +407,20 @@
     <script type="module">
         document.addEventListener('livewire:init', () => {
             Livewire.on('showModal', (data) => {
-                $('#exampleModal').modal('show');
+                const modalElement = document.getElementById('exampleModal');
+                const myModal = new bootstrap.Modal(modalElement);
+
+                // Show modal programmatically
+                myModal.show();
+                // $('#exampleModal').modal('show');
             });
             Livewire.on('closeModal', (data) => {
-                $('#exampleModal').modal('hide');
+                const modalElement = document.getElementById('exampleModal');
+                const myModal = new bootstrap.Modal(modalElement);
+
+                // Show modal programmatically
+                myModal.hide();
+                // $('#exampleModal').modal('hide');
             });
             Livewire.on('refreshComponent', (data) => {
                 location.reload();
