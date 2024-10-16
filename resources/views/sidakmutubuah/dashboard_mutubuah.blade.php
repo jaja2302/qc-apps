@@ -1341,8 +1341,11 @@
         let checkdata = @json($check);
         let recordsdupt = @json($idduplicate);
         if (checkdata === 'ada') {
-            // Show Bootstrap modal
-            $('#confirmationModal').modal('show');
+            const modalElement = document.getElementById('confirmationModal');
+            if (modalElement) {
+                new bootstrap.Modal(modalElement).show();
+            }
+
 
             // Attach a click event to the "Yes" button
             $('#confirmBtn').on('click', function() {
@@ -1378,7 +1381,8 @@
                     }
                 });
 
-                $('#confirmationModal').modal('hide');
+                new bootstrap.Modal(modalElement).hide();
+
             });
         }
 

@@ -375,7 +375,7 @@
                 </div>
                 @if (can_edit_mananger_askep())
                 <div>
-                    <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
+                    <button class="btn btn-primary align-self-end" id="verifButton">Verif now</button>
                 </div>
                 @endif
             </div>
@@ -749,7 +749,7 @@
     <input type="hidden" id="afd" value="{{$afd}}">
 
 
-    <script type="text/javascript">
+    <script type="module">
         const canedit = @json(can_edit());
         const can_edit_mananger_askep = @json(can_edit_mananger_askep());
 
@@ -919,7 +919,7 @@
             });
         }
 
-
+       
         // window.onload = function() {
         //     // Add the event listener for the "Save changes" button when the DOM is ready
         //     document.getElementById('save-changes-button').addEventListener('click', updateFunction);
@@ -1769,6 +1769,7 @@
         if (can_edit_mananger_askep) {
             document.getElementById("moveDataButton").addEventListener("click", selectDate);
         }
+        document.getElementById('verifButton').addEventListener('click', verifbutton);
         // Attach click event listener to the button
     </script>
 

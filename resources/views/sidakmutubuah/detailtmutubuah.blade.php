@@ -358,7 +358,7 @@
                 </div>
                 @if (can_edit_mananger_askep())
                 <div>
-                    <button class="btn btn-primary align-self-end" onclick="verifbutton()">Verif now</button>
+                    <button class="btn btn-primary align-self-end" id="verifButton">Verif now</button>
                 </div>
 
                 @endif
@@ -836,7 +836,7 @@
 
 
 
-        <script type="text/javascript">
+        <script type="module">
             const canedit = @json(can_edit());
 
             $(document).ready(function() {
@@ -2161,6 +2161,7 @@
 
             // Attach click event listener to the button
             document.getElementById("moveDataButton").addEventListener("click", selectDate);
+            document.getElementById('verifButton').addEventListener('click', verifbutton);
         </script>
 
 </x-layout.app>
