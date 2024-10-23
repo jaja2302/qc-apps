@@ -1,7 +1,7 @@
 <x-layout.app>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    @if (strpos(session('departemen'), 'QC') !== false && session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' || session('jabatan') == 'Admin' || auth()->user()->id_departement == '43' && in_array(auth()->user()->id_jabatan, ['10', '15', '20', '4', '5', '6']))
+    @if (can_edit())
     @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
@@ -152,7 +152,7 @@
 
 
 
-                                    @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' || session('jabatan') == 'Admin')
+                                    @if (can_edit())
                                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editProfileModal">
                                         Edit Profile
                                     </button>
@@ -343,6 +343,7 @@
     <script type="module">
         var currentUserName = "{{ session('jabatan') }}";
         var departemen = "{{ session('departemen') }}";
+        const can_edit = "{{ can_edit() }}";
         $(document).ready(function() {
             // Select all user_id_option select elements
             document.querySelectorAll('select[id^="user_id_option"]').forEach((userSelect) => {
@@ -372,7 +373,7 @@
                                     }], 'value', 'label', false);
                                 });
                             } else {
-                                console.log('No users found');
+                                // console.log('No users found');
                                 choices.clearChoices();
                                 choices.setChoices([{
                                     value: '',
@@ -387,8 +388,15 @@
                 });
             });
 
-            document.getElementById('user_id_option').addEventListener('change', function() {
-                document.getElementById('hidden_user_id_option').value = this.value;
+            // Triggering the change event for each select option in the modals
+            document.querySelectorAll('select[id^="user_id_option"]').forEach(function(selectElement) {
+                selectElement.addEventListener('change', function() {
+                    const modal = this.closest('.modal');
+                    const hiddenInput = modal.querySelector('#hidden_user_id_option');
+                    if (hiddenInput) {
+                        hiddenInput.value = this.value;
+                    }
+                });
             });
 
             // Get the session values
@@ -456,7 +464,7 @@
                             {
                                 // -1 targets the last column
                                 title: 'Actions',
-                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager' || (currentUserName === 'Admin' && departemen === 'QC')),
+                                visible: can_edit,
                                 render: function(data, type, row, meta) {
                                     var buttons =
                                         '<button  class="btn btn-primary"><span><i class="bi bi-pencil"></i></span>Edit</button>' +
@@ -508,7 +516,7 @@
                             {
                                 // -1 targets the last column
                                 title: 'Actions',
-                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager' || (currentUserName === 'Admin' && departemen === 'QC')),
+                                visible: can_edit,
                                 render: function(data, type, row, meta) {
                                     var buttons =
                                         '<button  class="btn btn-primary"><span><i class="bi bi-pencil"></i></span>Edit</button>'
@@ -574,7 +582,7 @@
                             {
                                 // -1 targets the last column
                                 title: 'Actions',
-                                visible: (currentUserName === 'Askep' || currentUserName === 'Manager' || (currentUserName === 'Admin' && departemen === 'QC')),
+                                visible: can_edit,
                                 render: function(data, type, row, meta) {
                                     var buttons =
                                         '<button  class="btn btn-primary"><span><i class="bi bi-pencil"></i></span>Edit</button>'

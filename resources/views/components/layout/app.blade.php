@@ -67,14 +67,14 @@
 
         </nav>
         <aside class="main-sidebar sidebar-light-primary elevation-4">
-            <a href="{{ asset('rekap') }}" class="brand-link">
+            <a href="#" class="brand-link">
                 <img src="{{ asset('img/CBIpreview.png') }}" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">Dashboard</span>
             </a>
             <div class="sidebar">
                 <nav class="" style="height: 100%">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" style="height: 100%">
-
+                        @if (type_of_user() === 'QC')
                         <li class="nav-item">
                             <a href="{{ asset('/dashboard_inspeksi') }}" class="nav-link">
                                 <div class="nav-icon lottie-animation" data-animation-path="https://assets10.lottiefiles.com/packages/lf20_w4hwxwuq.json"></div>
@@ -82,7 +82,6 @@
 
                             </a>
                         </li>
-
                         <li class="nav-item">
                             <!-- uses solid style -->
                             <a href="{{ asset('/dashboardtph') }}" class="nav-link">
@@ -120,11 +119,6 @@
                                 </p>
                             </a>
                         </li>
-
-
-
-
-
                         <li class="nav-item">
                             <a href="{{ asset('/dashboard_perum') }}" class="nav-link">
                                 <div class="nav-icon lottie-animation" data-animation-path="{{ asset('img/homejson.json') }}">
@@ -136,7 +130,6 @@
                                 </p>
                             </a>
                         </li>
-
                         <li class="nav-item">
                             <a href="{{ asset('/gradingdahsboard') }}" class="nav-link">
                                 <div class="nav-icon lottie-animation" data-animation-path="{{ asset('img/mill.json') }}">
@@ -156,11 +149,23 @@
                         </li>
                         @endif
 
-                        @if (strpos(session('departemen'), 'QC') !== false && session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten' || session('jabatan') == 'Admin' || auth()->user()->id_departement == '43' && in_array(auth()->user()->id_jabatan, ['10', '15', '20', '4', '5', '6']))
+                        @if (can_edit())
                         <li class="nav-item">
                             <a href="{{ asset('/userqcpanel') }}" class="nav-link">
                                 <div class="nav-icon lottie-animation" data-animation-path="{{ asset('img/homejson.json') }}"></div>
                                 <p style="font-size: 15px;">Management User QC</p>
+                            </a>
+                        </li>
+                        @endif
+                        @else
+                        <li class="nav-item">
+                            <a href="{{ asset('/gradingdahsboard') }}" class="nav-link">
+                                <div class="nav-icon lottie-animation" data-animation-path="{{ asset('img/mill.json') }}">
+                                </div>
+
+                                <p style="font-size: 15px;">
+                                    Grading MIll
+                                </p>
                             </a>
                         </li>
                         @endif

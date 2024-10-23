@@ -45,7 +45,9 @@ class LoginController extends Controller
             // Redirect the user back with an error message if not authorized
             return back()->with('error', 'Unauthorized access');
         }
-
+        if (type_of_user() === 'QC_Mill') {
+            return redirect()->intended(route('gradingdahsboard'));
+        }
         // Redirect the user to the intended route after successful login
         return redirect()->intended(route('dashboard_inspeksi'));
     }

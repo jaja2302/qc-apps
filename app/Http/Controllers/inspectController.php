@@ -700,8 +700,9 @@ class inspectController extends Controller
 
     public function dashboard_inspeksi(Request $request)
     {
-
-
+        // dd(auth()->user());
+        // $user = type_of_user();
+        // dd($user);
 
         $bulan = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         $shortMonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];

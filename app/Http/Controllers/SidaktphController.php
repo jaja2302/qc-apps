@@ -176,16 +176,20 @@ class SidaktphController extends Controller
         $records = detectDuplicates($sidaktph, $columns);
 
         // dd($records);
-
+        DB::connection('mysql2')->table('sidak_tph')
+            ->select('*')
+            ->whereIn('id', $records)
+            ->delete();
         $getdata = DB::connection('mysql2')->table('sidak_tph')
             ->select('*')
             ->whereIn('id', $records)
             ->get();
 
-        // dd($getdata);
+        // // dd($getdata);
 
-        $getdata = json_decode($getdata, true);
-        $tt_duplicate = count($records);
+        // $getdata = json_decode($getdata, true);
+        // $tt_duplicate = count($records);
+        $tt_duplicate = 0;
 
         if ($tt_duplicate != 0) {
             $check = 'ada';

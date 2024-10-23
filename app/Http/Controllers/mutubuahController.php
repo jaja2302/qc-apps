@@ -126,12 +126,16 @@ class mutubuahController extends Controller
 
         $records = detectDuplicates($sidakmtb, $columns);
 
-        // dd($sidakmtb);
-
+        // // dd($sidakmtb);
+        // DB::connection('mysql2')->table('sidak_mutu_buah')
+        //     ->select('*')
+        //     ->whereIn('id', $records)
+        //     ->delete();
         $getdata = DB::connection('mysql2')->table('sidak_mutu_buah')
             ->select('*')
             ->whereIn('id', $records)
             ->get();
+
 
         // dd($getdata);
 

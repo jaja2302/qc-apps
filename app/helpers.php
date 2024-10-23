@@ -6,6 +6,7 @@ use App\Models\BlokMatch;
 use App\Models\Gradingmill;
 use App\Models\Listmill;
 use App\Models\mutu_ancak;
+use App\Models\Pengguna;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cookie;
@@ -1022,38 +1023,46 @@ if (!function_exists('formatPhoneNumber')) {
         }
     }
 }
+if (!function_exists('type_of_user')) {
+    function type_of_user()
+    {
+        $user = Pengguna::where('user_id', auth()->user()->user_id)
+            ->with('Departement', 'Jabatan')
+            ->first();
 
+        $departmentIds = $user->Departement->pluck('id')->toArray();
 
-// manager askep asisten bisa edit dengan departemen khusus QC
+        if (in_array('43', $departmentIds)) {
+            return count($departmentIds) > 1 ? 'QC_Mill' : 'QC';
+        }
+
+        return 'Not_QC';
+    }
+}
+// Manager, Askep, and Asisten can edit with QC department
 if (!function_exists('can_edit')) {
     function can_edit()
     {
-        $user = auth()->user();
-        $newJabatan = $user->id_jabatan;
-        $oldJabatan = $user->jabatan;
-        $newDepartemen = $user->id_departement;
-        $oldDepartemen = $user->departemen;
+        $user = Pengguna::where('user_id', auth()->user()->user_id)
+            ->with('Departement', 'Jabatan')
+            ->first();
 
-        $allowedJabatan = ['6', '7', '15', '5'];
+        $allowedPositions = ['6', '7', '15', '5'];
         $allowedDepartments = ['43'];
+        $allowedOldPositions = ['Askep', 'Manager', 'Asisten', 'Askep/Asisten'];
+        $allowedOldDepartments = ['QC', 'Quality Control'];
 
         // Check new department and position
-        if ($newJabatan !== null && in_array($newDepartemen, $allowedDepartments) && in_array($newJabatan, $allowedJabatan)) {
-            return true;
+        if ($user->id_jabatan !== null) {
+            return in_array($user->id_jabatan, $allowedPositions) &&
+                !empty(array_intersect($user->Departement->pluck('id')->toArray(), $allowedDepartments));
         }
 
         // Check old department and position
-        $allowedOldJabatan = ['Askep', 'Manager', 'Asisten', 'Askep/Asisten'];
-        $allowedOldDepartments = ['QC', 'Quality Control'];
-
-        if ($newJabatan === null && in_array($oldDepartemen, $allowedOldDepartments) && in_array($oldJabatan, $allowedOldJabatan)) {
-            return true;
-        }
-
-        return false;
+        return in_array($user->jabatan, $allowedOldPositions) &&
+            in_array($user->departemen, $allowedOldDepartments);
     }
 }
-// cuma manager dan askep bisa edit tanpa depertement
 if (!function_exists('can_edit_mananger_askep')) {
     function can_edit_mananger_askep()
     {

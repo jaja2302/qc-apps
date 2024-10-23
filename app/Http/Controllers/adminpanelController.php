@@ -181,6 +181,8 @@ class adminpanelController extends Controller
         $afd = $request->input('afdeling');
         $no_hp = $request->input('nohp') ?? null;
         $pass = $request->input('pass');
+
+
         // Update the user in the database
         DB::table('pengguna')->where('user_id', $userqc)
             ->update([
@@ -209,37 +211,26 @@ class adminpanelController extends Controller
 
     public function updateAsisten(Request $request)
     {
-        DB::connection('mysql2')->beginTransaction(); // Start the transaction
+        DB::connection('mysql2')->beginTransaction();
 
         try {
-            // Get the asisten by ID
             $asisten = DB::table('asisten_qc')->where('id', $request->input('id'))->first();
-            // dd($request->input('hidden_user_id_option'));
-            // $user_id = $request->in
-            if ($asisten) {
-                // Update the asisten record
+            // dd($request->input('user_id_option'), $request->input('id'), $request->input('hidden_user_id_option'));
+            if ($asisten && $request->input('hidden_user_id_option') != null) {
                 DB::table('asisten_qc')->where('id', $request->input('id'))->update([
                     'user_id' => $request->input('hidden_user_id_option'),
                     'est' => $request->input('est'),
                     'afd' => $request->input('afd')
                 ]);
 
-                // Commit the transaction
                 DB::connection('mysql2')->commit();
-
                 return redirect()->back()->with('success', 'Profile updated successfully');
             } else {
-                // Rollback the transaction if the asisten is not found
                 DB::connection('mysql2')->rollBack();
-                return redirect()->back()->with('error', 'Asisten not found!');
+                return redirect()->back()->with('error', 'Asisten not found or user id is null!');
             }
         } catch (\Throwable $th) {
-            // Rollback the transaction if an error occurs
             DB::connection('mysql2')->rollBack();
-
-            // Log the exception
-
-            // Return back with an error message
             return redirect()->back()->with('error', 'Failed to update profile. Please try again later.');
         }
     }

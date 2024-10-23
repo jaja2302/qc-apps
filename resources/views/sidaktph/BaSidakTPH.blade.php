@@ -919,7 +919,7 @@
             });
         }
 
-       
+
         // window.onload = function() {
         //     // Add the event listener for the "Save changes" button when the DOM is ready
         //     document.getElementById('save-changes-button').addEventListener('click', updateFunction);

@@ -15,13 +15,11 @@ class Pengguna extends Authenticatable
 
     public function Departement()
     {
-        return $this->belongsTo(Departement::class, 'id_departement', 'id');
+        return $this->belongsToMany(Departement::class, 'department_user', 'user_id', 'department_id');
     }
-
     public function Jabatan()
     {
         return $this->belongsTo(Jabatan::class, 'id_jabatan', 'id');
     }
-
     // public $timestamps = false;
 }
