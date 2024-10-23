@@ -59,10 +59,7 @@ class RekapController extends Controller
             $dataparams = 'old';
         }
         // dd($bulan);
-        $queryAsisten = DB::connection('mysql2')->table('asisten_qc')
-            ->select('asisten_qc.*')
-            ->get();
-        $queryAsisten = json_decode($queryAsisten, true);
+
         // dd($value2['datetime'], $endDate);
         $queryEste = DB::connection('mysql2')->table('estate')
             ->select('estate.*')
@@ -245,12 +242,8 @@ class RekapController extends Controller
                     $sidak_buah[$key][$key1]['All_skor'] = $allSkor;
                     $sidak_buah[$key][$key1]['csfxr'] = $csfxr;
                     $sidak_buah[$key][$key1]['kategori'] = sidak_akhir($allSkor);
+                    $sidak_buah[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
 
-                    foreach ($queryAsisten as $ast => $asisten) {
-                        if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                            $sidak_buah[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                        }
-                    }
                     $jjg_samplex += $jjg_sample;
                     $tnpBRDx += $tnpBRD;
                     $krgBRDx += $krgBRD;
@@ -301,11 +294,7 @@ class RekapController extends Controller
                     $sidak_buah[$key][$key1]['All_skor'] = 0;
                     $sidak_buah[$key][$key1]['kategori'] = 0;
                     $sidak_buah[$key][$key1]['csfxr'] = 0;
-                    foreach ($queryAsisten as $ast => $asisten) {
-                        if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                            $sidak_buah[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                        }
-                    }
+                    $sidak_buah[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
                 }
             }
             if ($sum_krx != 0) {
@@ -327,15 +316,9 @@ class RekapController extends Controller
             $allSkor = sidak_brdTotal($skor_total) +  sidak_matangSKOR($skor_jjgMSk) +  sidak_lwtMatang($skor_lewatMTng) + sidak_jjgKosong($skor_jjgKosong) + sidak_tangkaiP($skor_vcut) + sidak_PengBRD($per_kr);
 
             $em = 'EM';
+            $nama_em = get_nama_em($key1);
 
-            $nama_em = '';
 
-            // dd($key1);
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
-                    $nama_em = $asisten['nama'];
-                }
-            }
             $jjg_mth = $tnpBRDx + $krgBRDx + $overripex + $emptyx;
 
             $skor_jjgMTh = ($jjg_samplex - $abrx != 0) ? round($jjg_mth / ($jjg_samplex - $abrx) * 100, 3) : 0;
@@ -813,16 +796,8 @@ class RekapController extends Controller
 
                 // dd($deviden);
 
-                $namaGM = '-';
-                foreach ($queryAsisten as $asisten) {
 
-                    // dd($asisten);
-                    if ($asisten['est'] == $key && $asisten['afd'] == $key1) {
-                        $namaGM = $asisten['nama'];
-                        break;
-                    }
-                }
-
+                $namaGM = get_nama_asisten($key, $key1);
                 $deviden = count($value2);
 
                 $new_dvd = $dividen_x ?? 0;
@@ -912,14 +887,8 @@ class RekapController extends Controller
             }
 
             // dd($value);
+            $namaGM = get_nama_em($key);
 
-            $namaGM = '-';
-            foreach ($queryAsisten as $asisten) {
-                if ($asisten['est'] == $key && $asisten['afd'] == 'EM') {
-                    $namaGM = $asisten['nama'];
-                    break;
-                }
-            }
             if ($new_dvdAfd != 0) {
                 $newSidak[$key]['deviden'] = 1;
             } else {
@@ -2709,12 +2678,8 @@ class RekapController extends Controller
                         $sidak_buah_mua[$key][$key1]['All_skor'] = $allSkor;
                         $sidak_buah_mua[$key][$key1]['csfxr'] = $csfxr;
                         $sidak_buah_mua[$key][$key1]['kategori'] = sidak_akhir($allSkor);
+                        $sidak_buah_mua[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
 
-                        foreach ($queryAsisten as $ast => $asisten) {
-                            if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                                $sidak_buah_mua[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                            }
-                        }
                         $jjg_samplex += $jjg_sample;
                         $tnpBRDx += $tnpBRD;
                         $krgBRDx += $krgBRD;
@@ -2765,11 +2730,7 @@ class RekapController extends Controller
                         $sidak_buah_mua[$key][$key1]['All_skor'] = 0;
                         $sidak_buah_mua[$key][$key1]['kategori'] = 0;
                         $sidak_buah_mua[$key][$key1]['csfxr'] = 0;
-                        foreach ($queryAsisten as $ast => $asisten) {
-                            if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                                $sidak_buah_mua[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                            }
-                        }
+                        $sidak_buah_mua[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
                     }
                 }
                 if ($sum_krx != 0) {
@@ -2791,15 +2752,8 @@ class RekapController extends Controller
                 $allSkor = sidak_brdTotal($skor_total) +  sidak_matangSKOR($skor_jjgMSk) +  sidak_lwtMatang($skor_lewatMTng) + sidak_jjgKosong($skor_jjgKosong) + sidak_tangkaiP($skor_vcut) + sidak_PengBRD($per_kr);
 
                 $em = 'EM';
+                $nama_em = get_nama_em($key1);
 
-                $nama_em = '';
-
-                // dd($key1);
-                foreach ($queryAsisten as $ast => $asisten) {
-                    if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
-                        $nama_em = $asisten['nama'];
-                    }
-                }
                 $jjg_mth = $tnpBRDx + $krgBRDx + $overripex + $emptyx;
 
                 $skor_jjgMTh = ($jjg_samplex - $abrx != 0) ? round($jjg_mth / ($jjg_samplex - $abrx) * 100, 3) : 0;
@@ -2886,15 +2840,8 @@ class RekapController extends Controller
             $allSkor = sidak_brdTotal($skor_total) +  sidak_matangSKOR($skor_jjgMSk) +  sidak_lwtMatang($skor_lewatMTng) + sidak_jjgKosong($skor_jjgKosong) + sidak_tangkaiP($skor_vcut) + sidak_PengBRD($per_kr);
 
             $em = 'EM';
+            $nama_em = get_nama_em($key1);
 
-            $nama_em = '';
-
-            // dd($key1);
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
-                    $nama_em = $asisten['nama'];
-                }
-            }
             $jjg_mthxy = $tnpBRDxy + $krgBRDxy + $overripexy + $emptyxy;
 
             $skor_jjgMTh = ($jjg_samplexy - $abrxy != 0) ? round($jjg_mth / ($jjg_samplexy - $abrxy) * 100, 3) : 0;
@@ -3207,16 +3154,9 @@ class RekapController extends Controller
 
 
                     // dd($deviden);
+                    $namaGM = get_nama_asisten($key, $key1);
 
-                    $namaGM = '-';
-                    foreach ($queryAsisten as $asisten) {
 
-                        // dd($asisten);
-                        if ($asisten['est'] == $key && $asisten['afd'] == $key1) {
-                            $namaGM = $asisten['nama'];
-                            break;
-                        }
-                    }
 
                     $deviden = count($value2);
 
@@ -3313,14 +3253,8 @@ class RekapController extends Controller
                 }
 
                 // dd($value);
+                $namaGM = get_nama_em($key);
 
-                $namaGM = '-';
-                foreach ($queryAsisten as $asisten) {
-                    if ($asisten['est'] == $key && $asisten['afd'] == 'EM') {
-                        $namaGM = $asisten['nama'];
-                        break;
-                    }
-                }
                 if ($new_dvdAfd != 0) {
                     $newSidak_mua[$key]['deviden'] = 1;
                 } else {
@@ -3361,13 +3295,8 @@ class RekapController extends Controller
 
             // dd($value);
 
-            $namaGMnewSidak_mua = '-';
-            foreach ($queryAsisten as $asisten) {
-                if ($asisten['est'] == $key && $asisten['afd'] == 'EM') {
-                    $namaGMnewSidak_mua = $asisten['nama'];
-                    break;
-                }
-            }
+            $namaGMnewSidak_mua = get_nama_em($key);
+
             $newSidak_mua['PT.MUA'] = [
                 'deviden' => $devmuxax,
                 'checkdata' => $checkdata,
@@ -4540,14 +4469,10 @@ class RekapController extends Controller
                         $datatph = 0;
                     }
                     // dd($key);
-                    foreach ($queryAsisten as $keyx => $valuex) {
-                        if ($valuex['est'] === $key && $valuex['afd'] === 'OA') {
-                            $rekapmua[$key]['asistenafd'] = $valuex['nama'] ?? '-';
-                            break;
-                        } elseif ($valuex['est'] === $key && $valuex['afd'] === 'EM') {
-                            $rekapmua[$key]['manager'] = $valuex['nama'] ?? '-';
-                        }
-                    }
+                    $rekapmua[$key]['asistenafd'] = get_nama_asisten($key, 'OA');
+                    $rekapmua[$key]['manager'] = get_nama_em($key);
+
+
 
 
                     $check = $databh + $dataqc + $datatph;
@@ -4660,10 +4585,9 @@ class RekapController extends Controller
                                         $countAda++;
                                     }
                                 }
-                                foreach ($queryAsisten as $keyx => $valuex) if ($valuex['est'] === $keyqc1 && $valuex['afd'] === $keyqc2) {
-                                    $rekapafd[$keyqc][$keyqc1][$keyqc2]['nama'] = $valuex['nama'] ?? '-';
-                                    break;
-                                }
+
+                                $rekapafd[$keyqc][$keyqc1][$keyqc2]['nama'] = get_nama_asisten($keyqc1, $keyqc2);
+
                                 $rekapafd[$keyqc][$keyqc1][$keyqc2]['tph_check'] = $tph;
                                 $rekapafd[$keyqc][$keyqc1][$keyqc2]['bgcolor'] = 'white';
                                 $rekapafd[$keyqc][$keyqc1][$keyqc2]['skor_tph'] = $tphskor;
@@ -4725,11 +4649,9 @@ class RekapController extends Controller
                                         $countAda2++;
                                     }
                                 }
-                                $namaqc = '-';
-                                foreach ($queryAsisten as $keyx => $valuex) if ($valuex['est'] === $keyqc1 && $valuex['afd'] === 'EM') {
-                                    $namaqc = $valuex['nama'] ?? '-';
-                                    break;
-                                }
+
+                                $namaqc =  get_nama_em($keyqc1);
+
                                 $totalest = $countAda2 !== 0 ? round(($tphskor2 + $qcskor2 + $buahskor2) / $countAda2, 3) : 0;
 
                                 // Assuming $estate is an individual entry and not part of $estates array for sorting
@@ -4890,14 +4812,9 @@ class RekapController extends Controller
 
             $em = 'EM';
 
-            $nama_em = '';
-
+            $nama_em = get_nama_em('PT.MUA');
             // dd($key1);
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ('PT.MUA' === $asisten['est'] && $em === $asisten['afd']) {
-                    $nama_em = $asisten['nama'];
-                }
-            }
+
             $jjg_mthxy = $tnpBRDxy + $krgBRDxy + $overripexy + $emptyxy;
 
             $skor_jjgMTh = ($jjg_samplexy - $abrxy != 0) ? round($jjg_mth / ($jjg_samplexy - $abrxy) * 100, 3) : 0;
@@ -4988,14 +4905,7 @@ class RekapController extends Controller
 
                     $nama_em = '';
                     $regrom = 'WIL-' . convertToRoman($key);
-                    // dd($key1);
-                    foreach ($queryAsisten as $ast => $asisten) {
-                        if ($regrom === $asisten['est'] && $em === $asisten['afd']) {
-                            $nama_em = $asisten['nama'];
-                            $finalwil[$key]['gmnama'] = $nama_em;
-                            break;
-                        }
-                    }
+                    $finalwil[$key]['gmnama'] = get_nama_gm($regrom);
                 }
             }
         }
@@ -5063,9 +4973,6 @@ class RekapController extends Controller
     {
         $regional = $request->input('reg');
         $tahun = $request->input('bulan');
-        $queryAsisten = DB::connection('mysql2')->table('asisten_qc')->get();
-        $queryAsisten = json_decode($queryAsisten, true);
-
         // Fetch estate data
         $estate = DB::connection('mysql2')->table('estate')
             ->select('*')
@@ -5210,15 +5117,8 @@ class RekapController extends Controller
                     $totalSkorEst =  skor_brd_ma($brdPerjjgEst) + skor_buah_Ma($sumPerBHEst) + skor_palepah_ma($perPlEst);
                     //PENAMPILAN UNTUK PERESTATE
 
-                    $namaGM = '-';
-                    foreach ($queryAsisten as $asisten) {
 
-                        // dd($asisten);
-                        if ($asisten['est'] == $key1 && $asisten['afd'] == 'EM') {
-                            $namaGM = $asisten['nama'];
-                            break;
-                        }
-                    }
+                    $namaGM = get_nama_em($key1);
 
                     // mutu buah 
                     if ($sum_krEst != 0) {
@@ -5419,7 +5319,9 @@ class RekapController extends Controller
                     }
 
                     $get_sum = [
-                        $skor_mtb, $skor_mt, $skor_ma
+                        $skor_mtb,
+                        $skor_mt,
+                        $skor_ma
                     ];
                     $sum = countNonZeroValues($get_sum);
                     $rekap_all_data[$key][$key1][$key2] = [
@@ -5476,10 +5378,7 @@ class RekapController extends Controller
         $regional = $request->input('reg');
 
 
-        $queryAsisten = DB::connection('mysql2')->table('asisten_qc')
-            ->select('asisten_qc.*')
-            ->get();
-        $queryAsisten = json_decode($queryAsisten, true);
+
         // dd($value2['datetime'], $endDate);
         $queryEste = DB::connection('mysql2')->table('estate')
             ->select('estate.*')
@@ -5650,13 +5549,8 @@ class RekapController extends Controller
                     $sidak_buah[$key][$key1]['skor_kr'] = sidak_PengBRD($per_kr);
                     $sidak_buah[$key][$key1]['All_skor'] = $allSkor;
                     $sidak_buah[$key][$key1]['csfxr'] = $csfxr;
-                    $sidak_buah[$key][$key1]['kategori'] = sidak_akhir($allSkor);
+                    $sidak_buah[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
 
-                    foreach ($queryAsisten as $ast => $asisten) {
-                        if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                            $sidak_buah[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                        }
-                    }
                     $jjg_samplex += $jjg_sample;
                     $tnpBRDx += $tnpBRD;
                     $krgBRDx += $krgBRD;
@@ -5707,11 +5601,7 @@ class RekapController extends Controller
                     $sidak_buah[$key][$key1]['All_skor'] = 0;
                     $sidak_buah[$key][$key1]['kategori'] = 0;
                     $sidak_buah[$key][$key1]['csfxr'] = 0;
-                    foreach ($queryAsisten as $ast => $asisten) {
-                        if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                            $sidak_buah[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                        }
-                    }
+                    $sidak_buah[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
                 }
             }
             if ($sum_krx != 0) {
@@ -5734,14 +5624,7 @@ class RekapController extends Controller
 
             $em = 'EM';
 
-            $nama_em = '';
-
-            // dd($key1);
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
-                    $nama_em = $asisten['nama'];
-                }
-            }
+            $nama_em = get_nama_em($key1);
             $jjg_mth = $tnpBRDx + $krgBRDx + $overripex + $emptyx;
 
             $skor_jjgMTh = ($jjg_samplex - $abrx != 0) ? round($jjg_mth / ($jjg_samplex - $abrx) * 100, 3) : 0;
@@ -6207,15 +6090,7 @@ class RekapController extends Controller
 
                 // dd($deviden);
 
-                $namaGM = '-';
-                foreach ($queryAsisten as $asisten) {
-
-                    // dd($asisten);
-                    if ($asisten['est'] == $key && $asisten['afd'] == $key1) {
-                        $namaGM = $asisten['nama'];
-                        break;
-                    }
-                }
+                $namaGM = get_nama_asisten($key, $key1);
 
                 $deviden = count($value2);
 
@@ -6253,15 +6128,7 @@ class RekapController extends Controller
                 $new_dvdAfdest += $new_dvdest;
                 $v2check5 += $v2check4;
             } else {
-                $namaGM = '-';
-                foreach ($queryAsisten as $asisten) {
-
-                    // dd($asisten);
-                    if ($asisten['est'] == $key && $asisten['afd'] == $key1) {
-                        $namaGM = $asisten['nama'];
-                        break;
-                    }
-                }
+                $namaGM = get_nama_em($key1);
                 $newSidak[$key][$key1]['total_brd'] = 0;
                 $newSidak[$key][$key1]['total_janjang']  = 0;
                 $newSidak[$key][$key1]['new_deviden']  = 0;
@@ -6282,13 +6149,7 @@ class RekapController extends Controller
 
             // dd($value);
 
-            $namaGM = '-';
-            foreach ($queryAsisten as $asisten) {
-                if ($asisten['est'] == $key && $asisten['afd'] == 'EM') {
-                    $namaGM = $asisten['nama'];
-                    break;
-                }
-            }
+            $namaGM = get_nama_em($key1);
             if ($new_dvdAfd != 0) {
                 $newSidak[$key]['deviden'] = 1;
             } else {
@@ -8062,10 +7923,7 @@ class RekapController extends Controller
                                         $countAda++;
                                     }
                                 }
-                                foreach ($queryAsisten as $keyx => $valuex) if ($valuex['est'] === $keyqc1 && $valuex['afd'] === $keyqc2) {
-                                    $rekapafd[$keyqc][$keyqc1][$keyqc2]['nama'] = $valuex['nama'] ?? '-';
-                                    break;
-                                }
+                                $rekapafd[$keyqc][$keyqc1][$keyqc2]['namaqc'] = get_nama_asisten($keyqc1, $keyqc2);
                                 $rekapafd[$keyqc][$keyqc1][$keyqc2]['tph_check'] = $tph;
                                 $rekapafd[$keyqc][$keyqc1][$keyqc2]['bgcolor'] = 'white';
                                 $rekapafd[$keyqc][$keyqc1][$keyqc2]['skor_tph'] = $tphskor;
@@ -8127,17 +7985,14 @@ class RekapController extends Controller
                                         $countAda2++;
                                     }
                                 }
-                                $namaqc = '-';
-                                foreach ($queryAsisten as $keyx => $valuex) if ($valuex['est'] === $keyqc1 && $valuex['afd'] === 'EM') {
-                                    $namaqc = $valuex['nama'] ?? '-';
-                                    break;
-                                }
+                                $namaqc = get_nama_em($keyqc1);
+
                                 $totalest = $countAda2 !== 0 ? round(($tphskor2 + $qcskor2 + $buahskor2) / $countAda2, 3) : 0;
 
                                 // Assuming $estate is an individual entry and not part of $estates array for sorting
                                 $estate = [
                                     'tph_check' => $tph2,
-                                    'nama' => $namaqc,
+                                    'namaqc' => $namaqc,
                                     'bgcolor' => '#a0978d',
                                     'skor_tph' => $tphskor2,
                                     'qc_check' => $qc2,
@@ -8201,6 +8056,7 @@ class RekapController extends Controller
             }
         }
 
+        // dd($rekapafd);
         // untuk get mua ===============================================
 
         // mutu_sidak_buah mua
@@ -8329,12 +8185,8 @@ class RekapController extends Controller
                         $sidak_buah_mua[$key][$key1]['All_skor'] = $allSkor;
                         $sidak_buah_mua[$key][$key1]['csfxr'] = $csfxr;
                         $sidak_buah_mua[$key][$key1]['kategori'] = sidak_akhir($allSkor);
+                        $sidak_buah_mua[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
 
-                        foreach ($queryAsisten as $ast => $asisten) {
-                            if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                                $sidak_buah_mua[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                            }
-                        }
                         $jjg_samplex += $jjg_sample;
                         $tnpBRDx += $tnpBRD;
                         $krgBRDx += $krgBRD;
@@ -8385,11 +8237,7 @@ class RekapController extends Controller
                         $sidak_buah_mua[$key][$key1]['All_skor'] = 0;
                         $sidak_buah_mua[$key][$key1]['kategori'] = 0;
                         $sidak_buah_mua[$key][$key1]['csfxr'] = 0;
-                        foreach ($queryAsisten as $ast => $asisten) {
-                            if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                                $sidak_buah_mua[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                            }
-                        }
+                        $sidak_buah_mua[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
                     }
                 }
                 if ($sum_krx != 0) {
@@ -8412,14 +8260,8 @@ class RekapController extends Controller
 
                 $em = 'EM';
 
-                $nama_em = '';
+                $nama_em = get_nama_em($key1);
 
-                // dd($key1);
-                foreach ($queryAsisten as $ast => $asisten) {
-                    if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
-                        $nama_em = $asisten['nama'];
-                    }
-                }
                 $jjg_mth = $tnpBRDx + $krgBRDx + $overripex + $emptyx;
 
                 $skor_jjgMTh = ($jjg_samplex - $abrx != 0) ? round($jjg_mth / ($jjg_samplex - $abrx) * 100, 3) : 0;
@@ -8505,16 +8347,8 @@ class RekapController extends Controller
 
             $allSkor = sidak_brdTotal($skor_total) +  sidak_matangSKOR($skor_jjgMSk) +  sidak_lwtMatang($skor_lewatMTng) + sidak_jjgKosong($skor_jjgKosong) + sidak_tangkaiP($skor_vcut) + sidak_PengBRD($per_kr);
 
-            $em = 'EM';
 
-            $nama_em = '';
-
-            // dd($key1);
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ($key1 === $asisten['est'] && $em === $asisten['afd']) {
-                    $nama_em = $asisten['nama'];
-                }
-            }
+            $nama_em = get_nama_em($key1);
             $jjg_mthxy = $tnpBRDxy + $krgBRDxy + $overripexy + $emptyxy;
 
             $skor_jjgMTh = ($jjg_samplexy - $abrxy != 0) ? round($jjg_mth / ($jjg_samplexy - $abrxy) * 100, 3) : 0;
@@ -8829,15 +8663,8 @@ class RekapController extends Controller
 
                     // dd($deviden);
 
-                    $namaGM = '-';
-                    foreach ($queryAsisten as $asisten) {
+                    $namaGM = get_nama_asisten($key, $key1);
 
-                        // dd($asisten);
-                        if ($asisten['est'] == $key && $asisten['afd'] == $key1) {
-                            $namaGM = $asisten['nama'];
-                            break;
-                        }
-                    }
 
                     $deviden = count($value2);
 
@@ -8935,13 +8762,8 @@ class RekapController extends Controller
 
                 // dd($value);
 
-                $namaGM = '-';
-                foreach ($queryAsisten as $asisten) {
-                    if ($asisten['est'] == $key && $asisten['afd'] == 'EM') {
-                        $namaGM = $asisten['nama'];
-                        break;
-                    }
-                }
+                $namaGM = get_nama_em($key);
+
                 if ($new_dvdAfd != 0) {
                     $newSidak_mua[$key]['deviden'] = 1;
                 } else {
@@ -8982,13 +8804,8 @@ class RekapController extends Controller
 
             // dd($value);
 
-            $namaGMnewSidak_mua = '-';
-            foreach ($queryAsisten as $asisten) {
-                if ($asisten['est'] == $key && $asisten['afd'] == 'EM') {
-                    $namaGMnewSidak_mua = $asisten['nama'];
-                    break;
-                }
-            }
+            $namaGMnewSidak_mua = get_nama_em($key);
+
             $newSidak_mua['PT.MUA'] = [
                 'deviden' => $devmuxax,
                 'checkdata' => $checkdata,
@@ -10157,15 +9974,8 @@ class RekapController extends Controller
                     } else {
                         $datatph = 0;
                     }
-                    // dd($key);
-                    foreach ($queryAsisten as $keyx => $valuex) {
-                        if ($valuex['est'] === $key && $valuex['afd'] === 'OA') {
-                            $rekapmua[$key]['asistenafd'] = $valuex['nama'] ?? '-';
-                            break;
-                        } elseif ($valuex['est'] === $key && $valuex['afd'] === 'EM') {
-                            $rekapmua[$key]['manager'] = $valuex['nama'] ?? '-';
-                        }
-                    }
+                    $rekapmua[$key]['asistenafd'] = get_nama_asisten($key, 'OA');
+                    $rekapmua[$key]['manager'] = get_nama_em($key);
 
 
                     $check = $databh + $dataqc + $datatph;
@@ -10221,24 +10031,10 @@ class RekapController extends Controller
         $skorrhmutubuah = $sidakmutubuah['Regional']['Total']['all_skor'];
         $skorrhsidaktph = $sidaktph[0]['skor'];
         $skorqcinspeksi = $qcinspeksi['reg'];
-        $queryAsisten = DB::connection('mysql2')
-            ->Table('asisten_qc')
-            ->get();
-        $queryAsisten = json_decode($queryAsisten, true);
-
-
 
         $regrom = 'REG-' . convertToRoman($mainregonal);
-        // dd($regrom);
-        $names = '-';
-        foreach ($queryAsisten as $key => $value) {
-            # code...
-            if ($value['afd'] === 'RH' && $value['est'] === $regrom) {
-                $names = $value['nama'];
-                break;
-            }
-        }
 
+        $names = get_nama_rh($regrom);
         // dd($names);
         // Convert '-' values to 0
         $skorqcinspeksi = $skorqcinspeksi == '-' ? 0 : $skorqcinspeksi;
@@ -10334,10 +10130,6 @@ class RekapController extends Controller
         $queryMTbuah = $queryMTbuah->groupBy(['estate', 'afdeling']);
         $queryMTbuah = json_decode($queryMTbuah, true);
 
-        $queryAsisten = DB::connection('mysql2')->table('asisten_qc')
-            ->select('asisten_qc.*')
-            ->get();
-        $queryAsisten = json_decode($queryAsisten, true);
         $databulananBuah = array();
         foreach ($queryMTbuah as $key => $value) {
             foreach ($value as $key2 => $value2) {
@@ -10464,13 +10256,8 @@ class RekapController extends Controller
                     $sidak_buah[$key][$key1]['blok'] = $dataBLok;
                     $sidak_buah[$key][$key1]['est'] = $key;
                     $sidak_buah[$key][$key1]['afd'] = $key1;
+                    $sidak_buah[$key][$key1]['nama_staff'] = get_nama_asisten($key, $key1);
 
-                    foreach ($queryAsisten as $ast => $asisten) {
-                        if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-
-                            $sidak_buah[$key][$key1]['nama_staff'] = $asisten['nama'];
-                        }
-                    }
                     $sidak_buah[$key][$key1]['tnp_brd'] = $tnpBRD;
                     $sidak_buah[$key][$key1]['krg_brd'] = $krgBRD;
                     $sidak_buah[$key][$key1]['persenTNP_brd'] = round(($tnpBRD / ($jjg_sample - $abr)) * 100, 3);
@@ -10548,13 +10335,7 @@ class RekapController extends Controller
                 $bgColor = $colors[$estateInt % count($colors)];
             }
             $staff = '-'; // Initialize $staff outside the loop to ensure it retains a value if conditions aren't met
-
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ($esatate === $asisten['est'] && $asisten['afd'] === 'EM') {
-                    $staff = $asisten['nama'];
-                    break; // Exit the loop once the condition is met to avoid overwriting $staff
-                }
-            }
+            $staff = get_nama_em($esatate);
 
             // Now $staff should contain the "nama" value if the conditions were met, or '-' if not
 
@@ -10724,12 +10505,7 @@ class RekapController extends Controller
 
 
 
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ($key === $asisten['est'] && $key1 === $asisten['afd']) {
-                    $sidak_buah[$key][$key1]['nama_asisten'] = $asisten['nama'];
-                }
-            }
-
+            $sidak_buah[$key][$key1]['nama_asisten'] = get_nama_asisten($key, $key1);
             $gm = 'GM';
             if ($primaryKey === 1) {
                 $namewil = 'WIL-I';
@@ -10765,12 +10541,7 @@ class RekapController extends Controller
             $nestedData = [];
             $staff = '-'; // Initialize $staff outside the loop to ensure it retains a value if conditions aren't met
             $newkey = 'WIL-' . convertToRoman($primaryKey);
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ($newkey === $asisten['est'] && $asisten['afd'] === 'GM') {
-                    $staff = $asisten['nama'];
-                    break; // Exit the loop once the condition is met to avoid overwriting $staff
-                }
-            }
+            $staff = get_nama_gm($newkey);
 
             // Assign the values to the nested data array
             $nestedData['reg'] = 'WiL';
@@ -10913,14 +10684,9 @@ class RekapController extends Controller
                         $skor_jjgKosong =  round(($empty / ($jjg_sample - $abr)) * 100, 3);
                         $skor_vcut =   round(($vcut / $jjg_sample) * 100, 3);
                         $allSkor = sidak_brdTotal($skor_total) +  sidak_matangSKOR($skor_jjgMSk) +  sidak_lwtMatang($skor_lewatMTng) + sidak_jjgKosong($skor_jjgKosong) + sidak_tangkaiP($skor_vcut) + sidak_PengBRD($per_kr);
-
+                        $sidak_buah_mua[$key][$key1]['nama_staff'] = get_nama_asisten($key1, 'OA');
                         // dd($key1);
-                        foreach ($queryAsisten as $ast => $asisten) {
-                            if ($key1 === $asisten['est'] && $asisten['afd'] === 'OA') {
-                                $sidak_buah_mua[$key][$key1]['nama_staff'] = $asisten['nama'];
-                                break;
-                            }
-                        }
+
                         $sidak_buah_mua[$key][$key1]['Jumlah_janjang'] = $jjg_sample;
                         $sidak_buah_mua[$key][$key1]['newblok'] = $dataBLok;
                         $sidak_buah_mua[$key][$key1]['est'] = $key;
@@ -10995,14 +10761,9 @@ class RekapController extends Controller
                 $em = 'EM';
 
                 $nama_em = '';
-
+                $nama_em = get_nama_em($key1);
                 // dd($key1);
-                foreach ($queryAsisten as $ast => $asisten) {
-                    if ($key1 === $asisten['est'] && $em === 'OA') {
-                        $nama_em = $asisten['nama'];
-                        break;
-                    }
-                }
+
                 $jjg_mth = $tnpBRDx + $krgBRDx + $overripex + $emptyx;
 
                 $skor_jjgMTh = ($jjg_samplex - $abrx != 0) ? round($jjg_mth / ($jjg_samplex - $abrx) * 100, 3) : 0;
@@ -11041,13 +10802,8 @@ class RekapController extends Controller
             $em = 'EM';
 
             $nama_em = '';
+            $nama_em = get_nama_em('PT.MUA');
 
-            // dd($key1);
-            foreach ($queryAsisten as $ast => $asisten) {
-                if ('PT.MUA' === $asisten['est'] && $em === $asisten['afd']) {
-                    $nama_em = $asisten['nama'];
-                }
-            }
             $jjg_mthxy = $tnpBRDxy + $krgBRDxy + $overripexy + $emptyxy;
 
             $skor_jjgMTh = ($jjg_samplexy - $abrxy != 0) ? round($jjg_mth / ($jjg_samplexy - $abrxy) * 100, 3) : 0;
@@ -11182,12 +10938,8 @@ class RekapController extends Controller
         $nama_rh = '-';
 
         $rh = 'RH';
+        $nama_rh = get_nama_rh($regional);
 
-        foreach ($queryAsisten as $ast => $asisten) {
-            if ($regional === $asisten['est'] && $rh === $asisten['afd']) {
-                $nama_rh = $asisten['nama'];
-            }
-        }
 
         $colors = ['#08b4f4', '#08b4f4', '#08b4f4', '#08b4f4'];
         $estateInt = intval($esatate); // Convert the estate string to an integer
@@ -11316,12 +11068,6 @@ class RekapController extends Controller
             ->get();
 
         $queryAfd = json_decode($queryAfd, true);
-
-
-
-        $queryAsisten = DB::connection('mysql2')
-            ->Table('asisten_qc')
-            ->get();
 
 
 
@@ -11622,10 +11368,6 @@ class RekapController extends Controller
         }
 
         $newSidak = array();
-        $asisten_qc = DB::connection('mysql2')
-            ->Table('asisten_qc')
-            ->get();
-        $queryAsisten = json_decode($asisten_qc, true);
 
         // dd($defaultWeek);
         // dd($defaultWeek);
@@ -11863,15 +11605,8 @@ class RekapController extends Controller
 
                 // dd($newSidak);
 
-                $namaGM = '-';
-                foreach ($queryAsisten as $asisten) {
 
-                    // dd($asisten);
-                    if ($asisten['est'] == $key && $asisten['afd'] == $key1) {
-                        $namaGM = $asisten['nama'];
-                        break;
-                    }
-                }
+                $namaGM = get_nama_asisten($key, $key1);
 
                 $deviden = count($value2);
 
@@ -11955,15 +11690,8 @@ class RekapController extends Controller
                 $total_brondolanchart3 += $total_brondolanchart2;
                 $total_janjangchart3 += $total_janjangchart2;
             } else {
-                $namaGMx = '-';
-                foreach ($queryAsisten as $asisten) {
+                $namaGMx = get_nama_asisten($key, $key1);
 
-                    // dd($asisten);
-                    if ($asisten['est'] == $key && $asisten['afd'] == $key1) {
-                        $namaGMx = $asisten['nama'];
-                        break;
-                    }
-                }
                 $newSidak[$key][$key1]['total_brd'] = 0;
                 $newSidak[$key][$key1]['total_janjang'] = 0;
                 $newSidak[$key][$key1]['new_deviden'] = 0;
@@ -11991,13 +11719,8 @@ class RekapController extends Controller
 
             // dd($value);
 
-            $namaGM = '-';
-            foreach ($queryAsisten as $asisten) {
-                if ($asisten['est'] == $key && $asisten['afd'] == 'EM') {
-                    $namaGM = $asisten['nama'];
-                    break;
-                }
-            }
+            $namaGM = get_nama_em($key);
+
             if ($v2check5 != 0) {
                 $newSidak[$key]['deviden'] = 1;
             } else {
@@ -12308,15 +12031,8 @@ class RekapController extends Controller
 
                     // dd($deviden);
 
-                    $namaGM = '-';
-                    foreach ($queryAsisten as $asisten) {
+                    $namaGM = get_nama_asisten($key, $key1);
 
-                        // dd($asisten);
-                        if ($asisten['est'] == $key && $asisten['afd'] == $key1) {
-                            $namaGM = $asisten['nama'];
-                            break;
-                        }
-                    }
 
                     $deviden = count($value2);
 
@@ -12416,13 +12132,8 @@ class RekapController extends Controller
 
                 // dd($value);
 
-                $namaGM = '-';
-                foreach ($queryAsisten as $asisten) {
-                    if ($asisten['est'] == $key && $asisten['afd'] == 'EM') {
-                        $namaGM = $asisten['nama'];
-                        break;
-                    }
-                }
+                $namaGM = get_nama_em($key);
+
                 if ($new_dvdAfd != 0) {
                     $newSidak_mua[$key]['deviden'] = 1;
                 } else {
@@ -12465,13 +12176,8 @@ class RekapController extends Controller
 
             // dd($value);
 
-            $namaGMnewSidak_mua = '-';
-            foreach ($queryAsisten as $asisten) {
-                if ($asisten['est'] == $key && $asisten['afd'] == 'EM') {
-                    $namaGMnewSidak_mua = $asisten['nama'];
-                    break;
-                }
-            }
+            $namaGMnewSidak_mua = get_nama_em($key);
+
             $newSidak_mua['PT.MUA'] = [
                 'deviden' => $devmuxax,
                 'checkdata' => $checkdata,
@@ -12584,15 +12290,8 @@ class RekapController extends Controller
         // dd($newrh);
 
         $regrom = 'REG-' . convertToRoman($regSidak);
-        // dd($regrom);
-        $names = '-';
-        foreach ($queryAsisten as $key => $value) {
-            # code...
-            if ($value['afd'] === 'RH' && $value['est'] === $regrom) {
-                $names = $value['nama'];
-                break;
-            }
-        }
+        $names = get_nama_rh($regrom);
+
 
         // Create a new array for each iteration
         $rhEstate[] = array(
@@ -12619,10 +12318,7 @@ class RekapController extends Controller
         $bulan = $mainbulan;
 
 
-        $queryAsisten = DB::connection('mysql2')->table('asisten_qc')
-            ->select('asisten_qc.*')
-            ->get();
-        $queryAsisten = json_decode($queryAsisten, true);
+
         // dd($value2['datetime'], $endDate);
         $queryEste = DB::connection('mysql2')->table('estate')
             ->select('estate.*')
@@ -12971,15 +12667,8 @@ class RekapController extends Controller
                     // $ttlSkorMA = $skor_bh + $skor_brd + $skor_ps;
                     $ttlSkorMA =  skor_buah_Ma($sumPerBH) + skor_brd_ma($brdPerjjg) + skor_palepah_ma($perPl);
 
-                    $namaGM = '-';
-                    foreach ($queryAsisten as $asisten) {
+                    $namaGM = get_nama_asisten($key1, $key2);
 
-                        // dd($asisten);
-                        if ($asisten['est'] == $key1 && $asisten['afd'] == $key2) {
-                            $namaGM = $asisten['nama'];
-                            break;
-                        }
-                    }
                     $rekap[$key][$key1][$key2]['pokok_samplecak'] = $totalPokok;
                     $rekap[$key][$key1][$key2]['namaGM'] = $namaGM;
                     $rekap[$key][$key1][$key2]['ha_samplecak'] = $jum_ha;
@@ -13110,15 +12799,9 @@ class RekapController extends Controller
 
                 $totalSkorEst =  skor_brd_ma($brdPerjjgEst) + skor_buah_Ma($sumPerBHEst) + skor_palepah_ma($perPlEst);
                 //PENAMPILAN UNTUK PERESTATE
-                $namaGM = '-';
-                foreach ($queryAsisten as $asisten) {
 
-                    // dd($asisten);
-                    if ($asisten['est'] == $key1 && $asisten['afd'] == 'EM') {
-                        $namaGM = $asisten['nama'];
-                        break;
-                    }
-                }
+                $namaGM = get_nama_em($key1);
+
                 $rekap[$key][$key1][$key2]['pokok_samplecak'] = $totalPokok;
                 $rekap[$key][$key1]['est']['estancak'] = [
                     'pokok_samplecak' => $pokok_panenEst,
@@ -13246,14 +12929,8 @@ class RekapController extends Controller
             $totalWil = skor_brd_ma($brdPerwil) + skor_buah_Ma($sumPerBHWil) + skor_palepah_ma($perPiWil);
             $namaGM = '-';
             $namewil = 'WIL-' . convertToRoman($key);
-            foreach ($queryAsisten as $asisten) {
+            $namaGM = get_nama_gm($namewil);
 
-                // dd($asisten);
-                if ($asisten['est'] == $namewil && $asisten['afd'] == 'GM') {
-                    $namaGM = $asisten['nama'];
-                    break;
-                }
-            }
             $rekap[$key]['wil']['wilancak'] = [
                 'data' =>  $data,
                 'namewil' =>  $namewil,
@@ -14707,14 +14384,9 @@ class RekapController extends Controller
         $totalSkorBuah =  skor_buah_mentah_mb($PerMth) + skor_buah_masak_mb($PerMsk) + skor_buah_over_mb($PerOver) + skor_vcut_mb($PerVcut) + skor_jangkos_mb($Perkosongjjg) + skor_abr_mb($per_kr);
         $namaGM = '-';
         $namewil = 'REG-' . convertToRoman($regional);
-        foreach ($queryAsisten as $asisten) {
 
-            // dd($asisten);
-            if ($asisten['est'] == $namewil && $asisten['afd'] == 'RH') {
-                $namaGM = $asisten['nama'];
-                break;
-            }
-        }
+        $namaGM = get_nama_rh($namewil);
+
         $dataReg['pokok_samplecak'] = $pokok_samplecak;
         $dataReg['namaGM'] = $namaGM;
         $dataReg['namewil'] = $namewil;

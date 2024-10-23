@@ -1035,6 +1035,9 @@ if (!function_exists('type_of_user')) {
         if (in_array('43', $departmentIds)) {
             return count($departmentIds) > 1 ? 'QC_Mill' : 'QC';
         }
+        if (in_array('268', $departmentIds)) {
+            return 'QC_Mill';
+        }
 
         return 'Not_QC';
     }

@@ -74,7 +74,7 @@
             <div class="sidebar">
                 <nav class="" style="height: 100%">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" style="height: 100%">
-                        @if (type_of_user() === 'QC')
+                        @if (type_of_user() === 'QC' || type_of_user() === 'Not_QC')
                         <li class="nav-item">
                             <a href="{{ asset('/dashboard_inspeksi') }}" class="nav-link">
                                 <div class="nav-icon lottie-animation" data-animation-path="https://assets10.lottiefiles.com/packages/lf20_w4hwxwuq.json"></div>
