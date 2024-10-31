@@ -1065,43 +1065,69 @@ class inspectController extends Controller
 
 
                 $vers = $item['app_version'];
-                $parts = explode(';', $vers);
 
-                $defaultparts = '{"awal":"GO","akhir":"GO"}';
-                // dd($parts);
-                $version = $parts[3] ?? $defaultparts;
+                $newversion = json_decode($vers, true);
 
-                if (strpos($version, 'awal')) {
-                    if (strpos($version, 'awal":"GL') !== false && strpos($version, 'akhir":"GA') !== false) {
-                        $item['app_version'] = 'GPS Awal Liar : GPS Akhir Akurat';
-                    } else  if (strpos($version, 'awal":"GL') !== false && strpos($version, 'akhir":"GL') !== false) {
-                        $item['app_version'] = 'GPS Awal Liar : GPS Akhir Liar';
-                    } else  if (strpos($version, 'awal":"GA') !== false && strpos($version, 'akhir":"GL"') !== false) {
-                        $item['app_version'] = 'GPS Awal Akurat : GPS Akhir Liar';
-                    } else  if (strpos($version, 'awal":"GA') !== false && strpos($version, 'akhir":"GA"') !== false) {
-                        $item['app_version'] = 'GPS Awal Akurat : GPS Akhir Akurat';
-                    } else if (strpos($version, 'awal":"GA') !== false && strpos($version, 'akhir":"G') !== false) {
-                        $item['app_version'] = 'GPS Awal Akurat : GPS Akhir Uknown';
-                    } else if (strpos($version, 'awal":"GL') !== false && strpos($version, 'akhir":"G') !== false) {
-                        $item['app_version'] = 'GPS Awal Akurat : GPS Akhir Uknown';
-                    } else if (strpos($version, 'awal":"GO') !== false && strpos($version, 'akhir":"GO') !== false) {
-                        $item['app_version'] = 'GPS Awal Uknown : GPS Akhir Uknown';
+                if ($newversion == null) {
+                    $parts = explode(';', $vers);
+
+                    $defaultparts = '{"awal":"GO","akhir":"GO"}';
+                    // dd($parts);
+                    $version = $parts[3] ?? $defaultparts;
+
+                    if (strpos($version, 'awal')) {
+                        if (strpos($version, 'awal":"GL') !== false && strpos($version, 'akhir":"GA') !== false) {
+                            $item['app_version'] = 'GPS Awal Liar : GPS Akhir Akurat';
+                        } else  if (strpos($version, 'awal":"GL') !== false && strpos($version, 'akhir":"GL') !== false) {
+                            $item['app_version'] = 'GPS Awal Liar : GPS Akhir Liar';
+                        } else  if (strpos($version, 'awal":"GA') !== false && strpos($version, 'akhir":"GL"') !== false) {
+                            $item['app_version'] = 'GPS Awal Akurat : GPS Akhir Liar';
+                        } else  if (strpos($version, 'awal":"GA') !== false && strpos($version, 'akhir":"GA"') !== false) {
+                            $item['app_version'] = 'GPS Awal Akurat : GPS Akhir Akurat';
+                        } else if (strpos($version, 'awal":"GA') !== false && strpos($version, 'akhir":"G') !== false) {
+                            $item['app_version'] = 'GPS Awal Akurat : GPS Akhir Uknown';
+                        } else if (strpos($version, 'awal":"GL') !== false && strpos($version, 'akhir":"G') !== false) {
+                            $item['app_version'] = 'GPS Awal Akurat : GPS Akhir Uknown';
+                        } else if (strpos($version, 'awal":"GO') !== false && strpos($version, 'akhir":"GO') !== false) {
+                            $item['app_version'] = 'GPS Awal Uknown : GPS Akhir Uknown';
+                        } else {
+                            $item['app_version'] = 'GPS Uknown';
+                        }
+
+                        // $item['app_version'] = $version;
+                        // dd($version);
+                        // dd('awal');
                     } else {
-                        $item['app_version'] = 'GPS Uknown';
+                        if (strpos($item['app_version'], ';GA') !== false) {
+                            $item['app_version'] = 'GPS Akurat';
+                        } elseif (strpos($item['app_version'], ';GL') !== false) {
+                            $item['app_version'] = 'GPS Liar';
+                        } else {
+                            $item['app_version'] = 'GPS Awal Uknown : GPS Akhir Uknown';
+                        }
+                        // dd('else');
                     }
-
-                    // $item['app_version'] = $version;
-                    // dd($version);
-                    // dd('awal');
                 } else {
-                    if (strpos($item['app_version'], ';GA') !== false) {
-                        $item['app_version'] = 'GPS Akurat';
-                    } elseif (strpos($item['app_version'], ';GL') !== false) {
-                        $item['app_version'] = 'GPS Liar';
-                    } else {
-                        $item['app_version'] = 'GPS Awal Uknown : GPS Akhir Uknown';
+                    $awal = $newversion['awal'];
+                    $akhir = $newversion['akhir'];
+                    if ($awal == 'GA') {
+                        $awal = 'GPS Awal Akurat';
+                    } elseif ($awal == 'GL' && $akhir == 'GL') {
+                        $awal = 'GPS Awal Liar';
                     }
+
+                    if ($akhir == 'GA') {
+                        $akhir = 'GPS Akhir Akurat';
+                    } elseif ($akhir == 'GL') {
+                        $akhir = 'GPS Akhir Liar';
+                    }
+                    $item['app_version'] = $awal . ' : ' . $akhir;
+                    // dd($awal, $akhir);
+                    // dd($newversion, 'tod');
                 }
+                // dd($vers);
+
+                // dd($item['app_version']);
             }
         }
 
@@ -1112,10 +1138,22 @@ class inspectController extends Controller
             // Check if "app_version" key exists in the current item
             if (isset($item['app_version'])) {
                 // Check if the value contains ";GA" or ":GL"
-                if (strpos($item['app_version'], ';GA') !== false) {
-                    $item['app_version'] = 'GPS Akurat';
-                } elseif (strpos($item['app_version'], ';GL') !== false) {
-                    $item['app_version'] = 'GPS Liar';
+                $newversion = json_decode($item['app_version'], true);
+
+                if ($newversion == null) {
+                    if (strpos($item['app_version'], ';GA') !== false) {
+                        $item['app_version'] = 'GPS Akurat';
+                    } elseif (strpos($item['app_version'], ';GL') !== false) {
+                        $item['app_version'] = 'GPS Liar';
+                    }
+                } else {
+                    $awal = $newversion['gps'];
+                    if ($awal == 'GA') {
+                        $awal = 'GPS Awal Akurat';
+                    } elseif ($awal == 'GL') {
+                        $awal = 'GPS Awal Liar';
+                    }
+                    $item['app_version'] = $awal;
                 }
             }
         }
@@ -1123,11 +1161,25 @@ class inspectController extends Controller
         foreach ($mutuBuah as &$item) {
             // Check if "app_version" key exists in the current item
             if (isset($item['app_version'])) {
-                // Check if the value contains ";GA" or ":GL"
-                if (strpos($item['app_version'], ';GA') !== false) {
-                    $item['app_version'] = 'GPS Akurat';
-                } elseif (strpos($item['app_version'], ';GL') !== false) {
-                    $item['app_version'] = 'GPS Liar';
+                $newversion = json_decode($item['app_version'], true);
+
+                if ($newversion == null) {
+                    // Check if the value contains ";GA" or ":GL"
+                    if (strpos($item['app_version'], ';GA') !== false) {
+                        $item['app_version'] = 'GPS Akurat';
+                    } elseif (strpos($item['app_version'], ';GL') !== false) {
+                        $item['app_version'] = 'GPS Liar';
+                    }
+                } else {
+                    // dd($newversion, 'tod');
+                    $awal = $newversion['gps'];
+                    if ($awal == 'GA') {
+                        $awal = 'GPS Awal Akurat';
+                    } elseif ($awal == 'GL') {
+                        $awal = 'GPS Awal Liar';
+                    }
+
+                    $item['app_version'] = $awal;
                 }
             }
         }
@@ -1137,10 +1189,23 @@ class inspectController extends Controller
             // Check if "app_version" key exists in the current item
             if (isset($item['app_version'])) {
                 // Check if the value contains ";GA" or ":GL"
-                if (strpos($item['app_version'], ';GA') !== false) {
-                    $item['app_version'] = 'GPS Akurat';
-                } elseif (strpos($item['app_version'], ';GL') !== false) {
-                    $item['app_version'] = 'GPS Liar';
+                $newversion = json_decode($item['app_version'], true);
+
+                if ($newversion == null) {
+                    if (strpos($item['app_version'], ';GA') !== false) {
+                        $item['app_version'] = 'GPS Akurat';
+                    } elseif (strpos($item['app_version'], ';GL') !== false) {
+                        $item['app_version'] = 'GPS Liar';
+                    }
+                } else {
+                    $awal = $newversion['gps'];
+                    if ($awal == 'GA') {
+                        $awal = 'GPS Awal Akurat';
+                    } elseif ($awal == 'GL') {
+                        $awal = 'GPS Awal Liar';
+                    }
+
+                    $item['app_version'] = $awal;
                 }
             }
         }

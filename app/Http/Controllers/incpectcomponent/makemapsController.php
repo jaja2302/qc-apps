@@ -203,11 +203,24 @@ class makemapsController extends Controller
                 $time = date('H:i:s', strtotime($datetime));
 
                 $maps = $coord['app_version'];
-                if (strpos($maps, ';GA') !== false) {
-                    $maps = 'GPS Akurat';
-                } elseif (strpos($maps, ';GL') !== false) {
-                    $maps = 'GPS Liar';
+                $newversion = json_decode($coord['app_version'], true);
+
+                if ($newversion == null) {
+                    if (strpos($maps, ';GA') !== false) {
+                        $maps = 'GPS Akurat';
+                    } elseif (strpos($maps, ';GL') !== false) {
+                        $maps = 'GPS Liar';
+                    }
+                } else {
+                    $awal = $newversion['gps'];
+                    if ($awal == 'GA') {
+                        $awal = 'GPS Awal Akurat';
+                    } elseif ($awal == 'GL') {
+                        $awal = 'GPS Awal Liar';
+                    }
+                    $maps = $awal;
                 }
+
 
                 $buah_plot[$blok][] = [
                     'blok' => $blok,
@@ -241,11 +254,25 @@ class makemapsController extends Controller
                 $datetime = $coord['datetime'];
                 $time = date('H:i:s', strtotime($datetime));
                 $maps = $coord['app_version'];
-                if (strpos($maps, ';GA') !== false) {
-                    $maps = 'GPS Akurat';
-                } elseif (strpos($maps, ';GL') !== false) {
-                    $maps = 'GPS Liar';
+                $newversion = json_decode($coord['app_version'], true);
+
+                if ($newversion == null) {
+                    if (strpos($maps, ';GA') !== false) {
+                        $maps = 'GPS Akurat';
+                    } elseif (strpos($maps, ';GL') !== false) {
+                        $maps = 'GPS Liar';
+                    }
+                } else {
+                    $awal = $newversion['gps'];
+                    if ($awal == 'GA') {
+                        $awal = 'GPS Awal Akurat';
+                    } elseif ($awal == 'GL') {
+                        $awal = 'GPS Awal Liar';
+                    }
+                    $maps = $awal;
                 }
+
+
 
                 $trans_plot[$blok][] = [
                     'blok' => $blok,
@@ -359,38 +386,58 @@ class makemapsController extends Controller
                 // }
 
                 $vers = $coord['app_version'];
-                $parts = explode(';', $vers);
 
-                $defaultparts = '{"awal":"GO","akhir":"GO"}';
-                $version = $parts[3] ?? $defaultparts;
+                $newversion = json_decode($vers, true);
+                if ($newversion == null) {
+                    $parts = explode(';', $vers);
 
-                if (strpos($version, 'awal')) {
-                    if (strpos($version, 'awal":"GL') !== false && strpos($version, 'akhir":"GA') !== false) {
-                        $maps = 'GPS Awal Liar : GPS Akhir Akurat';
-                    } else  if (strpos($version, 'awal":"GL') !== false && strpos($version, 'akhir":"GL') !== false) {
-                        $maps = 'GPS Awal Liar : GPS Akhir Liar';
-                    } else  if (strpos($version, 'awal":"GA') !== false && strpos($version, 'akhir":"GL"') !== false) {
-                        $maps = 'GPS Awal Akurat : GPS Akhir Liar';
-                    } else  if (strpos($version, 'awal":"GA') !== false && strpos($version, 'akhir":"GA"') !== false) {
-                        $maps = 'GPS Awal Akurat : GPS Akhir Akurat';
-                    } else if (strpos($version, 'awal":"GA') !== false && strpos($version, 'akhir":"G') !== false) {
-                        $maps = 'GPS Awal Akurat : GPS Akhir Uknown';
-                    } else if (strpos($version, 'awal":"GL') !== false && strpos($version, 'akhir":"G') !== false) {
-                        $maps = 'GPS Awal Akurat : GPS Akhir Uknown';
-                    } else if (strpos($version, 'awal":"GO') !== false && strpos($version, 'akhir":"GO') !== false) {
-                        $maps = 'GPS Awal Uknown : GPS Akhir Uknown';
+                    $defaultparts = '{"awal":"GO","akhir":"GO"}';
+                    $version = $parts[3] ?? $defaultparts;
+
+                    if (strpos($version, 'awal')) {
+                        if (strpos($version, 'awal":"GL') !== false && strpos($version, 'akhir":"GA') !== false) {
+                            $maps = 'GPS Awal Liar : GPS Akhir Akurat';
+                        } else  if (strpos($version, 'awal":"GL') !== false && strpos($version, 'akhir":"GL') !== false) {
+                            $maps = 'GPS Awal Liar : GPS Akhir Liar';
+                        } else  if (strpos($version, 'awal":"GA') !== false && strpos($version, 'akhir":"GL"') !== false) {
+                            $maps = 'GPS Awal Akurat : GPS Akhir Liar';
+                        } else  if (strpos($version, 'awal":"GA') !== false && strpos($version, 'akhir":"GA"') !== false) {
+                            $maps = 'GPS Awal Akurat : GPS Akhir Akurat';
+                        } else if (strpos($version, 'awal":"GA') !== false && strpos($version, 'akhir":"G') !== false) {
+                            $maps = 'GPS Awal Akurat : GPS Akhir Uknown';
+                        } else if (strpos($version, 'awal":"GL') !== false && strpos($version, 'akhir":"G') !== false) {
+                            $maps = 'GPS Awal Akurat : GPS Akhir Uknown';
+                        } else if (strpos($version, 'awal":"GO') !== false && strpos($version, 'akhir":"GO') !== false) {
+                            $maps = 'GPS Awal Uknown : GPS Akhir Uknown';
+                        } else {
+                            $maps = 'GPS Uknown';
+                        }
                     } else {
-                        $maps = 'GPS Uknown';
+                        if (strpos($coord['app_version'], ';GA') !== false) {
+                            $maps = 'GPS Akurat';
+                        } elseif (strpos($coord['app_version'], ';GL') !== false) {
+                            $maps = 'GPS Liar';
+                        } else {
+                            $maps = 'GPS Awal Uknown : GPS Akhir Uknown';
+                        }
                     }
                 } else {
-                    if (strpos($coord['app_version'], ';GA') !== false) {
-                        $maps = 'GPS Akurat';
-                    } elseif (strpos($coord['app_version'], ';GL') !== false) {
-                        $maps = 'GPS Liar';
-                    } else {
-                        $maps = 'GPS Awal Uknown : GPS Akhir Uknown';
+                    $awal = $newversion['awal'];
+                    $akhir = $newversion['akhir'];
+                    if ($awal == 'GA') {
+                        $awal = 'GPS Awal Akurat';
+                    } elseif ($awal == 'GL' && $akhir == 'GL') {
+                        $awal = 'GPS Awal Liar';
                     }
+
+                    if ($akhir == 'GA') {
+                        $akhir = 'GPS Akhir Akurat';
+                    } elseif ($akhir == 'GL') {
+                        $akhir = 'GPS Akhir Liar';
+                    }
+                    $maps = $awal . ' : ' . $akhir;
                 }
+
                 $ancak_fa_item = [
                     'blok' => $blok,
                     'estate' => $coord['estate'],
