@@ -12684,6 +12684,7 @@ if (!function_exists('rekap_estate_mill_perbulan_perhari')) {
         $data = $data->groupBy(['estate', 'afdeling']);
 
         $result = [];
+        // dd($data);
         if (!empty($data)) {
             foreach ($data as $keys => $values) {
                 $tot_tonase = 0;
@@ -12708,8 +12709,8 @@ if (!function_exists('rekap_estate_mill_perbulan_perhari')) {
                 $tot_abn_sakit = 0;
                 $tot_abn_kastrasi = 0;
                 $tot_loose_fruit = 0;
-                $unit = count($values);
-                foreach ($values as $key => $value) {
+                $tot_unit = 0;
+                foreach ($values as $key => $value) {;
                     $tonase = 0;
                     $jumlah_janjang_grading = 0;
                     $jumlah_janjang_spb = 0;
@@ -12729,7 +12730,7 @@ if (!function_exists('rekap_estate_mill_perbulan_perhari')) {
                     $kelas_a = 0;
                     $kelas_b = 0;
                     $kelas_c = 0;
-
+                    $unit = count($value);
                     foreach ($value as $key2 => $value1) {
                         $tonase += $value1['tonase'];
                         $jumlah_janjang_grading += $value1['jjg_grading'];
@@ -12843,6 +12844,7 @@ if (!function_exists('rekap_estate_mill_perbulan_perhari')) {
                     $tot_abn_sakit += $abn_sakit;
                     $tot_abn_kastrasi += $abn_kastrasi;
                     $tot_loose_fruit += $loose_fruit;
+                    $tot_unit += $unit;
                 }
                 $tot_bjr = $tot_tonase / $tot_grading;
 
@@ -12905,7 +12907,7 @@ if (!function_exists('rekap_estate_mill_perbulan_perhari')) {
                     'percentage_kelas_a' => $persentage_kelas_a,
                     'percentage_kelas_b' => $persentage_kelas_b,
                     'percentage_kelas_c' => $persentage_kelas_c,
-                    'no_plat' => $unit,
+                    'no_plat' => $tot_unit,
                     'unit' => null,
                     'total_test' => $unit,
                     'total' => '----------',

@@ -1717,7 +1717,7 @@ class Exportqcinspeksi implements FromView, WithEvents
                 'LDE' => $rekap[3]['LDE']['estate'] ?? [],
                 'SKE' => $rekap[3]['SKE']['estate'] ?? [],
             ];
-
+            // dd($muaarray);
 
             $ha_samplecak = 0;
             $jumlah_panencak = 0;
@@ -1745,30 +1745,30 @@ class Exportqcinspeksi implements FromView, WithEvents
             foreach ($muaarray as $key => $value) {
 
                 // ancak 
-                $pokok_samplecak += $value['pokok_samplecak'];
-                $ha_samplecak += $value['ha_samplecak'];
-                $jumlah_panencak += $value['jumlah_panencak'];
-                $pcak += $value['pcak'];
-                $kcak += $value['kcak'];
-                $tglcak += $value['tglcak'];
-                $bhts_scak += $value['bhts_scak'];
-                $bhtm1cak += $value['bhtm1cak'];
-                $bhtm2cak += $value['bhtm2cak'];
-                $bhtm3cak += $value['bhtm3cak'];
-                $palepah_pokokcak += $value['palepah_pokokcak'];
+                $pokok_samplecak += $value['pokok_samplecak'] ?? 0;
+                $ha_samplecak += $value['ha_samplecak'] ?? 0;
+                $jumlah_panencak += $value['jumlah_panencak'] ?? 0;
+                $pcak += $value['pcak'] ?? 0;
+                $kcak += $value['kcak'] ?? 0;
+                $tglcak += $value['tglcak'] ?? 0;
+                $bhts_scak += $value['bhts_scak'] ?? 0;
+                $bhtm1cak += $value['bhtm1cak'] ?? 0;
+                $bhtm2cak += $value['bhtm2cak'] ?? 0;
+                $bhtm3cak += $value['bhtm3cak'] ?? 0;
+                $palepah_pokokcak += $value['palepah_pokokcak'] ?? 0;
 
-                $tph_sampleNew += $value['tph_sampleNew'];
-                $total_brdtrans += $value['total_brdtrans'];
-                $total_buahtrans += $value['total_buahtrans'];
+                $tph_sampleNew += $value['tph_sampleNew'] ?? 0;
+                $total_brdtrans += $value['total_brdtrans'] ?? 0;
+                $total_buahtrans += $value['total_buahtrans'] ?? 0;
 
-                $tph_baris_bloksbh += $value['tph_baris_bloksbh'];
-                $sampleJJG_totalbh += $value['sampleJJG_totalbh'];
-                $total_mentahbh += $value['total_mentahbh'];
-                $total_overbh += $value['total_overbh'];
-                $total_abnormalbh += $value['total_abnormalbh'];
-                $total_jjgKosongbh += $value['total_jjgKosongbh'];
-                $total_vcutbh += $value['total_vcutbh'];
-                $jum_krbh += $value['jum_krbh'];
+                $tph_baris_bloksbh += $value['tph_baris_bloksbh'] ?? 0;
+                $sampleJJG_totalbh += $value['sampleJJG_totalbh'] ?? 0;
+                $total_mentahbh += $value['total_mentahbh'] ?? 0;
+                $total_overbh += $value['total_overbh'] ?? 0;
+                $total_abnormalbh += $value['total_abnormalbh'] ?? 0;
+                $total_jjgKosongbh += $value['total_jjgKosongbh'] ?? 0;
+                $total_vcutbh += $value['total_vcutbh'] ?? 0;
+                $jum_krbh += $value['jum_krbh'] ?? 0;
             }
 
             if ($ha_samplecak != 0) {
