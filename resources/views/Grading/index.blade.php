@@ -388,98 +388,8 @@
                 <div class="text-center border border-3 mt-4 ml-3 mr-3 mb-10">
                     <h1>REKAPITULASI LAPORAN GRADING PKS</h1>
                 </div>
+                @livewire('gradingmill-rekap-afdeling')
 
-                <div class="d-flex justify-content-end mr-3 mt-4">
-                    <div class="margin g-2">
-                        <div class="row align-items-center">
-                            <div class="col-md">
-                                {{csrf_field()}}
-                                <input class="form-control" value="{{ date('Y-m') }}" type="month" name="inputbulan" id="input_rekap_perfadeling">
-                            </div>
-                            <div class="col-md">
-                                <select class="form-select mb-2 mb-md-0" name="regional_id" id="rekap_perfadeling_reg" aria-label="Default select example">
-
-                                    @foreach ($regional as $items)
-                                    <option value="{{$items['id']}}">{{$items['nama']}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-auto">
-                                <button type="submit" class="btn btn-primary ml-2" id="rekap_perfadeling">Show</button>
-                            </div>
-                            <div class="col-auto">
-                                <form id="exportFormempat" action="{{ route('exportgrading') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" id="getregionalempat" name="getregionalempat">
-                                    <input type="hidden" id="getdateempat" name="getdateempat">
-                                    <input type="hidden" name="tipedata" value="rekapempat">
-                                    <button type="submit" class="btn btn-primary">Export</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-4 ml-3 mr-3 mb-10 text-center">
-                    <table class="table table-responsive table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Estate</th>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Afdeling</th>
-                                <th style="background-color: #f0ecec;" colspan="4">UNIT SORTASI</th>
-                                <th style="background-color: #88e48c;" colspan="20">HASIL GRADING</th>
-                                <th style="background-color: #f8c4ac;" colspan="6">KELAS JANJANG</th>
-                            </tr>
-                            <tr>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG SPB</th>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG GRADING</th>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">TONASE (KG)</th>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">BJR (KG)</th>
-                                <th style="background-color: #88e48c;" colspan="2">RIPENESS</th>
-                                <th style="background-color: #88e48c;" colspan="2">UNRIPE</th>
-                                <th style="background-color: #88e48c;" colspan="2">OVERRIPE</th>
-                                <th style="background-color: #88e48c;" colspan="2">EMPTY BUNCH</th>
-                                <th style="background-color: #88e48c;" colspan="2">ROTTEN BUNCH</th>
-                                <th style="background-color: #88e48c;" colspan="2">ABNORMAL</th>
-                                <th style="background-color: #88e48c;" colspan="2">LONG STALK</th>
-                                <th style="background-color: #88e48c;" colspan="2">V-CUT</th>
-                                <th style="background-color: #88e48c;" colspan="2">DIRT</th>
-                                <th style="background-color: #88e48c;" colspan="2">LOOSE FRUIT</th>
-                                <th style="background-color: #f8c4ac;" colspan="2">KELAS C</th>
-                                <th style="background-color: #f8c4ac;" colspan="2">KELAS B</th>
-                                <th style="background-color: #f8c4ac;" colspan="2">KELAS A</th>
-                            </tr>
-                            <tr>
-                                <th style="background-color: #88e48c;">JJG</th>
-                                <th style="background-color: #88e48c;">%</th>
-                                <th style="background-color: #88e48c;">JJG</th>
-                                <th style="background-color: #88e48c;">%</th>
-                                <th style="background-color: #88e48c;">JJG</th>
-                                <th style="background-color: #88e48c;">%</th>
-                                <th style="background-color: #88e48c;">JJG</th>
-                                <th style="background-color: #88e48c;">%</th>
-                                <th style="background-color: #88e48c;">JJG</th>
-                                <th style="background-color: #88e48c;">%</th>
-                                <th style="background-color: #88e48c;">JJG</th>
-                                <th style="background-color: #88e48c;">%</th>
-                                <th style="background-color: #88e48c;">JJG</th>
-                                <th style="background-color: #88e48c;">%</th>
-                                <th style="background-color: #88e48c;">JJG</th>
-                                <th style="background-color: #88e48c;">%</th>
-                                <th style="background-color: #88e48c;">JJG</th>
-                                <th style="background-color: #88e48c;">%</th>
-                                <th style="background-color: #88e48c;">JJG</th>
-                                <th style="background-color: #88e48c;">%</th>
-                                <th style="background-color: #f8c4ac;">JJG</th>
-                                <th style="background-color: #f8c4ac;">%</th>
-                                <th style="background-color: #f8c4ac;">JJG</th>
-                                <th style="background-color: #f8c4ac;">%</th>
-                                <th style="background-color: #f8c4ac;">JJG</th>
-                                <th style="background-color: #f8c4ac;">%</th>
-                            </tr>
-                        </thead>
-                        <tbody id="rekap_afdeling_data"></tbody>
-                    </table>
-                </div>
             </div>
         </div>
     </div>
@@ -565,18 +475,18 @@
         }
 
 
-        document.getElementById('rekap_perfadeling').onclick = function() {
-            Swal.fire({
-                title: 'Loading',
-                html: '<span class="loading-text">Mohon Tunggu...</span>',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                willOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-            getrekapperafdeling();
-        }
+        // document.getElementById('rekap_perfadeling').onclick = function() {
+        //     Swal.fire({
+        //         title: 'Loading',
+        //         html: '<span class="loading-text">Mohon Tunggu...</span>',
+        //         allowOutsideClick: false,
+        //         showConfirmButton: false,
+        //         willOpen: () => {
+        //             Swal.showLoading();
+        //         }
+        //     });
+        //     getrekapperafdeling();
+        // }
 
         function getregional() {
             let reg = document.getElementById('regional_select').value;
@@ -1039,96 +949,96 @@
 
 
 
-        function getrekapperafdeling() {
-            let reg = document.getElementById('rekap_perfadeling_reg').value;
-            let bulan = document.getElementById('input_rekap_perfadeling').value;
-            // let estate = document.getElementById('estate_select').value;
-            let _token = $('input[name="_token"]').val();
-            $('#rekap_afdeling_data').empty()
+        // function getrekapperafdeling() {
+        //     let reg = document.getElementById('rekap_perfadeling_reg').value;
+        //     let bulan = document.getElementById('input_rekap_perfadeling').value;
+        //     // let estate = document.getElementById('estate_select').value;
+        //     let _token = $('input[name="_token"]').val();
+        //     $('#rekap_afdeling_data').empty()
 
-            $.ajax({
-                url: "{{ route('getrekapperafdeling') }}",
-                method: "GET",
-                data: {
-                    reg: reg,
-                    bulan: bulan,
-                    _token: _token
-                },
-                headers: {
-                    'X-CSRF-TOKEN': _token
-                },
-                success: function(result) {
-                    let parseResult = JSON.parse(result)
-                    let rekap = parseResult['data_pperafd']
-                    let tbody = document.getElementById('rekap_afdeling_data');
-                    // console.log(rekap);
-                    Object.entries(rekap).forEach(([key, value]) => {
-                        Object.entries(value).forEach(([key1, value1]) => {
-                            let tr = document.createElement('tr');
+        //     $.ajax({
+        //         url: "{{ route('getrekapperafdeling') }}",
+        //         method: "GET",
+        //         data: {
+        //             reg: reg,
+        //             bulan: bulan,
+        //             _token: _token
+        //         },
+        //         headers: {
+        //             'X-CSRF-TOKEN': _token
+        //         },
+        //         success: function(result) {
+        //             let parseResult = JSON.parse(result)
+        //             let rekap = parseResult['data_pperafd']
+        //             let tbody = document.getElementById('rekap_afdeling_data');
+        //             // console.log(rekap);
+        //             Object.entries(rekap).forEach(([key, value]) => {
+        //                 Object.entries(value).forEach(([key1, value1]) => {
+        //                     let tr = document.createElement('tr');
 
-                            let itemElements = [];
+        //                     let itemElements = [];
 
-                            // Initialize itemElements array with 'td' elements
-                            for (let index = 0; index < 32; index++) {
-                                itemElements[index] = document.createElement('td');
-                            }
-                            let link;
-                            link = document.createElement('a');
-                            link.href = 'detailgradingmill/' + key + '/' + key1 + '/' + bulan;
-                            link.target = '_blank';
-                            link.innerText = key1;
-                            // Assign text values to each itemElement
-                            itemElements[0].innerText = key
-                            itemElements[1].appendChild(link); // Append link element to itemElements[1]
-                            itemElements[2].innerText = value1['jumlah_janjang_spb'].toLocaleString('id-ID')
-                            itemElements[3].innerText = value1['jumlah_janjang_grading'].toLocaleString('id-ID');
-                            itemElements[4].innerText = value1['tonase'].toLocaleString('id-ID');
-                            itemElements[5].innerText = value1['bjr'].toFixed(2).toLocaleString('id-ID');
-                            itemElements[6].innerText = value1['ripeness'].toLocaleString('id-ID')
-                            itemElements[7].innerText = value1['percentage_ripeness'].toFixed(2)
-                            itemElements[8].innerText = value1['unripe'].toLocaleString('id-ID')
-                            itemElements[9].innerText = value1['percentage_unripe'].toFixed(2)
-                            itemElements[10].innerText = value1['overripe'].toLocaleString('id-ID')
-                            itemElements[11].innerText = value1['percentage_overripe'].toFixed(2)
-                            itemElements[12].innerText = value1['empty_bunch'].toLocaleString('id-ID')
-                            itemElements[13].innerText = value1['percentage_empty_bunch'].toFixed(2)
-                            itemElements[14].innerText = value1['rotten_bunch'].toLocaleString('id-ID')
-                            itemElements[15].innerText = value1['percentage_rotten_bunch'].toFixed(2)
-                            itemElements[16].innerText = value1['abnormal'].toLocaleString('id-ID')
-                            itemElements[17].innerText = value1['percentage_abnormal'].toFixed(2)
-                            itemElements[18].innerText = value1['longstalk'].toLocaleString('id-ID')
-                            itemElements[19].innerText = value1['percentage_longstalk'].toFixed(2)
-                            itemElements[20].innerText = value1['vcut'].toLocaleString('id-ID')
-                            itemElements[21].innerText = value1['percentage_vcut'].toFixed(2)
-                            itemElements[22].innerText = value1['dirt_kg'].toLocaleString('id-ID')
-                            itemElements[23].innerText = value1['percentage_dirt'].toFixed(2)
-                            itemElements[24].innerText = value1['loose_fruit_kg'].toLocaleString('id-ID')
-                            itemElements[25].innerText = value1['percentage_loose_fruit'].toFixed(2)
-                            itemElements[26].innerText = value1['kelas_c'].toLocaleString('id-ID')
-                            itemElements[27].innerText = value1['percentage_kelas_c'].toFixed(2)
-                            itemElements[28].innerText = value1['kelas_b'].toLocaleString('id-ID')
-                            itemElements[29].innerText = value1['percentage_kelas_b'].toFixed(2)
-                            itemElements[30].innerText = value1['kelas_a'].toLocaleString('id-ID')
-                            itemElements[31].innerText = value1['percentage_kelas_a'].toFixed(2)
+        //                     // Initialize itemElements array with 'td' elements
+        //                     for (let index = 0; index < 32; index++) {
+        //                         itemElements[index] = document.createElement('td');
+        //                     }
+        //                     let link;
+        //                     link = document.createElement('a');
+        //                     link.href = 'detailgradingmill/' + key + '/' + key1 + '/' + bulan;
+        //                     link.target = '_blank';
+        //                     link.innerText = key1;
+        //                     // Assign text values to each itemElement
+        //                     itemElements[0].innerText = key
+        //                     itemElements[1].appendChild(link); // Append link element to itemElements[1]
+        //                     itemElements[2].innerText = value1['jumlah_janjang_spb'].toLocaleString('id-ID')
+        //                     itemElements[3].innerText = value1['jumlah_janjang_grading'].toLocaleString('id-ID');
+        //                     itemElements[4].innerText = value1['tonase'].toLocaleString('id-ID');
+        //                     itemElements[5].innerText = value1['bjr'].toFixed(2).toLocaleString('id-ID');
+        //                     itemElements[6].innerText = value1['ripeness'].toLocaleString('id-ID')
+        //                     itemElements[7].innerText = value1['percentage_ripeness'].toFixed(2)
+        //                     itemElements[8].innerText = value1['unripe'].toLocaleString('id-ID')
+        //                     itemElements[9].innerText = value1['percentage_unripe'].toFixed(2)
+        //                     itemElements[10].innerText = value1['overripe'].toLocaleString('id-ID')
+        //                     itemElements[11].innerText = value1['percentage_overripe'].toFixed(2)
+        //                     itemElements[12].innerText = value1['empty_bunch'].toLocaleString('id-ID')
+        //                     itemElements[13].innerText = value1['percentage_empty_bunch'].toFixed(2)
+        //                     itemElements[14].innerText = value1['rotten_bunch'].toLocaleString('id-ID')
+        //                     itemElements[15].innerText = value1['percentage_rotten_bunch'].toFixed(2)
+        //                     itemElements[16].innerText = value1['abnormal'].toLocaleString('id-ID')
+        //                     itemElements[17].innerText = value1['percentage_abnormal'].toFixed(2)
+        //                     itemElements[18].innerText = value1['longstalk'].toLocaleString('id-ID')
+        //                     itemElements[19].innerText = value1['percentage_longstalk'].toFixed(2)
+        //                     itemElements[20].innerText = value1['vcut'].toLocaleString('id-ID')
+        //                     itemElements[21].innerText = value1['percentage_vcut'].toFixed(2)
+        //                     itemElements[22].innerText = value1['dirt_kg'].toLocaleString('id-ID')
+        //                     itemElements[23].innerText = value1['percentage_dirt'].toFixed(2)
+        //                     itemElements[24].innerText = value1['loose_fruit_kg'].toLocaleString('id-ID')
+        //                     itemElements[25].innerText = value1['percentage_loose_fruit'].toFixed(2)
+        //                     itemElements[26].innerText = value1['kelas_c'].toLocaleString('id-ID')
+        //                     itemElements[27].innerText = value1['percentage_kelas_c'].toFixed(2)
+        //                     itemElements[28].innerText = value1['kelas_b'].toLocaleString('id-ID')
+        //                     itemElements[29].innerText = value1['percentage_kelas_b'].toFixed(2)
+        //                     itemElements[30].innerText = value1['kelas_a'].toLocaleString('id-ID')
+        //                     itemElements[31].innerText = value1['percentage_kelas_a'].toFixed(2)
 
-                            // Append each itemElement to the tr
-                            itemElements.forEach(itemElement => tr.appendChild(itemElement));
+        //                     // Append each itemElement to the tr
+        //                     itemElements.forEach(itemElement => tr.appendChild(itemElement));
 
-                            // Append the tr to the tbody
-                            tbody.appendChild(tr);
+        //                     // Append the tr to the tbody
+        //                     tbody.appendChild(tr);
 
-                        });
-                    });
+        //                 });
+        //             });
 
-                    Swal.close();
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error('AJAX Error:', textStatus, errorThrown);
-                }
-            });
+        //             Swal.close();
+        //         },
+        //         error: function(jqXHR, textStatus, errorThrown) {
+        //             console.error('AJAX Error:', textStatus, errorThrown);
+        //         }
+        //     });
 
 
-        }
+        // }
 
         function handleExportSubmit(event, formId, regionalSelectId, dateInputId, hiddenRegionalId, hiddenDateId) {
             event.preventDefault();
@@ -1170,8 +1080,8 @@
             handleExportSubmit(event, 'exportFormdua', 'regional_select_mill', 'inputbulan_mill', 'getregionaldua', 'getdatedua');
         });
 
-        document.getElementById('exportFormempat').addEventListener('submit', function(event) {
-            handleExportSubmit(event, 'exportFormempat', 'rekap_perfadeling_reg', 'input_rekap_perfadeling', 'getregionalempat', 'getdateempat');
-        });
+        // document.getElementById('exportFormempat').addEventListener('submit', function(event) {
+        //     handleExportSubmit(event, 'exportFormempat', 'rekap_perfadeling_reg', 'input_rekap_perfadeling', 'getregionalempat', 'getdateempat');
+        // });
     </script>
 </x-layout.app>
