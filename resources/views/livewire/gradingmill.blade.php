@@ -198,7 +198,7 @@
                 </div>
                 <div class="modal-body">
                     @foreach ($modal_data as $key => $items)
-                    <form wire:submit.prevent="editgradingmill({{ $items['id'] }})" class="mb-4 p-4 border rounded shadow-sm">
+                    <form wire:submit.prevent="editgradingmill('{{ $key }}')" class="mb-4 p-4 border rounded shadow-sm">
                         <h5 class="mb-3">Edit Grading Mill</h5>
 
                         <!-- Row for ID and Estate -->
@@ -351,10 +351,10 @@
                                 <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.unripe_kurang_brondol">
                             </div>
                         </div>
-                        <div class="row mb-3">
+                        <!-- <div class="row mb-3">
                             <label for="keterangan" class="form-label">Keterangan</label>
                             <textarea class="form-control" wire:model="modal_data.{{ $key }}.keterangan"></textarea>
-                        </div>
+                        </div> -->
                         @php
 
                         // Fetch the user's full name based on the user_id from the items array
@@ -367,8 +367,7 @@
                         </div>
                         <label for="update_date" class="form-label">Update date: {{ $items['update_date'] ?? '-' }}</label>
                         <div class="d-flex justify-content-end">
-                            <!-- <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancel</button> -->
-                            <button type="submit" class="btn btn-primary">Update</button>
+                            <button type="submit" class="btn btn-primary" data-array-key="{{ $key }}">Update</button>
                             <button type="button" class="btn btn-danger btn-sm" wire:click="delete({{ $items['id'] }})">
                                 Delete
                             </button>
@@ -414,6 +413,11 @@
                 myModal.show();
                 // $('#exampleModal').modal('show');
             });
+
+            Livewire.on('refreshComponent', (data) => {
+                location.reload();
+            });
+
             Livewire.on('closeModal', (data) => {
                 const modalElement = document.getElementById('exampleModal');
                 const myModal = new bootstrap.Modal(modalElement);
@@ -421,9 +425,6 @@
                 // Show modal programmatically
                 myModal.hide();
                 // $('#exampleModal').modal('hide');
-            });
-            Livewire.on('refreshComponent', (data) => {
-                location.reload();
             });
         });
     </script>

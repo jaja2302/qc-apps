@@ -104,10 +104,12 @@ class Gradingmill extends Component
 
     public function editgradingmill($id)
     {
-
+        // dd($id, $arrayKey);
         if (can_edit()) {
-            $gradingMill = ModelsGradingmill::find($id);
-
+            $data = $this->modal_data[$id];
+            // dd($data);
+            $gradingMill = ModelsGradingmill::find($data['id']);
+            // dd($gradingMill);
             // Check if the record exists
             if (!$gradingMill) {
                 session()->flash('error', 'Grading mill record not found.');
@@ -115,28 +117,24 @@ class Gradingmill extends Component
             }
 
             try {
-                // Debugging: Log the data being used to update
-                $data = $this->modal_data[0];
+                // Use the specific array item based on the provided key
+
+                // dd($data, $gradingMill);
                 $data['update_by'] = auth()->user()->user_id;
                 $data['update_date'] = now('Asia/Jakarta')->format('Y-m-d H:i:s');
 
-                // dd($data);
                 // Update the record with data from modal_data
                 $gradingMill->update($data);
 
                 // Flash a success message
                 session()->flash('message', 'Grading mill record updated successfully.');
 
-                // Optionally, close the modal or reset the form
+                // Close the modal and refresh
                 $this->dispatch('closeModal');
                 $this->dispatch('refreshComponent');
+                return;
             } catch (\Exception $e) {
-                // Handle the exception
-                // dd($e);
                 session()->flash('error', 'An error occurred while updating the grading mill: ' . $e->getMessage());
-
-                // Debugging: Log the exception
-
             }
         }
         session()->flash('error', 'You do not have permission to edit this grading mill.');
@@ -145,6 +143,7 @@ class Gradingmill extends Component
     // Delete method: Delete item from the database
     public function delete($id)
     {
+        // dd($id);
         if (can_edit()) {
             ModelsGradingmill::find($id)->delete();
 
