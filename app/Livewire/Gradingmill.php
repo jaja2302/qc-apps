@@ -119,7 +119,7 @@ class Gradingmill extends Component
             try {
                 // Use the specific array item based on the provided key
 
-                // dd($data, $gradingMill);
+                $data['datetime'] = Carbon::parse($data['datetime'])->format('Y-m-d H:i:s');
                 $data['update_by'] = auth()->user()->user_id;
                 $data['update_date'] = now('Asia/Jakarta')->format('Y-m-d H:i:s');
 

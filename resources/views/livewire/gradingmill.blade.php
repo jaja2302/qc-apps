@@ -223,7 +223,7 @@
                         <div class="row mb-3">
                             <div class="col-md">
                                 <label for="datetime" class="form-label">Date and Time</label>
-                                <input type="datetime-local" class="form-control" wire:model="modal_data.{{ $key }}.datetime" readonly>
+                                <input type="datetime-local" class="form-control" wire:model="modal_data.{{ $key }}.datetime" step="1">
                             </div>
                             <div class="col-md">
                                 <label for="app_version" class="form-label">App Version</label>
@@ -368,9 +368,9 @@
                         <label for="update_date" class="form-label">Update date: {{ $items['update_date'] ?? '-' }}</label>
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary" data-array-key="{{ $key }}">Update</button>
-                            <button type="button" class="btn btn-danger btn-sm" wire:click="delete({{ $items['id'] }})">
+                            <!-- <button type="button" class="btn btn-danger btn-sm" wire:click="delete({{ $items['id'] }})">
                                 Delete
-                            </button>
+                            </button> -->
                         </div>
 
                     </form>
