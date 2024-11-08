@@ -234,7 +234,7 @@
                         <!-- Row for Tonase and Petugas -->
                         <div class="row mb-3">
                             <div class="col-md">
-                                <label for="status_bot" class="form-label">Status Bot WA</label>
+                                <label for="status_bot" class="form-label">Status Bot WA (1 = terkirim , 0 = tidak terkirim)</label>
                                 <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.status_bot">
                             </div>
                             <div class="col-md">
