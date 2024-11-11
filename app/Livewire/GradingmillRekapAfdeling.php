@@ -27,6 +27,7 @@ class GradingmillRekapAfdeling extends Component
     public $selectedEstate;
     public $selectedAfdeling;
     public $isDownloading = false;
+    public $isDownloadingImage = [];
 
     protected $listeners = ['openModal'];
 
@@ -105,6 +106,117 @@ class GradingmillRekapAfdeling extends Component
         ]);
     }
 
+    public function downloadImage($id)
+    {
+        $this->isDownloadingImage[$id] = true;
+        $successCount = 0;
+        $errorCount = 0;
+
+        try {
+            $data = ModelsGradingmill::find($id);
+            if (!$data) {
+                $this->isDownloadingImage[$id] = false;
+                session()->flash('error', 'Record not found');
+                return;
+            }
+
+            $baseLink = 'https://mobilepro.srs-ssms.com/storage/app/public/qc/grading_mill/';
+            $foto = array_map('trim', explode(',', trim($data['foto_temuan'], '[]')));
+
+            // Filter out empty entries
+            $foto = array_filter($foto, fn($item) => !empty(trim($item)));
+
+            if (empty($foto)) {
+                $this->isDownloadingImage[$id] = false;
+                session()->flash('error', 'No images found for this record');
+                return;
+            }
+
+            // Ensure storage directory exists
+            $tempDir = storage_path('app/public/temp');
+            if (!file_exists($tempDir)) {
+                mkdir($tempDir, 0755, true);
+            }
+
+            // Create a zip archive
+            $zip = new \ZipArchive();
+            $zipName = 'grading_images_' . time() . '.zip';
+            $zipPath = $tempDir . '/' . $zipName;
+
+            if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
+                $client = new \GuzzleHttp\Client([
+                    'verify' => false,
+                    'timeout' => 10, // 10 seconds timeout
+                    'connect_timeout' => 5
+                ]);
+
+                foreach ($foto as $image) {
+                    $imageUrl = $baseLink . trim($image);
+                    $fileName = basename(trim($image));
+
+                    try {
+                        // Download image content
+                        $response = $client->get($imageUrl);
+
+                        if ($response->getStatusCode() === 200) {
+                            $content = $response->getBody();
+                            $contentLength = $content->getSize();
+
+                            // Skip if file size is 0
+                            if ($contentLength === 0) {
+                                \Log::warning("Image skipped (empty file): {$imageUrl}");
+                                $errorCount++;
+                                continue;
+                            }
+
+                            // Add file to zip
+                            $zip->addFromString($fileName, $content);
+                            $successCount++;
+                        }
+                    } catch (\GuzzleHttp\Exception\RequestException $e) {
+                        // Handle connection timeout or 404 errors
+                        \Log::warning("Image download failed: {$imageUrl} - " . $e->getMessage());
+                        $errorCount++;
+                        continue;
+                    } catch (\Exception $e) {
+                        // Handle other errors
+                        \Log::error("Unexpected error: {$imageUrl} - " . $e->getMessage());
+                        $errorCount++;
+                        continue;
+                    }
+                }
+
+                $zip->close();
+
+                $this->isDownloadingImage[$id] = false;
+
+                // Only return zip if at least one image was successfully downloaded
+                if ($successCount > 0) {
+                    $message = "Downloaded {$successCount} image" . ($successCount !== 1 ? 's' : '');
+                    if ($errorCount > 0) {
+                        $message .= " ({$errorCount} failed)";
+                    }
+                    session()->flash('success', $message);
+
+                    return response()->download($zipPath)->deleteFileAfterSend(true);
+                } else {
+                    // Clean up empty zip file
+                    if (file_exists($zipPath)) {
+                        unlink($zipPath);
+                    }
+                    session()->flash('error', 'No images could be downloaded');
+                    return;
+                }
+            }
+
+            $this->isDownloadingImage[$id] = false;
+            session()->flash('error', 'Failed to create zip archive');
+        } catch (\Exception $e) {
+            \Log::error('Download process failed: ' . $e->getMessage());
+            $this->isDownloadingImage[$id] = false;
+            session()->flash('error', 'Download process failed');
+        }
+    }
     public function downloadPDF($id)
     {
         $this->isDownloading = true;

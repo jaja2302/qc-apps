@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pengguna;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -36,18 +37,27 @@ class AbsensiController extends Controller
 
 
 
-        $user_Data = DB::table('pengguna')
-            ->select('pengguna.*')
-            ->where('departemen', 'QC')
-            ->orWhere('id_departement', 43)
+        // $user_Data = DB::table('pengguna')
+        //     ->select('pengguna.*')
+        //     ->where('departemen', 'QC')
+        //     ->orWhere('id_departement', 43)
+        //     ->where('lokasi_kerja', $lok)
+        //     ->where('email', 'like', '%mandor%')
+        //     ->get();
+
+        // // You can remove the unnecessary conversion to JSON
+        // // $user_Data = $user_Data->groupBy('nama_lengkap');
+        // $user_Data = json_decode($user_Data, true);
+
+        $user_Data = Pengguna::whereIn('id_jabatan', [1, 8])
+            ->with('Jabatan', 'Departement')
             ->where('lokasi_kerja', $lok)
-            ->where('email', 'like', '%mandor%')
+            ->whereHas('Departement', function ($query) {
+                $query->where('departement.id', 43);  // Specify the table name
+            })
             ->get();
-
-        // You can remove the unnecessary conversion to JSON
-        // $user_Data = $user_Data->groupBy('nama_lengkap');
+        // $user_Data = $user_Data->groupBy('user_id');
         $user_Data = json_decode($user_Data, true);
-
         // dd($user_Data);
 
         $firstDayOfMonth = Carbon::now()->firstOfMonth();
@@ -117,21 +127,31 @@ class AbsensiController extends Controller
             $result[$i - 1] = $i;
         }
 
-        // dd($result);
-        $user_Data = DB::table('pengguna')
-            ->select('pengguna.*')
-            ->where('departemen', 'QC')
-            ->orWhere('id_departement', 43)
-            ->where('lokasi_kerja', $regs)
-            ->where('email', 'like', '%mandor%')
-            ->get();
+        // dd($regs);
+        // $user_Data = DB::table('pengguna')
+        //     ->select('pengguna.*')
+        //     // ->where('departemen', 'QC')
+        //     // ->orWhere('id_departement', 43)
+        //     ->whereIn('id_jabatan', [1, 8])
+        //     ->where('lokasi_kerja', $regs)
 
-        // You can remove the unnecessary conversion to JSON
+        //     // ->where('email', 'like', '%mandor%')
+        //     ->get();
+
+        // // You can remove the unnecessary conversion to JSON
+        // $user_Data = $user_Data->groupBy('user_id');
+        // $user_Data = json_decode($user_Data, true);
+
+        $user_Data = Pengguna::whereIn('id_jabatan', [1, 8])
+            ->with('Jabatan', 'Departement')
+            ->where('lokasi_kerja', $regs)
+            ->whereHas('Departement', function ($query) {
+                $query->where('departement.id', 43);  // Specify the table name
+            })
+            ->get();
         $user_Data = $user_Data->groupBy('user_id');
         $user_Data = json_decode($user_Data, true);
-
-
-        // dd($datesnew);
+        // dd($user_data);
 
         $user_default = [];
 
@@ -606,15 +626,13 @@ class AbsensiController extends Controller
         }
 
         // dd($result);
-        $user_Data = DB::table('pengguna')
-            ->select('pengguna.*')
-            ->where('departemen', 'QC')
-            ->orWhere('id_departement', 43)
+        $user_Data = Pengguna::whereIn('id_jabatan', [1, 8])
+            ->with('Jabatan', 'Departement')
             ->where('lokasi_kerja', $regs)
-            ->where('email', 'like', '%mandor%')
+            ->whereHas('Departement', function ($query) {
+                $query->where('departement.id', 43);  // Specify the table name
+            })
             ->get();
-
-        // You can remove the unnecessary conversion to JSON
         $user_Data = $user_Data->groupBy('user_id');
         $user_Data = json_decode($user_Data, true);
 
@@ -1001,17 +1019,25 @@ class AbsensiController extends Controller
         // $userid = $request->input('userid');
         $date = $request->input('date');
         $lok = $request->session()->get('lok');
-        $user_Data = DB::table('pengguna')
-            ->select('pengguna.*')
-            ->where('departemen', 'QC')
-            ->orWhere('id_departement', 43)
+        // $user_Data = DB::table('pengguna')
+        //     ->select('pengguna.*')
+        //     ->where('departemen', 'QC')
+        //     ->orWhere('id_departement', 43)
+        //     ->where('lokasi_kerja', $lok)
+        //     ->where('email', 'like', '%mandor%')
+        //     ->pluck('user_id');
+
+
+        // $user_Data = json_decode($user_Data, true);
+        $user_Data = Pengguna::whereIn('id_jabatan', [1, 8])
+            ->with('Jabatan', 'Departement')
             ->where('lokasi_kerja', $lok)
-            ->where('email', 'like', '%mandor%')
-            ->pluck('user_id');
-
-
+            ->whereHas('Departement', function ($query) {
+                $query->where('departement.id', 43);  // Specify the table name
+            })
+            ->get();
+        // $user_Data = $user_Data->groupBy('user_id');
         $user_Data = json_decode($user_Data, true);
-
 
 
         $datauser = DB::connection('mysql2')->table('absensi_qc')

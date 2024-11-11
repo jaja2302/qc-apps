@@ -163,6 +163,7 @@
                     <table class="table table-responsive table-striped table-bordered">
                         <thead>
                             <tr>
+                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="3" colspan="2">Action</th>
                                 <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Estate</th>
                                 <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Afdeling</th>
                                 <th style="background-color: #f0ecec;" colspan="6">UNIT SORTASI</th>
@@ -232,7 +233,25 @@
                                         </span>
                                     </button>
                                 </td>
+                                <!-- downlaod the image only  -->
+                                <td>
+                                    <button class="btn btn-sm btn-primary"
+                                        wire:click="downloadImage('{{ $data['id'] }}')"
+                                        wire:loading.attr="disabled"
+                                        wire:target="downloadImage('{{ $data['id'] }}')">
+                                        @if(isset($isDownloadingImage[$data['id']]) && $isDownloadingImage[$data['id']])
+                                        <span>
+                                            <i class="fas fa-spinner fa-spin"></i> Downloading...
+                                        </span>
+                                        @else
+                                        <span>
+                                            <i class="fas fa-download"></i> Image
+                                        </span>
+                                        @endif
+                                    </button>
+                                </td>
                                 <td>{{$data['estate']}}</td>
+                                <td>{{$data['afdeling']}}</td>
                                 <td>{{$data['no_plat']}}</td>
                                 <td>{{$data['datetime']}}</td>
                                 <td>{{$data['jjg_spb']}}</td>
