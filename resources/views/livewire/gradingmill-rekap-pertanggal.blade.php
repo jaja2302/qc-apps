@@ -58,8 +58,26 @@
                 </select>
             </div>
             <div class="d-flex align-items-center">
-                <label class="me-2">Search:</label>
-                <input type="search" class="form-control form-control-sm" id="tableSearch" placeholder="Search...">
+                <label class="me-2">Search Mill:</label>
+                <input type="search" class="form-control form-control-sm" id="searchMill" placeholder="Search Mill...">
+            </div>
+            <div class="d-flex align-items-center">
+                <label class="me-2">Search Estate:</label>
+                <input type="search" class="form-control form-control-sm" id="searchEstate" placeholder="Search Estate...">
+            </div>
+            <div class="d-flex align-items-center">
+                <label class="me-2">Search Afdeling:</label>
+                <input type="search" class="form-control form-control-sm" id="searchAfdeling" placeholder="Search Afdeling...">
+            </div>
+            <div class="d-flex align-items-center">
+                <label class="me-2">Filter Data Type:</label>
+                <select class="form-select form-select-sm" id="filterDataType">
+                    <option value="all">Show All</option>
+                    <option value="block_data">Block Data Only</option>
+                    <option value="afdeling_total">Afdeling Total Only</option>
+                    <option value="estate_total">Estate Total Only</option>
+                    <option value="date_total">Date Total Only</option>
+                </select>
             </div>
         </div>
         <div class="table-responsive" style="position: relative;" wire:ignore>
@@ -179,10 +197,61 @@
             color: white;
         }
 
-
         .table-container {
             overflow-x: auto;
             position: relative;
+        }
+
+        /* Updated table styles */
+        #gradingTable {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 1rem;
+            color: #212529;
+        }
+
+        #gradingTable th,
+        #gradingTable td {
+            padding: 0.75rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+
+        #gradingTable thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+            background-color: #f8f9fa;
+            color: #495057;
+            font-weight: bold;
+        }
+
+        #gradingTable tbody tr:hover {
+            background-color: #f1f3f5;
+        }
+
+        #gradingTable tbody tr.table-warning {
+            background-color: #fff3cd;
+        }
+
+        #gradingTable tbody tr.table-primary {
+            background-color: #cce5ff;
+        }
+
+        #gradingTable tbody tr.table-danger {
+            background-color: #f8d7da;
+        }
+
+        .pagination .page-link {
+            color: #007bff;
+        }
+
+        .pagination .page-link:hover {
+            color: #0056b3;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
         }
     </style>
     <script type="module">
@@ -199,16 +268,16 @@
         ];
 
         let tableData = [];
+        let filteredData = [];
         let currentPage = 1;
         const rowsPerPage = 25;
-        let sortColumn = 0;
-        let sortDirection = 'asc';
 
         document.addEventListener('livewire:initialized', () => {
             initializeTable();
 
             @this.on('dataUpdated', (event) => {
                 tableData = event.data;
+                filteredData = [...tableData];
                 renderTable();
             });
         });
@@ -216,23 +285,12 @@
         function renderTable() {
             const tbody = document.createElement('tbody');
             const startIndex = (currentPage - 1) * rowsPerPage;
-            const endIndex = Math.min(startIndex + rowsPerPage, tableData.length);
+            const endIndex = Math.min(startIndex + rowsPerPage, filteredData.length);
 
-            // Sort data
-            const sortedData = [...tableData].sort((a, b) => {
-                const aVal = a[columns[sortColumn]];
-                const bVal = b[columns[sortColumn]];
-                return sortDirection === 'asc' ?
-                    (aVal > bVal ? 1 : -1) :
-                    (aVal < bVal ? 1 : -1);
-            });
-
-            // Render rows
             for (let i = startIndex; i < endIndex; i++) {
                 const row = document.createElement('tr');
-                const item = sortedData[i];
+                const item = filteredData[i];
 
-                // Add row classes based on type
                 if (item.type === 'afdeling_total') {
                     row.classList.add('table-warning', 'fw-bold');
                 } else if (item.type === 'estate_total') {
@@ -241,12 +299,10 @@
                     row.classList.add('table-danger', 'text-white', 'fw-bold');
                 }
 
-                // Add cells using the columns array
                 columns.forEach(column => {
                     const cell = document.createElement('td');
                     const value = item[column];
 
-                    // Format percentages
                     if (column.startsWith('percentage_')) {
                         cell.textContent = value ? Number(value).toFixed(2) : '0.00';
                     } else {
@@ -258,7 +314,6 @@
                 tbody.appendChild(row);
             }
 
-            // Update table
             const table = document.getElementById('gradingTable');
             const existingTbody = table.querySelector('tbody');
             if (existingTbody) {
@@ -266,18 +321,26 @@
             }
             table.appendChild(tbody);
 
-            // Update pagination info
             document.getElementById('startIndex').textContent = startIndex + 1;
             document.getElementById('endIndex').textContent = endIndex;
-            document.getElementById('totalEntries').textContent = tableData.length;
+            document.getElementById('totalEntries').textContent = filteredData.length;
 
-            // Update pagination buttons
             document.getElementById('prevPage').disabled = currentPage === 1;
-            document.getElementById('nextPage').disabled = endIndex >= tableData.length;
+            document.getElementById('nextPage').disabled = endIndex >= filteredData.length;
         }
 
         function initializeTable() {
-            // Add click handlers for pagination
+            document.getElementById('searchMill').addEventListener('input', handleSearch);
+            document.getElementById('searchEstate').addEventListener('input', handleSearch);
+            document.getElementById('searchAfdeling').addEventListener('input', handleSearch);
+            document.getElementById('filterDataType').addEventListener('change', handleSearch);
+
+            document.getElementById('entriesPerPage').addEventListener('change', (e) => {
+                rowsPerPage = parseInt(e.target.value);
+                currentPage = 1;
+                renderTable();
+            });
+
             document.getElementById('prevPage').addEventListener('click', () => {
                 if (currentPage > 1) {
                     currentPage--;
@@ -286,27 +349,48 @@
             });
 
             document.getElementById('nextPage').addEventListener('click', () => {
-                const maxPages = Math.ceil(tableData.length / rowsPerPage);
+                const maxPages = Math.ceil(filteredData.length / rowsPerPage);
                 if (currentPage < maxPages) {
                     currentPage++;
                     renderTable();
                 }
             });
+        }
 
-            // Add click handlers for sorting
-            const headers = document.querySelectorAll('#gradingTable th');
-            headers.forEach((header, index) => {
-                header.style.cursor = 'pointer';
-                header.addEventListener('click', () => {
-                    if (sortColumn === index) {
-                        sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-                    } else {
-                        sortColumn = index;
-                        sortDirection = 'asc';
-                    }
-                    renderTable();
-                });
+        function handleSearch() {
+            const millSearch = document.getElementById('searchMill').value.toLowerCase();
+            const estateSearch = document.getElementById('searchEstate').value.toLowerCase();
+            const afdelingSearch = document.getElementById('searchAfdeling').value.toLowerCase();
+            const dataTypeFilter = document.getElementById('filterDataType').value;
+
+            filteredData = tableData.filter(item => {
+                const matchMill = item.mill?.toLowerCase().includes(millSearch);
+                const matchEstate = item.estate?.toLowerCase().includes(estateSearch);
+                const matchAfdeling = item.afdeling?.toLowerCase().includes(afdelingSearch);
+
+                let matchDataType = true;
+                switch (dataTypeFilter) {
+                    case 'block_data':
+                        matchDataType = item.type !== 'afdeling_total' && item.type !== 'estate_total' && item.type !== 'date_total';
+                        break;
+                    case 'afdeling_total':
+                        matchDataType = item.type === 'afdeling_total';
+                        break;
+                    case 'estate_total':
+                        matchDataType = item.type === 'estate_total';
+                        break;
+                    case 'date_total':
+                        matchDataType = item.type === 'date_total';
+                        break;
+                    default:
+                        matchDataType = true;
+                }
+
+                return matchMill && matchEstate && matchAfdeling && matchDataType;
             });
+
+            currentPage = 1;
+            renderTable();
         }
     </script>
 </div>
