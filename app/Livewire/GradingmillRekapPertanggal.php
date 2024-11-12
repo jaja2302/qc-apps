@@ -52,13 +52,7 @@ class GradingmillRekapPertanggal extends Component
         $reg = $this->inputregional;
         $bulan = $this->inputbulan;
         $nestedResult = getdatamildetailpertanggal($bulan, $reg);
-
-        // $jsonData = json_encode($nestedResult, JSON_PRETTY_PRINT);
-        // $filename = storage_path('app/grading_data.json');
-        // file_put_contents($filename, $jsonData);
-
-        $this->resultdata = $nestedResult;
-        $this->dispatch('dataUpdated', data: $this->resultdata);
+        $this->dispatch('dataUpdated', data: $nestedResult);
     }
 
 
