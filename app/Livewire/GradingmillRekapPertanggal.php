@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use App\Models\Gradingmill as ModelsGradingmill;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\Gradingpertanggal;
 
 class GradingmillRekapPertanggal extends Component
 {
@@ -52,10 +53,26 @@ class GradingmillRekapPertanggal extends Component
         $bulan = $this->inputbulan;
         $nestedResult = getdatamildetailpertanggal($bulan, $reg);
 
-        // Flatten the nested array
+        // $jsonData = json_encode($nestedResult, JSON_PRETTY_PRINT);
+        // $filename = storage_path('app/grading_data.json');
+        // file_put_contents($filename, $jsonData);
 
-        // dd($nestedResult);
         $this->resultdata = $nestedResult;
         $this->dispatch('dataUpdated', data: $this->resultdata);
+    }
+
+
+    public function exportData()
+    {
+        session()->flash('message', 'Mohon menunggu excel sedang di proses...!');
+
+        $data = $this->resultdata;
+        if (empty($data)) {
+            session()->flash('message', 'Data Kosong...!');
+            return;
+        }
+        // dd($data);
+        session()->flash('message', 'Excel Berhasil di proses...!');
+        return Excel::download(new Gradingpertanggal($data), 'Excel Grading Pertanggal-' . $this->inputbulan . '-' . 'Bulan-' . $this->inputregional . '.xlsx');
     }
 }

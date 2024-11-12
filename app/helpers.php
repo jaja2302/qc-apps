@@ -12683,12 +12683,16 @@ if (!function_exists('getdatamildetailpertanggal')) {
             ->whereHas('Listmill', function ($query) use ($reg) {
                 $query->where('reg', $reg);
             })
+            ->orderBy('datetime', 'asc')
             ->orderBy('estate', 'asc')
             ->orderBy('afdeling', 'asc')
             ->get()
             ->groupBy(['tanggal', 'estate', 'afdeling']);
 
         $data = json_decode($data, true);
+        if ($data) {
+            ksort($data); // Sort by date keys
+        }
         // dd($data);
 
         // Assuming your original array is stored in $data
@@ -12912,6 +12916,7 @@ if (!function_exists('getdatamildetailpertanggal')) {
             $data = $result;
         }
 
+        // dd($data);
         $flattenedData = [];
 
         foreach ($data as $date => $estates) {
@@ -13125,6 +13130,7 @@ if (!function_exists('getdatamildetailpertanggal')) {
                 }
             }
         }
+        // save_json($flattenedData);
         return $flattenedData;
     }
 }
@@ -13808,5 +13814,14 @@ if (!function_exists('formula_grading')) {
             'kelas_c' => $array['kelas_c'],
             'persentase_kelas_c' => round($percentage_kelas_c, 2),
         ];
+    }
+}
+
+if (!function_exists('save_json')) {
+    function save_json($data)
+    {
+        $jsonData = json_encode($data, JSON_PRETTY_PRINT);
+        $filename = storage_path('app/grading_data.json');
+        file_put_contents($filename, $jsonData);;
     }
 }

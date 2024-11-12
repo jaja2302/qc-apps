@@ -77,7 +77,7 @@
         }
 
         /* Updated table styles */
-        #gradingTable {
+        KELAS JANJANG</th></tr><tr>#gradingTable {
             border-collapse: collapse;
             width: 100%;
             margin-bottom: 1rem;
@@ -334,6 +334,8 @@
             padding: 0.75rem;
             white-space: nowrap;
             border: 1px solid #dee2e6;
+            text-align: center;
+            vertical-align: middle;
         }
 
         /* Minimum widths for frozen columns */
@@ -376,6 +378,11 @@
                         <option value="{{ $regional['id'] }}">{{ $regional['nama'] }}</option>
                         @endforeach
                     </select>
+                </div>
+                <div class="col-auto">
+                    <form wire:submit.prevent="exportData">
+                        <button type="submit" class="btn btn-primary">Export</button>
+                    </form>
                 </div>
                 <div class="col-auto">
                     <button type="button" class="btn btn-primary ml-2" wire:click="showResults">Show</button>
@@ -479,19 +486,19 @@
                 <table id="gradingTable" class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Tanggal</th>
-                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Estate</th>
-                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Afdeling</th>
-                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Mill</th>
-                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Jam Grading</th>
-                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Nomor Plat</th>
-                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Driver</th>
-                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Blok</th>
-                            <th style="background-color: #f0ecec;" colspan="4">UNIT SORTASI</th>
+                            <th style="background-color: #f0ecec;" colspan="12">UNIT SORTASI</th>
                             <th style="background-color: #88e48c;" colspan="20">HASIL GRADING</th>
                             <th style="background-color: #f8c4ac;" colspan="6">KELAS JANJANG</th>
                         </tr>
                         <tr>
+                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">Tanggal</th>
+                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">Estate</th>
+                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">Afdeling</th>
+                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">Mill</th>
+                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">Jam Grading</th>
+                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">Nomor Plat</th>
+                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">Driver</th>
+                            <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">Blok</th>
                             <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG SPB</th>
                             <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG GRADING</th>
                             <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">TONASE (KG)</th>
