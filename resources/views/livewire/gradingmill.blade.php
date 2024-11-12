@@ -248,7 +248,12 @@
                             </div>
                             <div class="col-md">
                                 <label for="mill" class="form-label">Mill</label>
-                                <input type="text" class="form-control" wire:model="modal_data.{{ $key }}.mill" readonly>
+                                <select class="form-select" wire:model="modal_data.{{ $key }}.mill">
+                                    @foreach ($listmill as $id => $mill)
+                                    <option value="{{ $id }}">{{ $mill }}</option>
+                                    @endforeach
+                                </select>
+                                <!-- <input type="text" class="form-control" wire:model="modal_data.{{ $key }}.mill" readonly> -->
                             </div>
 
 
@@ -368,9 +373,9 @@
                         <label for="update_date" class="form-label">Update date: {{ $items['update_date'] ?? '-' }}</label>
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary" data-array-key="{{ $key }}">Update</button>
-                            <!-- <button type="button" class="btn btn-danger btn-sm" wire:click="delete({{ $items['id'] }})">
+                            <button type="button" class="btn btn-danger btn-sm" wire:click="delete({{ $items['id'] }})">
                                 Delete
-                            </button> -->
+                            </button>
                         </div>
 
                     </form>

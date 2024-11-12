@@ -570,20 +570,6 @@
     </div>
 
     <script type="module">
-        $(document).on('livewire:initialized', function() {
-            // initializeTable();
-
-            @this.on('dataUpdated', function(event) {
-
-                // console.log(event);
-
-                tableData = event.data;
-                filteredData = [...tableData];
-                renderTable();
-            });
-        });
-
-
         const columns = [
             'date', 'estate', 'afdeling', 'mill', 'datetime', 'no_plat', 'driver', 'blok',
             'jjg_spb', 'jjg_grading', 'tonase', 'bjr',
@@ -601,7 +587,15 @@
         let currentPage = 1;
         const rowsPerPage = 25;
 
+        document.addEventListener('livewire:initialized', () => {
+            initializeTable();
 
+            @this.on('dataUpdated', (event) => {
+                tableData = event.data;
+                filteredData = [...tableData];
+                renderTable();
+            });
+        });
 
         function renderTable() {
             const tbody = document.createElement('tbody');

@@ -34,7 +34,6 @@
                     <th style="background-color: #f0ecec;" colspan="4">UNIT SORTASI</th>
                     <th style="background-color: #88e48c;" colspan="20">HASIL GRADING</th>
                     <th style="background-color: #f8c4ac;" colspan="6">KELAS JANJANG</th>
-                    <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Action</th>
                 </tr>
                 <tr>
                     <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG SPB</th>
@@ -102,6 +101,8 @@
                     <td>{{round($items2['bjr'],2)}}</td>
                     <td>{{$items2['ripeness']}}</td>
                     <td>{{round($items2['percentage_ripeness'],2)}}</td>
+                    <td>{{$items2['unripe']}}</td>
+                    <td>{{round($items2['percentage_unripe'],2)}}</td>
                     <td>{{$items2['overripe']}}</td>
                     <td>{{round($items2['percentage_overripe'],2)}}</td>
                     <td>{{$items2['empty_bunch']}}</td>
@@ -124,6 +125,7 @@
                     <td>{{round($items2['percentage_kelas_b'],2)}}</td>
                     <td>{{$items2['kelas_a']}}</td>
                     <td>{{round($items2['percentage_kelas_a'],2)}}</td>
+
                 </tr>
                 @endforeach
                 @endforeach

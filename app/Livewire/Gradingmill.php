@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use App\Exports\Gradingperhari;
 use App\Models\Gradingmill as ModelsGradingmill;
-
+use App\Models\Listmill;
 use App\Models\Regional;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
@@ -20,12 +20,15 @@ class Gradingmill extends Component
     public $mill_id;
     public $mills = [];
     public $resultdata = [];
+    public $listmill = [];
     public $modal_data = [];
     public $itemId;
 
     public function mount()
     {
         // Load regions except id 5
+        $this->listmill = Listmill::all()->pluck('mill', 'mill');
+        // dd($this->listmill);
         $this->regional_id = Regional::query()->where('id', '!=', 5)->get();
         $this->inputbulan = Carbon::now('Asia/Jakarta')->format('mm/dd/yyyy');
     }
@@ -109,7 +112,7 @@ class Gradingmill extends Component
             $data = $this->modal_data[$id];
             // dd($data);
             $gradingMill = ModelsGradingmill::find($data['id']);
-            // dd($gradingMill);
+            // dd($data);
             // Check if the record exists
             if (!$gradingMill) {
                 session()->flash('error', 'Grading mill record not found.');
