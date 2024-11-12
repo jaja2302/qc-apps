@@ -217,6 +217,149 @@
             padding: 0.6rem 1rem;
             font-size: 0.9rem;
         }
+
+        /* Updated table styles for frozen columns */
+        .table-container {
+            position: relative;
+            overflow: auto;
+            max-height: 70vh;
+            border: 1px solid #dee2e6;
+        }
+
+        #gradingTable {
+            position: relative;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        /* Sticky header styles */
+        #gradingTable thead tr th {
+            position: sticky;
+            top: 0;
+            background-color: #f8f9fa;
+            z-index: 20;
+            border: 1px solid #dee2e6;
+        }
+
+        /* Second header row */
+        #gradingTable thead tr:nth-child(2) th {
+            top: 48px;
+        }
+
+        /* Third header row */
+        #gradingTable thead tr:nth-child(3) th {
+            top: 96px;
+        }
+
+        /* Sticky first four columns */
+        #gradingTable th:nth-child(1),
+        #gradingTable td:nth-child(1) {
+            position: sticky;
+            left: 0;
+            background-color: #fff;
+            z-index: 10;
+        }
+
+        #gradingTable th:nth-child(2),
+        #gradingTable td:nth-child(2) {
+            position: sticky;
+            left: 150px;
+            background-color: #fff;
+            z-index: 10;
+        }
+
+        #gradingTable th:nth-child(3),
+        #gradingTable td:nth-child(3) {
+            position: sticky;
+            left: 300px;
+            background-color: #fff;
+            z-index: 10;
+        }
+
+        #gradingTable th:nth-child(4),
+        #gradingTable td:nth-child(4) {
+            position: sticky;
+            left: 450px;
+            background-color: #fff;
+            z-index: 10;
+        }
+
+        /* Corner cells (intersection of sticky headers and columns) */
+        #gradingTable thead tr th:nth-child(-n+4) {
+            z-index: 30;
+        }
+
+        /* Ensure sticky columns have proper background when in different row types */
+        #gradingTable tr.table-warning td:nth-child(-n+4) {
+            background-color: #fff3cd;
+        }
+
+        #gradingTable tr.table-primary td:nth-child(-n+4) {
+            background-color: #cce5ff;
+        }
+
+        #gradingTable tr.table-danger td:nth-child(-n+4) {
+            background-color: #f8d7da;
+        }
+
+        /* Add shadows for better visual separation */
+        .table-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 450px;
+            /* Width of first 4 columns combined */
+            bottom: 0;
+            width: 5px;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+            pointer-events: none;
+        }
+
+        .table-container::before {
+            content: '';
+            position: absolute;
+            top: 144px;
+            /* Height of all header rows combined */
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+            pointer-events: none;
+            z-index: 21;
+        }
+
+        /* Ensure all cells have consistent padding and alignment */
+        #gradingTable th,
+        #gradingTable td {
+            padding: 0.75rem;
+            white-space: nowrap;
+            border: 1px solid #dee2e6;
+        }
+
+        /* Minimum widths for frozen columns */
+        #gradingTable th:nth-child(1),
+        #gradingTable td:nth-child(1) {
+            min-width: 150px;
+            /* Tanggal */
+        }
+
+        #gradingTable th:nth-child(2),
+        #gradingTable td:nth-child(2) {
+            min-width: 150px;
+            /* Estate */
+        }
+
+        #gradingTable th:nth-child(3),
+        #gradingTable td:nth-child(3) {
+            min-width: 150px;
+            /* Afdeling */
+        }
+
+        #gradingTable th:nth-child(4),
+        #gradingTable td:nth-child(4) {
+            min-width: 150px;
+            /* Mill */
+        }
     </style>
 
     <div class="d-flex justify-content-end mr-3 mt-4">
