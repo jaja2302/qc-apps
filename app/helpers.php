@@ -12911,7 +12911,221 @@ if (!function_exists('getdatamildetailpertanggal')) {
             }
             $data = $result;
         }
-        return $data;
+
+        $flattenedData = [];
+
+        foreach ($data as $date => $estates) {
+            // dd($estates);
+            foreach ($estates as $estate => $afdelings) {
+                if ($estate !== 'total_date') {
+                    foreach ($afdelings as $afdeling => $data) {
+                        if ($afdeling !== 'total_estate') {
+                            foreach ($data as $key => $value) {
+                                if ($key !== 'total_blok') {
+                                    $loose_fruit_kg = round(($value['loose_fruit'] / $value['tonase']) * 100, 2);
+                                    $dirt_kg = round(($value['dirt'] / $value['tonase']) * 100, 2);
+                                    $abnormal = $value['abn_partheno'] + $value['abn_hard'] + $value['abn_sakit'] + $value['abn_kastrasi'];
+                                    $unripe = $value['unripe_tanpa_brondol'] + $value['unripe_kurang_brondol'];
+                                    $ripeness = $value['jjg_grading'] - ($value['overripe'] + $value['empty'] + $value['rotten'] + $abnormal + $unripe);
+
+                                    // Calculate percentages
+                                    $percentage_ripeness = ($ripeness / $value['jjg_grading']) * 100;
+                                    $percentage_unripe = ($unripe / $value['jjg_grading']) * 100;
+                                    $percentage_brondol_0 = ($value['unripe_tanpa_brondol'] / $value['jjg_grading']) * 100;
+                                    $percentage_brondol_less = ($value['unripe_kurang_brondol'] / $value['jjg_grading']) * 100;
+                                    $percentage_overripe = ($value['overripe'] / $value['jjg_grading']) * 100;
+                                    $percentage_empty_bunch = ($value['empty'] / $value['jjg_grading']) * 100;
+                                    $percentage_rotten_bunch = ($value['rotten'] / $value['jjg_grading']) * 100;
+                                    $percentage_abnormal = ($abnormal / $value['jjg_grading']) * 100;
+                                    $percentage_tangkai_panjang = ($value['tangkai_panjang'] / $value['jjg_grading']) * 100;
+                                    $percentage_vcuts = ($value['vcut'] / $value['jjg_grading']) * 100;
+                                    $percentage_kelas_a = ($value['kelas_a'] / $value['jjg_grading']) * 100;
+                                    $percentage_kelas_b = ($value['kelas_b'] / $value['jjg_grading']) * 100;
+                                    $percentage_kelas_c = ($value['kelas_c'] / $value['jjg_grading']) * 100;
+
+                                    $jumlah_selisih_janjang = $value['jjg_grading'] - $value['jjg_spb'];
+                                    $percentage_selisih_janjang = ($jumlah_selisih_janjang / $value['jjg_spb']) * 100;
+                                    $bjr = round(($value['jjg_spb'] / $value['tonase']) * 100, 2);
+                                    $jam = date('H:i', strtotime($value['datetime']));
+                                    // Regular row
+                                    $flattenedData[] = [
+                                        'type' => 'data',
+                                        'date' => $date,
+                                        'estate' => $estate,
+                                        'afdeling' => $value['afdeling'],
+                                        'mill' => $value['mill'],
+                                        'datetime' => $jam,
+                                        'no_plat' => $value['no_plat'],
+                                        'driver' => $value['driver'],
+                                        'blok' => $value['blok'],
+                                        'jjg_spb' => $value['jjg_spb'],
+                                        'jjg_grading' => $value['jjg_grading'],
+                                        'tonase' => $value['tonase'],
+                                        'bjr' => $bjr,
+                                        'ripeness' => $ripeness,
+                                        'percentage_ripeness' => $percentage_ripeness,
+                                        'unripe' => $unripe,
+                                        'percentage_unripe' => $percentage_unripe,
+                                        'overripe' => $value['overripe'],
+                                        'percentage_overripe' => $percentage_overripe,
+                                        'empty' => $value['empty'],
+                                        'percentage_empty_bunch' => $percentage_empty_bunch,
+                                        'rotten' => $value['rotten'],
+                                        'percentage_rotten_bunch' => $percentage_rotten_bunch,
+                                        'abnormal' => $abnormal,
+                                        'percentage_abnormal' => $percentage_abnormal,
+                                        'tangkai_panjang' => $value['tangkai_panjang'],
+                                        'percentage_tangkai_panjang' => $percentage_tangkai_panjang,
+                                        'vcuts' => $value['vcut'],
+                                        'percentage_vcut' => $percentage_vcuts,
+                                        'loose_fruit' => $value['loose_fruit'],
+                                        'percentage_loose_fruit_kg' => $loose_fruit_kg,
+                                        'dirt' => $value['dirt'],
+                                        'percentage_dirt_kg' => $dirt_kg,
+                                        'kelas_c' => $value['kelas_c'],
+                                        'percentage_kelas_c' => $percentage_kelas_c,
+                                        'kelas_b' => $value['kelas_b'],
+                                        'percentage_kelas_b' => $percentage_kelas_b,
+                                        'kelas_a' => $value['kelas_a'],
+                                        'percentage_kelas_a' => $percentage_kelas_a,
+                                    ];
+                                } else {
+                                    // Afdeling total row
+                                    $flattenedData[] = [
+                                        'type' => 'afdeling_total',
+                                        'date' => $date,
+                                        'estate' => $estate,
+                                        'afdeling' => $value['afdeling'],
+                                        'mill' => '-',
+                                        'datetime' => '-',
+                                        'no_plat' => '-',
+                                        'driver' => '-',
+                                        'blok' => '-',
+                                        'jjg_spb' => $value['jjg_spb'],
+                                        'jjg_grading' => $value['jjg_grading'],
+                                        'tonase' => $value['tonase'],
+                                        'bjr' => $value['bjr'],
+                                        'ripeness' => $value['Ripeness'],
+                                        'percentage_ripeness' => $value['percentase_ripenes'],
+                                        'unripe' => $value['Unripe'],
+                                        'percentage_unripe' => $value['persenstase_unripe'],
+                                        'overripe' => $value['overripe'],
+                                        'percentage_overripe' => $value['persentase_overripe'],
+                                        'empty' => $value['empty'],
+                                        'percentage_empty_bunch' => $value['persentase_empty_bunch'],
+                                        'rotten' => $value['rotten'],
+                                        'percentage_rotten_bunch' => $value['persentase_rotten_bunce'],
+                                        'abnormal' => $value['Abnormal'],
+                                        'percentage_abnormal' => $value['persentase_abnormal'],
+                                        'tangkai_panjang' => $value['tangkai_panjang'],
+                                        'percentage_tangkai_panjang' => $value['persentase_stalk'],
+                                        'vcuts' => $value['vcuts'],
+                                        'percentage_vcut' => $value['persentase_vcut'],
+                                        'loose_fruit' => $value['loose_fruit'],
+                                        'percentage_loose_fruit_kg' => $value['persentase_lose_fruit'],
+                                        'dirt' => $value['dirt'],
+                                        'percentage_dirt_kg' => $value['persentase'],
+                                        'kelas_c' => $value['kelas_c'],
+                                        'percentage_kelas_c' => $value['persentase_kelas_c'],
+                                        'kelas_b' => $value['kelas_b'],
+                                        'percentage_kelas_b' => $value['persentase_kelas_b'],
+                                        'kelas_a' => $value['kelas_a'],
+                                        'percentage_kelas_a' => $value['persentase_kelas_a'],
+                                    ];
+                                }
+                            }
+                        } else {
+                            // Estate total row
+                            $flattenedData[] = [
+                                'type' => 'estate_total',
+                                'date' => $date,
+                                'estate' => $estate,
+                                'afdeling' => '-',
+                                'mill' => '-',
+                                'datetime' => '-',
+                                'no_plat' => '-',
+                                'driver' => '-',
+                                'blok' => '-',
+                                'jjg_spb' => $data['jjg_spb'],
+                                'jjg_grading' => $data['jjg_grading'],
+                                'tonase' => $data['tonase'],
+                                'bjr' => $data['bjr'],
+                                'ripeness' => $data['Ripeness'],
+                                'percentage_ripeness' => $data['percentase_ripenes'],
+                                'unripe' => $data['Unripe'],
+                                'percentage_unripe' => $data['persenstase_unripe'],
+                                'overripe' => $data['overripe'],
+                                'percentage_overripe' => $data['persentase_overripe'],
+                                'empty' => $data['empty'],
+                                'percentage_empty_bunch' => $data['persentase_empty_bunch'],
+                                'rotten' => $data['rotten'],
+                                'percentage_rotten_bunch' => $data['persentase_rotten_bunce'],
+                                'abnormal' => $data['Abnormal'],
+                                'percentage_abnormal' => $data['persentase_abnormal'],
+                                'tangkai_panjang' => $data['tangkai_panjang'],
+                                'percentage_tangkai_panjang' => $data['persentase_stalk'],
+                                'vcuts' => $data['vcuts'],
+                                'percentage_vcut' => $data['persentase_vcut'],
+                                'loose_fruit' => $data['loose_fruit'],
+                                'percentage_loose_fruit_kg' => $data['persentase_lose_fruit'],
+                                'dirt' => $data['dirt'],
+                                'percentage_dirt_kg' => $data['persentase'],
+                                'kelas_c' => $data['kelas_c'],
+                                'percentage_kelas_c' => $data['persentase_kelas_c'],
+                                'kelas_b' => $data['kelas_b'],
+                                'percentage_kelas_b' => $data['persentase_kelas_b'],
+                                'kelas_a' => $data['kelas_a'],
+                                'percentage_kelas_a' => $data['persentase_kelas_a'],
+                            ];
+                        }
+                    }
+                } else {
+                    // Date total row
+                    $flattenedData[] = [
+                        'type' => 'date_total',
+                        'date' => $date,
+                        'estate' => '-',
+                        'afdeling' => '-',
+                        'mill' => '-',
+                        'datetime' => '-',
+                        'no_plat' => '-',
+                        'driver' => '-',
+                        'blok' => '-',
+                        'jjg_spb' => $afdelings['jjg_spb'],
+                        'jjg_grading' => $afdelings['jjg_grading'],
+                        'tonase' => $afdelings['tonase'],
+                        'bjr' => $afdelings['bjr'],
+                        'ripeness' => $afdelings['Ripeness'],
+                        'percentage_ripeness' => $afdelings['percentase_ripenes'],
+                        'unripe' => $afdelings['Unripe'],
+                        'percentage_unripe' => $afdelings['persenstase_unripe'],
+                        'overripe' => $afdelings['overripe'],
+                        'percentage_overripe' => $afdelings['persentase_overripe'],
+                        'empty' => $afdelings['empty'],
+                        'percentage_empty_bunch' => $afdelings['persentase_empty_bunch'],
+                        'rotten' => $afdelings['rotten'],
+                        'percentage_rotten_bunch' => $afdelings['persentase_rotten_bunce'],
+                        'abnormal' => $afdelings['Abnormal'],
+                        'percentage_abnormal' => $afdelings['persentase_abnormal'],
+                        'tangkai_panjang' => $afdelings['tangkai_panjang'],
+                        'percentage_tangkai_panjang' => $afdelings['persentase_stalk'],
+                        'vcuts' => $afdelings['vcuts'],
+                        'percentage_vcut' => $afdelings['persentase_vcut'],
+                        'loose_fruit' => $afdelings['loose_fruit'],
+                        'percentage_loose_fruit_kg' => $afdelings['persentase_lose_fruit'],
+                        'dirt' => $afdelings['dirt'],
+                        'percentage_dirt_kg' => $afdelings['persentase'],
+                        'kelas_c' => $afdelings['kelas_c'],
+                        'percentage_kelas_c' => $afdelings['persentase_kelas_c'],
+                        'kelas_b' => $afdelings['kelas_b'],
+                        'percentage_kelas_b' => $afdelings['persentase_kelas_b'],
+                        'kelas_a' => $afdelings['kelas_a'],
+                        'percentage_kelas_a' => $afdelings['persentase_kelas_a'],
+                    ];
+                }
+            }
+        }
+        return $flattenedData;
     }
 }
 

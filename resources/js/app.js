@@ -5,39 +5,47 @@ import * as bootstrap from 'bootstrap';
 // import { Modal } from 'bootstrap';
 
 import Swal from 'sweetalert2/dist/sweetalert2.js';
-import 'sweetalert2/src/sweetalert2.scss';
-import 'leaflet-arrowheads';
-import 'leaflet-polylinedecorator';
-import 'leaflet-rotatedmarker';
 import html2canvas from 'html2canvas';
 import jQuery from 'jquery';
 import jszip from 'jszip';
 import pdfmake from 'pdfmake';
-import DataTable from 'datatables.net-dt';
-import 'datatables.net-autofill-dt';
-import 'datatables.net-buttons-dt';
+import DataTable from 'datatables.net-bs5';
+import DateTime from 'datatables.net-datetime';
+import select2 from 'select2';
+import Choices from 'choices.js';
+
+
+import 'datatables.net-autofill';
+import 'datatables.net-buttons';
 import 'datatables.net-buttons/js/buttons.colVis.mjs';
 import 'datatables.net-buttons/js/buttons.html5.mjs';
 import 'datatables.net-buttons/js/buttons.print.mjs';
-import 'datatables.net-colreorder-dt';
-import DateTime from 'datatables.net-datetime';
-import 'datatables.net-fixedcolumns-dt';
-import 'datatables.net-fixedheader-dt';
-import 'datatables.net-keytable-dt';
-import 'datatables.net-responsive-dt';
-import 'datatables.net-rowgroup-dt';
-import 'datatables.net-rowreorder-dt';
-import 'datatables.net-scroller-dt';
-import 'datatables.net-searchbuilder-dt';
-import 'datatables.net-searchpanes-dt';
-import 'datatables.net-select-dt';
-import 'datatables.net-staterestore-dt';
-import select2 from 'select2';
+import 'datatables.net-colreorder';
+
+import 'datatables.net-fixedcolumns';
+import 'datatables.net-fixedheader';
+import 'datatables.net-keytable';
+import 'datatables.net-responsive';
+import 'datatables.net-rowgroup';
+import 'datatables.net-rowreorder';
+import 'datatables.net-scroller';
+import 'datatables.net-searchbuilder';
+import 'datatables.net-searchpanes';
+import 'datatables.net-select';
+import 'datatables.net-staterestore';
+
+import 'sweetalert2/src/sweetalert2.scss';
+
+
+import 'leaflet-arrowheads';
+import 'leaflet-polylinedecorator';
+import 'leaflet-rotatedmarker';
+
 import 'select2/dist/css/select2.css';
 import 'bootstrap-select/dist/css/bootstrap-select.min.css';
 import 'bootstrap-select';
 import 'choices.js/public/assets/styles/choices.min.css';
-import Choices from 'choices.js';
+
 window.html2canvas = html2canvas;
 window.jQuery = jQuery;
 window.select2 = select2;

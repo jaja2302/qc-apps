@@ -43,14 +43,19 @@ class GradingmillRekapPertanggal extends Component
 
     public function showResults()
     {
-        // dd('showResults');
         $this->validate([
-            'inputregional' => 'required',  // Ensure region is selected     // Ensure mill is selected
-            'inputbulan' => 'required|date', // Ensure bulan (date) is provided
+            'inputregional' => 'required',
+            'inputbulan' => 'required|date',
         ]);
+
         $reg = $this->inputregional;
         $bulan = $this->inputbulan;
-        $result = getdatamildetailpertanggal($bulan, $reg);
-        $this->resultdata = $result;
+        $nestedResult = getdatamildetailpertanggal($bulan, $reg);
+
+        // Flatten the nested array
+
+        // dd($nestedResult);
+        $this->resultdata = $nestedResult;
+        $this->dispatch('dataUpdated', data: $this->resultdata);
     }
 }
