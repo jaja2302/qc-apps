@@ -1035,7 +1035,7 @@ class AbsensiController extends Controller
             ->whereHas('Departement', function ($query) {
                 $query->where('departement.id', 43);  // Specify the table name
             })
-            ->get();
+            ->pluck('user_id');
         // $user_Data = $user_Data->groupBy('user_id');
         $user_Data = json_decode($user_Data, true);
 

@@ -1308,7 +1308,14 @@ class unitController extends Controller
         if ($query->foto_kebersihan_gudang != null) {
             if (str_contains($query->foto_kebersihan_gudang, ';')) {
                 $exp_foto_kebersihan_gudang = explode(';', $query->foto_kebersihan_gudang);
+                if (count($exp_foto_kebersihan_gudang) > 2) {
+                    $lastIndex = count($exp_foto_kebersihan_gudang) - 1;
+                    $temp = $exp_foto_kebersihan_gudang[1];
+                    $exp_foto_kebersihan_gudang[1] = $exp_foto_kebersihan_gudang[$lastIndex];
+                    $exp_foto_kebersihan_gudang[$lastIndex] = $temp;
+                }
 
+                // dd($exp_foto_kebersihan_gudang);
                 // Loop through the exploded image filenames and create variables
                 foreach ($exp_foto_kebersihan_gudang as $index => $filename) {
                     $variableName = 'foto_kebersihan_gudang_' . ($index + 1);
@@ -1478,6 +1485,12 @@ class unitController extends Controller
         if ($query->foto_kebersihan_gudang != null) {
             if (str_contains($query->foto_kebersihan_gudang, ';')) {
                 $exp_foto_kebersihan_gudang = explode(';', $query->foto_kebersihan_gudang);
+                if (count($exp_foto_kebersihan_gudang) > 2) {
+                    $lastIndex = count($exp_foto_kebersihan_gudang) - 1;
+                    $temp = $exp_foto_kebersihan_gudang[1];
+                    $exp_foto_kebersihan_gudang[1] = $exp_foto_kebersihan_gudang[$lastIndex];
+                    $exp_foto_kebersihan_gudang[$lastIndex] = $temp;
+                }
 
                 // Loop through the exploded image filenames and create variables
                 foreach ($exp_foto_kebersihan_gudang as $index => $filename) {

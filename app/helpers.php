@@ -12670,6 +12670,251 @@ if (!function_exists('getdatamildetail')) {
     }
 }
 
+
+if (!function_exists('getdatamildetailpertanggal')) {
+    function getdatamildetailpertanggal($bulan, $reg)
+    {
+
+        // dd($bulan, $reg);
+        $data = Gradingmill::query()
+            ->with('Listmill')
+            ->selectRaw('*, DATE(datetime) as tanggal')
+            ->where('datetime', 'like', '%' . $bulan . '%')
+            ->whereHas('Listmill', function ($query) use ($reg) {
+                $query->where('reg', $reg);
+            })
+            ->orderBy('estate', 'asc')
+            ->orderBy('afdeling', 'asc')
+            ->get()
+            ->groupBy(['tanggal', 'estate', 'afdeling']);
+
+        $data = json_decode($data, true);
+        // dd($data);
+
+        // Assuming your original array is stored in $data
+        $result = [];
+        if (!empty($data)) {
+            foreach ($data as $date => $estates) {
+                $estates_result = [];
+                $jjg_grading_perdate = 0;
+                $jjg_spb_perdate = 0;
+                $unripe_tanpa_brondol_perdate = 0;
+                $unripe_kurang_brondol_perdate = 0;
+                $overripe_perdate = 0;
+                $empty_perdate = 0;
+                $rotten_perdate = 0;
+                $tangkai_panjang_perdate = 0;
+                $vcut_perdate = 0;
+                $kelas_a_perdate = 0;
+                $kelas_b_perdate = 0;
+                $kelas_c_perdate = 0;
+                $tonase_perdate = 0;
+                $dirt_perdate = 0;
+                $loose_fruit_perdate = 0;
+                $abn_partheno_perdate = 0;
+                $abn_hard_perdate = 0;
+                $abn_sakit_perdate = 0;
+                $abn_kastrasi_perdate = 0;
+                foreach ($estates as $estate => $blocks) {
+                    $blocks_result = [];
+                    $jjg_grading_estate = 0;
+                    $jjg_spb_estate = 0;
+                    $unripe_tanpa_brondol_estate = 0;
+                    $unripe_kurang_brondol_estate = 0;
+                    $overripe_estate = 0;
+                    $empty_estate = 0;
+                    $rotten_estate = 0;
+                    $tangkai_panjang_estate = 0;
+                    $vcut_estate = 0;
+                    $kelas_a_estate = 0;
+                    $kelas_b_estate = 0;
+                    $kelas_c_estate = 0;
+                    $tonase_estate = 0;
+                    $dirt_estate = 0;
+                    $loose_fruit_estate = 0;
+                    $abn_partheno_estate = 0;
+                    $abn_hard_estate = 0;
+                    $abn_sakit_estate = 0;
+                    $abn_kastrasi_estate = 0;
+                    foreach ($blocks as $block => $items) {
+                        // Create the new array you want to add
+                        $jjg_grading = 0;
+                        $jjg_spb = 0;
+                        $unripe_tanpa_brondol = 0;
+                        $unripe_kurang_brondol = 0;
+                        $overripe = 0;
+                        $empty = 0;
+                        $rotten = 0;
+                        $tangkai_panjang = 0;
+                        $vcut = 0;
+                        $kelas_a = 0;
+                        $kelas_b = 0;
+                        $kelas_c = 0;
+                        $abn_partheno = 0;
+                        $abn_hard = 0;
+                        $abn_sakit = 0;
+                        $abn_kastrasi = 0;
+                        $tonase = 0;
+                        $dirt = 0;
+                        $loose_fruit = 0;
+                        $brondol_0 = 0;
+                        $brondol_less = 0;
+                        foreach ($items as $key => $value) {
+                            $jjg_grading += $value['jjg_grading'];
+                            $jjg_spb += $value['jjg_spb'];
+                            $unripe_tanpa_brondol += $value['unripe_tanpa_brondol'];
+                            $unripe_kurang_brondol += $value['unripe_kurang_brondol'];
+                            $overripe += $value['overripe'];
+                            $empty += $value['empty'];
+                            $rotten += $value['rotten'];
+                            $tangkai_panjang += $value['tangkai_panjang'];
+                            $vcut += $value['vcut'];
+                            $kelas_a += $value['kelas_a'];
+                            $kelas_b += $value['kelas_b'];
+                            $kelas_c += $value['kelas_c'];
+                            $abn_partheno += $value['abn_partheno'];
+                            $abn_hard += $value['abn_hard'];
+                            $abn_sakit += $value['abn_sakit'];
+                            $abn_kastrasi += $value['abn_kastrasi'];
+                            $tonase += $value['tonase'];
+                            $dirt += $value['dirt'];
+                            $loose_fruit += $value['loose_fruit'];
+                        }
+                        $array = [
+                            'estate' => $estate,
+                            'afdeling' => $block,
+                            'jjg_grading' => $jjg_grading,
+                            'jjg_spb' => $jjg_spb,
+                            'brondol_0' => $unripe_tanpa_brondol,
+                            'brondol_less' => $unripe_kurang_brondol,
+                            'overripe' => $overripe,
+                            'empty' => $empty,
+                            'rotten' => $rotten,
+                            'tangkai_panjang' => $tangkai_panjang,
+                            'vcuts' => $vcut,
+                            'tonase' => $tonase,
+                            'dirt' => $dirt,
+                            'loose_fruit' => $loose_fruit,
+                            'abn_partheno' => $abn_partheno,
+                            'abn_hard' => $abn_hard,
+                            'abn_sakit' => $abn_sakit,
+                            'abn_kastrasi' => $abn_kastrasi,
+                            'kelas_a' => $kelas_a,
+                            'kelas_b' => $kelas_b,
+                            'kelas_c' => $kelas_c,
+                        ];
+
+                        $afdeling_arr = formula_grading($array);
+                        // Add the new array to the existing items
+                        $items_copy = $items;
+                        $items_copy['total_blok'] = $afdeling_arr;
+                        $blocks_result[$block] = $items_copy;
+
+                        $jjg_grading_estate += $jjg_grading;
+                        $jjg_spb_estate += $jjg_spb;
+                        $unripe_tanpa_brondol_estate += $unripe_tanpa_brondol;
+                        $unripe_kurang_brondol_estate += $unripe_kurang_brondol;
+                        $overripe_estate += $overripe;
+                        $empty_estate += $empty;
+                        $rotten_estate += $rotten;
+                        $tangkai_panjang_estate += $tangkai_panjang;
+                        $vcut_estate += $vcut;
+                        $kelas_a_estate += $kelas_a;
+                        $kelas_b_estate += $kelas_b;
+                        $kelas_c_estate += $kelas_c;
+                        $tonase_estate += $tonase;
+                        $dirt_estate += $dirt;
+                        $loose_fruit_estate += $loose_fruit;
+                        $abn_partheno_estate += $abn_partheno;
+                        $abn_hard_estate += $abn_hard;
+                        $abn_sakit_estate += $abn_sakit;
+                        $abn_kastrasi_estate += $abn_kastrasi;
+                    }
+
+                    $array_estate = [
+                        'estate' => $estate,
+                        'afdeling' => 'est',
+                        'jjg_grading' => $jjg_grading_estate,
+                        'jjg_spb' => $jjg_spb_estate,
+                        'brondol_0' => $unripe_tanpa_brondol_estate,
+                        'brondol_less' => $unripe_kurang_brondol_estate,
+                        'overripe' => $overripe_estate,
+                        'empty' => $empty_estate,
+                        'rotten' => $rotten_estate,
+                        'tangkai_panjang' => $tangkai_panjang_estate,
+                        'vcuts' => $vcut_estate,
+                        'tonase' => $tonase_estate,
+                        'dirt' => $dirt_estate,
+                        'loose_fruit' => $loose_fruit_estate,
+                        'abn_partheno' => $abn_partheno_estate,
+                        'abn_hard' => $abn_hard_estate,
+                        'abn_sakit' => $abn_sakit_estate,
+                        'abn_kastrasi' => $abn_kastrasi_estate,
+                        'kelas_a' => $kelas_a_estate,
+                        'kelas_b' => $kelas_b_estate,
+                        'kelas_c' => $kelas_c_estate,
+                    ];
+
+                    // dd($array_estate);
+                    $estate_arr = formula_grading($array_estate);
+                    $blocks_result['total_estate'] = $estate_arr;
+                    $estates_result[$estate] = $blocks_result;
+
+                    $jjg_grading_perdate += $jjg_grading_estate;
+                    $jjg_spb_perdate += $jjg_spb_estate;
+                    $unripe_tanpa_brondol_perdate += $unripe_tanpa_brondol_estate;
+                    $unripe_kurang_brondol_perdate += $unripe_kurang_brondol_estate;
+                    $overripe_perdate += $overripe_estate;
+                    $empty_perdate += $empty_estate;
+                    $rotten_perdate += $rotten_estate;
+                    $tangkai_panjang_perdate += $tangkai_panjang_estate;
+                    $vcut_perdate += $vcut_estate;
+                    $kelas_a_perdate += $kelas_a_estate;
+                    $kelas_b_perdate += $kelas_b_estate;
+                    $kelas_c_perdate += $kelas_c_estate;
+                    $tonase_perdate += $tonase_estate;
+                    $dirt_perdate += $dirt_estate;
+                    $loose_fruit_perdate += $loose_fruit_estate;
+                    $abn_partheno_perdate += $abn_partheno_estate;
+                    $abn_hard_perdate += $abn_hard_estate;
+                    $abn_sakit_perdate += $abn_sakit_estate;
+                    $abn_kastrasi_perdate += $abn_kastrasi_estate;
+                }
+                $array_perdate = [
+                    'estate' => $estate,
+                    'afdeling' => 'est',
+                    'jjg_grading' => $jjg_grading_perdate,
+                    'jjg_spb' => $jjg_spb_perdate,
+                    'brondol_0' => $unripe_tanpa_brondol_perdate,
+                    'brondol_less' => $unripe_kurang_brondol_perdate,
+                    'overripe' => $overripe_perdate,
+                    'empty' => $empty_perdate,
+                    'rotten' => $rotten_perdate,
+                    'tangkai_panjang' => $tangkai_panjang_perdate,
+                    'vcuts' => $vcut_perdate,
+                    'tonase' => $tonase_perdate,
+                    'dirt' => $dirt_perdate,
+                    'loose_fruit' => $loose_fruit_perdate,
+                    'abn_partheno' => $abn_partheno_perdate,
+                    'abn_hard' => $abn_hard_perdate,
+                    'abn_sakit' => $abn_sakit_perdate,
+                    'abn_kastrasi' => $abn_kastrasi_perdate,
+                    'kelas_a' => $kelas_a_perdate,
+                    'kelas_b' => $kelas_b_perdate,
+                    'kelas_c' => $kelas_c_perdate,
+                ];
+
+                // dd($array_perdate);
+                $date_arr = formula_grading($array_perdate);
+                $estates_result['total_date'] = $date_arr;
+                $result[$date] = $estates_result;
+            }
+            $data = $result;
+        }
+        return $data;
+    }
+}
+
 if (!function_exists('rekap_estate_mill_perbulan_perhari')) {
     function rekap_estate_mill_perbulan_perhari($bulan, $reg, $mill)
     {
@@ -13269,5 +13514,85 @@ if (!function_exists('roundangka_decimal')) {
     function roundangka_decimal($value)
     {
         return round($value, 2);
+    }
+}
+
+if (!function_exists('formula_grading')) {
+    function formula_grading($array)
+    {
+
+        $loose_fruit_kg = round(($array['loose_fruit'] / $array['tonase']) * 100, 2);
+        $dirt_kg = round(($array['dirt'] / $array['tonase']) * 100, 2);
+        $abnormal = $array['abn_partheno'] + $array['abn_hard'] + $array['abn_sakit'] + $array['abn_kastrasi'];
+        $unripe = $array['brondol_0'] + $array['brondol_less'];
+        $ripeness = $array['jjg_grading'] - ($array['overripe'] + $array['empty'] + $array['rotten'] + $abnormal + $unripe);
+
+        // Calculate percentages
+        $percentage_ripeness = ($ripeness / $array['jjg_grading']) * 100;
+        $percentage_unripe = ($unripe / $array['jjg_grading']) * 100;
+        $percentage_brondol_0 = ($array['brondol_0'] / $array['jjg_grading']) * 100;
+        $percentage_brondol_less = ($array['brondol_less'] / $array['jjg_grading']) * 100;
+        $percentage_overripe = ($array['overripe'] / $array['jjg_grading']) * 100;
+        $percentage_empty_bunch = ($array['empty'] / $array['jjg_grading']) * 100;
+        // Rotten bunch and abnormal are missing, set to zero
+        $percentage_rotten_bunch = ($array['rotten'] / $array['jjg_grading']) * 100;
+        $percentage_abnormal = ($abnormal / $array['jjg_grading']) * 100;
+        $percentage_tangkai_panjang = ($array['tangkai_panjang'] / $array['jjg_grading']) * 100;
+        $percentage_vcuts = ($array['vcuts'] / $array['jjg_grading']) * 100;
+        $percentage_kelas_a = ($array['kelas_a'] / $array['jjg_grading']) * 100;
+        $percentage_kelas_b = ($array['kelas_b'] / $array['jjg_grading']) * 100;
+        $percentage_kelas_c = ($array['kelas_c'] / $array['jjg_grading']) * 100;
+        // Assume loose fruit and dirt percentages are given as a part of total weight
+
+        // Calculate selisih janjang and percentage
+        $jumlah_selisih_janjang = $array['jjg_grading'] - $array['jjg_spb'];
+        $percentage_selisih_janjang = ($jumlah_selisih_janjang / $array['jjg_spb']) * 100;
+
+        return [
+            'estate' => $array['estate'],
+            'afdeling' => $array['afdeling'],
+            'jjg_grading' => $array['jjg_grading'],
+            'no_plat' => 'null',
+            'abn_partheno' => $array['abn_partheno'],
+            'abn_hard' => $array['abn_hard'],
+            'abn_sakit' => $array['abn_sakit'],
+            'abn_kastrasi' => $array['abn_kastrasi'],
+            'jjg_spb' => $array['jjg_spb'],
+            'datetime' => 'null',
+            'tonase' => $array['tonase'],
+            'bjr' => round(($array['jjg_spb'] / $array['tonase']) * 100, 2),
+            'jjg_selisih' => $jumlah_selisih_janjang,
+            'persentase_selisih' => round($percentage_selisih_janjang),
+            'Ripeness' => $ripeness,
+            'percentase_ripenes' => round($percentage_ripeness, 2),
+            'Unripe' => $unripe,
+            'persenstase_unripe' => round($percentage_unripe, 2),
+            'brondol_0' => $array['brondol_0'],
+            'persentase_nol_brondol' => round($percentage_brondol_0, 2),
+            'brondol_less' => $array['brondol_less'],
+            'persentase_brondol' => round($percentage_brondol_less, 2),
+            'overripe' => $array['overripe'],
+            'persentase_overripe' => round($percentage_overripe, 2),
+            'empty' => $array['empty'],
+            'persentase_empty_bunch' => round($percentage_empty_bunch, 2),
+            'rotten' => $array['rotten'],
+            'persentase_rotten_bunce' => round($percentage_rotten_bunch, 2),
+            'Abnormal' => $abnormal,
+            'persentase_abnormal' => round($percentage_abnormal, 2),
+            'tangkai_panjang' => $array['tangkai_panjang'],
+            'persentase_stalk' => round($percentage_tangkai_panjang, 2),
+            'vcuts' => $array['vcuts'],
+            'persentase_vcut' => round($percentage_vcuts, 2),
+            'loose_fruit' => $array['loose_fruit'],
+            'persentase_lose_fruit' => $loose_fruit_kg,
+            'dirt' => $array['dirt'],
+            'persentase' => $dirt_kg,
+            'kelas_a' => $array['kelas_a'],
+            'persentase_kelas_a' => round($percentage_kelas_a, 2),
+            'kelas_b' => $array['kelas_b'],
+            'persentase_kelas_b' => round($percentage_kelas_b, 2),
+            'kelas_c' => $array['kelas_c'],
+            'persentase_kelas_c' => round($percentage_kelas_c, 2),
+        ];
     }
 }
