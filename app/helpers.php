@@ -11917,8 +11917,8 @@ if (!function_exists('getdatamill')) {
                         $jumlah_janjang_spb += $value['jjg_spb'];
 
 
-                        $brondol_0 += $value['unripe_tanpa_brondol'];
-                        $brondol_less += $value['unripe_kurang_brondol'];
+                        $brondol_0 += is_numeric($value['unripe_tanpa_brondol']) ? $value['unripe_tanpa_brondol'] : 0;
+                        $brondol_less += is_numeric($value['unripe_kurang_brondol']) ? $value['unripe_kurang_brondol'] : 0;
 
                         $overripe += $value['overripe'];
                         $empty_bunch += $value['empty'];
@@ -11936,64 +11936,64 @@ if (!function_exists('getdatamill')) {
                         $kelas_b += $value['kelas_b'];
                         $kelas_c += $value['kelas_c'];
                     }
-                    $abnormal = $abn_partheno + $abn_hard + $abn_sakit +  $abn_kastrasi;
-                    $unripe = $brondol_0 + $brondol_less;
-                    $ripeness = $jumlah_janjang_grading - ($overripe + $empty_bunch + $rotten_bunch + $abnormal + $unripe);
 
-
-                    $loose_fruit_kg = ($loose_fruit / $tonase) * 100;
-                    $dirt_kg = ($dirt  / $tonase) * 100;
-
-                    // Calculate percentages
-                    $percentage_ripeness = ($ripeness / $jumlah_janjang_grading) * 100;
-                    $percentage_unripe = ($unripe / $jumlah_janjang_grading) * 100;
-                    $percentage_brondol_0 = ($brondol_0 / $jumlah_janjang_grading) * 100;
-                    $percentage_brondol_less = ($brondol_less / $jumlah_janjang_grading) * 100;
-                    $percentage_overripe = ($overripe / $jumlah_janjang_grading) * 100;
-                    $percentage_empty_bunch = ($empty_bunch / $jumlah_janjang_grading) * 100;
-                    // Rotten bunch and abnormal are missing, set to zero
-                    $percentage_rotten_bunch = ($rotten_bunch / $jumlah_janjang_grading) * 100;
-                    $percentage_abnormal = ($abnormal / $jumlah_janjang_grading) * 100;
-                    $percentage_longstalk = ($longstalk / $jumlah_janjang_grading) * 100;
-                    $percentage_vcut = ($vcut / $jumlah_janjang_grading) * 100;
-                    $persentage_kelas_a = ($kelas_a / $jumlah_janjang_grading) * 100;
-                    $persentage_kelas_b = ($kelas_b / $jumlah_janjang_grading) * 100;
-                    $persentage_kelas_c = ($kelas_c / $jumlah_janjang_grading) * 100;
-                    // Assume loose fruit and dirt percentages are given as a part of total weight
-
-                    // Calculate selisih janjang and percentage
-                    $jumlah_selisih_janjang = $jumlah_janjang_grading - $jumlah_janjang_spb;
-                    $percentage_selisih_janjang = ($jumlah_selisih_janjang / $jumlah_janjang_spb) * 100;
-                    $result[$keys]['regional'] = [
-                        'tonase' => $tonase,
-                        'jumlah_janjang_grading' => $jumlah_janjang_grading,
-                        'jumlah_janjang_spb' => $jumlah_janjang_spb,
-                        'ripeness' => $ripeness,
-                        'percentage_ripeness' => $percentage_ripeness,
-                        'unripe' => $unripe,
-                        'percentage_unripe' => $percentage_unripe,
+                    $array_perdate = [
+                        'estate' => $keys,
+                        'afdeling' => $key,
+                        'jjg_grading' => $jumlah_janjang_grading,
+                        'jjg_spb' => $jumlah_janjang_spb,
+                        'brondol_0' => $brondol_0,
+                        'brondol_less' => $brondol_less,
                         'overripe' => $overripe,
-                        'percentage_overripe' => $percentage_overripe,
-                        'empty_bunch' => $empty_bunch,
-                        'percentage_empty_bunch' => $percentage_empty_bunch,
-                        'rotten_bunch' => $rotten_bunch,
-                        'percentage_rotten_bunch' => $percentage_rotten_bunch,
-                        'abnormal' => $abnormal,
-                        'percentage_abnormal' => $percentage_abnormal,
-                        'longstalk' => $longstalk,
-                        'percentage_longstalk' => $percentage_longstalk,
-                        'vcut' => $vcut,
-                        'percentage_vcut' => $percentage_vcut,
-                        'dirt_kg' => $dirt,
-                        'percentage_dirt' => $dirt_kg,
-                        'loose_fruit_kg' => $loose_fruit,
-                        'percentage_loose_fruit' => $loose_fruit_kg,
+                        'empty' => $empty_bunch,
+                        'rotten' => $rotten_bunch,
+                        'tangkai_panjang' => $longstalk,
+                        'vcuts' => $vcut,
+                        'tonase' => $tonase,
+                        'dirt' => $dirt,
+                        'loose_fruit' => $loose_fruit,
+                        'abn_partheno' => $abn_partheno,
+                        'abn_hard' => $abn_hard,
+                        'abn_sakit' => $abn_sakit,
+                        'abn_kastrasi' => $abn_kastrasi,
                         'kelas_a' => $kelas_a,
                         'kelas_b' => $kelas_b,
                         'kelas_c' => $kelas_c,
-                        'percentage_kelas_a' => $persentage_kelas_a,
-                        'percentage_kelas_b' => $persentage_kelas_b,
-                        'percentage_kelas_c' => $persentage_kelas_c,
+                    ];
+
+                    // dd($array_perdate);
+                    $date_arr = formula_grading($array_perdate);
+
+                    $result[$keys]['regional'] = [
+                        'tonase' => $date_arr['tonase'],
+                        'jumlah_janjang_grading' => $date_arr['jjg_grading'],
+                        'jumlah_janjang_spb' => $date_arr['jjg_spb'],
+                        'ripeness' => $date_arr['Ripeness'],
+                        'percentage_ripeness' => $date_arr['percentase_ripenes'],
+                        'unripe' => $date_arr['Unripe'],
+                        'percentage_unripe' => $date_arr['persenstase_unripe'],
+                        'overripe' => $date_arr['overripe'],
+                        'percentage_overripe' => $date_arr['persentase_overripe'],
+                        'empty_bunch' => $date_arr['empty'],
+                        'percentage_empty_bunch' => $date_arr['persentase_empty_bunch'],
+                        'rotten_bunch' => $date_arr['rotten'],
+                        'percentage_rotten_bunch' => $date_arr['persentase_rotten_bunce'],
+                        'abnormal' => $date_arr['Abnormal'],
+                        'percentage_abnormal' => $date_arr['persentase_abnormal'],
+                        'longstalk' => $date_arr['tangkai_panjang'],
+                        'percentage_longstalk' => $date_arr['persentase_stalk'],
+                        'vcut' => $date_arr['vcuts'],
+                        'percentage_vcut' => $date_arr['persentase_vcut'],
+                        'dirt_kg' => $date_arr['dirt'],
+                        'percentage_dirt' => $date_arr['persentase'],
+                        'loose_fruit_kg' => $date_arr['loose_fruit'],
+                        'percentage_loose_fruit' => $date_arr['persentase_lose_fruit'],
+                        'kelas_a' => $date_arr['kelas_a'],
+                        'kelas_b' => $date_arr['kelas_b'],
+                        'kelas_c' => $date_arr['kelas_c'],
+                        'percentage_kelas_a' => $date_arr['persentase_kelas_a'],
+                        'percentage_kelas_b' => $date_arr['persentase_kelas_b'],
+                        'percentage_kelas_c' => $date_arr['persentase_kelas_c'],
 
                     ];
                 }
@@ -12026,8 +12026,12 @@ if (!function_exists('getdatamill')) {
                         $jumlah_janjang_spb += $value['jjg_spb'];
 
 
-                        $brondol_0 += $value['unripe_tanpa_brondol'];
-                        $brondol_less += $value['unripe_kurang_brondol'];
+
+                        $brondol_0 += is_numeric($value['unripe_tanpa_brondol']) ? $value['unripe_tanpa_brondol'] : 0;
+                        $brondol_less += is_numeric($value['unripe_kurang_brondol']) ? $value['unripe_kurang_brondol'] : 0;
+
+                        // $brondol_0 += $value['unripe_tanpa_brondol'];
+                        // $brondol_less += $value['unripe_kurang_brondol'];
 
                         $overripe += $value['overripe'];
                         $empty_bunch += $value['empty'];
@@ -12045,64 +12049,64 @@ if (!function_exists('getdatamill')) {
                         $kelas_b += $value['kelas_b'];
                         $kelas_c += $value['kelas_c'];
                     }
-                    $abnormal = $abn_partheno + $abn_hard + $abn_sakit +  $abn_kastrasi;
-                    $unripe = $brondol_0 + $brondol_less;
-                    $ripeness = $jumlah_janjang_grading - ($overripe + $empty_bunch + $rotten_bunch + $abnormal + $unripe);
 
-
-                    $loose_fruit_kg = ($loose_fruit / $tonase) * 100;
-                    $dirt_kg = ($dirt  / $tonase) * 100;
-
-                    // Calculate percentages
-                    $percentage_ripeness = ($ripeness / $jumlah_janjang_grading) * 100;
-                    $percentage_unripe = ($unripe / $jumlah_janjang_grading) * 100;
-                    $percentage_brondol_0 = ($brondol_0 / $jumlah_janjang_grading) * 100;
-                    $percentage_brondol_less = ($brondol_less / $jumlah_janjang_grading) * 100;
-                    $percentage_overripe = ($overripe / $jumlah_janjang_grading) * 100;
-                    $percentage_empty_bunch = ($empty_bunch / $jumlah_janjang_grading) * 100;
-                    // Rotten bunch and abnormal are missing, set to zero
-                    $percentage_rotten_bunch = ($rotten_bunch / $jumlah_janjang_grading) * 100;
-                    $percentage_abnormal = ($abnormal / $jumlah_janjang_grading) * 100;
-                    $percentage_longstalk = ($longstalk / $jumlah_janjang_grading) * 100;
-                    $percentage_vcut = ($vcut / $jumlah_janjang_grading) * 100;
-                    $persentage_kelas_a = ($kelas_a / $jumlah_janjang_grading) * 100;
-                    $persentage_kelas_b = ($kelas_b / $jumlah_janjang_grading) * 100;
-                    $persentage_kelas_c = ($kelas_c / $jumlah_janjang_grading) * 100;
-                    // Assume loose fruit and dirt percentages are given as a part of total weight
-
-                    // Calculate selisih janjang and percentage
-                    $jumlah_selisih_janjang = $jumlah_janjang_grading - $jumlah_janjang_spb;
-                    $percentage_selisih_janjang = ($jumlah_selisih_janjang / $jumlah_janjang_spb) * 100;
-                    $result_wil[$keys]['wil'] = [
-                        'tonase' => $tonase,
-                        'jumlah_janjang_grading' => $jumlah_janjang_grading,
-                        'jumlah_janjang_spb' => $jumlah_janjang_spb,
-                        'ripeness' => $ripeness,
-                        'percentage_ripeness' => $percentage_ripeness,
-                        'unripe' => $unripe,
-                        'percentage_unripe' => $percentage_unripe,
+                    $array_perdate = [
+                        'estate' => $keys,
+                        'afdeling' => $key,
+                        'jjg_grading' => $jumlah_janjang_grading,
+                        'jjg_spb' => $jumlah_janjang_spb,
+                        'brondol_0' => $brondol_0,
+                        'brondol_less' => $brondol_less,
                         'overripe' => $overripe,
-                        'percentage_overripe' => $percentage_overripe,
-                        'empty_bunch' => $empty_bunch,
-                        'percentage_empty_bunch' => $percentage_empty_bunch,
-                        'rotten_bunch' => $rotten_bunch,
-                        'percentage_rotten_bunch' => $percentage_rotten_bunch,
-                        'abnormal' => $abnormal,
-                        'percentage_abnormal' => $percentage_abnormal,
-                        'longstalk' => $longstalk,
-                        'percentage_longstalk' => $percentage_longstalk,
-                        'vcut' => $vcut,
-                        'percentage_vcut' => $percentage_vcut,
-                        'dirt_kg' => $dirt,
-                        'percentage_dirt' => $dirt_kg,
-                        'loose_fruit_kg' => $loose_fruit,
-                        'percentage_loose_fruit' => $loose_fruit_kg,
+                        'empty' => $empty_bunch,
+                        'rotten' => $rotten_bunch,
+                        'tangkai_panjang' => $longstalk,
+                        'vcuts' => $vcut,
+                        'tonase' => $tonase,
+                        'dirt' => $dirt,
+                        'loose_fruit' => $loose_fruit,
+                        'abn_partheno' => $abn_partheno,
+                        'abn_hard' => $abn_hard,
+                        'abn_sakit' => $abn_sakit,
+                        'abn_kastrasi' => $abn_kastrasi,
                         'kelas_a' => $kelas_a,
                         'kelas_b' => $kelas_b,
                         'kelas_c' => $kelas_c,
-                        'percentage_kelas_a' => $persentage_kelas_a,
-                        'percentage_kelas_b' => $persentage_kelas_b,
-                        'percentage_kelas_c' => $persentage_kelas_c,
+                    ];
+
+                    // dd($array_perdate);
+                    $date_arr = formula_grading($array_perdate);
+
+                    $result_wil[$keys]['wil'] = [
+                        'tonase' => $date_arr['tonase'] ?? 0,
+                        'jumlah_janjang_grading' => $date_arr['jjg_grading'] ?? 0,
+                        'jumlah_janjang_spb' => $date_arr['jjg_spb'] ?? 0,
+                        'ripeness' => $date_arr['Ripeness'] ?? 0,
+                        'percentage_ripeness' => $date_arr['percentase_ripenes'] ?? 0,
+                        'unripe' => $date_arr['Unripe'] ?? 0,
+                        'percentage_unripe' => $date_arr['persenstase_unripe'] ?? 0,
+                        'overripe' => $date_arr['overripe'] ?? 0,
+                        'percentage_overripe' => $date_arr['persentase_overripe'] ?? 0,
+                        'empty_bunch' => $date_arr['empty'] ?? 0,
+                        'percentage_empty_bunch' => $date_arr['persentase_empty_bunch'] ?? 0,
+                        'rotten_bunch' => $date_arr['rotten'] ?? 0,
+                        'percentage_rotten_bunch' => $date_arr['persentase_rotten_bunce'] ?? 0,
+                        'abnormal' => $date_arr['abnormal'] ?? 0,
+                        'percentage_abnormal' => $date_arr['persentase_abnormal'] ?? 0,
+                        'longstalk' => $date_arr['longstalk'] ?? 0,
+                        'percentage_longstalk' => $date_arr['persentase_stalk'] ?? 0,
+                        'vcut' => $date_arr['vcuts'] ?? 0,
+                        'percentage_vcut' => $date_arr['persentase_vcut'] ?? 0,
+                        'dirt_kg' => $date_arr['dirt'] ?? 0,
+                        'percentage_dirt' => $date_arr['persentase'] ?? 0,
+                        'loose_fruit_kg' => $date_arr['loose_fruit'] ?? 0,
+                        'percentage_loose_fruit' => $date_arr['persentase_lose_fruit'] ?? 0,
+                        'kelas_a' => $date_arr['kelas_a'] ?? 0,
+                        'kelas_b' => $date_arr['kelas_b'] ?? 0,
+                        'kelas_c' => $date_arr['kelas_c'] ?? 0,
+                        'percentage_kelas_a' => $date_arr['persentase_kelas_a'] ?? 0,
+                        'percentage_kelas_b' => $date_arr['persentase_kelas_b'] ?? 0,
+                        'percentage_kelas_c' => $date_arr['persentase_kelas_c'] ?? 0,
 
                     ];
                 }
@@ -12135,8 +12139,13 @@ if (!function_exists('getdatamill')) {
                         $jumlah_janjang_spb += $value['jjg_spb'];
 
 
-                        $brondol_0 += $value['unripe_tanpa_brondol'];
-                        $brondol_less += $value['unripe_kurang_brondol'];
+                        // $brondol_0 += $value['unripe_tanpa_brondol'];
+                        // $brondol_less += $value['unripe_kurang_brondol'];
+
+
+                        $brondol_0 += is_numeric($value['unripe_tanpa_brondol']) ? $value['unripe_tanpa_brondol'] : 0;
+                        $brondol_less += is_numeric($value['unripe_kurang_brondol']) ? $value['unripe_kurang_brondol'] : 0;
+
 
                         $overripe += $value['overripe'];
                         $empty_bunch += $value['empty'];
@@ -12154,64 +12163,63 @@ if (!function_exists('getdatamill')) {
                         $kelas_b += $value['kelas_b'];
                         $kelas_c += $value['kelas_c'];
                     }
-                    $abnormal = $abn_partheno + $abn_hard + $abn_sakit +  $abn_kastrasi;
-                    $unripe = $brondol_0 + $brondol_less;
-                    $ripeness = $jumlah_janjang_grading - ($overripe + $empty_bunch + $rotten_bunch + $abnormal + $unripe);
 
-
-                    $loose_fruit_kg = ($loose_fruit / $tonase) * 100;
-                    $dirt_kg = ($dirt  / $tonase) * 100;
-
-                    // Calculate percentages
-                    $percentage_ripeness = ($ripeness / $jumlah_janjang_grading) * 100;
-                    $percentage_unripe = ($unripe / $jumlah_janjang_grading) * 100;
-                    $percentage_brondol_0 = ($brondol_0 / $jumlah_janjang_grading) * 100;
-                    $percentage_brondol_less = ($brondol_less / $jumlah_janjang_grading) * 100;
-                    $percentage_overripe = ($overripe / $jumlah_janjang_grading) * 100;
-                    $percentage_empty_bunch = ($empty_bunch / $jumlah_janjang_grading) * 100;
-                    // Rotten bunch and abnormal are missing, set to zero
-                    $percentage_rotten_bunch = ($rotten_bunch / $jumlah_janjang_grading) * 100;
-                    $percentage_abnormal = ($abnormal / $jumlah_janjang_grading) * 100;
-                    $percentage_longstalk = ($longstalk / $jumlah_janjang_grading) * 100;
-                    $percentage_vcut = ($vcut / $jumlah_janjang_grading) * 100;
-                    $persentage_kelas_a = ($kelas_a / $jumlah_janjang_grading) * 100;
-                    $persentage_kelas_b = ($kelas_b / $jumlah_janjang_grading) * 100;
-                    $persentage_kelas_c = ($kelas_c / $jumlah_janjang_grading) * 100;
-                    // Assume loose fruit and dirt percentages are given as a part of total weight
-
-                    // Calculate selisih janjang and percentage
-                    $jumlah_selisih_janjang = $jumlah_janjang_grading - $jumlah_janjang_spb;
-                    $percentage_selisih_janjang = ($jumlah_selisih_janjang / $jumlah_janjang_spb) * 100;
-                    $result_mill[$keys]['mil'] = [
-                        'tonase' => $tonase,
-                        'jumlah_janjang_grading' => $jumlah_janjang_grading,
-                        'jumlah_janjang_spb' => $jumlah_janjang_spb,
-                        'ripeness' => $ripeness,
-                        'percentage_ripeness' => $percentage_ripeness,
-                        'unripe' => $unripe,
-                        'percentage_unripe' => $percentage_unripe,
+                    $array_perdate = [
+                        'estate' => $keys,
+                        'afdeling' => $key,
+                        'jjg_grading' => $jumlah_janjang_grading,
+                        'jjg_spb' => $jumlah_janjang_spb,
+                        'brondol_0' => $brondol_0,
+                        'brondol_less' => $brondol_less,
                         'overripe' => $overripe,
-                        'percentage_overripe' => $percentage_overripe,
-                        'empty_bunch' => $empty_bunch,
-                        'percentage_empty_bunch' => $percentage_empty_bunch,
-                        'rotten_bunch' => $rotten_bunch,
-                        'percentage_rotten_bunch' => $percentage_rotten_bunch,
-                        'abnormal' => $abnormal,
-                        'percentage_abnormal' => $percentage_abnormal,
-                        'longstalk' => $longstalk,
-                        'percentage_longstalk' => $percentage_longstalk,
-                        'vcut' => $vcut,
-                        'percentage_vcut' => $percentage_vcut,
-                        'dirt_kg' => $dirt,
-                        'percentage_dirt' => $dirt_kg,
-                        'loose_fruit_kg' => $loose_fruit,
-                        'percentage_loose_fruit' => $loose_fruit_kg,
+                        'empty' => $empty_bunch,
+                        'rotten' => $rotten_bunch,
+                        'tangkai_panjang' => $longstalk,
+                        'vcuts' => $vcut,
+                        'tonase' => $tonase,
+                        'dirt' => $dirt,
+                        'loose_fruit' => $loose_fruit,
+                        'abn_partheno' => $abn_partheno,
+                        'abn_hard' => $abn_hard,
+                        'abn_sakit' => $abn_sakit,
+                        'abn_kastrasi' => $abn_kastrasi,
                         'kelas_a' => $kelas_a,
                         'kelas_b' => $kelas_b,
                         'kelas_c' => $kelas_c,
-                        'percentage_kelas_a' => $persentage_kelas_a,
-                        'percentage_kelas_b' => $persentage_kelas_b,
-                        'percentage_kelas_c' => $persentage_kelas_c,
+                    ];
+
+                    // dd($array_perdate);
+                    $date_arr = formula_grading($array_perdate);
+                    $result_mill[$keys]['mil'] = [
+                        'tonase' => $date_arr['tonase'],
+                        'jumlah_janjang_grading' => $date_arr['jjg_grading'],
+                        'jumlah_janjang_spb' => $date_arr['jjg_spb'],
+                        'ripeness' => $date_arr['Ripeness'],
+                        'percentage_ripeness' => $date_arr['percentase_ripenes'],
+                        'unripe' => $date_arr['Unripe'],
+                        'percentage_unripe' => $date_arr['persenstase_unripe'],
+                        'overripe' => $date_arr['overripe'],
+                        'percentage_overripe' => $date_arr['persentase_overripe'],
+                        'empty_bunch' => $date_arr['empty'],
+                        'percentage_empty_bunch' => $date_arr['persentase_empty_bunch'],
+                        'rotten_bunch' => $date_arr['rotten'],
+                        'percentage_rotten_bunch' => $date_arr['persentase_rotten_bunce'],
+                        'abnormal' => $date_arr['Abnormal'],
+                        'percentage_abnormal' => $date_arr['persentase_abnormal'],
+                        'longstalk' => $date_arr['tangkai_panjang'],
+                        'percentage_longstalk' => $date_arr['persentase_stalk'],
+                        'vcut' => $date_arr['vcuts'],
+                        'percentage_vcut' => $date_arr['persentase_vcut'],
+                        'dirt_kg' => $date_arr['dirt'],
+                        'percentage_dirt' => $date_arr['persentase'],
+                        'loose_fruit_kg' => $date_arr['loose_fruit'],
+                        'percentage_loose_fruit' => $date_arr['persentase_lose_fruit'],
+                        'kelas_a' => $date_arr['kelas_a'],
+                        'kelas_b' => $date_arr['kelas_b'],
+                        'kelas_c' => $date_arr['kelas_c'],
+                        'percentage_kelas_a' => $date_arr['persentase_kelas_a'],
+                        'percentage_kelas_b' => $date_arr['persentase_kelas_b'],
+                        'percentage_kelas_c' => $date_arr['persentase_kelas_c'],
 
                     ];
                 }
@@ -12248,50 +12256,35 @@ if (!function_exists('getdatamill')) {
 
                     // Trim spaces from each element in the array
                     $foto = array_map('trim', $foto);
-                    $jumlah_janjang_grading = $value['jjg_grading'];
-                    $jumlah_janjang_spb = $value['jjg_spb'];
 
+                    $array_perdate = [
+                        'estate' => $value['estate'],
+                        'afdeling' => $value['afdeling'],
+                        'jjg_grading' => $value['jjg_grading'],
+                        'jjg_spb' => $value['jjg_spb'],
+                        'brondol_0' => $value['unripe_tanpa_brondol'],
+                        'brondol_less' => $value['unripe_kurang_brondol'],
+                        'overripe' => $value['overripe'],
+                        'empty' => $value['empty'],
+                        'rotten' => $value['rotten'],
+                        'tangkai_panjang' => $value['tangkai_panjang'],
+                        'vcuts' => $value['vcut'],
+                        'tonase' => $value['tonase'],
+                        'dirt' => $value['dirt'],
+                        'loose_fruit' => $value['loose_fruit'],
+                        'abn_partheno' => $value['abn_partheno'],
+                        'abn_hard' => $value['abn_hard'],
+                        'abn_sakit' => $value['abn_sakit'],
+                        'abn_kastrasi' => $value['abn_kastrasi'],
+                        'kelas_a' => $value['kelas_a'],
+                        'kelas_b' => $value['kelas_b'],
+                        'kelas_c' => $value['kelas_c'],
+                    ];
 
-                    $brondol_0 = $value['unripe_tanpa_brondol'];
-                    $brondol_less = $value['unripe_kurang_brondol'];
+                    // dd($array_perdate);
+                    $date_arr = formula_grading($array_perdate);
 
-                    $overripe = $value['overripe'];
-                    $empty_bunch = $value['empty'];
-                    $rotten_bunch = $value['rotten'];
-                    $tangkai_panjang = $value['tangkai_panjang'];
-                    $vcuts = $value['vcut'];
-                    $kelass_a = $value['kelas_a'];
-                    $kelass_b = $value['kelas_b'];
-                    $kelass_c = $value['kelas_c'];
-                    $abnormal = $value['abn_partheno'] + $value['abn_hard'] + $value['abn_sakit'] +  $value['abn_kastrasi'];
-
-                    $loose_fruit_kg = round(($value['loose_fruit'] / $value['tonase']) * 100, 2);
-                    $dirt_kg = round(($value['dirt']  / $value['tonase']) * 100, 2);
-                    $unripe = $brondol_0 + $brondol_less;
-                    $ripeness = $value['jjg_grading'] - ($value['overripe'] + $value['empty'] + $value['rotten'] + $abnormal + $unripe);
-
-                    // Calculate percentages
-                    $percentage_ripeness = ($ripeness / $jumlah_janjang_grading) * 100;
-                    $percentage_unripe = ($unripe / $jumlah_janjang_grading) * 100;
-                    $percentage_brondol_0 = ($brondol_0 / $jumlah_janjang_grading) * 100;
-                    $percentage_brondol_less = ($brondol_less / $jumlah_janjang_grading) * 100;
-                    $percentage_overripe = ($overripe / $jumlah_janjang_grading) * 100;
-                    $percentage_empty_bunch = ($empty_bunch / $jumlah_janjang_grading) * 100;
-                    // Rotten bunch and abnormal are missing, set to zero
-                    $percentage_rotten_bunch = ($rotten_bunch / $jumlah_janjang_grading) * 100;
-                    $percentage_abnormal = ($abnormal / $jumlah_janjang_grading) * 100;
-                    $percentage_tangkai_panjang = ($tangkai_panjang / $jumlah_janjang_grading) * 100;
-                    $percentage_vcuts = ($vcuts / $jumlah_janjang_grading) * 100;
-                    $percentage_kelas_a = ($kelass_a / $jumlah_janjang_grading) * 100;
-                    $percentage_kelas_b = ($kelass_b / $jumlah_janjang_grading) * 100;
-                    $percentage_kelas_c = ($kelass_c / $jumlah_janjang_grading) * 100;
-                    // Assume loose fruit and dirt percentages are given as a part of total weight
-
-                    // Calculate selisih janjang and percentage
-                    $jumlah_selisih_janjang = $jumlah_janjang_grading - $jumlah_janjang_spb;
-                    $percentage_selisih_janjang = ($jumlah_selisih_janjang / $jumlah_janjang_spb) * 100;
                     $no_pemanen = json_decode($value['no_pemanen'], true);
-
                     $tanpaBrondol = [];
                     $datakurang_brondol = [];
                     // dd($no_pemanen);
@@ -12329,43 +12322,43 @@ if (!function_exists('getdatamill')) {
                         'datetime' => $value['datetime'],
                         'tonase' => $value['tonase'],
                         'bjr' => ($value['jjg_spb'] / $value['tonase']) * 100,
-                        'jjg_selisih' => $jumlah_selisih_janjang,
-                        'persentase_selisih' => round($percentage_selisih_janjang),
-                        'Ripeness' => $ripeness,
-                        'percentase_ripenes' => round($percentage_ripeness, 2),
-                        'Unripe' => $unripe,
-                        'persenstase_unripe' => round($percentage_unripe, 2),
-                        'nol_brondol' => $brondol_0,
-                        'persentase_nol_brondol' => round($percentage_brondol_0, 2),
-                        'kurang_brondol' => $brondol_less,
-                        'persentase_brondol' => round($percentage_brondol_less, 2),
+                        'jjg_selisih' => $date_arr['jjg_selisih'],
+                        'persentase_selisih' => round($date_arr['percentage_selisih_janjang']),
+                        'Ripeness' => $date_arr['ripeness'],
+                        'percentase_ripenes' => round($date_arr['percentage_ripeness'], 2),
+                        'Unripe' => $date_arr['unripe'],
+                        'persenstase_unripe' => round($date_arr['percentage_unripe'], 2),
+                        'nol_brondol' => $date_arr['brondol_0'],
+                        'persentase_nol_brondol' => round($date_arr['percentage_brondol_0'], 2),
+                        'kurang_brondol' => $date_arr['brondol_less'],
+                        'persentase_brondol' => round($date_arr['percentage_brondol_less'], 2),
                         'nomor_pemanen' => 'a',
                         'unripe_tanda_x' => 'a',
-                        'Overripe' => $overripe,
-                        'persentase_overripe' => round($percentage_overripe, 2),
-                        'empty_bunch' => $empty_bunch,
-                        'persentase_empty_bunch' => round($percentage_empty_bunch, 2),
-                        'rotten_bunch' => $rotten_bunch,
-                        'persentase_rotten_bunce' => round($percentage_rotten_bunch, 2),
-                        'Abnormal' => $abnormal,
-                        'persentase_abnormal' =>    round($percentage_abnormal, 2),
-                        'stalk' =>    $tangkai_panjang,
-                        'persentase_stalk' => round($percentage_tangkai_panjang, 2),
-                        'vcut' =>    $vcuts,
-                        'persentase_vcut' => round($percentage_vcuts, 2),
+                        'Overripe' => $date_arr['overripe'],
+                        'persentase_overripe' => round($date_arr['percentage_overripe'], 2),
+                        'empty_bunch' => $value['empty'],
+                        'persentase_empty_bunch' => round($date_arr['percentage_empty_bunch'], 2),
+                        'rotten_bunch' => $value['rotten'],
+                        'persentase_rotten_bunce' => round($date_arr['percentage_rotten_bunch'], 2),
+                        'Abnormal' => $date_arr['abnormal'],
+                        'persentase_abnormal' =>    round($date_arr['percentage_abnormal'], 2),
+                        'stalk' =>    $date_arr['tangkai_panjang'],
+                        'persentase_stalk' => round($date_arr['percentage_tangkai_panjang'], 2),
+                        'vcut' =>    $value['vcut'],
+                        'persentase_vcut' => round($date_arr['percentage_vcuts'], 2),
                         'loose_fruit' => $value['loose_fruit'],
-                        'persentase_lose_fruit' => $loose_fruit_kg,
+                        'persentase_lose_fruit' => $date_arr['persentase_loose_fruit'],
                         'Dirt' => $value['dirt'],
-                        'persentase' => $dirt_kg,
+                        'persentase' => $date_arr['persentase'],
                         'foto' => $foto,
                         'pemanen_list_tanpabrondol' => $tanpaBrondol,
                         'pemanen_list_kurangbrondol' => $datakurang_brondol,
-                        'kelas_a' => $kelass_a,
-                        'persentase_kelas_a' => round($percentage_kelas_a, 2),
-                        'kelas_b' => $kelass_b,
-                        'persentase_kelas_b' => round($percentage_kelas_b, 2),
-                        'kelas_c' => $kelass_c,
-                        'persentase_kelas_c' => round($percentage_kelas_c, 2),
+                        'kelas_a' => $value['kelas_a'],
+                        'persentase_kelas_a' => round($date_arr['percentage_kelas_a'], 2),
+                        'kelas_b' => $value['kelas_b'],
+                        'persentase_kelas_b' => round($date_arr['percentage_kelas_b'], 2),
+                        'kelas_c' => $value['kelas_c'],
+                        'persentase_kelas_c' => round($date_arr['percentage_kelas_c'], 2),
                     ];
                 }
                 // dd($data, $result);
@@ -12420,8 +12413,11 @@ if (!function_exists('getdatamill')) {
                             $jumlah_janjang_spb += $value1['jjg_spb'];
 
 
-                            $brondol_0 += $value1['unripe_tanpa_brondol'];
-                            $brondol_less += $value1['unripe_kurang_brondol'];
+                            $brondol_0 += is_numeric($value1['unripe_tanpa_brondol']) ? $value1['unripe_tanpa_brondol'] : 0;
+                            $brondol_less += is_numeric($value1['unripe_kurang_brondol']) ? $value1['unripe_kurang_brondol'] : 0;
+
+                            // $brondol_0 += $value1['unripe_tanpa_brondol'];
+                            // $brondol_less += $value1['unripe_kurang_brondol'];
 
                             $overripe += $value1['overripe'];
                             $empty_bunch += $value1['empty'];
@@ -12439,66 +12435,64 @@ if (!function_exists('getdatamill')) {
                             $kelas_b += $value1['kelas_b'];
                             $kelas_c += $value1['kelas_c'];
                         }
-                        $abnormal = $abn_partheno + $abn_hard + $abn_sakit +  $abn_kastrasi;
-                        $unripe = $brondol_0 + $brondol_less;
-                        $ripeness = $jumlah_janjang_grading - ($overripe + $empty_bunch + $rotten_bunch + $abnormal + $unripe);
-
-
-                        $loose_fruit_kg = ($loose_fruit / $tonase) * 100;
-                        $dirt_kg = ($dirt  / $tonase) * 100;
-                        $bjr = ($tonase  / $jumlah_janjang_spb) * 100;
-
-                        // Calculate percentages
-                        $percentage_ripeness = ($ripeness / $jumlah_janjang_grading) * 100;
-                        $percentage_unripe = ($unripe / $jumlah_janjang_grading) * 100;
-                        $percentage_brondol_0 = ($brondol_0 / $jumlah_janjang_grading) * 100;
-                        $percentage_brondol_less = ($brondol_less / $jumlah_janjang_grading) * 100;
-                        $percentage_overripe = ($overripe / $jumlah_janjang_grading) * 100;
-                        $percentage_empty_bunch = ($empty_bunch / $jumlah_janjang_grading) * 100;
-                        // Rotten bunch and abnormal are missing, set to zero
-                        $percentage_rotten_bunch = ($rotten_bunch / $jumlah_janjang_grading) * 100;
-                        $percentage_abnormal = ($abnormal / $jumlah_janjang_grading) * 100;
-                        $percentage_longstalk = ($longstalk / $jumlah_janjang_grading) * 100;
-                        $percentage_vcut = ($vcut / $jumlah_janjang_grading) * 100;
-                        $persentage_kelas_a = ($kelas_a / $jumlah_janjang_grading) * 100;
-                        $persentage_kelas_b = ($kelas_b / $jumlah_janjang_grading) * 100;
-                        $persentage_kelas_c = ($kelas_c / $jumlah_janjang_grading) * 100;
-                        // Assume loose fruit and dirt percentages are given as a part of total weight
-
-                        // Calculate selisih janjang and percentage
-                        $jumlah_selisih_janjang = $jumlah_janjang_grading - $jumlah_janjang_spb;
-                        $percentage_selisih_janjang = ($jumlah_selisih_janjang / $jumlah_janjang_spb) * 100;
-                        $result[$keys][$key] = [
-                            'tonase' => $tonase,
-                            'jumlah_janjang_grading' => $jumlah_janjang_grading,
-                            'jumlah_janjang_spb' => $jumlah_janjang_spb,
-                            'bjr' => $bjr,
-                            'ripeness' => $ripeness,
-                            'percentage_ripeness' => $percentage_ripeness,
-                            'unripe' => $unripe,
-                            'percentage_unripe' => $percentage_unripe,
+                        $array_perdate = [
+                            'estate' => $key,
+                            'afdeling' => $key1,
+                            'jjg_grading' => $jumlah_janjang_grading,
+                            'jjg_spb' => $jumlah_janjang_spb,
+                            'brondol_0' => $brondol_0,
+                            'brondol_less' => $brondol_less,
                             'overripe' => $overripe,
-                            'percentage_overripe' => $percentage_overripe,
-                            'empty_bunch' => $empty_bunch,
-                            'percentage_empty_bunch' => $percentage_empty_bunch,
-                            'rotten_bunch' => $rotten_bunch,
-                            'percentage_rotten_bunch' => $percentage_rotten_bunch,
-                            'abnormal' => $abnormal,
-                            'percentage_abnormal' => $percentage_abnormal,
-                            'longstalk' => $longstalk,
-                            'percentage_longstalk' => $percentage_longstalk,
-                            'vcut' => $vcut,
-                            'percentage_vcut' => $percentage_vcut,
-                            'dirt_kg' => $dirt,
-                            'percentage_dirt' => $dirt_kg,
-                            'loose_fruit_kg' => $loose_fruit,
-                            'percentage_loose_fruit' => $loose_fruit_kg,
+                            'empty' => $empty_bunch,
+                            'rotten' => $rotten_bunch,
+                            'tangkai_panjang' => $longstalk,
+                            'vcuts' => $vcut,
+                            'tonase' => $tonase,
+                            'dirt' => $dirt,
+                            'loose_fruit' => $loose_fruit,
+                            'abn_partheno' => $abn_partheno,
+                            'abn_hard' => $abn_hard,
+                            'abn_sakit' => $abn_sakit,
+                            'abn_kastrasi' => $abn_kastrasi,
                             'kelas_a' => $kelas_a,
                             'kelas_b' => $kelas_b,
                             'kelas_c' => $kelas_c,
-                            'percentage_kelas_a' => $persentage_kelas_a,
-                            'percentage_kelas_b' => $persentage_kelas_b,
-                            'percentage_kelas_c' => $persentage_kelas_c,
+                        ];
+
+                        // dd($array_perdate);
+                        $date_arr = formula_grading($array_perdate);
+
+                        $result[$keys][$key] = [
+                            'tonase' => $date_arr['tonase'],
+                            'jumlah_janjang_grading' => $date_arr['jjg_grading'],
+                            'jumlah_janjang_spb' => $date_arr['jjg_spb'],
+                            'bjr' => $date_arr['bjr'],
+                            'ripeness' => $date_arr['Ripeness'],
+                            'percentage_ripeness' => $date_arr['percentase_ripenes'],
+                            'unripe' => $date_arr['Unripe'],
+                            'percentage_unripe' => $date_arr['persenstase_unripe'],
+                            'overripe' => $date_arr['overripe'],
+                            'percentage_overripe' => $date_arr['persentase_overripe'],
+                            'empty_bunch' => $date_arr['empty'],
+                            'percentage_empty_bunch' => $date_arr['persentase_empty_bunch'],
+                            'rotten_bunch' => $date_arr['rotten'],
+                            'percentage_rotten_bunch' => $date_arr['persentase_rotten_bunce'],
+                            'abnormal' => $date_arr['Abnormal'],
+                            'percentage_abnormal' => $date_arr['persentase_abnormal'],
+                            'longstalk' => $date_arr['tangkai_panjang'],
+                            'percentage_longstalk' => $date_arr['persentase_stalk'],
+                            'vcut' => $date_arr['vcuts'],
+                            'percentage_vcut' => $date_arr['persentase_vcut'],
+                            'dirt_kg' => $date_arr['dirt'],
+                            'percentage_dirt' => $date_arr['persentase'],
+                            'loose_fruit_kg' => $date_arr['loose_fruit'],
+                            'percentage_loose_fruit' => $date_arr['persentase_lose_fruit'],
+                            'kelas_a' => $date_arr['kelas_a'],
+                            'kelas_b' => $date_arr['kelas_b'],
+                            'kelas_c' => $date_arr['kelas_c'],
+                            'percentage_kelas_a' => $date_arr['persentase_kelas_a'],
+                            'percentage_kelas_b' => $date_arr['persentase_kelas_b'],
+                            'percentage_kelas_c' => $date_arr['persentase_kelas_c'],
 
                         ];
                     }
@@ -12544,8 +12538,11 @@ if (!function_exists('getdatamildetail')) {
                 $jumlah_janjang_spb = $value['jjg_spb'];
 
 
-                $brondol_0 = $value['unripe_tanpa_brondol'];
-                $brondol_less = $value['unripe_kurang_brondol'];
+                $brondol_0 = is_numeric($value['unripe_tanpa_brondol']) ? $value['unripe_tanpa_brondol'] : 0;
+                $brondol_less = is_numeric($value['unripe_kurang_brondol']) ? $value['unripe_kurang_brondol'] : 0;
+
+                // $brondol_0 = $value['unripe_tanpa_brondol'];
+                // $brondol_less = $value['unripe_kurang_brondol'];
 
                 $overripe = $value['overripe'];
                 $empty_bunch = $value['empty'];
@@ -12766,8 +12763,13 @@ if (!function_exists('getdatamildetailpertanggal')) {
                         foreach ($items as $key => $value) {
                             $jjg_grading += $value['jjg_grading'];
                             $jjg_spb += $value['jjg_spb'];
-                            $unripe_tanpa_brondol += $value['unripe_tanpa_brondol'];
-                            $unripe_kurang_brondol += $value['unripe_kurang_brondol'];
+
+                            $unripe_tanpa_brondol += is_numeric($value['unripe_tanpa_brondol']) ? $value['unripe_tanpa_brondol'] : 0;
+                            $unripe_kurang_brondol += is_numeric($value['unripe_kurang_brondol']) ? $value['unripe_kurang_brondol'] : 0;
+
+
+                            // $unripe_tanpa_brondol += $value['unripe_tanpa_brondol'];
+                            // $unripe_kurang_brondol += $value['unripe_kurang_brondol'];
                             $overripe += $value['overripe'];
                             $empty += $value['empty'];
                             $rotten += $value['rotten'];
@@ -13202,8 +13204,11 @@ if (!function_exists('rekap_estate_mill_perbulan_perhari')) {
                         $jumlah_janjang_spb += $value1['jjg_spb'];
 
 
-                        $brondol_0 += $value1['unripe_tanpa_brondol'];
-                        $brondol_less += $value1['unripe_kurang_brondol'];
+                        $brondol_0 += is_numeric($value1['unripe_tanpa_brondol']) ? $value1['unripe_tanpa_brondol'] : 0;
+                        $brondol_less += is_numeric($value1['unripe_kurang_brondol']) ? $value1['unripe_kurang_brondol'] : 0;
+
+                        // $brondol_0 += $value1['unripe_tanpa_brondol'];
+                        // $brondol_less += $value1['unripe_kurang_brondol'];
 
                         $overripe += $value1['overripe'];
                         $empty_bunch += $value1['empty'];
@@ -13223,155 +13228,153 @@ if (!function_exists('rekap_estate_mill_perbulan_perhari')) {
                         $no_plat = $value1['no_plat'];
                         $units = Carbon::parse($value1['datetime'])->format('H:i');
                     }
-                    // dd($value);
-                    $abnormal = $abn_partheno + $abn_hard + $abn_sakit +  $abn_kastrasi;
-                    $unripe = $brondol_0 + $brondol_less;
-                    $ripeness = $jumlah_janjang_grading - ($overripe + $empty_bunch + $rotten_bunch + $abnormal + $unripe);
 
-
-                    $loose_fruit_kg = ($loose_fruit / $tonase) * 100;
-                    $dirt_kg = ($dirt  / $tonase) * 100;
-
-                    // Calculate percentages
-                    $percentage_ripeness = ($ripeness / $jumlah_janjang_grading) * 100;
-                    $percentage_unripe = ($unripe / $jumlah_janjang_grading) * 100;
-                    $percentage_brondol_0 = ($brondol_0 / $jumlah_janjang_grading) * 100;
-                    $percentage_brondol_less = ($brondol_less / $jumlah_janjang_grading) * 100;
-                    $percentage_overripe = ($overripe / $jumlah_janjang_grading) * 100;
-                    $percentage_empty_bunch = ($empty_bunch / $jumlah_janjang_grading) * 100;
-                    // Rotten bunch and abnormal are missing, set to zero
-                    $percentage_rotten_bunch = ($rotten_bunch / $jumlah_janjang_grading) * 100;
-                    $percentage_abnormal = ($abnormal / $jumlah_janjang_grading) * 100;
-                    $percentage_longstalk = ($longstalk / $jumlah_janjang_grading) * 100;
-                    $percentage_vcut = ($vcut / $jumlah_janjang_grading) * 100;
-                    $persentage_kelas_a = ($kelas_a / $jumlah_janjang_grading) * 100;
-                    $persentage_kelas_b = ($kelas_b / $jumlah_janjang_grading) * 100;
-                    $persentage_kelas_c = ($kelas_c / $jumlah_janjang_grading) * 100;
-                    // Assume loose fruit and dirt percentages are given as a part of total weight
-
-                    // Calculate selisih janjang and percentage
-                    $jumlah_selisih_janjang = $jumlah_janjang_grading - $jumlah_janjang_spb;
-                    $percentage_selisih_janjang = ($jumlah_selisih_janjang / $jumlah_janjang_spb) * 100;
-                    $result[$keys][$key] = [
-                        'tonase' => $tonase,
-                        'jumlah_janjang_grading' => $jumlah_janjang_grading,
-                        'jumlah_janjang_spb' => $jumlah_janjang_spb,
-                        'bjr' => $tonase / $jumlah_janjang_grading,
-                        'ripeness' => $ripeness,
-                        'percentage_ripeness' => $percentage_ripeness,
-                        'unripe' => $unripe,
-                        'percentage_unripe' => $percentage_unripe,
+                    $array_perdate = [
+                        'estate' => $key,
+                        'afdeling' => $key2,
+                        'jjg_grading' => $jumlah_janjang_grading,
+                        'jjg_spb' => $jumlah_janjang_spb,
+                        'brondol_0' => $brondol_0,
+                        'brondol_less' => $brondol_less,
                         'overripe' => $overripe,
-                        'percentage_overripe' => $percentage_overripe,
-                        'empty_bunch' => $empty_bunch,
-                        'percentage_empty_bunch' => $percentage_empty_bunch,
-                        'rotten_bunch' => $rotten_bunch,
-                        'percentage_rotten_bunch' => $percentage_rotten_bunch,
-                        'abnormal' => $abnormal,
-                        'percentage_abnormal' => $percentage_abnormal,
-                        'longstalk' => $longstalk,
-                        'percentage_longstalk' => $percentage_longstalk,
-                        'vcut' => $vcut,
-                        'percentage_vcut' => $percentage_vcut,
-                        'dirt_kg' => $dirt,
-                        'percentage_dirt' => $dirt_kg,
-                        'loose_fruit_kg' => $loose_fruit,
-                        'percentage_loose_fruit' => $loose_fruit_kg,
+                        'empty' => $empty_bunch,
+                        'rotten' => $rotten_bunch,
+                        'tangkai_panjang' => $longstalk,
+                        'vcuts' => $vcut,
+                        'tonase' => $tonase,
+                        'dirt' => $dirt,
+                        'loose_fruit' => $loose_fruit,
+                        'abn_partheno' => $abn_partheno,
+                        'abn_hard' => $abn_hard,
+                        'abn_sakit' => $abn_sakit,
+                        'abn_kastrasi' => $abn_kastrasi,
                         'kelas_a' => $kelas_a,
                         'kelas_b' => $kelas_b,
                         'kelas_c' => $kelas_c,
-                        'percentage_kelas_a' => $persentage_kelas_a,
-                        'percentage_kelas_b' => $persentage_kelas_b,
-                        'percentage_kelas_c' => $persentage_kelas_c,
+                    ];
+
+                    // dd($array_perdate);
+                    $date_arr = formula_grading($array_perdate);
+                    $result[$keys][$key] = [
+                        'tonase' => $date_arr['tonase'],
+                        'jumlah_janjang_grading' => $date_arr['jjg_grading'],
+                        'jumlah_janjang_spb' => $date_arr['jjg_spb'],
+                        'bjr' => $date_arr['bjr'],
+                        'ripeness' => $date_arr['Ripeness'],
+                        'percentage_ripeness' => $date_arr['percentase_ripenes'],
+                        'unripe' => $date_arr['Unripe'],
+                        'percentage_unripe' => $date_arr['persenstase_unripe'],
+                        'overripe' => $date_arr['overripe'],
+                        'percentage_overripe' => $date_arr['persentase_overripe'],
+                        'empty_bunch' => $date_arr['empty'],
+                        'percentage_empty_bunch' => $date_arr['persentase_empty_bunch'],
+                        'rotten_bunch' => $date_arr['rotten'],
+                        'percentage_rotten_bunch' => $date_arr['persentase_rotten_bunce'],
+                        'abnormal' => $date_arr['Abnormal'],
+                        'percentage_abnormal' => $date_arr['persentase_abnormal'],
+                        'longstalk' => $date_arr['tangkai_panjang'],
+                        'percentage_longstalk' => $date_arr['persentase_stalk'],
+                        'vcut' => $date_arr['vcuts'],
+                        'percentage_vcut' => $date_arr['persentase_vcut'],
+                        'dirt_kg' => $date_arr['dirt'],
+                        'percentage_dirt' => $date_arr['persentase'],
+                        'loose_fruit_kg' => $date_arr['loose_fruit'],
+                        'percentage_loose_fruit' => $date_arr['persentase_lose_fruit'],
+                        'kelas_a' => $date_arr['kelas_a'],
+                        'kelas_b' => $date_arr['kelas_b'],
+                        'kelas_c' => $date_arr['kelas_c'],
+                        'percentage_kelas_a' => $date_arr['persentase_kelas_a'],
+                        'percentage_kelas_b' => $date_arr['persentase_kelas_b'],
+                        'percentage_kelas_c' => $date_arr['persentase_kelas_c'],
                         'no_plat' => $no_plat,
                         'unit' => $units,
                     ];
 
-                    $tot_tonase += $tonase;
-                    $tot_spb += $jumlah_janjang_spb;
-                    $tot_grading += $jumlah_janjang_grading;
-                    $tot_ripeness += $ripeness;
-                    $tot_unripe += $unripe;
-                    $tot_overripe += $overripe;
-                    $tot_empty_bunch += $empty_bunch;
-                    $tot_rotten_bunch += $rotten_bunch;
-                    $tot_abnormal += $abnormal;
-                    $tot_longstalk += $longstalk;
-                    $tot_brondol_0 += $brondol_0;
-                    $tot_brondol_less += $brondol_less;
-                    $tot_vcut += $vcut;
-                    $tot_dirt += $dirt;
-                    $tot_kelas_a += $kelas_a;
-                    $tot_kelas_b += $kelas_b;
-                    $tot_kelas_c += $kelas_c;
-                    $tot_abn_partheno += $abn_partheno;
-                    $tot_abn_hard += $abn_hard;
-                    $tot_abn_sakit += $abn_sakit;
-                    $tot_abn_kastrasi += $abn_kastrasi;
-                    $tot_loose_fruit += $loose_fruit;
+                    $tot_tonase += $date_arr['tonase'];
+                    $tot_spb += $date_arr['jjg_spb'];
+                    $tot_grading += $date_arr['jjg_grading'];
+                    $tot_ripeness += $date_arr['Ripeness'];
+                    $tot_unripe += $date_arr['Unripe'];
+                    $tot_overripe += $date_arr['overripe'];
+                    $tot_empty_bunch += $date_arr['empty'];
+                    $tot_rotten_bunch += $date_arr['rotten'];
+                    $tot_abnormal += $date_arr['Abnormal'];
+                    $tot_longstalk += $date_arr['tangkai_panjang'];
+                    $tot_brondol_0 += $date_arr['brondol_0'];
+                    $tot_brondol_less += $date_arr['brondol_less'];
+                    $tot_vcut += $date_arr['vcuts'];
+                    $tot_dirt += $date_arr['dirt'];
+                    $tot_kelas_a += $date_arr['kelas_a'];
+                    $tot_kelas_b += $date_arr['kelas_b'];
+                    $tot_kelas_c += $date_arr['kelas_c'];
+                    $tot_abn_partheno += $date_arr['abn_partheno'];
+                    $tot_abn_hard += $date_arr['abn_hard'];
+                    $tot_abn_sakit += $date_arr['abn_sakit'];
+                    $tot_abn_kastrasi += $date_arr['abn_kastrasi'];
+                    $tot_loose_fruit += $date_arr['loose_fruit'];
                     $tot_unit += $unit;
                 }
-                $tot_bjr = $tot_tonase / $tot_grading;
-
-                $abnormal = $tot_abn_partheno + $tot_abn_hard + $tot_abn_sakit +  $tot_abn_kastrasi;
-                $unripe = $tot_brondol_0 + $tot_brondol_less;
-                $ripeness = $tot_grading - ($tot_overripe + $tot_empty_bunch + $tot_rotten_bunch + $tot_abnormal + $tot_unripe);
-
-
-                $loose_fruit_kg = ($tot_loose_fruit / $tot_tonase) * 100;
-                $dirt_kg = ($tot_dirt  / $tot_tonase) * 100;
-
-                // Calculate percentages
-                $percentage_ripeness = ($tot_ripeness / $tot_grading) * 100;
-                $percentage_unripe = ($tot_unripe / $tot_grading) * 100;
-                $percentage_brondol_0 = ($tot_brondol_0 / $tot_grading) * 100;
-                $percentage_brondol_less = ($tot_brondol_less / $tot_grading) * 100;
-                $percentage_overripe = ($tot_overripe / $tot_grading) * 100;
-                $percentage_empty_bunch = ($tot_empty_bunch / $tot_grading) * 100;
-                // Rotten bunch and abnormal are missing, set to zero
-                $percentage_rotten_bunch = ($tot_rotten_bunch / $tot_grading) * 100;
-                $percentage_abnormal = ($tot_abnormal / $tot_grading) * 100;
-                $percentage_longstalk = ($tot_longstalk / $tot_grading) * 100;
-                $percentage_vcut = ($tot_vcut / $tot_grading) * 100;
-                $persentage_kelas_a = ($tot_kelas_a / $tot_grading) * 100;
-                $persentage_kelas_b = ($tot_kelas_b / $tot_grading) * 100;
-                $persentage_kelas_c = ($tot_kelas_c / $tot_grading) * 100;
-                // Assume loose fruit and dirt percentages are given as a part of total weight
-
-                // Calculate selisih janjang and percentage
-                $jumlah_selisih_janjang = $jumlah_janjang_grading - $jumlah_janjang_spb;
-                $percentage_selisih_janjang = ($jumlah_selisih_janjang / $jumlah_janjang_spb) * 100;
-                $result[$keys]['Total'] = [
-                    'tonase' => $tot_tonase,
-                    'jumlah_janjang_grading' => $tot_grading,
-                    'jumlah_janjang_spb' => $tot_spb,
-                    'bjr' => $tot_bjr,
-                    'ripeness' => $ripeness,
-                    'percentage_ripeness' => $percentage_ripeness,
-                    'unripe' => $unripe,
-                    'percentage_unripe' => $percentage_unripe,
+                $array_perdate = [
+                    'estate' => $keys,
+                    'afdeling' => $key,
+                    'jjg_grading' => $tot_grading,
+                    'jjg_spb' => $tot_spb,
+                    'brondol_0' => $tot_brondol_0,
+                    'brondol_less' => $tot_brondol_less,
                     'overripe' => $tot_overripe,
-                    'percentage_overripe' => $percentage_overripe,
-                    'empty_bunch' => $tot_empty_bunch,
-                    'percentage_empty_bunch' => $percentage_empty_bunch,
-                    'rotten_bunch' => $tot_rotten_bunch,
-                    'percentage_rotten_bunch' => $percentage_rotten_bunch,
-                    'abnormal' => $tot_abnormal,
-                    'percentage_abnormal' => $percentage_abnormal,
-                    'longstalk' => $tot_longstalk,
-                    'percentage_longstalk' => $percentage_longstalk,
-                    'vcut' => $tot_vcut,
-                    'percentage_vcut' => $percentage_vcut,
-                    'dirt_kg' => $tot_dirt,
-                    'percentage_dirt' => $dirt_kg,
-                    'loose_fruit_kg' => $tot_loose_fruit,
-                    'percentage_loose_fruit' => $loose_fruit_kg,
+                    'empty' => $tot_empty_bunch,
+                    'rotten' => $tot_rotten_bunch,
+                    'tangkai_panjang' => $tot_longstalk,
+                    'vcuts' => $tot_vcut,
+                    'tonase' => $tot_tonase,
+                    'dirt' => $tot_dirt,
+                    'loose_fruit' => $tot_loose_fruit,
+                    'abn_partheno' => $tot_abn_partheno,
+                    'abn_hard' => $tot_abn_hard,
+                    'abn_sakit' => $tot_abn_sakit,
+                    'abn_kastrasi' => $tot_abn_kastrasi,
                     'kelas_a' => $tot_kelas_a,
                     'kelas_b' => $tot_kelas_b,
                     'kelas_c' => $tot_kelas_c,
-                    'percentage_kelas_a' => $persentage_kelas_a,
-                    'percentage_kelas_b' => $persentage_kelas_b,
-                    'percentage_kelas_c' => $persentage_kelas_c,
+                ];
+                $date_arr = formula_grading($array_perdate);
+                $result[$keys]['Total'] = [
+                    'tonase' => $date_arr['tonase'],
+                    'jumlah_janjang_grading' => $date_arr['jjg_grading'],
+                    'jumlah_janjang_spb' => $date_arr['jjg_spb'],
+                    'bjr' => $date_arr['bjr'],
+                    'ripeness' => $date_arr['Ripeness'],
+                    'percentage_ripeness' => $date_arr['percentase_ripenes'],
+                    'brondol_0' => $date_arr['brondol_0'],
+                    'brondol_less' => $date_arr['brondol_less'],
+                    'abn_partheno' => $date_arr['abn_partheno'],
+                    'abn_hard' => $date_arr['abn_hard'],
+                    'abn_sakit' => $date_arr['abn_sakit'],
+                    'abn_kastrasi' => $date_arr['abn_kastrasi'],
+                    'unripe' => $date_arr['Unripe'],
+                    'percentage_unripe' => $date_arr['persenstase_unripe'],
+                    'overripe' => $date_arr['overripe'],
+                    'percentage_overripe' => $date_arr['persentase_overripe'],
+                    'empty_bunch' => $date_arr['empty'],
+                    'percentage_empty_bunch' => $date_arr['persentase_empty_bunch'],
+                    'rotten_bunch' => $date_arr['rotten'],
+                    'percentage_rotten_bunch' => $date_arr['persentase_rotten_bunce'],
+                    'abnormal' => $date_arr['Abnormal'],
+                    'percentage_abnormal' => $date_arr['persentase_abnormal'],
+                    'longstalk' => $date_arr['tangkai_panjang'],
+                    'percentage_longstalk' => $date_arr['persentase_stalk'],
+                    'vcut' => $date_arr['vcuts'],
+                    'percentage_vcut' => $date_arr['persentase_vcut'],
+                    'dirt_kg' => $date_arr['dirt'],
+                    'percentage_dirt' => $date_arr['persentase'],
+                    'loose_fruit_kg' => $date_arr['loose_fruit'],
+                    'percentage_loose_fruit' => $date_arr['persentase_lose_fruit'],
+                    'kelas_a' => $date_arr['kelas_a'],
+                    'kelas_b' => $date_arr['kelas_b'],
+                    'kelas_c' => $date_arr['kelas_c'],
+                    'percentage_kelas_a' => $date_arr['persentase_kelas_a'],
+                    'percentage_kelas_b' => $date_arr['persentase_kelas_b'],
+                    'percentage_kelas_c' => $date_arr['persentase_kelas_c'],
                     'no_plat' => $tot_unit,
                     'unit' => null,
                     'total_test' => $unit,
@@ -13404,6 +13407,12 @@ if (!function_exists('rekap_estate_mill_perbulan_perhari')) {
         $kelas_c_tod = 0;
         $unit_tod = 0;
         $ripeness_tod = 0;
+        $brondol_0 = 0;
+        $brondol_less = 0;
+        $abn_partheno_tod = 0;
+        $abn_hard_tod = 0;
+        $abn_sakit_tod = 0;
+        $abn_kastrasi_tod = 0;
         $ripeness_test = [];
         foreach ($Total_est as $key => $value) {
             $tonase_tod += $value['tonase'];
@@ -13412,6 +13421,13 @@ if (!function_exists('rekap_estate_mill_perbulan_perhari')) {
 
 
             $unripe_tod += $value['unripe'];
+            $brondol_0 += $value['brondol_0'];
+            $brondol_less += $value['brondol_less'];
+            $abn_partheno_tod += $value['abn_partheno'];
+            $abn_hard_tod += $value['abn_hard'];
+            $abn_sakit_tod += $value['abn_sakit'];
+            $abn_kastrasi_tod += $value['abn_kastrasi'];
+
             $overripe_tod += $value['overripe'];
             $empty_bunch_tod += $value['empty_bunch'];
             $rotten_bunch_tod += $value['rotten_bunch'];
@@ -13428,61 +13444,62 @@ if (!function_exists('rekap_estate_mill_perbulan_perhari')) {
             $kelas_c_tod += $value['kelas_c'];
             $unit_tod += $value['total_test'];
         }
-        $tot_bjr = $jumlah_janjang_grading_tod > 0 ? $tonase_tod / $jumlah_janjang_grading_tod : 0;
-
-        $abnormal = $abnormal_tod;
-        $unripe = $unripe_tod;
-
-        $loose_fruit_kg = $tonase_tod > 0 ? ($loose_fruit_tod / $tonase_tod) * 100 : 0;
-        $dirt_kg = $tonase_tod > 0 ? ($dirt_tod / $tonase_tod) * 100 : 0;
-
-        // Calculate percentages
-        $percentage_ripeness = $jumlah_janjang_grading_tod > 0 ? ($ripeness_tod / $jumlah_janjang_grading_tod) * 100 : 0;
-        $percentage_unripe = $jumlah_janjang_grading_tod > 0 ? ($unripe / $jumlah_janjang_grading_tod) * 100 : 0;
-        $percentage_overripe = $jumlah_janjang_grading_tod > 0 ? ($overripe_tod / $jumlah_janjang_grading_tod) * 100 : 0;
-        $percentage_empty_bunch = $jumlah_janjang_grading_tod > 0 ? ($empty_bunch_tod / $jumlah_janjang_grading_tod) * 100 : 0;
-        $percentage_rotten_bunch = $jumlah_janjang_grading_tod > 0 ? ($rotten_bunch_tod / $jumlah_janjang_grading_tod) * 100 : 0;
-        $percentage_abnormal = $jumlah_janjang_grading_tod > 0 ? ($abnormal_tod / $jumlah_janjang_grading_tod) * 100 : 0;
-        $percentage_longstalk = $jumlah_janjang_grading_tod > 0 ? ($longstalk_tod / $jumlah_janjang_grading_tod) * 100 : 0;
-        $percentage_vcut = $jumlah_janjang_grading_tod > 0 ? ($vcut_tod / $jumlah_janjang_grading_tod) * 100 : 0;
-        $persentage_kelas_a = $jumlah_janjang_grading_tod > 0 ? ($kelas_a_tod / $jumlah_janjang_grading_tod) * 100 : 0;
-        $persentage_kelas_b = $jumlah_janjang_grading_tod > 0 ? ($kelas_b_tod / $jumlah_janjang_grading_tod) * 100 : 0;
-        $persentage_kelas_c = $jumlah_janjang_grading_tod > 0 ? ($kelas_c_tod / $jumlah_janjang_grading_tod) * 100 : 0;
-
-        $jumlah_selisih_janjang = $jumlah_janjang_grading_tod - $jumlah_janjang_spb_tod;
-        $percentage_selisih_janjang = $jumlah_janjang_spb_tod > 0 ? ($jumlah_selisih_janjang / $jumlah_janjang_spb_tod) * 100 : 0;
-
-        $final = [
-            'tonase' => $tonase_tod,
-            'jumlah_janjang_grading' => $jumlah_janjang_grading_tod,
-            'jumlah_janjang_spb' => $jumlah_janjang_spb_tod,
-            'bjr' => $tot_bjr,
-            'ripeness' => $ripeness_tod,
-            'percentage_ripeness' => $percentage_ripeness,
-            'unripe' => $unripe,
-            'percentage_unripe' => $percentage_unripe,
+        $array_perdate = [
+            'estate' => 'null',
+            'afdeling' => 'null',
+            'jjg_grading' => $jumlah_janjang_grading_tod,
+            'jjg_spb' => $jumlah_janjang_spb_tod,
+            'brondol_0' => $brondol_0,
+            'brondol_less' => $brondol_less,
             'overripe' => $overripe_tod,
-            'percentage_overripe' => $percentage_overripe,
-            'empty_bunch' => $empty_bunch_tod,
-            'percentage_empty_bunch' => $percentage_empty_bunch,
-            'rotten_bunch' => $rotten_bunch_tod,
-            'percentage_rotten_bunch' => $percentage_rotten_bunch,
-            'abnormal' => $abnormal_tod,
-            'percentage_abnormal' => $percentage_abnormal,
-            'longstalk' => $longstalk_tod,
-            'percentage_longstalk' => $percentage_longstalk,
-            'vcut' => $vcut_tod,
-            'percentage_vcut' => $percentage_vcut,
-            'dirt_kg' => $dirt_tod,
-            'percentage_dirt' => $dirt_kg,
-            'loose_fruit_kg' => $loose_fruit_tod,
-            'percentage_loose_fruit' => $loose_fruit_kg,
+            'empty' => $empty_bunch_tod,
+            'rotten' => $rotten_bunch_tod,
+            'tangkai_panjang' => $longstalk_tod,
+            'vcuts' => $vcut_tod,
+            'tonase' => $tonase_tod,
+            'dirt' => $dirt_tod,
+            'loose_fruit' => $loose_fruit_tod,
+            'abn_partheno' => $abn_partheno_tod,
+            'abn_hard' => $abn_hard_tod,
+            'abn_sakit' => $abn_sakit_tod,
+            'abn_kastrasi' => $abn_kastrasi_tod,
             'kelas_a' => $kelas_a_tod,
             'kelas_b' => $kelas_b_tod,
             'kelas_c' => $kelas_c_tod,
-            'percentage_kelas_a' => $persentage_kelas_a,
-            'percentage_kelas_b' => $persentage_kelas_b,
-            'percentage_kelas_c' => $persentage_kelas_c,
+        ];
+        $date_arr = formula_grading($array_perdate);
+        $final = [
+            // 'est' => $key,
+            'tonase' => $tonase_tod,
+            'jumlah_janjang_grading' => $jumlah_janjang_grading_tod,
+            'jumlah_janjang_spb' => $jumlah_janjang_spb_tod,
+            'bjr' => $date_arr['bjr'],
+            'ripeness' => $date_arr['Ripeness'],
+            'percentage_ripeness' => $date_arr['percentase_ripenes'],
+            'unripe' => $unripe_tod,
+            'percentage_unripe' => $date_arr['persenstase_unripe'],
+            'overripe' => $overripe_tod,
+            'percentage_overripe' => $date_arr['persentase_overripe'],
+            'empty_bunch' => $empty_bunch_tod,
+            'percentage_empty_bunch' => $date_arr['persentase_empty_bunch'],
+            'rotten_bunch' => $rotten_bunch_tod,
+            'percentage_rotten_bunch' => $date_arr['persentase_rotten_bunce'],
+            'abnormal' => $abnormal_tod,
+            'percentage_abnormal' => $date_arr['persentase_abnormal'],
+            'longstalk' => $longstalk_tod,
+            'percentage_longstalk' => $date_arr['persentase_stalk'],
+            'vcut' => $vcut_tod,
+            'percentage_vcut' => $date_arr['persentase_vcut'],
+            'dirt_kg' => $dirt_tod,
+            'percentage_dirt' => $date_arr['persentase'],
+            'loose_fruit_kg' => $loose_fruit_tod,
+            'percentage_loose_fruit' => $date_arr['persentase_lose_fruit'],
+            'kelas_a' => $kelas_a_tod,
+            'kelas_b' => $kelas_b_tod,
+            'kelas_c' => $kelas_c_tod,
+            'percentage_kelas_a' => $date_arr['persentase_kelas_a'],
+            'percentage_kelas_b' => $date_arr['persentase_kelas_b'],
+            'percentage_kelas_c' => $date_arr['persentase_kelas_c'],
             'no_plat' => null,
             'unit' => $unit_tod,
             'ripeness_test' => $ripeness_test,
@@ -13741,32 +13758,30 @@ if (!function_exists('formula_grading')) {
     function formula_grading($array)
     {
 
-        $loose_fruit_kg = round(($array['loose_fruit'] / $array['tonase']) * 100, 2);
-        $dirt_kg = round(($array['dirt'] / $array['tonase']) * 100, 2);
+        $loose_fruit_kg = $array['tonase'] > 0 ? round(($array['loose_fruit'] / $array['tonase']) * 100, 2) : 0;
+        $dirt_kg = $array['tonase'] > 0 ? round(($array['dirt'] / $array['tonase']) * 100, 2) : 0;
         $abnormal = $array['abn_partheno'] + $array['abn_hard'] + $array['abn_sakit'] + $array['abn_kastrasi'];
         $unripe = $array['brondol_0'] + $array['brondol_less'];
         $ripeness = $array['jjg_grading'] - ($array['overripe'] + $array['empty'] + $array['rotten'] + $abnormal + $unripe);
 
         // Calculate percentages
-        $percentage_ripeness = ($ripeness / $array['jjg_grading']) * 100;
-        $percentage_unripe = ($unripe / $array['jjg_grading']) * 100;
-        $percentage_brondol_0 = ($array['brondol_0'] / $array['jjg_grading']) * 100;
-        $percentage_brondol_less = ($array['brondol_less'] / $array['jjg_grading']) * 100;
-        $percentage_overripe = ($array['overripe'] / $array['jjg_grading']) * 100;
-        $percentage_empty_bunch = ($array['empty'] / $array['jjg_grading']) * 100;
-        // Rotten bunch and abnormal are missing, set to zero
-        $percentage_rotten_bunch = ($array['rotten'] / $array['jjg_grading']) * 100;
-        $percentage_abnormal = ($abnormal / $array['jjg_grading']) * 100;
-        $percentage_tangkai_panjang = ($array['tangkai_panjang'] / $array['jjg_grading']) * 100;
-        $percentage_vcuts = ($array['vcuts'] / $array['jjg_grading']) * 100;
-        $percentage_kelas_a = ($array['kelas_a'] / $array['jjg_grading']) * 100;
-        $percentage_kelas_b = ($array['kelas_b'] / $array['jjg_grading']) * 100;
-        $percentage_kelas_c = ($array['kelas_c'] / $array['jjg_grading']) * 100;
-        // Assume loose fruit and dirt percentages are given as a part of total weight
+        $percentage_ripeness = $array['jjg_grading'] > 0 ? ($ripeness / $array['jjg_grading']) * 100 : 0;
+        $percentage_unripe = $array['jjg_grading'] > 0 ? ($unripe / $array['jjg_grading']) * 100 : 0;
+        $percentage_brondol_0 = $array['jjg_grading'] > 0 ? ($array['brondol_0'] / $array['jjg_grading']) * 100 : 0;
+        $percentage_brondol_less = $array['jjg_grading'] > 0 ? ($array['brondol_less'] / $array['jjg_grading']) * 100 : 0;
+        $percentage_overripe = $array['jjg_grading'] > 0 ? ($array['overripe'] / $array['jjg_grading']) * 100 : 0;
+        $percentage_empty_bunch = $array['jjg_grading'] > 0 ? ($array['empty'] / $array['jjg_grading']) * 100 : 0;
+        $percentage_rotten_bunch = $array['jjg_grading'] > 0 ? ($array['rotten'] / $array['jjg_grading']) * 100 : 0;
+        $percentage_abnormal = $array['jjg_grading'] > 0 ? ($abnormal / $array['jjg_grading']) * 100 : 0;
+        $percentage_tangkai_panjang = $array['jjg_grading'] > 0 ? ($array['tangkai_panjang'] / $array['jjg_grading']) * 100 : 0;
+        $percentage_vcuts = $array['jjg_grading'] > 0 ? ($array['vcuts'] / $array['jjg_grading']) * 100 : 0;
+        $percentage_kelas_a = $array['jjg_grading'] > 0 ? ($array['kelas_a'] / $array['jjg_grading']) * 100 : 0;
+        $percentage_kelas_b = $array['jjg_grading'] > 0 ? ($array['kelas_b'] / $array['jjg_grading']) * 100 : 0;
+        $percentage_kelas_c = $array['jjg_grading'] > 0 ? ($array['kelas_c'] / $array['jjg_grading']) * 100 : 0;
 
         // Calculate selisih janjang and percentage
         $jumlah_selisih_janjang = $array['jjg_grading'] - $array['jjg_spb'];
-        $percentage_selisih_janjang = ($jumlah_selisih_janjang / $array['jjg_spb']) * 100;
+        $percentage_selisih_janjang = $array['jjg_spb'] > 0 ? ($jumlah_selisih_janjang / $array['jjg_spb']) * 100 : 0;
 
         return [
             'estate' => $array['estate'],
@@ -13780,7 +13795,7 @@ if (!function_exists('formula_grading')) {
             'jjg_spb' => $array['jjg_spb'],
             'datetime' => 'null',
             'tonase' => $array['tonase'],
-            'bjr' => round(($array['jjg_spb'] / $array['tonase']) * 100, 2),
+            'bjr' => $array['tonase'] > 0 ? round(($array['jjg_spb'] / $array['tonase']) * 100, 2) : 0,
             'jjg_selisih' => $jumlah_selisih_janjang,
             'persentase_selisih' => round($percentage_selisih_janjang),
             'Ripeness' => $ripeness,

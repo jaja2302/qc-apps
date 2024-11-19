@@ -136,42 +136,45 @@
                 @else
                 @foreach ($resultdata as $key => $items)
                 @foreach ($items as $key2 => $items2)
+                @php
+                $total = $key2 == 'Total' ? 'background-color: #c8e4f4;' : '';
+                @endphp
                 <tr>
-                    <td>{{$key}}</td>
-                    <td>{{$key2}}</td>
-                    <td>{{$items2['no_plat']}}</td>
-                    <td>{{$items2['unit']}}</td>
-                    <td>{{$items2['tonase']}}</td>
-                    <td>{{$items2['jumlah_janjang_spb']}}</td>
-                    <td>{{$items2['jumlah_janjang_grading']}}</td>
-                    <td>{{$items2['tonase']}}</td>
-                    <td>{{round($items2['bjr'],2)}}</td>
-                    <td>{{$items2['ripeness']}}</td>
-                    <td>{{round($items2['percentage_ripeness'],2)}}</td>
-                    <td>{{$items2['unripe']}}</td>
-                    <td>{{round($items2['percentage_unripe'],2)}}</td>
-                    <td>{{$items2['overripe']}}</td>
-                    <td>{{round($items2['percentage_overripe'],2)}}</td>
-                    <td>{{$items2['empty_bunch']}}</td>
-                    <td>{{round($items2['percentage_empty_bunch'],2)}}</td>
-                    <td>{{$items2['rotten_bunch']}}</td>
-                    <td>{{round($items2['percentage_rotten_bunch'],2)}}</td>
-                    <td>{{$items2['abnormal']}}</td>
-                    <td>{{round($items2['percentage_abnormal'],2)}}</td>
-                    <td>{{$items2['longstalk']}}</td>
-                    <td>{{round($items2['percentage_longstalk'],2)}}</td>
-                    <td>{{$items2['vcut']}}</td>
-                    <td>{{round($items2['percentage_vcut'],2)}}</td>
-                    <td>{{$items2['dirt_kg']}}</td>
-                    <td>{{round($items2['percentage_dirt'],2)}}</td>
-                    <td>{{$items2['loose_fruit_kg']}}</td>
-                    <td>{{round($items2['percentage_loose_fruit'],2)}}</td>
-                    <td>{{$items2['kelas_c']}}</td>
-                    <td>{{round($items2['percentage_kelas_c'],2)}}</td>
-                    <td>{{$items2['kelas_b']}}</td>
-                    <td>{{round($items2['percentage_kelas_b'],2)}}</td>
-                    <td>{{$items2['kelas_a']}}</td>
-                    <td>{{round($items2['percentage_kelas_a'],2)}}</td>
+                    <td style="{{$total}}">{{$key}}</td>
+                    <td style="{{$total}}">{{$key2}}</td>
+                    <td style="{{$total}}">{{$items2['no_plat']}}</td>
+                    <td style="{{$total}}">{{$items2['unit']}}</td>
+                    <td style="{{$total}}">{{$items2['tonase']}}</td>
+                    <td style="{{$total}}">{{$items2['jumlah_janjang_spb']}}</td>
+                    <td style="{{$total}}">{{$items2['jumlah_janjang_grading']}}</td>
+                    <td style="{{$total}}">{{$items2['tonase']}}</td>
+                    <td style="{{$total}}">{{round($items2['bjr'],2)}}</td>
+                    <td style="{{$total}}">{{$items2['ripeness']}}</td>
+                    <td style="{{$total}}">{{round($items2['percentage_ripeness'],2)}}</td>
+                    <td style="{{$total}}">{{$items2['unripe']}}</td>
+                    <td style="{{$total}}">{{round($items2['percentage_unripe'],2)}}</td>
+                    <td style="{{$total}}">{{$items2['overripe']}}</td>
+                    <td style="{{$total}}">{{round($items2['percentage_overripe'],2)}}</td>
+                    <td style="{{$total}}">{{$items2['empty_bunch']}}</td>
+                    <td style="{{$total}}">{{round($items2['percentage_empty_bunch'],2)}}</td>
+                    <td style="{{$total}}">{{$items2['rotten_bunch']}}</td>
+                    <td style="{{$total}}">{{round($items2['percentage_rotten_bunch'],2)}}</td>
+                    <td style="{{$total}}">{{$items2['abnormal']}}</td>
+                    <td style="{{$total}}">{{round($items2['percentage_abnormal'],2)}}</td>
+                    <td style="{{$total}}">{{$items2['longstalk']}}</td>
+                    <td style="{{$total}}">{{round($items2['percentage_longstalk'],2)}}</td>
+                    <td style="{{$total}}">{{$items2['vcut']}}</td>
+                    <td style="{{$total}}">{{round($items2['percentage_vcut'],2)}}</td>
+                    <td style="{{$total}}">{{$items2['dirt_kg']}}</td>
+                    <td style="{{$total}}">{{round($items2['percentage_dirt'],2)}}</td>
+                    <td style="{{$total}}">{{$items2['loose_fruit_kg']}}</td>
+                    <td style="{{$total}}">{{round($items2['percentage_loose_fruit'],2)}}</td>
+                    <td style="{{$total}}">{{$items2['kelas_c']}}</td>
+                    <td style="{{$total}}">{{round($items2['percentage_kelas_c'],2)}}</td>
+                    <td style="{{$total}}">{{$items2['kelas_b']}}</td>
+                    <td style="{{$total}}">{{round($items2['percentage_kelas_b'],2)}}</td>
+                    <td style="{{$total}}">{{$items2['kelas_a']}}</td>
+                    <td style="{{$total}}">{{round($items2['percentage_kelas_a'],2)}}</td>
                     @if(can_edit())
                     <td>
                         <button type="button" class="btn btn-warning btn-sm" wire:click="formdata('{{ $key }}', '{{ $key2 }}')">
@@ -183,6 +186,42 @@
                 </tr>
                 @endforeach
                 @endforeach
+
+                <tr>
+                    <td style="background-color: aquamarine;color:black" colspan="4">{{$this->inputbulan}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['tonase']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['jumlah_janjang_spb']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['jumlah_janjang_grading']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['tonase']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{round($resultdate['bjr'],2)}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['ripeness']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_ripeness'],2)}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['unripe']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_unripe'],2)}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['overripe']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_overripe'],2)}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['empty_bunch']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_empty_bunch'],2)}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['rotten_bunch']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_rotten_bunch'],2)}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['abnormal']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_abnormal'],2)}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['longstalk']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_longstalk'],2)}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['vcut']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_vcut'],2)}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['dirt_kg']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_dirt'],2)}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['loose_fruit_kg']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_loose_fruit'],2)}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['kelas_c']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_kelas_c'],2)}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['kelas_b']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_kelas_b'],2)}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['kelas_a']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_kelas_a'],2)}}</td>
+                </tr>
+
                 @endif
             </tbody>
         </table>

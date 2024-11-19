@@ -20,6 +20,7 @@ class Gradingmill extends Component
     public $mill_id;
     public $mills = [];
     public $resultdata = [];
+    public $resultdate = [];
     public $listmill = [];
     public $modal_data = [];
     public $itemId;
@@ -65,6 +66,7 @@ class Gradingmill extends Component
         $result = rekap_estate_mill_perbulan_perhari($bulan, $reg, $mill);
         // dd($result);
         $this->resultdata = $result['result'];
+        $this->resultdate = $result['final'];
         // dd($this)
         // dd($result);
     }
