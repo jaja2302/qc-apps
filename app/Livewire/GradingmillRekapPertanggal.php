@@ -59,13 +59,16 @@ class GradingmillRekapPertanggal extends Component
     public function exportData()
     {
         session()->flash('message', 'Mohon menunggu excel sedang di proses...!');
+        $reg = $this->inputregional;
+        $bulan = $this->inputbulan;
+        $data = getdatamildetailpertanggal($bulan, $reg);
 
-        $data = $this->resultdata;
+
         if (empty($data)) {
             session()->flash('message', 'Data Kosong...!');
             return;
         }
-        // dd($data);
+
         session()->flash('message', 'Excel Berhasil di proses...!');
         return Excel::download(new Gradingpertanggal($data), 'Excel Grading Pertanggal-' . $this->inputbulan . '-' . 'Bulan-' . $this->inputregional . '.xlsx');
     }
