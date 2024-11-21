@@ -11837,11 +11837,17 @@ if (!function_exists('getdatamill')) {
                 ->where('estate.emp', '!=', 1)
                 ->where('wil.regional', $get_regional)
                 ->where('grading_mill.datetime', 'like', '%' . $get_bulan . '%')
+                ->orderBy('grading_mill.datetime', 'asc')
                 ->orderBy('estate.est', 'asc')
                 ->orderBy('grading_mill.afdeling', 'asc')
                 ->get();
+            // $data = $data->groupBy(['estate']);
             $data = $data->groupBy(['estate']);
             $data = json_decode($data, true);
+
+            // dd($data);
+            // save_json($data['SCM']);
+            // dd($data['SCM']);
             // dd($data, $get_regional, $get_bulan);
 
             $wil = DB::connection('mysql2')->table('estate')
@@ -11887,6 +11893,7 @@ if (!function_exists('getdatamill')) {
                     }
                 }
             }
+            // dd($data_mill);
             // dd($data, $mil, $data_mill);
             // dd($wil, $data_wil);
             $result = [];
@@ -12224,7 +12231,7 @@ if (!function_exists('getdatamill')) {
                     ];
                 }
             }
-            // dd($result_wil);
+            // dd($result_mill);
             $arr = array();
             $arr['data_regional'] = $result;
             $arr['data_wil'] = $result_wil;
@@ -12321,7 +12328,8 @@ if (!function_exists('getdatamill')) {
                         'jjg_spb' => $value['jjg_spb'],
                         'datetime' => $value['datetime'],
                         'tonase' => $value['tonase'],
-                        'bjr' => ($value['jjg_spb'] / $value['tonase']) * 100,
+                        // 'bjr' => ($value['jjg_spb'] / $value['tonase']) * 100,
+                        'bjr' => $value['tonase'] > 0 ? round(($value['tonase'] / $value['jjg_grading']) * 100, 2) : 0,
                         'jjg_selisih' => $date_arr['jjg_selisih'],
                         'persentase_selisih' => round($date_arr['percentage_selisih_janjang']),
                         'Ripeness' => $date_arr['ripeness'],
@@ -12617,7 +12625,8 @@ if (!function_exists('getdatamildetail')) {
                     'jjg_spb' => $value['jjg_spb'],
                     'datetime' => $value['datetime'],
                     'tonase' => $value['tonase'],
-                    'bjr' => ($value['jjg_spb'] / $value['tonase']) * 100,
+                    // 'bjr' => ($value['jjg_spb'] / $value['tonase']) * 100,
+                    'bjr' => $value['tonase'] > 0 ? round(($value['tonase'] / $value['jjg_grading']) * 100, 2) : 0,
                     'jjg_selisih' => $jumlah_selisih_janjang,
                     'persentase_selisih' => round($percentage_selisih_janjang),
                     'Ripeness' => $ripeness,
@@ -12932,14 +12941,15 @@ if (!function_exists('getdatamildetailpertanggal')) {
                                     $loose_fruit_kg = round(($value['loose_fruit'] / $value['tonase']) * 100, 2);
                                     $dirt_kg = round(($value['dirt'] / $value['tonase']) * 100, 2);
                                     $abnormal = $value['abn_partheno'] + $value['abn_hard'] + $value['abn_sakit'] + $value['abn_kastrasi'];
-                                    $unripe = $value['unripe_tanpa_brondol'] + $value['unripe_kurang_brondol'];
+                                    // dd($value);
+                                    $unripe = intval($value['unripe_tanpa_brondol']) + intval($value['unripe_kurang_brondol']);
                                     $ripeness = $value['jjg_grading'] - ($value['overripe'] + $value['empty'] + $value['rotten'] + $abnormal + $unripe);
 
                                     // Calculate percentages
                                     $percentage_ripeness = ($ripeness / $value['jjg_grading']) * 100;
                                     $percentage_unripe = ($unripe / $value['jjg_grading']) * 100;
-                                    $percentage_brondol_0 = ($value['unripe_tanpa_brondol'] / $value['jjg_grading']) * 100;
-                                    $percentage_brondol_less = ($value['unripe_kurang_brondol'] / $value['jjg_grading']) * 100;
+                                    // $percentage_brondol_0 = ($value['unripe_tanpa_brondol'] / $value['jjg_grading']) * 100;
+                                    // $percentage_brondol_less = ($value['unripe_kurang_brondol'] / $value['jjg_grading']) * 100;
                                     $percentage_overripe = ($value['overripe'] / $value['jjg_grading']) * 100;
                                     $percentage_empty_bunch = ($value['empty'] / $value['jjg_grading']) * 100;
                                     $percentage_rotten_bunch = ($value['rotten'] / $value['jjg_grading']) * 100;
@@ -12952,7 +12962,8 @@ if (!function_exists('getdatamildetailpertanggal')) {
 
                                     $jumlah_selisih_janjang = $value['jjg_grading'] - $value['jjg_spb'];
                                     $percentage_selisih_janjang = ($jumlah_selisih_janjang / $value['jjg_spb']) * 100;
-                                    $bjr = round(($value['jjg_spb'] / $value['tonase']) * 100, 2);
+                                    // $bjr = round(($value['jjg_spb'] / $value['tonase']) * 100, 2);
+                                    $bjr = $value['tonase'] > 0 ? round(($value['tonase'] / $value['jjg_grading']) * 100, 2) : 0;
                                     $jam = date('H:i', strtotime($value['datetime']));
                                     // Regular row
                                     $flattenedData[] = [
@@ -13795,7 +13806,8 @@ if (!function_exists('formula_grading')) {
             'jjg_spb' => $array['jjg_spb'],
             'datetime' => 'null',
             'tonase' => $array['tonase'],
-            'bjr' => $array['tonase'] > 0 ? round(($array['jjg_spb'] / $array['tonase']) * 100, 2) : 0,
+            // 'bjr' => $array['tonase'] > 0 ? round(($array['jjg_spb'] / $array['tonase']) * 100, 2) : 0,
+            'bjr' => $array['jjg_grading'] > 0 ? round(($array['tonase'] / $array['jjg_grading']) * 100, 2) : 0,
             'jjg_selisih' => $jumlah_selisih_janjang,
             'persentase_selisih' => round($percentage_selisih_janjang),
             'Ripeness' => $ripeness,

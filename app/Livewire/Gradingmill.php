@@ -27,6 +27,21 @@ class Gradingmill extends Component
 
     public function mount()
     {
+        // dd('test');
+        // $data = ModelsGradingmill::query()
+        //     ->where('mill', 'SCM')
+        //     ->whereBetween('datetime', ['2024-11-01', '2024-11-19'])
+        //     ->get();
+        // $test = [];
+        // $jjg_grading = 0;
+        // foreach ($data as $key => $value) {
+        //     $jjg_grading += $value->jjg_grading;
+        //     $test = [
+        //         'jjg_grading' => $jjg_grading
+        //     ];
+        // }
+
+        // dd($data, $test);
         // Load regions except id 5
         $this->listmill = Listmill::all()->pluck('mill', 'mill');
         // dd($this->listmill);
@@ -109,12 +124,13 @@ class Gradingmill extends Component
 
     public function editgradingmill($id)
     {
+
         // dd($id, $arrayKey);
         if (can_edit()) {
             $data = $this->modal_data[$id];
+            $data['mill'] = str_replace(' ', '', $data['mill']);
             // dd($data);
             $gradingMill = ModelsGradingmill::find($data['id']);
-            // dd($data);
             // Check if the record exists
             if (!$gradingMill) {
                 session()->flash('error', 'Grading mill record not found.');
