@@ -12664,6 +12664,7 @@ if (!function_exists('getdatamildetail')) {
                     'persentase_kelas_b' => round($percentage_kelas_b, 2),
                     'kelas_c' => $kelass_c,
                     'persentase_kelas_c' => round($percentage_kelas_c, 2),
+                    'status_bot' => $value['status_bot'],
                 ];
             }
         }

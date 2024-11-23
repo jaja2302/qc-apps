@@ -1,4 +1,28 @@
 <div>
+    <!-- Add Flash Messages Section -->
+    <div class="mx-3">
+        @if (session()->has('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Gagal!</strong> {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+
+        @if (session()->has('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Berhasil!</strong> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+
+        @if (session()->has('message'))
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            {{ session('message') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+    </div>
+
     <div class="d-flex justify-content-end mr-3 mt-4">
         <div class="margin g-2">
             <div class="row align-items-center">
@@ -165,7 +189,7 @@
                     <table class="table table-responsive table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="3" colspan="2">Action</th>
+                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="3" colspan="3">Action</th>
                                 <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Estate</th>
                                 <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Afdeling</th>
                                 <th style="background-color: #f0ecec;" colspan="6">UNIT SORTASI</th>
@@ -252,6 +276,41 @@
                                         @endif
                                     </button>
                                 </td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            @php
+                                            $status_bot = $data['status_bot'];
+                                            if ($status_bot == 0) {
+                                            $status_bot = 'Pending';
+                                            $bgcol = 'bg-warning';
+                                            } else if ($status_bot == 1) {
+                                            $status_bot = 'Sent';
+                                            $bgcol = 'bg-success';
+                                            }
+                                            @endphp
+                                            <td class="{{ $bgcol }}">{{ $status_bot }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary"
+                                                    wire:click="confirmResend('{{ $data['id'] }}')"
+                                                    wire:loading.attr="disabled"
+                                                    wire:target="confirmResend('{{ $data['id'] }}')">
+                                                    @if(isset($isresendingWhatsapp[$data['id']]) && $isresendingWhatsapp[$data['id']])
+                                                    <span>
+                                                        <i class="fas fa-spinner fa-spin"></i> Resending...
+                                                    </span>
+                                                    @else
+                                                    <span>
+                                                        <i class="fas fa-paper-plane"></i> Resend
+                                                    </span>
+                                                    @endif
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
                                 <td>{{$data['estate']}}</td>
                                 <td>{{$data['afdeling']}}</td>
                                 <td>{{$data['no_plat']}}</td>
@@ -317,6 +376,28 @@
                 if (myModal) {
                     myModal.hide();
                 }
+            });
+
+            Livewire.on('confirm-resend', () => {
+                Swal.fire({
+                    title: 'Peringatan!',
+                    html: `
+                        <p>Mohon perhatikan:</p>
+                        <ul style="text-align: left;">
+                            <li>Anda harus menunggu 10 menit sebelum mengirim ulang untuk menghindari pesan duplikat</li>
+                            <li>Jika bot masih belum terkirim setelah 10 menit, silakan hubungi tim DA Support di grup WhatsApp</li>
+                        </ul>
+                        <p>Apakah Anda ingin melanjutkan pengiriman ulang?</p>
+                    `,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, kirim ulang',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Livewire.dispatch('perform-resend');
+                    }
+                });
             });
         });
     </script>

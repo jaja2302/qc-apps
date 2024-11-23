@@ -28,6 +28,9 @@ class GradingmillRekapAfdeling extends Component
     public $selectedAfdeling;
     public $isDownloading = false;
     public $isDownloadingImage = [];
+    public $selectedId;
+    public $isresendingWhatsapp = [];
+    public $lastResendTime = [];
 
     protected $listeners = ['openModal'];
 
@@ -106,6 +109,64 @@ class GradingmillRekapAfdeling extends Component
         ]);
     }
 
+    // resending bot whatsapp
+    public function resendWhatsapp($id)
+    {
+        $this->isresendingWhatsapp[$id] = true;
+        $data = ModelsGradingmill::find($id);
+
+        if (!$data) {
+            $this->isresendingWhatsapp[$id] = false;
+            session()->flash('error', 'Data tidak ditemukan');
+            return;
+        }
+
+        // Check if last resend time exists and if 10 minutes have passed
+        $lastResend = $data->last_resend_time;
+        $now = now();
+
+        if ($lastResend && $now->diffInMinutes($lastResend) < 10) {
+            $minutesLeft = 10 - $now->diffInMinutes($lastResend);
+            $this->isresendingWhatsapp[$id] = false;
+            session()->flash('error', "Mohon tunggu {$minutesLeft} menit sebelum mengirim ulang.");
+            return;
+        }
+
+        try {
+            // Your resending logic here
+            $data->status_bot = 0;
+            $data->last_resend_time = $now;
+            $data->save();
+
+            session()->flash('success', 'Bot WhatsApp berhasil dikirim ulang');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Gagal mengirim ulang bot WhatsApp');
+            \Log::error('WhatsApp resend failed: ' . $e->getMessage());
+        }
+
+        $this->isresendingWhatsapp[$id] = false;
+    }
+
+    public function confirmResend($id)
+    {
+        $this->selectedId = $id;
+        $this->dispatch('confirm-resend');
+    }
+
+    public function performResend()
+    {
+        $this->resendWhatsapp($this->selectedId);
+    }
+
+    protected function getListeners()
+    {
+        return array_merge(parent::getListeners(), [
+            'perform-resend' => 'performResend',
+            'openModal' => 'openModal'
+        ]);
+    }
+
+    // download image
     public function downloadImage($id)
     {
         $this->isDownloadingImage[$id] = true;
@@ -445,7 +506,7 @@ class GradingmillRekapAfdeling extends Component
 
     public function exportData()
     {
-        session()->flash('message', 'Mohon menunggu excel sedang di proses...!');
+        session()->flash('message', 'Mohon menunggu, excel sedang diproses...');
 
         // Validate the input fields
         $this->validate([

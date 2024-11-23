@@ -57,7 +57,7 @@
     <div class="content-wrapper">
         <div class="card table_wrapper">
             <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark ">
-                <h2>Pemeriksaan Emplashment</h2>
+                <h2>Pemeriksaan Emplasemen</h2>
             </div>
 
 
