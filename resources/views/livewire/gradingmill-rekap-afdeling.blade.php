@@ -160,11 +160,12 @@
     </div>
 
     <!-- Add this modal at the bottom of the div -->
-    <div class="modal fade" id="detailModal" tabindex="-1" wire:ignore.self>
-        <div class="modal-dialog modal-xl">
+    <div class="modal fade" id="detailModal" tabindex="-1" wire:ignore.self
+        aria-labelledby="detailModalLabel" role="dialog">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Detail Data Afdeling</h5>
+                    <h5 class="modal-title" id="detailModalLabel">Detail Data Afdeling</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -335,16 +336,17 @@
                                 <td>{{$data['persentase_stalk']}}</td>
                                 <td>{{$data['vcut']}}</td>
                                 <td>{{$data['persentase_vcut']}}</td>
-                                <td>{{$data['loose_fruit']}}</td>
-                                <td>{{$data['persentase_lose_fruit']}}</td>
+
                                 <td>{{$data['Dirt']}}</td>
                                 <td>{{$data['persentase']}}</td>
-                                <td>{{$data['kelas_a']}}</td>
-                                <td>{{$data['persentase_kelas_a']}}</td>
-                                <td>{{$data['kelas_b']}}</td>
-                                <td>{{$data['persentase_kelas_b']}}</td>
+                                <td>{{$data['loose_fruit']}}</td>
+                                <td>{{$data['persentase_lose_fruit']}}</td>
                                 <td>{{$data['kelas_c']}}</td>
                                 <td>{{$data['persentase_kelas_c']}}</td>
+                                <td>{{$data['kelas_b']}}</td>
+                                <td>{{$data['persentase_kelas_b']}}</td>
+                                <td>{{$data['kelas_a']}}</td>
+                                <td>{{$data['persentase_kelas_a']}}</td>
                             </tr>
                             @empty
                             <tr>
@@ -360,24 +362,59 @@
     </div>
     <script type="module">
         document.addEventListener('livewire:initialized', () => {
+            let currentModal = null;
+            let lastFocusedElement = null;
+
+            // Show modal with proper focus management
             Livewire.on('show-modal', () => {
                 const modalElement = document.getElementById('detailModal');
-                const myModal = new bootstrap.Modal(modalElement);
+                lastFocusedElement = document.activeElement;
 
-                // Show modal programmatically
-                myModal.show();
-            });
+                currentModal = new bootstrap.Modal(modalElement);
+                currentModal.show();
 
-            Livewire.on('closeModal', (data) => {
-                const modalElement = document.getElementById('detailModal');
-                const myModal = bootstrap.Modal.getInstance(modalElement);
-
-                // Hide modal programmatically
-                if (myModal) {
-                    myModal.hide();
+                // Set focus to first focusable element in modal
+                const firstFocusable = modalElement.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                if (firstFocusable) {
+                    firstFocusable.focus();
                 }
             });
 
+            // Close modal with focus restoration
+            Livewire.on('closeModal', () => {
+                if (currentModal) {
+                    currentModal.hide();
+                    if (lastFocusedElement) {
+                        lastFocusedElement.focus();
+                    }
+                    currentModal = null;
+                    lastFocusedElement = null;
+                }
+            });
+
+            // Handle modal close via escape key
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && currentModal) {
+                    currentModal.hide();
+                    if (lastFocusedElement) {
+                        lastFocusedElement.focus();
+                    }
+                    currentModal = null;
+                    lastFocusedElement = null;
+                }
+            });
+
+            // Handle session flash messages
+            Livewire.on('flashMessage', (message) => {
+                if (message.type === 'error') {
+                    if (currentModal) {
+                        currentModal.hide();
+                        currentModal = null;
+                    }
+                }
+            });
+
+            // Handle resend confirmation
             Livewire.on('confirm-resend', () => {
                 Swal.fire({
                     title: 'Peringatan!',
@@ -398,6 +435,26 @@
                         Livewire.dispatch('perform-resend');
                     }
                 });
+            });
+
+            // Handle modal close button
+            document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(button => {
+                button.addEventListener('click', () => {
+                    if (currentModal) {
+                        currentModal.hide();
+                        currentModal = null;
+                    }
+                });
+            });
+
+            // Handle modal backdrop click
+            document.getElementById('detailModal').addEventListener('click', (e) => {
+                if (e.target.id === 'detailModal') {
+                    if (currentModal) {
+                        currentModal.hide();
+                        currentModal = null;
+                    }
+                }
             });
         });
     </script>
