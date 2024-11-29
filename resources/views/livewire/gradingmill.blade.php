@@ -239,7 +239,7 @@
                     @foreach ($modal_data as $key => $items)
                     <form wire:submit.prevent="editgradingmill('{{ $key }}')" class="mb-4 p-4 border rounded shadow-sm">
                         <h5 class="mb-3">Edit Grading Mill</h5>
-
+                        <p>Catatan Ketika anda mengedit data maka otomatis bot akan mengirim kembali ke grup whatsapp dalam waktu kurang lebih 10 menit</p>
                         <!-- Row for ID and Estate -->
                         <div class="row mb-3">
                             <div class="col-md">
@@ -272,10 +272,6 @@
                         </div>
                         <!-- Row for Tonase and Petugas -->
                         <div class="row mb-3">
-                            <div class="col-md">
-                                <label for="status_bot" class="form-label">Status Bot WA (1 = terkirim , 0 = tidak terkirim)</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.status_bot">
-                            </div>
                             <div class="col-md">
                                 <label for="petugas" class="form-label">Petugas</label>
                                 <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.petugas" readonly>

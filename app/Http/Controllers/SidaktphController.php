@@ -13,6 +13,7 @@ use Illuminate\Support\Arr;
 use Nette\Utils\DateTime;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ExportSidaktph;
+use App\Models\Regional;
 
 require_once(app_path('helpers.php'));
 
@@ -209,8 +210,6 @@ class SidaktphController extends Controller
             'check_data' => $getdata,
         ]);
     }
-
-
 
     public function changeDataTph(Request $request)
     {
@@ -4875,15 +4874,26 @@ class SidaktphController extends Controller
         // dd($tanggalDateTime);
         $newparamsdateDateTime = new DateTime($newparamsdate);
         // dd($newparamsdateDateTime);
-
+        // Start of Selection
+        $collect_estate = Regional::where('id', $regional)
+            ->with('wilayah.estate')
+            ->get()
+            ->flatMap(function ($regional) {
+                return $regional->wilayah->flatMap(function ($wilayah) {
+                    return $wilayah->estate->pluck('est');
+                });
+            });
+        // dd($collect_estate);
         if ($tanggalDateTime >= $newparamsdateDateTime) {
             $dataparams = 'new';
         } else {
             $dataparams = 'old';
         }
 
+
         $ancakFA = DB::connection('mysql2')
             ->table('sidak_tph')
+            ->whereIn('sidak_tph.est', $collect_estate)
             ->select(
                 "sidak_tph.*",
                 DB::raw('DATE_FORMAT(sidak_tph.datetime, "%Y-%m-%d") as tanggal'),
@@ -6408,6 +6418,8 @@ class SidaktphController extends Controller
             $week5[] = $weekestate;
         }
 
+        $rekap_perbulan = getRekapPerbulanSidaktph($date, $collect_estate, $newparamsdate);
+        // dd($rekap_perbulan, $week1);
 
         $dataweek = [
             'week1' => $week1,
@@ -6415,6 +6427,7 @@ class SidaktphController extends Controller
             'week3' => $week3,
             'week4' => $week4,
             'week5' => $week5,
+            'rekap' => $rekap_perbulan,
         ];
 
 

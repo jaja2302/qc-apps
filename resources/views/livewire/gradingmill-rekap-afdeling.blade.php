@@ -190,7 +190,8 @@
                     <table class="table table-responsive table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="3" colspan="3">Action</th>
+                                <th style="background-color: #f0ecec;" class="align-middle" rowspan="3" colspan="2">Action</th>
+
                                 <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Estate</th>
                                 <th style="background-color: #f0ecec;" class="align-middle" rowspan="3">Afdeling</th>
                                 <th style="background-color: #f0ecec;" colspan="6">UNIT SORTASI</th>
@@ -277,7 +278,8 @@
                                         @endif
                                     </button>
                                 </td>
-                                <td>
+                                {{--
+                                    <td>
                                     <table>
                                         <tr>
                                             @php
@@ -291,69 +293,72 @@
                                             }
                                             @endphp
                                             <td class="{{ $bgcol }}">{{ $status_bot }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <button class="btn btn-sm btn-primary"
-                                                    wire:click="confirmResend('{{ $data['id'] }}')"
-                                                    wire:loading.attr="disabled"
-                                                    wire:target="confirmResend('{{ $data['id'] }}')">
-                                                    @if(isset($isresendingWhatsapp[$data['id']]) && $isresendingWhatsapp[$data['id']])
-                                                    <span>
-                                                        <i class="fas fa-spinner fa-spin"></i> Resending...
-                                                    </span>
-                                                    @else
-                                                    <span>
-                                                        <i class="fas fa-paper-plane"></i> Resend
-                                                    </span>
-                                                    @endif
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td>{{$data['estate']}}</td>
-                                <td>{{$data['afdeling']}}</td>
-                                <td>{{$data['no_plat']}}</td>
-                                <td>{{$data['datetime']}}</td>
-                                <td>{{$data['jjg_spb']}}</td>
-                                <td>{{$data['jjg_grading']}}</td>
-                                <td>{{$data['tonase']}}</td>
-                                <td>{{round($data['bjr'],2)}}</td>
-                                <td>{{$data['Ripeness']}}</td>
-                                <td>{{$data['percentase_ripenes']}}</td>
-                                <td>{{$data['Unripe']}}</td>
-                                <td>{{$data['persenstase_unripe']}}</td>
-                                <td>{{$data['Overripe']}}</td>
-                                <td>{{$data['persentase_overripe']}}</td>
-                                <td>{{$data['empty_bunch']}}</td>
-                                <td>{{$data['persentase_empty_bunch']}}</td>
-                                <td>{{$data['rotten_bunch']}}</td>
-                                <td>{{$data['persentase_rotten_bunce']}}</td>
-                                <td>{{$data['Abnormal']}}</td>
-                                <td>{{$data['persentase_abnormal']}}</td>
-                                <td>{{$data['stalk']}}</td>
-                                <td>{{$data['persentase_stalk']}}</td>
-                                <td>{{$data['vcut']}}</td>
-                                <td>{{$data['persentase_vcut']}}</td>
-
-                                <td>{{$data['Dirt']}}</td>
-                                <td>{{$data['persentase']}}</td>
-                                <td>{{$data['loose_fruit']}}</td>
-                                <td>{{$data['persentase_lose_fruit']}}</td>
-                                <td>{{$data['kelas_c']}}</td>
-                                <td>{{$data['persentase_kelas_c']}}</td>
-                                <td>{{$data['kelas_b']}}</td>
-                                <td>{{$data['persentase_kelas_b']}}</td>
-                                <td>{{$data['kelas_a']}}</td>
-                                <td>{{$data['persentase_kelas_a']}}</td>
                             </tr>
-                            @empty
                             <tr>
-                                <td colspan="35" class="text-center">No data available for selected date</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary"
+                                        wire:click="confirmResend('{{ $data['id'] }}')"
+                                        wire:loading.attr="disabled"
+                                        wire:target="confirmResend('{{ $data['id'] }}')">
+                                        @if(isset($isresendingWhatsapp[$data['id']]) && $isresendingWhatsapp[$data['id']])
+                                        <span>
+                                            <i class="fas fa-spinner fa-spin"></i> Resending...
+                                        </span>
+                                        @else
+                                        <span>
+                                            <i class="fas fa-paper-plane"></i> Resend
+                                        </span>
+                                        @endif
+                                    </button>
+                                </td>
                             </tr>
-                            @endforelse
-                        </tbody>
+                    </table>
+                    </td>
+
+                    --}}
+
+                    <td>{{$data['estate']}}</td>
+                    <td>{{$data['afdeling']}}</td>
+                    <td>{{$data['no_plat']}}</td>
+                    <td>{{$data['datetime']}}</td>
+                    <td>{{$data['jjg_spb']}}</td>
+                    <td>{{$data['jjg_grading']}}</td>
+                    <td>{{$data['tonase']}}</td>
+                    <td>{{round($data['bjr'],2)}}</td>
+                    <td>{{$data['Ripeness']}}</td>
+                    <td>{{$data['percentase_ripenes']}}</td>
+                    <td>{{$data['Unripe']}}</td>
+                    <td>{{$data['persenstase_unripe']}}</td>
+                    <td>{{$data['Overripe']}}</td>
+                    <td>{{$data['persentase_overripe']}}</td>
+                    <td>{{$data['empty_bunch']}}</td>
+                    <td>{{$data['persentase_empty_bunch']}}</td>
+                    <td>{{$data['rotten_bunch']}}</td>
+                    <td>{{$data['persentase_rotten_bunce']}}</td>
+                    <td>{{$data['Abnormal']}}</td>
+                    <td>{{$data['persentase_abnormal']}}</td>
+                    <td>{{$data['stalk']}}</td>
+                    <td>{{$data['persentase_stalk']}}</td>
+                    <td>{{$data['vcut']}}</td>
+                    <td>{{$data['persentase_vcut']}}</td>
+
+                    <td>{{$data['Dirt']}}</td>
+                    <td>{{$data['persentase']}}</td>
+                    <td>{{$data['loose_fruit']}}</td>
+                    <td>{{$data['persentase_lose_fruit']}}</td>
+                    <td>{{$data['kelas_c']}}</td>
+                    <td>{{$data['persentase_kelas_c']}}</td>
+                    <td>{{$data['kelas_b']}}</td>
+                    <td>{{$data['persentase_kelas_b']}}</td>
+                    <td>{{$data['kelas_a']}}</td>
+                    <td>{{$data['persentase_kelas_a']}}</td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="35" class="text-center">No data available for selected date</td>
+                    </tr>
+                    @endforelse
+                    </tbody>
                     </table>
 
                 </div>

@@ -142,6 +142,7 @@ class Gradingmill extends Component
 
                 $data['datetime'] = Carbon::parse($data['datetime'])->format('Y-m-d H:i:s');
                 $data['update_by'] = auth()->user()->user_id;
+                $data['status_bot'] = 0;
                 $data['update_date'] = now('Asia/Jakarta')->format('Y-m-d H:i:s');
 
                 // Update the record with data from modal_data

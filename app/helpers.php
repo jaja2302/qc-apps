@@ -13853,3 +13853,226 @@ if (!function_exists('save_json')) {
         file_put_contents($filename, $jsonData);;
     }
 }
+if (!function_exists('getRekapPerbulanSidaktph')) {
+    function getRekapPerbulanSidaktph($date, $collect_estate, $newparamsdate)
+    {
+        $date = Carbon::parse($date)->format('Y-m');
+
+        $ancakFA = DB::connection('mysql2')
+            ->table('sidak_tph')
+            ->whereIn('sidak_tph.est', $collect_estate)
+            ->select(
+                "sidak_tph.*",
+                DB::raw('DATE_FORMAT(sidak_tph.datetime, "%Y-%m-%d") as tanggal'),
+                DB::raw('DATE_FORMAT(sidak_tph.datetime, "%M") as bulan'),
+                DB::raw("
+    CASE 
+        WHEN status = '' THEN 1
+        WHEN status = '0' THEN 1
+        WHEN LOCATE('>H+', status) > 0 THEN '8'
+        WHEN LOCATE('H+', status) > 0 THEN 
+            CASE 
+                WHEN SUBSTRING_INDEX(SUBSTRING_INDEX(status, 'H+', -1), ' ', 1) > 8 THEN '8'
+                ELSE SUBSTRING_INDEX(SUBSTRING_INDEX(status, 'H+', -1), ' ', 1)
+            END
+        WHEN status REGEXP '^[0-9]+$' AND status > 8 THEN '8'
+        WHEN LENGTH(status) > 1 AND status NOT LIKE '%H+%' AND status NOT LIKE '%>H+%' AND LOCATE(',', status) > 0 THEN SUBSTRING_INDEX(status, ',', 1)
+        ELSE status
+    END AS statuspanen")
+            )
+            ->where('sidak_tph.datetime', 'like', '%' . $date . '%')
+            ->orderBy('est', 'asc')
+            ->orderBy('afd', 'asc')
+            ->get();
+
+        $ancakFA = $ancakFA->groupBy(['est', 'afd', 'statuspanen', 'tanggal']);
+        $ancakFA = json_decode($ancakFA, true);
+
+        // dd($ancakFA, $collect_estate, $date);
+
+        // dd($ancakFA['SPE']);
+        // Start of Selection
+        $default_h_panen = [];
+        for ($i = 1; $i <= 8; $i++) {
+            $default_h_panen[(string)$i] = [
+                "est" => "-",
+                "afd" => "-",
+                "total_score" => "-",
+                "kategori" => "-",
+                "inspek" => "-",
+                "tph" => "-",
+                "jalan" => "-",
+                "bin" => "-",
+                "karung" => "-",
+                "buah" => "-",
+                "restan" => "-",
+                "skor_brd" => "-",
+                "skor_janjang" => "-",
+                "tot_brd" => "-",
+                "tod_jjg" => "-",
+            ];
+        }
+        // dd($default_h_panen);
+
+        $result = [];
+        foreach ($ancakFA as $key => $value) {
+            foreach ($value as $key1 => $value1) {
+                $sum_bt_tph_3 = 0;
+                $sum_bt_jalan_3 = 0;
+                $sum_bt_bin_3 = 0;
+                $sum_jum_karung_3 = 0;
+                $sum_buah_tinggal_3 = 0;
+                $sum_restan_unreported_3 = 0;
+                $tod_brd_sum = 0;
+                $tod_jjg_sum = 0;
+                foreach ($value1 as $key2 => $value2) {
+                    $sum_bt_tph_2 = 0;
+                    $sum_bt_jalan_2 = 0;
+                    $sum_bt_bin_2 = 0;
+                    $sum_jum_karung_2 = 0;
+                    $sum_buah_tinggal_2 = 0;
+                    $sum_restan_unreported_2 = 0;
+                    foreach ($value2 as $key3 => $value3) {
+                        $sum_bt_tph = 0;
+                        $sum_bt_jalan = 0;
+                        $sum_bt_bin = 0;
+                        $sum_jum_karung = 0;
+                        $sum_buah_tinggal = 0;
+                        $sum_restan_unreported = 0;
+                        foreach ($value3 as $key4 => $value4) {
+                            // dd($key3);
+                            $sum_bt_tph += $value4['bt_tph'];
+                            $sum_bt_jalan += $value4['bt_jalan'];
+                            $sum_bt_bin += $value4['bt_bin'];
+                            $sum_jum_karung += $value4['jum_karung'];
+                            $sum_buah_tinggal += $value4['buah_tinggal'];
+                            $sum_restan_unreported += $value4['restan_unreported'];
+                        }
+
+                        // $result[$key][$key1][$key2][$key3] = [
+                        //     'tphx' => $sum_bt_tph,
+                        //     'jalan' => $sum_bt_jalan,
+                        //     'bin' => $sum_bt_bin,
+                        //     'karung' => $sum_jum_karung,
+                        // ];
+                        $sum_bt_tph_2 += $sum_bt_tph;
+                        $sum_bt_jalan_2 += $sum_bt_jalan;
+                        $sum_bt_bin_2 += $sum_bt_bin;
+                        $sum_jum_karung_2 += $sum_jum_karung;
+                        $sum_buah_tinggal_2 += $sum_buah_tinggal;
+                        $sum_restan_unreported_2 += $sum_restan_unreported;
+                    }
+                    $status_panen = $key2;
+
+                    if ($newparamsdate === 'new') {
+                        [$panen_brd, $panen_jjg] = calculatePanennew($status_panen);
+                    } else {
+                        [$panen_brd, $panen_jjg] = calculatePanen($status_panen);
+                    }
+
+
+                    $total_brondolan =  round(($sum_bt_tph_2 + $sum_bt_jalan_2 + $sum_bt_bin_2 + $sum_jum_karung_2) * $panen_brd / 100, 1);
+                    $total_janjang =  round(($sum_buah_tinggal_2 + $sum_restan_unreported_2) * $panen_jjg / 100, 1);
+                    $tod_brd = $sum_bt_tph_2 + $sum_bt_jalan_2 + $sum_bt_bin_2 + $sum_jum_karung_2;
+                    $tod_jjg = $sum_buah_tinggal_2 + $sum_restan_unreported_2;
+                    $result[$key][$key1][$key2] = [
+                        "est" => $key,
+                        "afd" => $key1,
+                        "total_score" => $tod_brd + $tod_jjg,
+                        "kategori" => "-",
+                        "inspek" => "-",
+                        "tph" => $sum_bt_tph_2,
+                        "jalan" => $sum_bt_jalan_2,
+                        "bin" => $sum_bt_bin_2,
+                        "karung" => $sum_jum_karung_2,
+                        "buah" => $sum_buah_tinggal_2,
+                        "restan" => $sum_restan_unreported_2,
+                        "skor_brd" => $total_brondolan,
+                        "skor_janjang" => $total_janjang,
+                        "tot_brd" => $tod_brd,
+                        "tod_jjg" => $tod_jjg,
+                    ];
+
+                    $sum_bt_tph_3 += $sum_bt_tph_2;
+                    $sum_bt_jalan_3 += $sum_bt_jalan_2;
+                    $sum_bt_bin_3 += $sum_bt_bin_2;
+                    $sum_jum_karung_3 += $sum_jum_karung_2;
+                    $sum_buah_tinggal_3 += $sum_buah_tinggal_2;
+                    $sum_restan_unreported_3 += $sum_restan_unreported_2;
+                    $tod_brd_sum += $total_brondolan;
+                    $tod_jjg_sum += $total_janjang;
+                }
+
+                $total_estkors = $tod_brd_sum + $tod_jjg_sum;
+                $checkscore = 100 - ($total_estkors);
+                if ($checkscore < 0) {
+                    $all_score = 0;
+                } else {
+                    $all_score = $checkscore;
+                }
+                $result[$key][$key1]['Totalafd'] = [
+                    "est" => $key,
+                    "afd" => $key1,
+                    "total_score" => $all_score,
+                    "kategori" => "-",
+                    "inspek" => "-",
+                    "tot_brd" => $tod_brd_sum,
+                    "tod_jjg" => $tod_jjg_sum,
+                ];
+            }
+        }
+
+        // dd($result);
+        // // Iterate through estates
+        foreach ($result as $estate => $afdeling_data) {
+            // Iterate through afdelings
+            foreach ($afdeling_data as $afd => $status_data) {
+                // Create a new array with default values
+                $merged_status = $default_h_panen;
+
+                // Merge existing data with defaults
+                foreach ($status_data as $status => $data) {
+                    $merged_status[$status] = $data;
+                }
+
+                // Replace original data with merged data
+                $result[$estate][$afd] = $merged_status;
+            }
+        }
+        $flattened = [];
+        $index = 0;
+
+        // dd($result);
+        foreach ($result as $est => $afdArray) {
+            foreach ($afdArray as $afd => $weekData) {
+                // dd($weekData);
+                $newRow = [
+                    'est' => $est,
+                    'afd' => $afd,
+                    'total_score' => $weekData['Totalafd']['total_score'],
+                    'kategori' => $weekData['Totalafd']['kategori'],
+                    'inspek' => $weekData['Totalafd']['inspek'],
+                ];
+
+                // Loop through weeks 1-8 to add numbered fields
+                for ($week = 1; $week <= 8; $week++) {
+                    $newRow["tph$week"] = $weekData[$week]['tph'];
+                    $newRow["jalan$week"] = $weekData[$week]['jalan'];
+                    $newRow["bin$week"] = $weekData[$week]['bin'];
+                    $newRow["karung$week"] = $weekData[$week]['karung'];
+                    $newRow["buah$week"] = $weekData[$week]['buah'];
+                    $newRow["restan$week"] = $weekData[$week]['restan'];
+                    $newRow["skor_brd$week"] = $weekData[$week]['skor_brd'];
+                    $newRow["skor_janjang$week"] = $weekData[$week]['skor_janjang'];
+                    $newRow["tot_brd$week"] = $weekData[$week]['tot_brd'];
+                    $newRow["tod_jjg$week"] = $weekData[$week]['tod_jjg'];
+                }
+
+                $flattened[$index] = $newRow;
+                $index++;
+            }
+        }
+        // dd($flattened[37]);
+        return $flattened;
+    }
+}
