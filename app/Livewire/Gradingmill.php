@@ -122,44 +122,76 @@ class Gradingmill extends Component
         $this->dispatch('showModal');
     }
 
+    public function rules()
+    {
+        return [
+            'modal_data.*.jjg_spb' => 'required|numeric|min:0',
+            'modal_data.*.jjg_grading' => 'required|numeric|min:0',
+            'modal_data.*.overripe' => 'required|numeric|min:0',
+            'modal_data.*.empty' => 'required|numeric|min:0',
+            'modal_data.*.rotten' => 'required|numeric|min:0',
+            'modal_data.*.abn_partheno' => 'required|numeric|min:0',
+            'modal_data.*.abn_hard' => 'required|numeric|min:0',
+            'modal_data.*.abn_sakit' => 'required|numeric|min:0',
+            'modal_data.*.abn_kastrasi' => 'required|numeric|min:0',
+            'modal_data.*.tangkai_panjang' => 'required|numeric|min:0',
+            'modal_data.*.vcut' => 'required|numeric|min:0',
+            'modal_data.*.dirt' => 'required|numeric|min:0',
+            'modal_data.*.karung' => 'required|numeric|min:0',
+            'modal_data.*.loose_fruit' => 'required|numeric|min:0',
+            'modal_data.*.tonase' => 'required|numeric|min:0',
+            'modal_data.*.kelas_c' => 'required|numeric|min:0',
+            'modal_data.*.kelas_b' => 'required|numeric|min:0',
+            'modal_data.*.kelas_a' => 'required|numeric|min:0',
+            'modal_data.*.unripe_tanpa_brondol' => 'required|numeric|min:0',
+            'modal_data.*.unripe_kurang_brondol' => 'required|numeric|min:0',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'modal_data.*.*.required' => 'Field tidak boleh kosong (minimal 0)',
+            'modal_data.*.*.numeric' => 'Field harus berupa angka',
+            'modal_data.*.*.min' => 'Field minimal bernilai 0',
+        ];
+    }
+
     public function editgradingmill($id)
     {
-
-        // dd($id, $arrayKey);
         if (can_edit()) {
-            $data = $this->modal_data[$id];
-            $data['mill'] = str_replace(' ', '', $data['mill']);
-            // dd($data);
-            $gradingMill = ModelsGradingmill::find($data['id']);
-            // Check if the record exists
-            if (!$gradingMill) {
-                session()->flash('error', 'Grading mill record not found.');
-                return;
-            }
-
             try {
-                // Use the specific array item based on the provided key
+                $this->validate();
+
+                $data = $this->modal_data[$id];
+                $data['mill'] = str_replace(' ', '', $data['mill']);
+
+                $gradingMill = ModelsGradingmill::find($data['id']);
+                if (!$gradingMill) {
+                    $this->addError('modal_error', 'Grading mill record not found.');
+                    return;
+                }
 
                 $data['datetime'] = Carbon::parse($data['datetime'])->format('Y-m-d H:i:s');
                 $data['update_by'] = auth()->user()->user_id;
                 $data['status_bot'] = 0;
                 $data['update_date'] = now('Asia/Jakarta')->format('Y-m-d H:i:s');
 
-                // Update the record with data from modal_data
                 $gradingMill->update($data);
-
-                // Flash a success message
-                session()->flash('message', 'Grading mill record updated successfully.');
-
-                // Close the modal and refresh
                 $this->dispatch('closeModal');
                 $this->dispatch('refreshComponent');
-                return;
+            } catch (\Illuminate\Validation\ValidationException $e) {
+                // Keep modal open and show validation errors
+                $this->dispatch('showModal');
+                throw $e;
             } catch (\Exception $e) {
-                session()->flash('error', 'An error occurred while updating the grading mill: ' . $e->getMessage());
+                $this->addError('modal_error', 'An error occurred while updating the grading mill: ' . $e->getMessage());
+                $this->dispatch('showModal');
             }
+        } else {
+            $this->addError('modal_error', 'You do not have permission to edit this grading mill.');
+            $this->dispatch('showModal');
         }
-        session()->flash('error', 'You do not have permission to edit this grading mill.');
     }
 
     // Delete method: Delete item from the database

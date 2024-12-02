@@ -236,6 +236,25 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <!-- Show modal-specific error message if exists -->
+                    @error('modal_error')
+                    <div class="alert alert-danger">
+                        {{ $message }}
+                    </div>
+                    @enderror
+
+                    <!-- Show validation error summary at top of modal if needed -->
+                    @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <p>Field tidak boleh kosong (minimal 0):</p>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+
                     @foreach ($modal_data as $key => $items)
                     <form wire:submit.prevent="editgradingmill('{{ $key }}')" class="mb-4 p-4 border rounded shadow-sm">
                         <h5 class="mb-3">Edit Grading Mill</h5>
@@ -297,104 +316,184 @@
                         <div class="row mb-3">
                             <div class="col-md">
                                 <label for="jjg_spb" class="form-label">JJG SPB</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.jjg_spb">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.jjg_spb') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.jjg_spb">
+                                @error("modal_data.$key.jjg_spb")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md">
                                 <label for="jjg_grading" class="form-label">JJG Grading</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.jjg_grading">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.jjg_grading') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.jjg_grading">
+                                @error("modal_data.$key.jjg_grading")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md">
                                 <label for="overripe" class="form-label">Overripe</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.overripe">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.overripe') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.overripe">
+                                @error("modal_data.$key.overripe")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md">
                                 <label for="empty" class="form-label">Empty</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.empty">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.empty') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.empty">
+                                @error("modal_data.$key.empty")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md">
                                 <label for="rotten" class="form-label">Rotten</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.rotten">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.rotten') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.rotten">
+                                @error("modal_data.$key.rotten")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md">
                                 <label for="abn_partheno" class="form-label">ABN Partheno</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.abn_partheno">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.abn_partheno') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.abn_partheno">
+                                @error("modal_data.$key.abn_partheno")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md">
                                 <label for="abn_hard" class="form-label">ABN Hard</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.abn_hard">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.abn_hard') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.abn_hard">
+                                @error("modal_data.$key.abn_hard")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md">
                                 <label for="abn_sakit" class="form-label">ABN Sakit</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.abn_sakit">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.abn_sakit') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.abn_sakit">
+                                @error("modal_data.$key.abn_sakit")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md">
                                 <label for="abn_kastrasi" class="form-label">ABN Kastrasi</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.abn_kastrasi">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.abn_kastrasi') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.abn_kastrasi">
+                                @error("modal_data.$key.abn_kastrasi")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md">
                                 <label for="tangkai_panjang" class="form-label">Tangkai Panjang</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.tangkai_panjang">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.tangkai_panjang') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.tangkai_panjang">
+                                @error("modal_data.$key.tangkai_panjang")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md">
                                 <label for="vcut" class="form-label">V Cut</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.vcut">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.vcut') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.vcut">
+                                @error("modal_data.$key.vcut")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="col-md">
                                 <label for="dirt" class="form-label">Dirt</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.dirt">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.dirt') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.dirt">
+                                @error("modal_data.$key.dirt")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                         </div>
                         <div class="row mb-3">
                             <div class="col-md">
                                 <label for="karung" class="form-label">Karung</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.karung">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.karung') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.karung">
+                                @error("modal_data.$key.karung")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md">
                                 <label for="loose_fruit" class="form-label">Loose Fruit</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.loose_fruit">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.loose_fruit') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.loose_fruit">
+                                @error("modal_data.$key.loose_fruit")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md">
                                 <label for="tonase" class="form-label">Tonase</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.tonase">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.tonase') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.tonase">
+                                @error("modal_data.$key.tonase")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md">
                                 <label for="kelas_c" class="form-label">Kelas C</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.kelas_c">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.kelas_c') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.kelas_c">
+                                @error("modal_data.$key.kelas_c")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="col-md">
                                 <label for="kelas_b" class="form-label">Kelas B</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.kelas_b">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.kelas_b') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.kelas_b">
+                                @error("modal_data.$key.kelas_b")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md">
                                 <label for="kelas_a" class="form-label">Kelas A</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.kelas_a">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.kelas_a') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.kelas_a">
+                                @error("modal_data.$key.kelas_a")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="row mb-3">
 
                             <div class="col-md">
                                 <label for="unripe_tanpa_brondol" class="form-label">Unripe Tanpa Brondol</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.unripe_tanpa_brondol">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.unripe_tanpa_brondol') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.unripe_tanpa_brondol">
+                                @error("modal_data.$key.unripe_tanpa_brondol")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="col-md">
                                 <label for="unripe_kurang_brondol" class="form-label">Unripe Kurang Brondol</label>
-                                <input type="number" class="form-control" wire:model="modal_data.{{ $key }}.unripe_kurang_brondol">
+                                <input type="number" class="form-control @error('modal_data.'.$key.'.unripe_kurang_brondol') is-invalid @enderror"
+                                    wire:model="modal_data.{{ $key }}.unripe_kurang_brondol">
+                                @error("modal_data.$key.unripe_kurang_brondol")
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <!-- <div class="row mb-3">
-                            <label for="keterangan" class="form-label">Keterangan</label>
-                            <textarea class="form-control" wire:model="modal_data.{{ $key }}.keterangan"></textarea>
-                        </div> -->
+                                <label for="keterangan" class="form-label">Keterangan</label>
+                                <textarea class="form-control" wire:model="modal_data.{{ $key }}.keterangan"></textarea>
+                            </div> -->
                         @php
 
                         // Fetch the user's full name based on the user_id from the items array
