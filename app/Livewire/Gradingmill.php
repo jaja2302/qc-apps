@@ -27,22 +27,7 @@ class Gradingmill extends Component
 
     public function mount()
     {
-        // dd('test');
-        // $data = ModelsGradingmill::query()
-        //     ->where('mill', 'SCM')
-        //     ->whereBetween('datetime', ['2024-11-01', '2024-11-19'])
-        //     ->get();
-        // $test = [];
-        // $jjg_grading = 0;
-        // foreach ($data as $key => $value) {
-        //     $jjg_grading += $value->jjg_grading;
-        //     $test = [
-        //         'jjg_grading' => $jjg_grading
-        //     ];
-        // }
 
-        // dd($data, $test);
-        // Load regions except id 5
         $this->listmill = Listmill::all()->pluck('mill', 'mill');
         // dd($this->listmill);
         $this->regional_id = Regional::query()->where('id', '!=', 5)->get();
@@ -160,36 +145,42 @@ class Gradingmill extends Component
     public function editgradingmill($id)
     {
         if (can_edit()) {
-            try {
-                $this->validate();
+            $this->validate();
+            $data = $this->modal_data[$id];
+            $check_status_departement = can_edit_based_departement($data['mill']);
 
-                $data = $this->modal_data[$id];
-                $data['mill'] = str_replace(' ', '', $data['mill']);
+            if ($check_status_departement) {
+                try {
+                    $data['mill'] = str_replace(' ', '', $data['mill']);
 
-                $gradingMill = ModelsGradingmill::find($data['id']);
-                if (!$gradingMill) {
-                    $this->addError('modal_error', 'Grading mill record not found.');
-                    return;
+                    $gradingMill = ModelsGradingmill::find($data['id']);
+                    if (!$gradingMill) {
+                        $this->addError('modal_error', 'Data grading mill tidak ditemukan.');
+                        return;
+                    }
+
+                    $data['datetime'] = Carbon::parse($data['datetime'])->format('Y-m-d H:i:s');
+                    $data['update_by'] = auth()->user()->user_id;
+                    $data['status_bot'] = 0;
+                    $data['update_date'] = now('Asia/Jakarta')->format('Y-m-d H:i:s');
+
+                    $gradingMill->update($data);
+                    $this->dispatch('closeModal');
+                    $this->dispatch('refreshComponent');
+                } catch (\Illuminate\Validation\ValidationException $e) {
+                    // Keep modal open and show validation errors
+                    $this->dispatch('showModal');
+                    throw $e;
+                } catch (\Exception $e) {
+                    $this->addError('modal_error', 'Terjadi kesalahan saat mengupdate grading mill: ' . $e->getMessage());
+                    $this->dispatch('showModal');
                 }
-
-                $data['datetime'] = Carbon::parse($data['datetime'])->format('Y-m-d H:i:s');
-                $data['update_by'] = auth()->user()->user_id;
-                $data['status_bot'] = 0;
-                $data['update_date'] = now('Asia/Jakarta')->format('Y-m-d H:i:s');
-
-                $gradingMill->update($data);
-                $this->dispatch('closeModal');
-                $this->dispatch('refreshComponent');
-            } catch (\Illuminate\Validation\ValidationException $e) {
-                // Keep modal open and show validation errors
-                $this->dispatch('showModal');
-                throw $e;
-            } catch (\Exception $e) {
-                $this->addError('modal_error', 'An error occurred while updating the grading mill: ' . $e->getMessage());
+            } else {
+                $this->addError('modal_error', 'Anda tidak memiliki izin untuk mengedit grading mill ini.');
                 $this->dispatch('showModal');
             }
         } else {
-            $this->addError('modal_error', 'You do not have permission to edit this grading mill.');
+            $this->addError('modal_error', 'Anda tidak memiliki izin untuk mengedit grading mill ini.');
             $this->dispatch('showModal');
         }
     }
@@ -199,14 +190,24 @@ class Gradingmill extends Component
     {
         // dd($id);
         if (can_edit()) {
-            ModelsGradingmill::find($id)->delete();
 
-            // Provide feedback to the user
-            session()->flash('message', 'Item deleted successfully!');
-
-            // Refresh the component
-            $this->dispatch('refreshComponent');
+            try {
+                $data =  ModelsGradingmill::find($id);
+                $check_status_departement = can_edit_based_departement($data['mill']);
+                if ($check_status_departement) {
+                    $data->delete();
+                    session()->flash('message', 'Item deleted successfully!');
+                    $this->dispatch('refreshComponent');
+                } else {
+                    $this->addError('modal_error', 'Anda tidak memiliki izin untuk menghapus grading mill ini.');
+                    $this->dispatch('showModal');
+                }
+            } catch (\Exception $e) {
+                $this->addError('modal_error', 'Terjadi kesalahan saat menghapus grading mill: ' . $e->getMessage());
+                $this->dispatch('showModal');
+            }
+        } else {
+            session()->flash('error', 'Anda tidak memiliki izin untuk menghapus grading mill ini.');
         }
-        session()->flash('error', 'You do not have permission to delete this grading mill.');
     }
 }

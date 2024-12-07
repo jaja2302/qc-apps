@@ -19,7 +19,11 @@ class Departement extends Model
 
     public function Departement()
     {
-        return $this->hasMany(Pengguna::class, 'new_departement', 'id');
+        return $this->hasMany(Pengguna::class, 'id_departement', 'id');
+    }
+    public function users()
+    {
+        return $this->belongsToMany(Pengguna::class, 'department_user', 'department_id', 'user_id');
     }
     public $timestamps = false;
 }

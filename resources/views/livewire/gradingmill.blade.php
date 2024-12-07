@@ -246,7 +246,7 @@
                     <!-- Show validation error summary at top of modal if needed -->
                     @if ($errors->any())
                     <div class="alert alert-danger">
-                        <p>Field tidak boleh kosong (minimal 0):</p>
+
                         <ul>
                             @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>

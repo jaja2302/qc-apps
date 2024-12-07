@@ -3,6 +3,7 @@
 
 use App\Models\Asistenqc;
 use App\Models\BlokMatch;
+use App\Models\Departement;
 use App\Models\Gradingmill;
 use App\Models\Listmill;
 use App\Models\mutu_ancak;
@@ -1050,8 +1051,9 @@ if (!function_exists('can_edit')) {
             ->with('Departement', 'Jabatan')
             ->first();
 
-        $allowedPositions = ['6', '7', '15', '5'];
-        $allowedDepartments = ['43'];
+        $allowedPositions = ['6', '7', '15', '5', '45', '47'];
+        $allowedDepartments = GetDepartementFamily(43);
+        // dd($allowedDepartments);
         $allowedOldPositions = ['Askep', 'Manager', 'Asisten', 'Askep/Asisten'];
         $allowedOldDepartments = ['QC', 'Quality Control'];
 
@@ -1142,6 +1144,19 @@ if (!function_exists('can_edit_asisten')) {
         return false;
     }
 }
+
+if (!function_exists('can_edit_based_departement')) {
+    function can_edit_based_departement($mill)
+    {
+        $user_departement = auth()->user()->Departement->pluck('nama')->toArray();
+        // dd($user_departement, $mill);
+        if (in_array($mill, $user_departement)) {
+            return true;
+        }
+        return false;
+    }
+}
+
 
 if (!function_exists('fetchDataByMonthAndGroupInChunks')) {
     function fetchDataByMonthAndGroupInChunks($table, $RegData, $year, $month)
@@ -14074,5 +14089,28 @@ if (!function_exists('getRekapPerbulanSidaktph')) {
         }
         // dd($flattened[37]);
         return $flattened;
+    }
+}
+
+
+if (!function_exists('GetDepartementFamily')) {
+    function GetDepartementFamily($parentId)
+    {
+        $allDepartments = Departement::all();
+
+        // Function to get all child departments of a given parent department
+        $getChildDepartments = function ($parentId, $departments) use (&$getChildDepartments) {
+            $childDepartments = [];
+            foreach ($departments as $department) {
+                if ($department->id_parent == $parentId) {
+                    $childDepartments[] = $department->id;
+                    // Recursively get child departments
+                    $childDepartments = array_merge($childDepartments, $getChildDepartments($department->id, $departments));
+                }
+            }
+            $childDepartments[] = $parentId;
+            return $childDepartments;
+        };
+        return $getChildDepartments($parentId, $allDepartments);
     }
 }
