@@ -1067,14 +1067,14 @@ class inspectController extends Controller
                 $vers = $item['app_version'];
 
                 $newversion = json_decode($vers, true);
-
+                // dd($newversion);
                 if ($newversion == null) {
                     $parts = explode(';', $vers);
 
                     $defaultparts = '{"awal":"GO","akhir":"GO"}';
                     // dd($parts);
                     $version = $parts[3] ?? $defaultparts;
-
+                    // dd($version, 'bb');
                     if (strpos($version, 'awal')) {
                         if (strpos($version, 'awal":"GL') !== false && strpos($version, 'akhir":"GA') !== false) {
                             $item['app_version'] = 'GPS Awal Liar : GPS Akhir Akurat';
@@ -1108,18 +1108,24 @@ class inspectController extends Controller
                         // dd('else');
                     }
                 } else {
-                    $awal = $newversion['awal'];
-                    $akhir = $newversion['akhir'];
+                    // dd($newversion);
+                    // dd($newversion, 'aa');
+                    $awal = $newversion['awal'] ?? 'GO';
+                    $akhir = $newversion['akhir'] ?? 'GO';
                     if ($awal == 'GA') {
                         $awal = 'GPS Awal Akurat';
                     } elseif ($awal == 'GL' && $akhir == 'GL') {
                         $awal = 'GPS Awal Liar';
+                    } else {
+                        $awal = 'GPS Awal Uknown';
                     }
 
                     if ($akhir == 'GA') {
                         $akhir = 'GPS Akhir Akurat';
                     } elseif ($akhir == 'GL') {
                         $akhir = 'GPS Akhir Liar';
+                    } else {
+                        $akhir = 'GPS Akhir Uknown';
                     }
                     $item['app_version'] = $awal . ' : ' . $akhir;
                     // dd($awal, $akhir);

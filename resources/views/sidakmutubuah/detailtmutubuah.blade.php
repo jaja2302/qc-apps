@@ -545,8 +545,8 @@
                                         <th class="sticky" style="background-color: white;">No TPH</th>
                                         <th class="sticky" style="background-color: white;">Ancak Pemanen</th>
                                         <th class="sticky" style="background-color: white;">Jumlah Janjang</th>
-                                        <th class="sticky" style="background-color: white;">Buah Mentah</th>
-                                        <th class="sticky" style="background-color: white;">Buah Masak</th>
+                                        <th class="sticky" style="background-color: white;">Mentah Tidak Brondol</th>
+                                        <th class="sticky" style="background-color: white;">Mentah Kurang Brondol</th>
                                         <th class="sticky" style="background-color: white;">Buah Lewat Masak</th>
                                         <th class="sticky" style="background-color: white;">Buah Kosong</th>
                                         <th class="sticky" style="background-color: white;">Buah Abnormal</th>
@@ -596,8 +596,8 @@
                         <tr>
                             <th rowspan="3" style="background-color: #ffc404; color: white;" class="text-center">Total
                                 Janjang Sample</th>
-                            <th colspan="7" style="background-color: #ffc404; color: white;" class="text-center">Mentah</th>
-                            <th rowspan="2" colspan="3" style="background-color: #ffc404; color: white;" class="text-center">Matang</th>
+                            <th colspan="7" style="background-color: #ffc404; color: white;" class="text-center">Mentah Tidak Brondol</th>
+                            <th rowspan="2" colspan="3" style="background-color: #ffc404; color: white;" class="text-center">Mentah Kurang Brondol</th>
                             <th rowspan="2" colspan="3" style="background-color: #ffc404; color: white;" class="text-center">Lewat Matang (O)</th>
                             <th rowspan="2" colspan="3" style="background-color: #ffc404; color: white;" class="text-center">Janjang Kosong (E)</th>
                             <th rowspan="2" colspan="3" style="background-color: #ffc404; color: white;" class="text-center">Tidak Standar Vcut</th>

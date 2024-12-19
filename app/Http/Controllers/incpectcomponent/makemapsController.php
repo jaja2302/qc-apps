@@ -422,18 +422,22 @@ class makemapsController extends Controller
                         }
                     }
                 } else {
-                    $awal = $newversion['awal'];
-                    $akhir = $newversion['akhir'];
+                    $awal = $newversion['awal'] ?? 'GO';
+                    $akhir = $newversion['akhir'] ?? 'GO';
                     if ($awal == 'GA') {
                         $awal = 'GPS Awal Akurat';
                     } elseif ($awal == 'GL' && $akhir == 'GL') {
                         $awal = 'GPS Awal Liar';
+                    } else {
+                        $awal = 'GPS Awal Uknown';
                     }
 
                     if ($akhir == 'GA') {
                         $akhir = 'GPS Akhir Akurat';
                     } elseif ($akhir == 'GL') {
                         $akhir = 'GPS Akhir Liar';
+                    } else {
+                        $akhir = 'GPS Akhir Uknown';
                     }
                     $maps = $awal . ' : ' . $akhir;
                 }
