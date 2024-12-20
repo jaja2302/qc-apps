@@ -64,7 +64,7 @@
         <table class="table table-responsive table-striped table-bordered">
             <thead>
                 <tr>
-                    <th colspan="35" style="background-color: #c8e4f4;">BERDASARKAN ESTATE</th>
+                    <th colspan="37" style="background-color: #c8e4f4;">BERDASARKAN ESTATE</th>
                     @if(can_edit())
                     <th style="background-color: #f8c4ac;vertical-align:middle" rowspan="4"> Action</th>
                     @endif
@@ -75,6 +75,7 @@
                     <th style="background-color: #f0ecec;" colspan="7">UNIT SORTASI</th>
                     <th style="background-color: #88e48c;" colspan="20">HASIL GRADING</th>
                     <th style="background-color: #f8c4ac;" colspan="6">KELAS JANJANG</th>
+                    <th style="background-color: #B1A1C6;" colspan="4">BUAH MENTAH</th>
                 </tr>
                 <tr>
                     <th class="no-polisi" style="background-color: #f0ecec;vertical-align: middle;" rowspan="2">NO POLISI</th>
@@ -97,6 +98,8 @@
                     <th style="background-color: #f8c4ac;vertical-align: middle;" colspan="2">KELAS C</th>
                     <th style="background-color: #f8c4ac;vertical-align: middle;" colspan="2">KELAS B</th>
                     <th style="background-color: #f8c4ac;vertical-align: middle;" colspan="2">KELAS A</th>
+                    <th style="background-color: #B1A1C6;vertical-align: middle;" colspan="2">TIDAK BRONDOL</th>
+                    <th style="background-color: #B1A1C6;vertical-align: middle;" colspan="2">KURANG BRONDOL</th>
                 </tr>
                 <tr>
                     <th style="background-color: #88e48c;">JJG</th>
@@ -119,6 +122,10 @@
                     <th style="background-color: #88e48c;">%</th>
                     <th style="background-color: #88e48c;">JJG</th>
                     <th style="background-color: #88e48c;">%</th>
+                    <th style="background-color: #f8c4ac;">JJG</th>
+                    <th style="background-color: #f8c4ac;">%</th>
+                    <th style="background-color: #f8c4ac;">JJG</th>
+                    <th style="background-color: #f8c4ac;">%</th>
                     <th style="background-color: #f8c4ac;">JJG</th>
                     <th style="background-color: #f8c4ac;">%</th>
                     <th style="background-color: #f8c4ac;">JJG</th>
@@ -138,15 +145,21 @@
                 @foreach ($items as $key2 => $items2)
                 @php
                 $total = $key2 == 'Total' ? 'background-color: #c8e4f4;' : '';
+                $units = '-';
+                if($key2 === 'Total'){
+                $units = $items2['unit'];
+                }else{
+                $units = $items2['datetime'];
+                }
                 @endphp
                 <tr>
                     <td style="{{$total}}">{{$key}}</td>
                     <td style="{{$total}}">{{$key2}}</td>
                     <td style="{{$total}}">{{$items2['no_plat']}}</td>
-                    <td style="{{$total}}">{{$items2['unit']}}</td>
+                    <td style="{{$total}}">{{$units}}</td>
                     <td style="{{$total}}">{{$items2['tonase']}}</td>
-                    <td style="{{$total}}">{{$items2['jumlah_janjang_spb']}}</td>
-                    <td style="{{$total}}">{{$items2['jumlah_janjang_grading']}}</td>
+                    <td style="{{$total}}">{{$items2['jjg_grading']}}</td>
+                    <td style="{{$total}}">{{$items2['jjg_spb']}}</td>
                     <td style="{{$total}}">{{$items2['tonase']}}</td>
                     <td style="{{$total}}">{{round($items2['bjr'],2)}}</td>
                     <td style="{{$total}}">{{$items2['ripeness']}}</td>
@@ -165,9 +178,9 @@
                     <td style="{{$total}}">{{round($items2['percentage_longstalk'],2)}}</td>
                     <td style="{{$total}}">{{$items2['vcut']}}</td>
                     <td style="{{$total}}">{{round($items2['percentage_vcut'],2)}}</td>
-                    <td style="{{$total}}">{{$items2['dirt_kg']}}</td>
+                    <td style="{{$total}}">{{$items2['dirt']}}</td>
                     <td style="{{$total}}">{{round($items2['percentage_dirt'],2)}}</td>
-                    <td style="{{$total}}">{{$items2['loose_fruit_kg']}}</td>
+                    <td style="{{$total}}">{{$items2['loose_fruit']}}</td>
                     <td style="{{$total}}">{{round($items2['percentage_loose_fruit'],2)}}</td>
                     <td style="{{$total}}">{{$items2['kelas_c']}}</td>
                     <td style="{{$total}}">{{round($items2['percentage_kelas_c'],2)}}</td>
@@ -175,6 +188,10 @@
                     <td style="{{$total}}">{{round($items2['percentage_kelas_b'],2)}}</td>
                     <td style="{{$total}}">{{$items2['kelas_a']}}</td>
                     <td style="{{$total}}">{{round($items2['percentage_kelas_a'],2)}}</td>
+                    <td style="{{$total}}">{{$items2['unripe_tanpa_brondol']}}</td>
+                    <td style="{{$total}}">{{round($items2['persentase_unripe_tanpa_brondol'],2)}}</td>
+                    <td style="{{$total}}">{{$items2['unripe_kurang_brondol']}}</td>
+                    <td style="{{$total}}">{{round($items2['persentase_unripe_kurang_brondol'],2)}}</td>
                     @if(can_edit())
                     <td>
                         <button type="button" class="btn btn-warning btn-sm" wire:click="formdata('{{ $key }}', '{{ $key2 }}')">
@@ -190,8 +207,8 @@
                 <tr>
                     <td style="background-color: aquamarine;color:black" colspan="4">{{$this->inputbulan}}</td>
                     <td style="background-color: aquamarine;color:black">{{$resultdate['tonase']}}</td>
-                    <td style="background-color: aquamarine;color:black">{{$resultdate['jumlah_janjang_spb']}}</td>
-                    <td style="background-color: aquamarine;color:black">{{$resultdate['jumlah_janjang_grading']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['jjg_grading']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['jjg_spb']}}</td>
                     <td style="background-color: aquamarine;color:black">{{$resultdate['tonase']}}</td>
                     <td style="background-color: aquamarine;color:black">{{round($resultdate['bjr'],2)}}</td>
                     <td style="background-color: aquamarine;color:black">{{$resultdate['ripeness']}}</td>
@@ -210,9 +227,9 @@
                     <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_longstalk'],2)}}</td>
                     <td style="background-color: aquamarine;color:black">{{$resultdate['vcut']}}</td>
                     <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_vcut'],2)}}</td>
-                    <td style="background-color: aquamarine;color:black">{{$resultdate['dirt_kg']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['dirt']}}</td>
                     <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_dirt'],2)}}</td>
-                    <td style="background-color: aquamarine;color:black">{{$resultdate['loose_fruit_kg']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['loose_fruit']}}</td>
                     <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_loose_fruit'],2)}}</td>
                     <td style="background-color: aquamarine;color:black">{{$resultdate['kelas_c']}}</td>
                     <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_kelas_c'],2)}}</td>
@@ -220,6 +237,10 @@
                     <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_kelas_b'],2)}}</td>
                     <td style="background-color: aquamarine;color:black">{{$resultdate['kelas_a']}}</td>
                     <td style="background-color: aquamarine;color:black">{{round($resultdate['percentage_kelas_a'],2)}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['unripe_tanpa_brondol']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{round($resultdate['persentase_unripe_tanpa_brondol'],2)}}</td>
+                    <td style="background-color: aquamarine;color:black">{{$resultdate['unripe_kurang_brondol']}}</td>
+                    <td style="background-color: aquamarine;color:black">{{round($resultdate['persentase_unripe_kurang_brondol'],2)}}</td>
                 </tr>
 
                 @endif

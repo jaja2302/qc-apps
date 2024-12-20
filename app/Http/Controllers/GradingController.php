@@ -14,10 +14,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Services\CalculationGrading;
 
 class GradingController extends Controller
 {
 
+    private $calculationGrading;
+    public function __construct(CalculationGrading $calculationGrading)
+    {
+        $this->calculationGrading = $calculationGrading;
+    }
     public function index(Request $request)
     {
         $regionalId = $request->input('regional_id');
@@ -50,7 +56,12 @@ class GradingController extends Controller
         $reg = $request->input('reg');
         $bulan = $request->input('bulan');
         $type = 'perbulan';
-        $result = getdatamill($bulan, $reg, $type);
+        // $type = 'perhari';
+
+        $result = $this->calculationGrading->getGradingData($bulan, $reg, $type);
+        // $result = getdatamill($bulan, $reg, $type);
+        // dd($result);
+
         echo json_encode($result);
         exit();
     }
@@ -59,7 +70,9 @@ class GradingController extends Controller
         $reg = $request->input('reg');
         $bulan = $request->input('bulan');
         $type = 'perbulan';
-        $result = getdatamill($bulan, $reg, $type);
+        $result = $this->calculationGrading->getGradingData($bulan, $reg, $type);
+
+        // dd($result);
         echo json_encode($result);
         exit();
     }

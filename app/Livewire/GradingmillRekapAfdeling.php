@@ -87,19 +87,8 @@ class GradingmillRekapAfdeling extends Component
             $this->modal_data = [];
             return;
         }
-
-        // $estate = $request->input('estate');
-        // // $afd = $request->input('afd');
-        // // $date = $request->input('date');
         $data = getdatamildetail($this->selectedEstate, $this->selectedAfdeling, $value);
         $this->modal_data = $data['data_perhari'];
-        // dd($this->modal_data);
-        // $this->modal_data = ModelsGradingmill::query()
-        //     ->where('estate', $this->selectedEstate)
-        //     ->where('afdeling', $this->selectedAfdeling)
-        //     ->whereDate('datetime', $value)
-        //     ->get()
-        //     ->toArray();
     }
 
     public function render()

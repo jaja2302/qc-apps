@@ -94,13 +94,14 @@
                     <table class="table table-responsive table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th colspan="31" style="background-color: #c8e4f4;">BERDASARKAN ESTATE</th>
+                                <th colspan="35" style="background-color: #c8e4f4;">BERDASARKAN ESTATE</th>
                             </tr>
                             <tr>
                                 <th rowspan="3" class="align-middle" style="background-color: #f0ecec;">Estate</th>
                                 <th style="background-color: #f0ecec;" colspan="2">UNIT SORTASI</th>
                                 <th style="background-color: #88e48c;" colspan="20">HASIL GRADING</th>
                                 <th style="background-color: #f8c4ac;" colspan="6">KELAS JANJANG</th>
+                                <th style="background-color: #B1A1C6;" colspan="4">BUAH MENTAH</th>
                             </tr>
                             <tr>
                                 <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG GRADING</th>
@@ -118,6 +119,8 @@
                                 <th style="background-color: #f8c4ac;" colspan="2">KELAS C</th>
                                 <th style="background-color: #f8c4ac;" colspan="2">KELAS B</th>
                                 <th style="background-color: #f8c4ac;" colspan="2">KELAS A</th>
+                                <th style="background-color: #B1A1C6;" colspan="2">TIDAK BRONDOL</th>
+                                <th style="background-color: #B1A1C6;" colspan="2">KURANG BRONDOL</th>
                             </tr>
                             <tr>
                                 <th style="background-color: #88e48c;">JJG</th>
@@ -146,6 +149,10 @@
                                 <th style="background-color: #f8c4ac;">%</th>
                                 <th style="background-color: #f8c4ac;">JJG</th>
                                 <th style="background-color: #f8c4ac;">%</th>
+                                <th style="background-color: #B1A1C6;">JJG</th>
+                                <th style="background-color: #B1A1C6;">%</th>
+                                <th style="background-color: #B1A1C6;">JJG</th>
+                                <th style="background-color: #B1A1C6;">%</th>
                             </tr>
                         </thead>
                         <tbody id="regional_estate">
@@ -156,13 +163,14 @@
                     <table class="mt-5 table table-responsive table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th colspan="31" style="background-color: #c8e4f4;">BERDASARKAN WILAYAH</th>
+                                <th colspan="35" style="background-color: #c8e4f4;">BERDASARKAN WILAYAH</th>
                             </tr>
                             <tr>
                                 <th rowspan="3" class="align-middle" style="background-color: #f0ecec;">Wilayah</th>
                                 <th style="background-color: #f0ecec;" colspan="2">UNIT SORTASI</th>
                                 <th style="background-color: #88e48c;" colspan="20">HASIL GRADING</th>
                                 <th style="background-color: #f8c4ac;" colspan="6">KELAS JANJANG</th>
+                                <th style="background-color: #B1A1C6;" colspan="4">BUAH MENTAH</th>
                             </tr>
                             <tr>
                                 <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG GRADING</th>
@@ -180,6 +188,8 @@
                                 <th style="background-color: #f8c4ac;" colspan="2">KELAS C</th>
                                 <th style="background-color: #f8c4ac;" colspan="2">KELAS B</th>
                                 <th style="background-color: #f8c4ac;" colspan="2">KELAS A</th>
+                                <th style="background-color: #B1A1C6;" colspan="2">TIDAK BRONDOL</th>
+                                <th style="background-color: #B1A1C6;" colspan="2">KURANG BRONDOL</th>
                             </tr>
                             <tr>
                                 <th style="background-color: #88e48c;">JJG</th>
@@ -208,6 +218,10 @@
                                 <th style="background-color: #f8c4ac;">%</th>
                                 <th style="background-color: #f8c4ac;">JJG</th>
                                 <th style="background-color: #f8c4ac;">%</th>
+                                <th style="background-color: #B1A1C6;">JJG</th>
+                                <th style="background-color: #B1A1C6;">%</th>
+                                <th style="background-color: #B1A1C6;">JJG</th>
+                                <th style="background-color: #B1A1C6;">%</th>
                             </tr>
                         </thead>
                         <tbody id="data_wil"></tbody>
@@ -216,13 +230,14 @@
                     <table class="mt-5  table table-responsive table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th colspan="32" style="background-color: #c8e4f4;">BERDASARKAN MILL</th>
+                                <th colspan="35" style="background-color: #c8e4f4;">BERDASARKAN MILL</th>
                             </tr>
                             <tr>
                                 <th rowspan="3" colspan="2" class="align-middle" style="background-color: #f0ecec;">MILL</th>
                                 <th style="background-color: #f0ecec;" colspan="2">UNIT SORTASI</th>
                                 <th style="background-color: #88e48c;" colspan="20">HASIL GRADING</th>
                                 <th style="background-color: #f8c4ac;" colspan="6">KELAS JANJANG</th>
+                                <th style="background-color: #B1A1C6;" colspan="4">BUAH MENTAH</th>
                             </tr>
                             <tr>
                                 <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG GRADING</th>
@@ -240,6 +255,8 @@
                                 <th style="background-color: #f8c4ac;" colspan="2">KELAS C</th>
                                 <th style="background-color: #f8c4ac;" colspan="2">KELAS B</th>
                                 <th style="background-color: #f8c4ac;" colspan="2">KELAS A</th>
+                                <th style="background-color: #B1A1C6;" colspan="2">TIDAK BRONDOL</th>
+                                <th style="background-color: #B1A1C6;" colspan="2">KURANG BRONDOL</th>
                             </tr>
                             <tr>
                                 <th style="background-color: #88e48c;">JJG</th>
@@ -268,6 +285,10 @@
                                 <th style="background-color: #f8c4ac;">%</th>
                                 <th style="background-color: #f8c4ac;">JJG</th>
                                 <th style="background-color: #f8c4ac;">%</th>
+                                <th style="background-color: #B1A1C6;">JJG</th>
+                                <th style="background-color: #B1A1C6;">%</th>
+                                <th style="background-color: #B1A1C6;">JJG</th>
+                                <th style="background-color: #B1A1C6;">%</th>
                             </tr>
                         </thead>
                         <tbody id="data_mill"></tbody>
@@ -317,13 +338,14 @@
                     <table class="table table-responsive table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th colspan="31" style="background-color: #c8e4f4;">BERDASARKAN ESTATE</th>
+                                <th colspan="35" style="background-color: #c8e4f4;">BERDASARKAN ESTATE</th>
                             </tr>
                             <tr>
                                 <th rowspan="3" class="align-middle" style="background-color: #f0ecec;">Estate</th>
                                 <th style="background-color: #f0ecec;" colspan="2">UNIT SORTASI</th>
                                 <th style="background-color: #88e48c;" colspan="20">HASIL GRADING</th>
                                 <th style="background-color: #f8c4ac;" colspan="6">KELAS JANJANG</th>
+                                <th style="background-color: #B1A1C6;" colspan="4">BUAH MENTAH</th>
                             </tr>
                             <tr>
                                 <th style="background-color: #f0ecec;" class="align-middle" rowspan="2">JUMLAH JANJANG GRADING</th>
@@ -341,6 +363,8 @@
                                 <th style="background-color: #f8c4ac;" colspan="2">KELAS C</th>
                                 <th style="background-color: #f8c4ac;" colspan="2">KELAS B</th>
                                 <th style="background-color: #f8c4ac;" colspan="2">KELAS A</th>
+                                <th style="background-color: #B1A1C6;" colspan="2">TIDAK BRONDOL</th>
+                                <th style="background-color: #B1A1C6;" colspan="2">KURANG BRONDOL</th>
                             </tr>
                             <tr>
                                 <th style="background-color: #88e48c;">JJG</th>
@@ -369,6 +393,10 @@
                                 <th style="background-color: #f8c4ac;">%</th>
                                 <th style="background-color: #f8c4ac;">JJG</th>
                                 <th style="background-color: #f8c4ac;">%</th>
+                                <th style="background-color: #B1A1C6;">JJG</th>
+                                <th style="background-color: #B1A1C6;">%</th>
+                                <th style="background-color: #B1A1C6;">JJG</th>
+                                <th style="background-color: #B1A1C6;">%</th>
                             </tr>
                         </thead>
                         <tbody id="rekap_mill"></tbody>
@@ -532,40 +560,46 @@
                         let itemElements = [];
 
                         // Initialize itemElements array with 'td' elements
-                        for (let index = 0; index < 29; index++) {
+                        for (let index = 0; index < 33; index++) {
                             itemElements[index] = document.createElement('td');
                         }
 
+                        // console.log(value);
+
                         // Assign text values to each itemElement
                         itemElements[0].innerText = key;
-                        itemElements[1].innerText = value['regional']['jumlah_janjang_grading'].toLocaleString('id-ID');
-                        itemElements[2].innerText = value['regional']['tonase'].toLocaleString('id-ID');
-                        itemElements[3].innerText = value['regional']['ripeness'].toLocaleString('id-ID');
-                        itemElements[4].innerText = value['regional']['percentage_ripeness'].toFixed(2);
-                        itemElements[5].innerText = value['regional']['unripe'].toLocaleString('id-ID');
-                        itemElements[6].innerText = value['regional']['percentage_unripe'].toFixed(2);
-                        itemElements[7].innerText = value['regional']['overripe'].toLocaleString('id-ID');
-                        itemElements[8].innerText = value['regional']['percentage_overripe'].toFixed(2);
-                        itemElements[9].innerText = value['regional']['empty_bunch'].toLocaleString('id-ID');
-                        itemElements[10].innerText = value['regional']['percentage_empty_bunch'].toFixed(2);
-                        itemElements[11].innerText = value['regional']['rotten_bunch'].toLocaleString('id-ID');
-                        itemElements[12].innerText = value['regional']['percentage_rotten_bunch'].toFixed(2);
-                        itemElements[13].innerText = value['regional']['abnormal'].toLocaleString('id-ID');
-                        itemElements[14].innerText = value['regional']['percentage_abnormal'].toFixed(2);
-                        itemElements[15].innerText = value['regional']['longstalk'].toLocaleString('id-ID');
-                        itemElements[16].innerText = value['regional']['percentage_longstalk'].toFixed(2);
-                        itemElements[17].innerText = value['regional']['vcut'];
-                        itemElements[18].innerText = value['regional']['percentage_vcut'].toFixed(2);
-                        itemElements[19].innerText = value['regional']['dirt_kg'].toLocaleString('id-ID');
-                        itemElements[20].innerText = value['regional']['percentage_dirt'].toFixed(2);
-                        itemElements[21].innerText = value['regional']['loose_fruit_kg'].toLocaleString('id-ID');
-                        itemElements[22].innerText = value['regional']['percentage_loose_fruit'].toFixed(2);
-                        itemElements[23].innerText = value['regional']['kelas_c'].toLocaleString('id-ID');
-                        itemElements[24].innerText = value['regional']['percentage_kelas_c'].toFixed(2);
-                        itemElements[25].innerText = value['regional']['kelas_b'].toLocaleString('id-ID');
-                        itemElements[26].innerText = value['regional']['percentage_kelas_b'].toFixed(2);
-                        itemElements[27].innerText = value['regional']['kelas_a'].toLocaleString('id-ID')
-                        itemElements[28].innerText = value['regional']['percentage_kelas_a'].toFixed(2);
+                        itemElements[1].innerText = value['data']['jjg_grading'].toLocaleString('id-ID');
+                        itemElements[2].innerText = value['data']['tonase'].toLocaleString('id-ID');
+                        itemElements[3].innerText = value['data']['ripeness'].toLocaleString('id-ID');
+                        itemElements[4].innerText = value['data']['percentage_ripeness'].toFixed(2);
+                        itemElements[5].innerText = value['data']['unripe'].toLocaleString('id-ID');
+                        itemElements[6].innerText = value['data']['percentage_unripe'].toFixed(2);
+                        itemElements[7].innerText = value['data']['overripe'].toLocaleString('id-ID');
+                        itemElements[8].innerText = value['data']['percentage_overripe'].toFixed(2);
+                        itemElements[9].innerText = value['data']['empty_bunch'].toLocaleString('id-ID');
+                        itemElements[10].innerText = value['data']['percentage_empty_bunch'].toFixed(2);
+                        itemElements[11].innerText = value['data']['rotten_bunch'].toLocaleString('id-ID');
+                        itemElements[12].innerText = value['data']['percentage_rotten_bunch'].toFixed(2);
+                        itemElements[13].innerText = value['data']['abnormal'].toLocaleString('id-ID');
+                        itemElements[14].innerText = value['data']['percentage_abnormal'].toFixed(2);
+                        itemElements[15].innerText = value['data']['longstalk'].toLocaleString('id-ID');
+                        itemElements[16].innerText = value['data']['percentage_longstalk'].toFixed(2);
+                        itemElements[17].innerText = value['data']['vcut'];
+                        itemElements[18].innerText = value['data']['percentage_vcut'].toFixed(2);
+                        itemElements[19].innerText = value['data']['dirt'].toLocaleString('id-ID');
+                        itemElements[20].innerText = value['data']['percentage_dirt'].toFixed(2);
+                        itemElements[21].innerText = value['data']['loose_fruit'].toLocaleString('id-ID');
+                        itemElements[22].innerText = value['data']['percentage_loose_fruit'].toFixed(2);
+                        itemElements[23].innerText = value['data']['kelas_c'].toLocaleString('id-ID');
+                        itemElements[24].innerText = value['data']['percentage_kelas_c'].toFixed(2);
+                        itemElements[25].innerText = value['data']['kelas_b'].toLocaleString('id-ID');
+                        itemElements[26].innerText = value['data']['percentage_kelas_b'].toFixed(2);
+                        itemElements[27].innerText = value['data']['kelas_a'].toLocaleString('id-ID')
+                        itemElements[28].innerText = value['data']['percentage_kelas_a'].toFixed(2);
+                        itemElements[29].innerText = value['data']['unripe_tanpa_brondol']
+                        itemElements[30].innerText = value['data']['persentase_unripe_tanpa_brondol'].toFixed(2);
+                        itemElements[31].innerText = value['data']['unripe_kurang_brondol']
+                        itemElements[32].innerText = value['data']['persentase_unripe_kurang_brondol'].toFixed(2);
 
                         // Append each itemElement to the tr
                         itemElements.forEach(itemElement => tr.appendChild(itemElement));
@@ -581,40 +615,44 @@
                         let itemElements = [];
 
                         // Initialize itemElements array with 'td' elements
-                        for (let index = 0; index < 29; index++) {
+                        for (let index = 0; index < 33; index++) {
                             itemElements[index] = document.createElement('td');
                         }
 
                         // Assign text values to each itemElement
                         itemElements[0].innerText = key;
-                        itemElements[1].innerText = value['wil']['jumlah_janjang_grading'].toLocaleString('id-ID');
-                        itemElements[2].innerText = value['wil']['tonase'].toLocaleString('id-ID');
-                        itemElements[3].innerText = value['wil']['ripeness'].toLocaleString('id-ID');
-                        itemElements[4].innerText = value['wil']['percentage_ripeness'].toFixed(2);
-                        itemElements[5].innerText = value['wil']['unripe'].toLocaleString('id-ID');
-                        itemElements[6].innerText = value['wil']['percentage_unripe'].toFixed(2);
-                        itemElements[7].innerText = value['wil']['overripe'].toLocaleString('id-ID');
-                        itemElements[8].innerText = value['wil']['percentage_overripe'].toFixed(2);
-                        itemElements[9].innerText = value['wil']['empty_bunch'].toLocaleString('id-ID');
-                        itemElements[10].innerText = value['wil']['percentage_empty_bunch'].toFixed(2);
-                        itemElements[11].innerText = value['wil']['rotten_bunch'].toLocaleString('id-ID');
-                        itemElements[12].innerText = value['wil']['percentage_rotten_bunch'].toFixed(2);
-                        itemElements[13].innerText = value['wil']['abnormal'].toLocaleString('id-ID');
-                        itemElements[14].innerText = value['wil']['percentage_abnormal'].toFixed(2);
-                        itemElements[15].innerText = value['wil']['longstalk'].toLocaleString('id-ID');
-                        itemElements[16].innerText = value['wil']['percentage_longstalk'].toFixed(2);
-                        itemElements[17].innerText = value['wil']['vcut'].toLocaleString('id-ID');
-                        itemElements[18].innerText = value['wil']['percentage_vcut'].toFixed(2);
-                        itemElements[19].innerText = value['wil']['dirt_kg'].toLocaleString('id-ID');
-                        itemElements[20].innerText = value['wil']['percentage_dirt'].toFixed(2);
-                        itemElements[21].innerText = value['wil']['loose_fruit_kg'].toLocaleString('id-ID');
-                        itemElements[22].innerText = value['wil']['percentage_loose_fruit'].toFixed(2);
-                        itemElements[23].innerText = value['wil']['kelas_c'];
-                        itemElements[24].innerText = value['wil']['percentage_kelas_c'].toFixed(2);
-                        itemElements[25].innerText = value['wil']['kelas_b'];
-                        itemElements[26].innerText = value['wil']['percentage_kelas_b'].toFixed(2);
-                        itemElements[27].innerText = value['wil']['kelas_a'];
-                        itemElements[28].innerText = value['wil']['percentage_kelas_a'].toFixed(2);
+                        itemElements[1].innerText = value['data']['jjg_grading'].toLocaleString('id-ID');
+                        itemElements[2].innerText = value['data']['tonase'].toLocaleString('id-ID');
+                        itemElements[3].innerText = value['data']['ripeness'].toLocaleString('id-ID');
+                        itemElements[4].innerText = value['data']['percentage_ripeness'].toFixed(2);
+                        itemElements[5].innerText = value['data']['unripe'].toLocaleString('id-ID');
+                        itemElements[6].innerText = value['data']['percentage_unripe'].toFixed(2);
+                        itemElements[7].innerText = value['data']['overripe'].toLocaleString('id-ID');
+                        itemElements[8].innerText = value['data']['percentage_overripe'].toFixed(2);
+                        itemElements[9].innerText = value['data']['empty_bunch'].toLocaleString('id-ID');
+                        itemElements[10].innerText = value['data']['percentage_empty_bunch'].toFixed(2);
+                        itemElements[11].innerText = value['data']['rotten_bunch'].toLocaleString('id-ID');
+                        itemElements[12].innerText = value['data']['percentage_rotten_bunch'].toFixed(2);
+                        itemElements[13].innerText = value['data']['abnormal'].toLocaleString('id-ID');
+                        itemElements[14].innerText = value['data']['percentage_abnormal'].toFixed(2);
+                        itemElements[15].innerText = value['data']['longstalk'].toLocaleString('id-ID');
+                        itemElements[16].innerText = value['data']['percentage_longstalk'].toFixed(2);
+                        itemElements[17].innerText = value['data']['vcut'].toLocaleString('id-ID');
+                        itemElements[18].innerText = value['data']['percentage_vcut'].toFixed(2);
+                        itemElements[19].innerText = value['data']['dirt'].toLocaleString('id-ID');
+                        itemElements[20].innerText = value['data']['percentage_dirt'].toFixed(2);
+                        itemElements[21].innerText = value['data']['loose_fruit'].toLocaleString('id-ID');
+                        itemElements[22].innerText = value['data']['percentage_loose_fruit'].toFixed(2);
+                        itemElements[23].innerText = value['data']['kelas_c'];
+                        itemElements[24].innerText = value['data']['percentage_kelas_c'].toFixed(2);
+                        itemElements[25].innerText = value['data']['kelas_b'];
+                        itemElements[26].innerText = value['data']['percentage_kelas_b'].toFixed(2);
+                        itemElements[27].innerText = value['data']['kelas_a'];
+                        itemElements[28].innerText = value['data']['percentage_kelas_a'].toFixed(2);
+                        itemElements[29].innerText = value['data']['unripe_tanpa_brondol']
+                        itemElements[30].innerText = value['data']['persentase_unripe_tanpa_brondol'].toFixed(2);
+                        itemElements[31].innerText = value['data']['unripe_kurang_brondol']
+                        itemElements[32].innerText = value['data']['persentase_unripe_kurang_brondol'].toFixed(2);
 
                         // Append each itemElement to the tr
                         itemElements.forEach(itemElement => tr.appendChild(itemElement));
@@ -629,41 +667,45 @@
                         let itemElements = [];
 
                         // Initialize itemElements array with 'td' elements
-                        for (let index = 0; index < 29; index++) {
+                        for (let index = 0; index < 33; index++) {
                             itemElements[index] = document.createElement('td');
                         }
 
                         // Assign text values to each itemElement
                         itemElements[0].innerText = key;
                         itemElements[0].colSpan = 2; // Sets the colspan attribute to 2
-                        itemElements[1].innerText = value['mil']['jumlah_janjang_grading'].toLocaleString('id-ID');
-                        itemElements[2].innerText = value['mil']['tonase'].toLocaleString('id-ID');
-                        itemElements[3].innerText = value['mil']['ripeness'].toLocaleString('id-ID');
-                        itemElements[4].innerText = value['mil']['percentage_ripeness'].toFixed(2);
-                        itemElements[5].innerText = value['mil']['unripe'].toLocaleString('id-ID');
-                        itemElements[6].innerText = value['mil']['percentage_unripe'].toFixed(2);
-                        itemElements[7].innerText = value['mil']['overripe'].toLocaleString('id-ID');
-                        itemElements[8].innerText = value['mil']['percentage_overripe'].toFixed(2);
-                        itemElements[9].innerText = value['mil']['empty_bunch'].toLocaleString('id-ID');
-                        itemElements[10].innerText = value['mil']['percentage_empty_bunch'].toFixed(2);
-                        itemElements[11].innerText = value['mil']['rotten_bunch'].toLocaleString('id-ID');
-                        itemElements[12].innerText = value['mil']['percentage_rotten_bunch'].toFixed(2);
-                        itemElements[13].innerText = value['mil']['abnormal'].toLocaleString('id-ID');
-                        itemElements[14].innerText = value['mil']['percentage_abnormal'].toFixed(2);
-                        itemElements[15].innerText = value['mil']['longstalk'].toLocaleString('id-ID');
-                        itemElements[16].innerText = value['mil']['percentage_longstalk'].toFixed(2);
-                        itemElements[17].innerText = value['mil']['vcut'].toLocaleString('id-ID');
-                        itemElements[18].innerText = value['mil']['percentage_vcut'].toFixed(2);
-                        itemElements[19].innerText = value['mil']['dirt_kg'].toLocaleString('id-ID');
-                        itemElements[20].innerText = value['mil']['percentage_dirt'].toFixed(2);
-                        itemElements[21].innerText = value['mil']['loose_fruit_kg'].toLocaleString('id-ID');
-                        itemElements[22].innerText = value['mil']['percentage_loose_fruit'].toFixed(2);
-                        itemElements[23].innerText = value['mil']['kelas_c'];
-                        itemElements[24].innerText = value['mil']['percentage_kelas_c'].toFixed(2);
-                        itemElements[25].innerText = value['mil']['kelas_b'];
-                        itemElements[26].innerText = value['mil']['percentage_kelas_b'].toFixed(2);
-                        itemElements[27].innerText = value['mil']['kelas_a'];
-                        itemElements[28].innerText = value['mil']['percentage_kelas_a'].toFixed(2);
+                        itemElements[1].innerText = value['data']['jjg_grading'].toLocaleString('id-ID');
+                        itemElements[2].innerText = value['data']['tonase'].toLocaleString('id-ID');
+                        itemElements[3].innerText = value['data']['ripeness'].toLocaleString('id-ID');
+                        itemElements[4].innerText = value['data']['percentage_ripeness'].toFixed(2);
+                        itemElements[5].innerText = value['data']['unripe'].toLocaleString('id-ID');
+                        itemElements[6].innerText = value['data']['percentage_unripe'].toFixed(2);
+                        itemElements[7].innerText = value['data']['overripe'].toLocaleString('id-ID');
+                        itemElements[8].innerText = value['data']['percentage_overripe'].toFixed(2);
+                        itemElements[9].innerText = value['data']['empty_bunch'].toLocaleString('id-ID');
+                        itemElements[10].innerText = value['data']['percentage_empty_bunch'].toFixed(2);
+                        itemElements[11].innerText = value['data']['rotten_bunch'].toLocaleString('id-ID');
+                        itemElements[12].innerText = value['data']['percentage_rotten_bunch'].toFixed(2);
+                        itemElements[13].innerText = value['data']['abnormal'].toLocaleString('id-ID');
+                        itemElements[14].innerText = value['data']['percentage_abnormal'].toFixed(2);
+                        itemElements[15].innerText = value['data']['longstalk'].toLocaleString('id-ID');
+                        itemElements[16].innerText = value['data']['percentage_longstalk'].toFixed(2);
+                        itemElements[17].innerText = value['data']['vcut'].toLocaleString('id-ID');
+                        itemElements[18].innerText = value['data']['percentage_vcut'].toFixed(2);
+                        itemElements[19].innerText = value['data']['dirt'].toLocaleString('id-ID');
+                        itemElements[20].innerText = value['data']['percentage_dirt'].toFixed(2);
+                        itemElements[21].innerText = value['data']['loose_fruit'].toLocaleString('id-ID');
+                        itemElements[22].innerText = value['data']['percentage_loose_fruit'].toFixed(2);
+                        itemElements[23].innerText = value['data']['kelas_c'];
+                        itemElements[24].innerText = value['data']['percentage_kelas_c'].toFixed(2);
+                        itemElements[25].innerText = value['data']['kelas_b'];
+                        itemElements[26].innerText = value['data']['percentage_kelas_b'].toFixed(2);
+                        itemElements[27].innerText = value['data']['kelas_a'];
+                        itemElements[28].innerText = value['data']['percentage_kelas_a'].toFixed(2);
+                        itemElements[29].innerText = value['data']['unripe_tanpa_brondol']
+                        itemElements[30].innerText = value['data']['persentase_unripe_tanpa_brondol'].toFixed(2);
+                        itemElements[31].innerText = value['data']['unripe_kurang_brondol']
+                        itemElements[32].innerText = value['data']['persentase_unripe_kurang_brondol'].toFixed(2);
 
                         // Append each itemElement to the tr
                         itemElements.forEach(itemElement => tr.appendChild(itemElement));
@@ -712,41 +754,45 @@
                         let itemElements = [];
 
                         // Initialize itemElements array with 'td' elements
-                        for (let index = 0; index < 29; index++) {
+                        for (let index = 0; index < 33; index++) {
                             itemElements[index] = document.createElement('td');
                         }
 
                         // Assign text values to each itemElement
                         itemElements[0].innerText = key;
                         // itemElements[0].colSpan = 2; // Sets the colspan attribute to 2
-                        itemElements[1].innerText = value['mil']['jumlah_janjang_grading'].toLocaleString('id-ID');
-                        itemElements[2].innerText = value['mil']['tonase'].toLocaleString('id-ID');
-                        itemElements[3].innerText = value['mil']['ripeness'].toLocaleString('id-ID');
-                        itemElements[4].innerText = value['mil']['percentage_ripeness'].toFixed(2);
-                        itemElements[5].innerText = value['mil']['unripe'].toLocaleString('id-ID');
-                        itemElements[6].innerText = value['mil']['percentage_unripe'].toFixed(2);
-                        itemElements[7].innerText = value['mil']['overripe'].toLocaleString('id-ID');
-                        itemElements[8].innerText = value['mil']['percentage_overripe'].toFixed(2);
-                        itemElements[9].innerText = value['mil']['empty_bunch'].toLocaleString('id-ID');
-                        itemElements[10].innerText = value['mil']['percentage_empty_bunch'].toFixed(2);
-                        itemElements[11].innerText = value['mil']['rotten_bunch'].toLocaleString('id-ID');
-                        itemElements[12].innerText = value['mil']['percentage_rotten_bunch'].toFixed(2);
-                        itemElements[13].innerText = value['mil']['abnormal'].toLocaleString('id-ID');
-                        itemElements[14].innerText = value['mil']['percentage_abnormal'].toFixed(2);
-                        itemElements[15].innerText = value['mil']['longstalk'].toLocaleString('id-ID');
-                        itemElements[16].innerText = value['mil']['percentage_longstalk'].toFixed(2);
-                        itemElements[17].innerText = value['mil']['vcut'];
-                        itemElements[18].innerText = value['mil']['percentage_vcut'].toFixed(2);
-                        itemElements[19].innerText = value['mil']['dirt_kg'].toLocaleString('id-ID');
-                        itemElements[20].innerText = value['mil']['percentage_dirt'].toFixed(2);
-                        itemElements[21].innerText = value['mil']['loose_fruit_kg'].toLocaleString('id-ID');
-                        itemElements[22].innerText = value['mil']['percentage_loose_fruit'].toFixed(2);
-                        itemElements[23].innerText = value['mil']['kelas_c'].toLocaleString('id-ID');
-                        itemElements[24].innerText = value['mil']['percentage_kelas_c'].toFixed(2);
-                        itemElements[25].innerText = value['mil']['kelas_b'].toLocaleString('id-ID');
-                        itemElements[26].innerText = value['mil']['percentage_kelas_b'].toFixed(2);
-                        itemElements[27].innerText = value['mil']['kelas_a'].toLocaleString('id-ID');
-                        itemElements[28].innerText = value['mil']['percentage_kelas_a'].toFixed(2);
+                        itemElements[1].innerText = value['data']['jjg_grading'].toLocaleString('id-ID');
+                        itemElements[2].innerText = value['data']['tonase'].toLocaleString('id-ID');
+                        itemElements[3].innerText = value['data']['ripeness'].toLocaleString('id-ID');
+                        itemElements[4].innerText = value['data']['percentage_ripeness'].toFixed(2);
+                        itemElements[5].innerText = value['data']['unripe'].toLocaleString('id-ID');
+                        itemElements[6].innerText = value['data']['percentage_unripe'].toFixed(2);
+                        itemElements[7].innerText = value['data']['overripe'].toLocaleString('id-ID');
+                        itemElements[8].innerText = value['data']['percentage_overripe'].toFixed(2);
+                        itemElements[9].innerText = value['data']['empty_bunch'].toLocaleString('id-ID');
+                        itemElements[10].innerText = value['data']['percentage_empty_bunch'].toFixed(2);
+                        itemElements[11].innerText = value['data']['rotten_bunch'].toLocaleString('id-ID');
+                        itemElements[12].innerText = value['data']['percentage_rotten_bunch'].toFixed(2);
+                        itemElements[13].innerText = value['data']['abnormal'].toLocaleString('id-ID');
+                        itemElements[14].innerText = value['data']['percentage_abnormal'].toFixed(2);
+                        itemElements[15].innerText = value['data']['longstalk'].toLocaleString('id-ID');
+                        itemElements[16].innerText = value['data']['percentage_longstalk'].toFixed(2);
+                        itemElements[17].innerText = value['data']['vcut'];
+                        itemElements[18].innerText = value['data']['percentage_vcut'].toFixed(2);
+                        itemElements[19].innerText = value['data']['dirt'].toLocaleString('id-ID');
+                        itemElements[20].innerText = value['data']['percentage_dirt'].toFixed(2);
+                        itemElements[21].innerText = value['data']['loose_fruit'].toLocaleString('id-ID');
+                        itemElements[22].innerText = value['data']['percentage_loose_fruit'].toFixed(2);
+                        itemElements[23].innerText = value['data']['kelas_c'].toLocaleString('id-ID');
+                        itemElements[24].innerText = value['data']['percentage_kelas_c'].toFixed(2);
+                        itemElements[25].innerText = value['data']['kelas_b'].toLocaleString('id-ID');
+                        itemElements[26].innerText = value['data']['percentage_kelas_b'].toFixed(2);
+                        itemElements[27].innerText = value['data']['kelas_a'].toLocaleString('id-ID');
+                        itemElements[28].innerText = value['data']['percentage_kelas_a'].toFixed(2);
+                        itemElements[29].innerText = value['data']['unripe_tanpa_brondol']
+                        itemElements[30].innerText = value['data']['persentase_unripe_tanpa_brondol'].toFixed(2);
+                        itemElements[31].innerText = value['data']['unripe_kurang_brondol']
+                        itemElements[32].innerText = value['data']['persentase_unripe_kurang_brondol'].toFixed(2);
 
                         // Append each itemElement to the tr
                         itemElements.forEach(itemElement => tr.appendChild(itemElement));
