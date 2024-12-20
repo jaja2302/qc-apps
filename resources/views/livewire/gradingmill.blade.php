@@ -64,7 +64,7 @@
         <table class="table table-responsive table-striped table-bordered">
             <thead>
                 <tr>
-                    <th colspan="37" style="background-color: #c8e4f4;">BERDASARKAN ESTATE</th>
+                    <th colspan="39" style="background-color: #c8e4f4;">BERDASARKAN ESTATE</th>
                     @if(can_edit())
                     <th style="background-color: #f8c4ac;vertical-align:middle" rowspan="4"> Action</th>
                     @endif

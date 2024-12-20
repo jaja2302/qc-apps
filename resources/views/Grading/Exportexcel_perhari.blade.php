@@ -180,14 +180,6 @@
                 <td>{{round($items4['persentase_unripe_tanpa_brondol'],2)}}</td>
                 <td>{{$items4['unripe_kurang_brondol']}}</td>
                 <td>{{round($items4['persentase_unripe_kurang_brondol'],2)}}</td>
-                @if(can_edit())
-                <td>
-                    <button type="button" class="btn btn-warning btn-sm" wire:click="formdata('{{ $key }}', '{{ $key2 }}')">
-                        Edit
-                    </button>
-
-                </td>
-                @endif
             </tr>
             @endforeach
             @endif

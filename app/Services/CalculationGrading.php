@@ -398,7 +398,7 @@ class CalculationGrading
             'unit' => $array['unit'],
             'tonase' => $array['tonase'],
             'datetime' => $array['datetime'],
-            'bjr' => $array['jjg_grading'] > 0 ? round(($array['tonase'] / $array['jjg_grading']) * 100, 2) : 0,
+            'bjr' => $array['jjg_grading'] > 0 ? round(($array['tonase'] / $array['jjg_grading']), 2) : 0,
             // 'bjr' => $array['jjg_grading'],
             'jjg_selisih' => $jumlah_selisih_janjang,
             'persentase_selisih' => round($percentage_selisih_janjang),
