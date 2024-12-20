@@ -121,62 +121,98 @@
                     <td colspan="36" style="color: #88e48c;">Tidak ada data tersedia</td>
                 </tr>
                 @else
+
+
                 @foreach ($resultdata as $key => $items)
                 @foreach ($items as $key1 => $items1)
+                @if ($key1 !== 'Total')
                 @foreach ($items1 as $key2 => $items2)
-                @php
-                if ($key2 === 'Total') {
-                $bg = 'background-color: #75A5CB;';
-                } else {
-                $bg = 'background-color: white;';
-                }
-                @endphp
+                @if($key2 == 'afdeling')
                 <tr>
-                    <td style="{{$bg}}">{{$key1}}</td>
-                    @if($key2 === 'Total')
-                    <td style="{{$bg}}">{{$key2}}</td>
-                    @else
-                    <td style="{{$bg}} cursor: pointer; text-decoration: underline;color:blue;" wire:click="openModal('{{$key1}}', '{{$key2}}')">{{$key2}}</td>
-                    @endif
-                    <td style="{{$bg}}">{{$items2['jjg_grading']}}</td>
-                    <td style="{{$bg}}">{{$items2['jjg_spb']}}</td>
-                    <td style="{{$bg}}">{{$items2['tonase']}}</td>
-                    <td style="{{$bg}}">{{round($items2['bjr'],2)}}</td>
-                    <td style="{{$bg}}">{{$items2['ripeness']}}</td>
-                    <td style="{{$bg}}">{{round($items2['percentage_ripeness'],2)}}</td>
-                    <td style="{{$bg}}">{{$items2['unripe']}}</td>
-                    <td style="{{$bg}}">{{round($items2['percentage_unripe'],2)}}</td>
-                    <td style="{{$bg}}">{{$items2['overripe']}}</td>
-                    <td style="{{$bg}}">{{round($items2['percentage_overripe'],2)}}</td>
-                    <td style="{{$bg}}">{{$items2['empty_bunch']}}</td>
-                    <td style="{{$bg}}">{{round($items2['percentage_empty_bunch'],2)}}</td>
-                    <td style="{{$bg}}">{{$items2['rotten_bunch']}}</td>
-                    <td style="{{$bg}}">{{round($items2['percentage_rotten_bunch'],2)}}</td>
-                    <td style="{{$bg}}">{{$items2['abnormal']}}</td>
-                    <td style="{{$bg}}">{{round($items2['percentage_abnormal'],2)}}</td>
-                    <td style="{{$bg}}">{{$items2['longstalk']}}</td>
-                    <td style="{{$bg}}">{{round($items2['percentage_longstalk'],2)}}</td>
-                    <td style="{{$bg}}">{{$items2['vcut']}}</td>
-                    <td style="{{$bg}}">{{round($items2['percentage_vcut'],2)}}</td>
-                    <td style="{{$bg}}">{{$items2['dirt']}}</td>
-                    <td style="{{$bg}}">{{round($items2['percentage_dirt'],2)}}</td>
-                    <td style="{{$bg}}">{{$items2['loose_fruit']}}</td>
-                    <td style="{{$bg}}">{{round($items2['percentage_loose_fruit'],2)}}</td>
-                    <td style="{{$bg}}">{{$items2['kelas_c']}}</td>
-                    <td style="{{$bg}}">{{round($items2['percentage_kelas_c'],2)}}</td>
-                    <td style="{{$bg}}">{{$items2['kelas_b']}}</td>
-                    <td style="{{$bg}}">{{round($items2['percentage_kelas_b'],2)}}</td>
-                    <td style="{{$bg}}">{{$items2['kelas_a']}}</td>
-                    <td style="{{$bg}}">{{round($items2['percentage_kelas_a'],2)}}</td>
-                    <td style="{{$bg}}">{{round($items2['unripe_tanpa_brondol'],2)}}</td>
-                    <td style="{{$bg}}">{{round($items2['persentase_unripe_tanpa_brondol'],2)}}</td>
-                    <td style="{{$bg}}">{{round($items2['unripe_kurang_brondol'],2)}}</td>
-                    <td style="{{$bg}}">{{round($items2['persentase_unripe_kurang_brondol'],2)}}</td>
+                    <td>{{$key}}</td>
+                    <td style="cursor: pointer; text-decoration: underline;color:blue;" wire:click="openModal('{{$key}}', '{{$key1}}')">{{$key1}}</td>
+                    <td>{{$items2['jjg_spb']}}</td>
+                    <td>{{$items2['jjg_grading']}}</td>
+                    <td>{{$items2['tonase']}}</td>
+                    <td>{{round($items2['bjr'],2)}}</td>
+                    <td>{{$items2['ripeness']}}</td>
+                    <td>{{round($items2['percentage_ripeness'],2)}}</td>
+                    <td>{{$items2['unripe']}}</td>
+                    <td>{{round($items2['percentage_unripe'],2)}}</td>
+                    <td>{{$items2['overripe']}}</td>
+                    <td>{{round($items2['percentage_overripe'],2)}}</td>
+                    <td>{{$items2['empty_bunch']}}</td>
+                    <td>{{round($items2['percentage_empty_bunch'],2)}}</td>
+                    <td>{{$items2['rotten_bunch']}}</td>
+                    <td>{{round($items2['percentage_rotten_bunch'],2)}}</td>
+                    <td>{{$items2['abnormal']}}</td>
+                    <td>{{round($items2['percentage_abnormal'],2)}}</td>
+                    <td>{{$items2['longstalk']}}</td>
+                    <td>{{round($items2['percentage_longstalk'],2)}}</td>
+                    <td>{{$items2['vcut']}}</td>
+                    <td>{{round($items2['percentage_vcut'],2)}}</td>
+                    <td>{{$items2['dirt']}}</td>
+                    <td>{{round($items2['percentage_dirt'],2)}}</td>
+                    <td>{{$items2['loose_fruit']}}</td>
+                    <td>{{round($items2['percentage_loose_fruit'],2)}}</td>
+                    <td>{{$items2['kelas_c']}}</td>
+                    <td>{{round($items2['percentage_kelas_c'],2)}}</td>
+                    <td>{{$items2['kelas_b']}}</td>
+                    <td>{{round($items2['percentage_kelas_b'],2)}}</td>
+                    <td>{{$items2['kelas_a']}}</td>
+                    <td>{{round($items2['percentage_kelas_a'],2)}}</td>
+                    <td>{{round($items2['unripe_tanpa_brondol'],2)}}</td>
+                    <td>{{round($items2['persentase_unripe_tanpa_brondol'],2)}}</td>
+                    <td>{{round($items2['unripe_kurang_brondol'],2)}}</td>
+                    <td>{{round($items2['persentase_unripe_kurang_brondol'],2)}}</td>
 
                 </tr>
+                @endif
+                @endforeach
+                @else
+                <tr>
+                    <td style="background-color: #9DCED4;">{{$key}}</td>
+                    <td style="background-color: #9DCED4;">{{$key1}}</td>
+                    <td style="background-color: #9DCED4;">{{$items1['jjg_spb']}}</td>
+                    <td style="background-color: #9DCED4;">{{$items1['jjg_grading']}}</td>
+                    <td style="background-color: #9DCED4;">{{$items1['tonase']}}</td>
+                    <td style="background-color: #9DCED4;">{{round($items1['bjr'],2)}}</td>
+                    <td style="background-color: #9DCED4;">{{$items1['ripeness']}}</td>
+                    <td style="background-color: #9DCED4;">{{round($items1['percentage_ripeness'],2)}}</td>
+                    <td style="background-color: #9DCED4;">{{$items1['unripe']}}</td>
+                    <td style="background-color: #9DCED4;">{{round($items1['percentage_unripe'],2)}}</td>
+                    <td style="background-color: #9DCED4;">{{$items1['overripe']}}</td>
+                    <td style="background-color: #9DCED4;">{{round($items1['percentage_overripe'],2)}}</td>
+                    <td style="background-color: #9DCED4;">{{$items1['empty_bunch']}}</td>
+                    <td style="background-color: #9DCED4;">{{round($items1['percentage_empty_bunch'],2)}}</td>
+                    <td style="background-color: #9DCED4;">{{$items1['rotten_bunch']}}</td>
+                    <td style="background-color: #9DCED4;">{{round($items1['percentage_rotten_bunch'],2)}}</td>
+                    <td style="background-color: #9DCED4;">{{$items1['abnormal']}}</td>
+                    <td style="background-color: #9DCED4;">{{round($items1['percentage_abnormal'],2)}}</td>
+                    <td style="background-color: #9DCED4;">{{$items1['longstalk']}}</td>
+                    <td style="background-color: #9DCED4;">{{round($items1['percentage_longstalk'],2)}}</td>
+                    <td style="background-color: #9DCED4;">{{$items1['vcut']}}</td>
+                    <td style="background-color: #9DCED4;">{{round($items1['percentage_vcut'],2)}}</td>
+                    <td style="background-color: #9DCED4;">{{$items1['dirt']}}</td>
+                    <td style="background-color: #9DCED4;">{{round($items1['percentage_dirt'],2)}}</td>
+                    <td style="background-color: #9DCED4;">{{$items1['loose_fruit']}}</td>
+                    <td style="background-color: #9DCED4;">{{round($items1['percentage_loose_fruit'],2)}}</td>
+                    <td style="background-color: #9DCED4;">{{$items1['kelas_c']}}</td>
+                    <td style="background-color: #9DCED4;">{{round($items1['percentage_kelas_c'],2)}}</td>
+                    <td style="background-color: #9DCED4;">{{$items1['kelas_b']}}</td>
+                    <td style="background-color: #9DCED4;">{{round($items1['percentage_kelas_b'],2)}}</td>
+                    <td style="background-color: #9DCED4;">{{$items1['kelas_a']}}</td>
+                    <td style="background-color: #9DCED4;">{{round($items1['percentage_kelas_a'],2)}}</td>
+                    <td style="background-color: #9DCED4;">{{round($items1['unripe_tanpa_brondol'],2)}}</td>
+                    <td style="background-color: #9DCED4;">{{round($items1['persentase_unripe_tanpa_brondol'],2)}}</td>
+                    <td style="background-color: #9DCED4;">{{round($items1['unripe_kurang_brondol'],2)}}</td>
+                    <td style="background-color: #9DCED4;">{{round($items1['persentase_unripe_kurang_brondol'],2)}}</td>
+                </tr>
+                @endif
                 @endforeach
                 @endforeach
-                @endforeach
+
+
                 @endif
             </tbody>
         </table>

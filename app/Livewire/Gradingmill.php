@@ -64,7 +64,7 @@ class Gradingmill extends Component
 
         // Your logic to show results
         $result = rekap_estate_mill_perbulan_perhari($bulan, $reg, $mill);
-        // dd($result);
+        // dd($result['result']);
         $this->resultdata = $result['result'];
         $this->resultdate = $result['final'];
         // dd($this)
@@ -85,6 +85,8 @@ class Gradingmill extends Component
         $reg = $this->inputregional;
         $mill_perhari = $this->mill_id;
         $data = rekap_estate_mill_perbulan_perhari($date, $reg, $mill_perhari);
+
+
         session()->flash('message', 'Excel Berhasil di proses...!');
         return Excel::download(new Gradingperhari($data), 'Excel Grading Regional-' . $date . '-' . 'Bulan-' . $reg . '.xlsx');
     }

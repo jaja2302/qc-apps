@@ -11844,573 +11844,581 @@ if (!function_exists('getdatamill')) {
         $get_regional = (int)$reg;
         $get_type = $type;
         // dd($get_type);
-        if ($get_type === 'perbulan') {
-            $data = DB::connection('mysql2')->table('grading_mill')
-                ->select('grading_mill.*', 'grading_mill.id as id_data')
-                ->join('estate', 'estate.est', '=', 'grading_mill.estate')
-                ->join('wil', 'wil.id', '=', 'estate.wil')
-                ->where('estate.emp', '!=', 1)
-                ->where('wil.regional', $get_regional)
-                ->where('grading_mill.datetime', 'like', '%' . $get_bulan . '%')
-                ->orderBy('grading_mill.datetime', 'asc')
-                ->orderBy('estate.est', 'asc')
-                ->orderBy('grading_mill.afdeling', 'asc')
-                ->get();
-            // $data = $data->groupBy(['estate']);
-            $data = $data->groupBy(['estate']);
-            $data = json_decode($data, true);
+        // if ($get_type === 'perbulan') {
+        //     $data = DB::connection('mysql2')->table('grading_mill')
+        //         ->select('grading_mill.*', 'grading_mill.id as id_data')
+        //         ->join('estate', 'estate.est', '=', 'grading_mill.estate')
+        //         ->join('wil', 'wil.id', '=', 'estate.wil')
+        //         ->where('estate.emp', '!=', 1)
+        //         ->where('wil.regional', $get_regional)
+        //         ->where('grading_mill.datetime', 'like', '%' . $get_bulan . '%')
+        //         ->orderBy('grading_mill.datetime', 'asc')
+        //         ->orderBy('estate.est', 'asc')
+        //         ->orderBy('grading_mill.afdeling', 'asc')
+        //         ->get();
+        //     // $data = $data->groupBy(['estate']);
+        //     $data = $data->groupBy(['estate']);
+        //     $data = json_decode($data, true);
 
-            // dd($data);
-            // save_json($data['SCM']);
-            // dd($data['SCM']);
-            // dd($data, $get_regional, $get_bulan);
+        //     // dd($data);
+        //     // save_json($data['SCM']);
+        //     // dd($data['SCM']);
+        //     // dd($data, $get_regional, $get_bulan);
 
-            $wil = DB::connection('mysql2')->table('estate')
-                ->select('estate.*', 'wil.nama as namawil')
-                ->join('wil', 'wil.id', '=', 'estate.wil')
-                ->where('wil.regional', $get_regional)
-                ->whereNotIn('estate.est', ['CWS1', 'CWS2', 'CWS3'])
-                ->where('estate.emp', '!=', 1)
-                ->orderBy('estate.wil', 'asc')
-                ->where('estate.est', '!=', 'PLASMA')
-                ->get();
-            $wil = $wil->groupBy(['namawil']);
-            $wil = json_decode($wil, true);
+        //     $wil = DB::connection('mysql2')->table('estate')
+        //         ->select('estate.*', 'wil.nama as namawil')
+        //         ->join('wil', 'wil.id', '=', 'estate.wil')
+        //         ->where('wil.regional', $get_regional)
+        //         ->whereNotIn('estate.est', ['CWS1', 'CWS2', 'CWS3'])
+        //         ->where('estate.emp', '!=', 1)
+        //         ->orderBy('estate.wil', 'asc')
+        //         ->where('estate.est', '!=', 'PLASMA')
+        //         ->get();
+        //     $wil = $wil->groupBy(['namawil']);
+        //     $wil = json_decode($wil, true);
 
-            $mil = DB::connection('mysql2')->table('list_mill')
-                ->select('list_mill.*')
-                ->where('reg', $get_regional)
-                ->get();
-            $mil = $mil->groupBy(['nama_mill']);
-            $mil = json_decode($mil, true);
-            // dd($mil);
-            $data_wil = [];
-            foreach ($data as $key => $value) {
-                foreach ($value as $key => $value1) {
-                    foreach ($wil as $keywil => $wilval) {
-                        foreach ($wilval as $keywil1 => $wilval1) {
-                            if ($value1['estate'] === $wilval1['est']) {
-                                $data_wil[$keywil][] = $value1;
-                            }
-                        }
-                    }
-                }
-            }
-            $data_mill = [];
-            foreach ($data as $key => $value) {
-                foreach ($value as $key => $value1) {
-                    foreach ($mil as $keywil => $wilval) {
-                        foreach ($wilval as $keywil1 => $wilval1) {
-                            if ($value1['mill'] === $wilval1['mill']) {
-                                $data_mill[$keywil][] = $value1;
-                            }
-                        }
-                    }
-                }
-            }
-            // dd($data_mill);
-            // dd($data, $mil, $data_mill);
-            // dd($wil, $data_wil);
-            $result = [];
-            if (!empty($data)) {
-                foreach ($data as $keys => $values) {
-                    $tonase = 0;
-                    $jumlah_janjang_grading = 0;
-                    $jumlah_janjang_spb = 0;
-                    $brondol_0 = 0;
-                    $brondol_less = 0;
-                    $overripe = 0;
-                    $empty_bunch = 0;
-                    $rotten_bunch = 0;
-                    $abn_partheno = 0;
-                    $abn_hard = 0;
-                    $abn_sakit = 0;
-                    $abn_kastrasi = 0;
-                    $longstalk = 0;
-                    $vcut = 0;
-                    $dirt = 0;
-                    $loose_fruit = 0;
-                    $kelas_a = 0;
-                    $kelas_b = 0;
-                    $kelas_c = 0;
-                    foreach ($values as $key => $value) {
-                        $tonase += $value['tonase'];
-                        $jumlah_janjang_grading += $value['jjg_grading'];
-                        $jumlah_janjang_spb += $value['jjg_spb'];
-
-
-                        $brondol_0 += is_numeric($value['unripe_tanpa_brondol']) ? $value['unripe_tanpa_brondol'] : 0;
-                        $brondol_less += is_numeric($value['unripe_kurang_brondol']) ? $value['unripe_kurang_brondol'] : 0;
-
-                        $overripe += $value['overripe'];
-                        $empty_bunch += $value['empty'];
-                        $rotten_bunch += $value['rotten'];
-
-                        $abn_partheno += $value['abn_partheno'];
-                        $abn_hard += $value['abn_hard'];
-                        $abn_sakit += $value['abn_sakit'];
-                        $abn_kastrasi += $value['abn_kastrasi'];
-                        $longstalk += $value['tangkai_panjang'];
-                        $vcut += $value['vcut'];
-                        $dirt += $value['dirt'];
-                        $loose_fruit += $value['loose_fruit'];
-                        $kelas_a += $value['kelas_a'];
-                        $kelas_b += $value['kelas_b'];
-                        $kelas_c += $value['kelas_c'];
-                    }
-
-                    $array_perdate = [
-                        'estate' => $keys,
-                        'afdeling' => $key,
-                        'jjg_grading' => $jumlah_janjang_grading,
-                        'jjg_spb' => $jumlah_janjang_spb,
-                        'brondol_0' => $brondol_0,
-                        'brondol_less' => $brondol_less,
-                        'overripe' => $overripe,
-                        'empty' => $empty_bunch,
-                        'rotten' => $rotten_bunch,
-                        'tangkai_panjang' => $longstalk,
-                        'vcuts' => $vcut,
-                        'tonase' => $tonase,
-                        'dirt' => $dirt,
-                        'loose_fruit' => $loose_fruit,
-                        'abn_partheno' => $abn_partheno,
-                        'abn_hard' => $abn_hard,
-                        'abn_sakit' => $abn_sakit,
-                        'abn_kastrasi' => $abn_kastrasi,
-                        'kelas_a' => $kelas_a,
-                        'kelas_b' => $kelas_b,
-                        'kelas_c' => $kelas_c,
-                    ];
-
-                    // dd($array_perdate);
-                    $date_arr = formula_grading($array_perdate);
-
-                    $result[$keys]['regional'] = [
-                        'tonase' => $date_arr['tonase'],
-                        'jumlah_janjang_grading' => $date_arr['jjg_grading'],
-                        'jumlah_janjang_spb' => $date_arr['jjg_spb'],
-                        'ripeness' => $date_arr['Ripeness'],
-                        'percentage_ripeness' => $date_arr['percentase_ripenes'],
-                        'unripe' => $date_arr['Unripe'],
-                        'percentage_unripe' => $date_arr['persenstase_unripe'],
-                        'overripe' => $date_arr['overripe'],
-                        'percentage_overripe' => $date_arr['persentase_overripe'],
-                        'empty_bunch' => $date_arr['empty'],
-                        'percentage_empty_bunch' => $date_arr['persentase_empty_bunch'],
-                        'rotten_bunch' => $date_arr['rotten'],
-                        'percentage_rotten_bunch' => $date_arr['persentase_rotten_bunce'],
-                        'abnormal' => $date_arr['Abnormal'],
-                        'percentage_abnormal' => $date_arr['persentase_abnormal'],
-                        'longstalk' => $date_arr['tangkai_panjang'],
-                        'percentage_longstalk' => $date_arr['persentase_stalk'],
-                        'vcut' => $date_arr['vcuts'],
-                        'percentage_vcut' => $date_arr['persentase_vcut'],
-                        'dirt_kg' => $date_arr['dirt'],
-                        'percentage_dirt' => $date_arr['persentase'],
-                        'loose_fruit_kg' => $date_arr['loose_fruit'],
-                        'percentage_loose_fruit' => $date_arr['persentase_lose_fruit'],
-                        'kelas_a' => $date_arr['kelas_a'],
-                        'kelas_b' => $date_arr['kelas_b'],
-                        'kelas_c' => $date_arr['kelas_c'],
-                        'percentage_kelas_a' => $date_arr['persentase_kelas_a'],
-                        'percentage_kelas_b' => $date_arr['persentase_kelas_b'],
-                        'percentage_kelas_c' => $date_arr['persentase_kelas_c'],
-
-                    ];
-                }
-            }
-            $result_wil = [];
-            if (!empty($data_wil)) {
-                foreach ($data_wil as $keys => $values) {
-                    $tonase = 0;
-                    $jumlah_janjang_grading = 0;
-                    $jumlah_janjang_spb = 0;
-                    $brondol_0 = 0;
-                    $brondol_less = 0;
-                    $overripe = 0;
-                    $empty_bunch = 0;
-                    $rotten_bunch = 0;
-                    $abn_partheno = 0;
-                    $abn_hard = 0;
-                    $abn_sakit = 0;
-                    $abn_kastrasi = 0;
-                    $longstalk = 0;
-                    $vcut = 0;
-                    $dirt = 0;
-                    $loose_fruit = 0;
-                    $kelas_a = 0;
-                    $kelas_b = 0;
-                    $kelas_c = 0;
-                    foreach ($values as $key => $value) {
-                        $tonase += $value['tonase'];
-                        $jumlah_janjang_grading += $value['jjg_grading'];
-                        $jumlah_janjang_spb += $value['jjg_spb'];
+        //     $mil = DB::connection('mysql2')->table('list_mill')
+        //         ->select('list_mill.*')
+        //         ->where('reg', $get_regional)
+        //         ->get();
+        //     $mil = $mil->groupBy(['nama_mill']);
+        //     $mil = json_decode($mil, true);
+        //     // dd($mil);
+        //     $data_wil = [];
+        //     foreach ($data as $key => $value) {
+        //         foreach ($value as $key => $value1) {
+        //             foreach ($wil as $keywil => $wilval) {
+        //                 foreach ($wilval as $keywil1 => $wilval1) {
+        //                     if ($value1['estate'] === $wilval1['est']) {
+        //                         $data_wil[$keywil][] = $value1;
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     $data_mill = [];
+        //     foreach ($data as $key => $value) {
+        //         foreach ($value as $key => $value1) {
+        //             foreach ($mil as $keywil => $wilval) {
+        //                 foreach ($wilval as $keywil1 => $wilval1) {
+        //                     if ($value1['mill'] === $wilval1['mill']) {
+        //                         $data_mill[$keywil][] = $value1;
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     // dd($data_mill);
+        //     // dd($data, $mil, $data_mill);
+        //     // dd($wil, $data_wil);
+        //     $result = [];
+        //     if (!empty($data)) {
+        //         foreach ($data as $keys => $values) {
+        //             $tonase = 0;
+        //             $jumlah_janjang_grading = 0;
+        //             $jumlah_janjang_spb = 0;
+        //             $brondol_0 = 0;
+        //             $brondol_less = 0;
+        //             $overripe = 0;
+        //             $empty_bunch = 0;
+        //             $rotten_bunch = 0;
+        //             $abn_partheno = 0;
+        //             $abn_hard = 0;
+        //             $abn_sakit = 0;
+        //             $abn_kastrasi = 0;
+        //             $longstalk = 0;
+        //             $vcut = 0;
+        //             $dirt = 0;
+        //             $loose_fruit = 0;
+        //             $kelas_a = 0;
+        //             $kelas_b = 0;
+        //             $kelas_c = 0;
+        //             foreach ($values as $key => $value) {
+        //                 $tonase += $value['tonase'];
+        //                 $jumlah_janjang_grading += $value['jjg_grading'];
+        //                 $jumlah_janjang_spb += $value['jjg_spb'];
 
 
+        //                 $brondol_0 += is_numeric($value['unripe_tanpa_brondol']) ? $value['unripe_tanpa_brondol'] : 0;
+        //                 $brondol_less += is_numeric($value['unripe_kurang_brondol']) ? $value['unripe_kurang_brondol'] : 0;
 
-                        $brondol_0 += is_numeric($value['unripe_tanpa_brondol']) ? $value['unripe_tanpa_brondol'] : 0;
-                        $brondol_less += is_numeric($value['unripe_kurang_brondol']) ? $value['unripe_kurang_brondol'] : 0;
+        //                 $overripe += $value['overripe'];
+        //                 $empty_bunch += $value['empty'];
+        //                 $rotten_bunch += $value['rotten'];
 
-                        // $brondol_0 += $value['unripe_tanpa_brondol'];
-                        // $brondol_less += $value['unripe_kurang_brondol'];
+        //                 $abn_partheno += $value['abn_partheno'];
+        //                 $abn_hard += $value['abn_hard'];
+        //                 $abn_sakit += $value['abn_sakit'];
+        //                 $abn_kastrasi += $value['abn_kastrasi'];
+        //                 $longstalk += $value['tangkai_panjang'];
+        //                 $vcut += $value['vcut'];
+        //                 $dirt += $value['dirt'];
+        //                 $loose_fruit += $value['loose_fruit'];
+        //                 $kelas_a += $value['kelas_a'];
+        //                 $kelas_b += $value['kelas_b'];
+        //                 $kelas_c += $value['kelas_c'];
+        //             }
 
-                        $overripe += $value['overripe'];
-                        $empty_bunch += $value['empty'];
-                        $rotten_bunch += $value['rotten'];
+        //             $array_perdate = [
+        //                 'estate' => $keys,
+        //                 'afdeling' => $key,
+        //                 'jjg_grading' => $jumlah_janjang_grading,
+        //                 'jjg_spb' => $jumlah_janjang_spb,
+        //                 'brondol_0' => $brondol_0,
+        //                 'brondol_less' => $brondol_less,
+        //                 'overripe' => $overripe,
+        //                 'empty' => $empty_bunch,
+        //                 'rotten' => $rotten_bunch,
+        //                 'tangkai_panjang' => $longstalk,
+        //                 'vcuts' => $vcut,
+        //                 'tonase' => $tonase,
+        //                 'dirt' => $dirt,
+        //                 'loose_fruit' => $loose_fruit,
+        //                 'abn_partheno' => $abn_partheno,
+        //                 'abn_hard' => $abn_hard,
+        //                 'abn_sakit' => $abn_sakit,
+        //                 'abn_kastrasi' => $abn_kastrasi,
+        //                 'kelas_a' => $kelas_a,
+        //                 'kelas_b' => $kelas_b,
+        //                 'kelas_c' => $kelas_c,
+        //             ];
 
-                        $abn_partheno += $value['abn_partheno'];
-                        $abn_hard += $value['abn_hard'];
-                        $abn_sakit += $value['abn_sakit'];
-                        $abn_kastrasi += $value['abn_kastrasi'];
-                        $longstalk += $value['tangkai_panjang'];
-                        $vcut += $value['vcut'];
-                        $dirt += $value['dirt'];
-                        $loose_fruit += $value['loose_fruit'];
-                        $kelas_a += $value['kelas_a'];
-                        $kelas_b += $value['kelas_b'];
-                        $kelas_c += $value['kelas_c'];
-                    }
+        //             // dd($array_perdate);
+        //             $date_arr = formula_grading($array_perdate);
 
-                    $array_perdate = [
-                        'estate' => $keys,
-                        'afdeling' => $key,
-                        'jjg_grading' => $jumlah_janjang_grading,
-                        'jjg_spb' => $jumlah_janjang_spb,
-                        'brondol_0' => $brondol_0,
-                        'brondol_less' => $brondol_less,
-                        'overripe' => $overripe,
-                        'empty' => $empty_bunch,
-                        'rotten' => $rotten_bunch,
-                        'tangkai_panjang' => $longstalk,
-                        'vcuts' => $vcut,
-                        'tonase' => $tonase,
-                        'dirt' => $dirt,
-                        'loose_fruit' => $loose_fruit,
-                        'abn_partheno' => $abn_partheno,
-                        'abn_hard' => $abn_hard,
-                        'abn_sakit' => $abn_sakit,
-                        'abn_kastrasi' => $abn_kastrasi,
-                        'kelas_a' => $kelas_a,
-                        'kelas_b' => $kelas_b,
-                        'kelas_c' => $kelas_c,
-                    ];
+        //             $result[$keys]['regional'] = [
+        //                 'tonase' => $date_arr['tonase'],
+        //                 'jumlah_janjang_grading' => $date_arr['jjg_grading'],
+        //                 'jumlah_janjang_spb' => $date_arr['jjg_spb'],
+        //                 'ripeness' => $date_arr['Ripeness'],
+        //                 'percentage_ripeness' => $date_arr['percentase_ripenes'],
+        //                 'unripe' => $date_arr['Unripe'],
+        //                 'percentage_unripe' => $date_arr['persenstase_unripe'],
+        //                 'overripe' => $date_arr['overripe'],
+        //                 'percentage_overripe' => $date_arr['persentase_overripe'],
+        //                 'empty_bunch' => $date_arr['empty'],
+        //                 'percentage_empty_bunch' => $date_arr['persentase_empty_bunch'],
+        //                 'rotten_bunch' => $date_arr['rotten'],
+        //                 'percentage_rotten_bunch' => $date_arr['persentase_rotten_bunce'],
+        //                 'abnormal' => $date_arr['Abnormal'],
+        //                 'percentage_abnormal' => $date_arr['persentase_abnormal'],
+        //                 'longstalk' => $date_arr['tangkai_panjang'],
+        //                 'percentage_longstalk' => $date_arr['persentase_stalk'],
+        //                 'vcut' => $date_arr['vcuts'],
+        //                 'percentage_vcut' => $date_arr['persentase_vcut'],
+        //                 'dirt_kg' => $date_arr['dirt'],
+        //                 'percentage_dirt' => $date_arr['persentase'],
+        //                 'loose_fruit_kg' => $date_arr['loose_fruit'],
+        //                 'percentage_loose_fruit' => $date_arr['persentase_lose_fruit'],
+        //                 'kelas_a' => $date_arr['kelas_a'],
+        //                 'kelas_b' => $date_arr['kelas_b'],
+        //                 'kelas_c' => $date_arr['kelas_c'],
+        //                 'percentage_kelas_a' => $date_arr['persentase_kelas_a'],
+        //                 'percentage_kelas_b' => $date_arr['persentase_kelas_b'],
+        //                 'percentage_kelas_c' => $date_arr['persentase_kelas_c'],
 
-                    // dd($array_perdate);
-                    $date_arr = formula_grading($array_perdate);
-
-                    $result_wil[$keys]['wil'] = [
-                        'tonase' => $date_arr['tonase'] ?? 0,
-                        'jumlah_janjang_grading' => $date_arr['jjg_grading'] ?? 0,
-                        'jumlah_janjang_spb' => $date_arr['jjg_spb'] ?? 0,
-                        'ripeness' => $date_arr['Ripeness'] ?? 0,
-                        'percentage_ripeness' => $date_arr['percentase_ripenes'] ?? 0,
-                        'unripe' => $date_arr['Unripe'] ?? 0,
-                        'percentage_unripe' => $date_arr['persenstase_unripe'] ?? 0,
-                        'overripe' => $date_arr['overripe'] ?? 0,
-                        'percentage_overripe' => $date_arr['persentase_overripe'] ?? 0,
-                        'empty_bunch' => $date_arr['empty'] ?? 0,
-                        'percentage_empty_bunch' => $date_arr['persentase_empty_bunch'] ?? 0,
-                        'rotten_bunch' => $date_arr['rotten'] ?? 0,
-                        'percentage_rotten_bunch' => $date_arr['persentase_rotten_bunce'] ?? 0,
-                        'abnormal' => $date_arr['abnormal'] ?? 0,
-                        'percentage_abnormal' => $date_arr['persentase_abnormal'] ?? 0,
-                        'longstalk' => $date_arr['longstalk'] ?? 0,
-                        'percentage_longstalk' => $date_arr['persentase_stalk'] ?? 0,
-                        'vcut' => $date_arr['vcuts'] ?? 0,
-                        'percentage_vcut' => $date_arr['persentase_vcut'] ?? 0,
-                        'dirt_kg' => $date_arr['dirt'] ?? 0,
-                        'percentage_dirt' => $date_arr['persentase'] ?? 0,
-                        'loose_fruit_kg' => $date_arr['loose_fruit'] ?? 0,
-                        'percentage_loose_fruit' => $date_arr['persentase_lose_fruit'] ?? 0,
-                        'kelas_a' => $date_arr['kelas_a'] ?? 0,
-                        'kelas_b' => $date_arr['kelas_b'] ?? 0,
-                        'kelas_c' => $date_arr['kelas_c'] ?? 0,
-                        'percentage_kelas_a' => $date_arr['persentase_kelas_a'] ?? 0,
-                        'percentage_kelas_b' => $date_arr['persentase_kelas_b'] ?? 0,
-                        'percentage_kelas_c' => $date_arr['persentase_kelas_c'] ?? 0,
-
-                    ];
-                }
-            }
-            $result_mill = [];
-            if (!empty($data_mill)) {
-                foreach ($data_mill as $keys => $values) {
-                    $tonase = 0;
-                    $jumlah_janjang_grading = 0;
-                    $jumlah_janjang_spb = 0;
-                    $brondol_0 = 0;
-                    $brondol_less = 0;
-                    $overripe = 0;
-                    $empty_bunch = 0;
-                    $rotten_bunch = 0;
-                    $abn_partheno = 0;
-                    $abn_hard = 0;
-                    $abn_sakit = 0;
-                    $abn_kastrasi = 0;
-                    $longstalk = 0;
-                    $vcut = 0;
-                    $dirt = 0;
-                    $loose_fruit = 0;
-                    $kelas_a = 0;
-                    $kelas_b = 0;
-                    $kelas_c = 0;
-                    foreach ($values as $key => $value) {
-                        $tonase += $value['tonase'];
-                        $jumlah_janjang_grading += $value['jjg_grading'];
-                        $jumlah_janjang_spb += $value['jjg_spb'];
-
-
-                        // $brondol_0 += $value['unripe_tanpa_brondol'];
-                        // $brondol_less += $value['unripe_kurang_brondol'];
-
-
-                        $brondol_0 += is_numeric($value['unripe_tanpa_brondol']) ? $value['unripe_tanpa_brondol'] : 0;
-                        $brondol_less += is_numeric($value['unripe_kurang_brondol']) ? $value['unripe_kurang_brondol'] : 0;
-
-
-                        $overripe += $value['overripe'];
-                        $empty_bunch += $value['empty'];
-                        $rotten_bunch += $value['rotten'];
-
-                        $abn_partheno += $value['abn_partheno'];
-                        $abn_hard += $value['abn_hard'];
-                        $abn_sakit += $value['abn_sakit'];
-                        $abn_kastrasi += $value['abn_kastrasi'];
-                        $longstalk += $value['tangkai_panjang'];
-                        $vcut += $value['vcut'];
-                        $dirt += $value['dirt'];
-                        $loose_fruit += $value['loose_fruit'];
-                        $kelas_a += $value['kelas_a'];
-                        $kelas_b += $value['kelas_b'];
-                        $kelas_c += $value['kelas_c'];
-                    }
-
-                    $array_perdate = [
-                        'estate' => $keys,
-                        'afdeling' => $key,
-                        'jjg_grading' => $jumlah_janjang_grading,
-                        'jjg_spb' => $jumlah_janjang_spb,
-                        'brondol_0' => $brondol_0,
-                        'brondol_less' => $brondol_less,
-                        'overripe' => $overripe,
-                        'empty' => $empty_bunch,
-                        'rotten' => $rotten_bunch,
-                        'tangkai_panjang' => $longstalk,
-                        'vcuts' => $vcut,
-                        'tonase' => $tonase,
-                        'dirt' => $dirt,
-                        'loose_fruit' => $loose_fruit,
-                        'abn_partheno' => $abn_partheno,
-                        'abn_hard' => $abn_hard,
-                        'abn_sakit' => $abn_sakit,
-                        'abn_kastrasi' => $abn_kastrasi,
-                        'kelas_a' => $kelas_a,
-                        'kelas_b' => $kelas_b,
-                        'kelas_c' => $kelas_c,
-                    ];
-
-                    // dd($array_perdate);
-                    $date_arr = formula_grading($array_perdate);
-                    $result_mill[$keys]['mil'] = [
-                        'tonase' => $date_arr['tonase'],
-                        'jumlah_janjang_grading' => $date_arr['jjg_grading'],
-                        'jumlah_janjang_spb' => $date_arr['jjg_spb'],
-                        'ripeness' => $date_arr['Ripeness'],
-                        'percentage_ripeness' => $date_arr['percentase_ripenes'],
-                        'unripe' => $date_arr['Unripe'],
-                        'percentage_unripe' => $date_arr['persenstase_unripe'],
-                        'overripe' => $date_arr['overripe'],
-                        'percentage_overripe' => $date_arr['persentase_overripe'],
-                        'empty_bunch' => $date_arr['empty'],
-                        'percentage_empty_bunch' => $date_arr['persentase_empty_bunch'],
-                        'rotten_bunch' => $date_arr['rotten'],
-                        'percentage_rotten_bunch' => $date_arr['persentase_rotten_bunce'],
-                        'abnormal' => $date_arr['Abnormal'],
-                        'percentage_abnormal' => $date_arr['persentase_abnormal'],
-                        'longstalk' => $date_arr['tangkai_panjang'],
-                        'percentage_longstalk' => $date_arr['persentase_stalk'],
-                        'vcut' => $date_arr['vcuts'],
-                        'percentage_vcut' => $date_arr['persentase_vcut'],
-                        'dirt_kg' => $date_arr['dirt'],
-                        'percentage_dirt' => $date_arr['persentase'],
-                        'loose_fruit_kg' => $date_arr['loose_fruit'],
-                        'percentage_loose_fruit' => $date_arr['persentase_lose_fruit'],
-                        'kelas_a' => $date_arr['kelas_a'],
-                        'kelas_b' => $date_arr['kelas_b'],
-                        'kelas_c' => $date_arr['kelas_c'],
-                        'percentage_kelas_a' => $date_arr['persentase_kelas_a'],
-                        'percentage_kelas_b' => $date_arr['persentase_kelas_b'],
-                        'percentage_kelas_c' => $date_arr['persentase_kelas_c'],
-
-                    ];
-                }
-            }
-            // dd($result_mill);
-            $arr = array();
-            $arr['data_regional'] = $result;
-            $arr['data_wil'] = $result_wil;
-            $arr['data_mill'] = $result_mill;
-
-            return $arr;
-            // dd($result, $data);
-            // echo json_encode($arr); //di decode ke dalam bentuk json dalam vaiavel arrview yang dapat menampung banyak isi array
-            // exit();
-        } elseif ($get_type === 'perhari') {
-
-            $data = DB::connection('mysql2')->table('grading_mill')
-                ->join('estate', 'estate.est', '=', 'grading_mill.estate')
-                ->join('wil', 'wil.id', '=', 'estate.wil')
-                ->where('estate.emp', '!=', 1)
-                ->where('wil.regional', $get_regional)
-                ->where('grading_mill.datetime', 'like', '%' . $get_bulan . '%')
-                ->orderBy('estate.est', 'asc')
-                ->orderBy('grading_mill.afdeling', 'asc')
-                ->get();
-            $data = json_decode($data, true);
-
-            $result = [];
-            if (!empty($data)) {
-                foreach ($data as $key => $value) {
-                    // Remove square brackets and split the string into an array
-                    $cleaned_string = str_replace(['[', ']'], '', $value['foto_temuan']);
-                    $foto = explode(',', $cleaned_string);
-
-                    // Trim spaces from each element in the array
-                    $foto = array_map('trim', $foto);
-
-                    $array_perdate = [
-                        'estate' => $value['estate'],
-                        'afdeling' => $value['afdeling'],
-                        'jjg_grading' => $value['jjg_grading'],
-                        'jjg_spb' => $value['jjg_spb'],
-                        'brondol_0' => $value['unripe_tanpa_brondol'],
-                        'brondol_less' => $value['unripe_kurang_brondol'],
-                        'overripe' => $value['overripe'],
-                        'empty' => $value['empty'],
-                        'rotten' => $value['rotten'],
-                        'tangkai_panjang' => $value['tangkai_panjang'],
-                        'vcuts' => $value['vcut'],
-                        'tonase' => $value['tonase'],
-                        'dirt' => $value['dirt'],
-                        'loose_fruit' => $value['loose_fruit'],
-                        'abn_partheno' => $value['abn_partheno'],
-                        'abn_hard' => $value['abn_hard'],
-                        'abn_sakit' => $value['abn_sakit'],
-                        'abn_kastrasi' => $value['abn_kastrasi'],
-                        'kelas_a' => $value['kelas_a'],
-                        'kelas_b' => $value['kelas_b'],
-                        'kelas_c' => $value['kelas_c'],
-                    ];
-
-                    // dd($array_perdate);
-                    $date_arr = formula_grading($array_perdate);
-
-                    $no_pemanen = json_decode($value['no_pemanen'], true);
-                    $tanpaBrondol = [];
-                    $datakurang_brondol = [];
-                    // dd($no_pemanen);
-                    foreach ($no_pemanen as $keys1 => $values1) {
-                        $get_pemanen = isset($values1['a']) ? $values1['a'] : (isset($values1['noPemanen']) ? $values1['noPemanen'] : null);
-                        $get_kurangBrondol = isset($values1['b']) ? $values1['b'] : (isset($values1['kurangBrondol']) ? $values1['kurangBrondol'] : 0);
-                        $get_tanpaBrondol = isset($values1['c']) ? $values1['c'] : (isset($values1['tanpaBrondol']) ? $values1['tanpaBrondol'] : 0);
-                        if ($get_kurangBrondol != 0) {
-                            $datakurang_brondol['kurangBrondol_list'][] = [
-                                'no_pemanen' => ($get_pemanen == 999) ? 'x' : $get_pemanen,
-                                'kurangBrondol' => $get_kurangBrondol,
-                            ];
-                        }
-                        if ($get_kurangBrondol != 0) {
-                            $tanpaBrondol['tanpaBrondol_list'][] = [
-                                'no_pemanen' => ($get_pemanen == 999) ? 'x' : $get_pemanen,
-                                'tanpaBrondol' => $get_tanpaBrondol,
-                            ];
-                        }
-                    }
-
-                    // dd($datakurang_brondol, $tanpaBrondol);
+        //             ];
+        //         }
+        //     }
+        //     $result_wil = [];
+        //     if (!empty($data_wil)) {
+        //         foreach ($data_wil as $keys => $values) {
+        //             $tonase = 0;
+        //             $jumlah_janjang_grading = 0;
+        //             $jumlah_janjang_spb = 0;
+        //             $brondol_0 = 0;
+        //             $brondol_less = 0;
+        //             $overripe = 0;
+        //             $empty_bunch = 0;
+        //             $rotten_bunch = 0;
+        //             $abn_partheno = 0;
+        //             $abn_hard = 0;
+        //             $abn_sakit = 0;
+        //             $abn_kastrasi = 0;
+        //             $longstalk = 0;
+        //             $vcut = 0;
+        //             $dirt = 0;
+        //             $loose_fruit = 0;
+        //             $kelas_a = 0;
+        //             $kelas_b = 0;
+        //             $kelas_c = 0;
+        //             foreach ($values as $key => $value) {
+        //                 $tonase += $value['tonase'];
+        //                 $jumlah_janjang_grading += $value['jjg_grading'];
+        //                 $jumlah_janjang_spb += $value['jjg_spb'];
 
 
 
-                    // Output results
+        //                 $brondol_0 += is_numeric($value['unripe_tanpa_brondol']) ? $value['unripe_tanpa_brondol'] : 0;
+        //                 $brondol_less += is_numeric($value['unripe_kurang_brondol']) ? $value['unripe_kurang_brondol'] : 0;
 
-                    $result[] = [
-                        'id' => $value['id'],
-                        'estate' => $value['estate'],
-                        'afdeling' => $value['afdeling'],
-                        'jjg_grading' => $value['jjg_grading'],
-                        'no_plat' => $value['no_plat'],
-                        'jjg_spb' => $value['jjg_spb'],
-                        'datetime' => $value['datetime'],
-                        'tonase' => $value['tonase'],
-                        // 'bjr' => ($value['jjg_spb'] / $value['tonase']) * 100,
-                        'bjr' => $value['tonase'] > 0 ? round(($value['tonase'] / $value['jjg_grading']) * 100, 2) : 0,
-                        'jjg_selisih' => $date_arr['jjg_selisih'],
-                        'persentase_selisih' => round($date_arr['percentage_selisih_janjang']),
-                        'Ripeness' => $date_arr['ripeness'],
-                        'percentase_ripenes' => round($date_arr['percentage_ripeness'], 2),
-                        'Unripe' => $date_arr['unripe'],
-                        'persenstase_unripe' => round($date_arr['percentage_unripe'], 2),
-                        'nol_brondol' => $date_arr['brondol_0'],
-                        'persentase_nol_brondol' => round($date_arr['percentage_brondol_0'], 2),
-                        'kurang_brondol' => $date_arr['brondol_less'],
-                        'persentase_brondol' => round($date_arr['percentage_brondol_less'], 2),
-                        'nomor_pemanen' => 'a',
-                        'unripe_tanda_x' => 'a',
-                        'Overripe' => $date_arr['overripe'],
-                        'persentase_overripe' => round($date_arr['percentage_overripe'], 2),
-                        'empty_bunch' => $value['empty'],
-                        'persentase_empty_bunch' => round($date_arr['percentage_empty_bunch'], 2),
-                        'rotten_bunch' => $value['rotten'],
-                        'persentase_rotten_bunce' => round($date_arr['percentage_rotten_bunch'], 2),
-                        'Abnormal' => $date_arr['abnormal'],
-                        'persentase_abnormal' =>    round($date_arr['percentage_abnormal'], 2),
-                        'stalk' =>    $date_arr['tangkai_panjang'],
-                        'persentase_stalk' => round($date_arr['percentage_tangkai_panjang'], 2),
-                        'vcut' =>    $value['vcut'],
-                        'persentase_vcut' => round($date_arr['percentage_vcuts'], 2),
-                        'loose_fruit' => $value['loose_fruit'],
-                        'persentase_lose_fruit' => $date_arr['persentase_loose_fruit'],
-                        'Dirt' => $value['dirt'],
-                        'persentase' => $date_arr['persentase'],
-                        'foto' => $foto,
-                        'pemanen_list_tanpabrondol' => $tanpaBrondol,
-                        'pemanen_list_kurangbrondol' => $datakurang_brondol,
-                        'kelas_a' => $value['kelas_a'],
-                        'persentase_kelas_a' => round($date_arr['percentage_kelas_a'], 2),
-                        'kelas_b' => $value['kelas_b'],
-                        'persentase_kelas_b' => round($date_arr['percentage_kelas_b'], 2),
-                        'kelas_c' => $value['kelas_c'],
-                        'persentase_kelas_c' => round($date_arr['percentage_kelas_c'], 2),
-                    ];
-                }
-                // dd($data, $result);
-                // $result now contains the processed data
+        //                 // $brondol_0 += $value['unripe_tanpa_brondol'];
+        //                 // $brondol_less += $value['unripe_kurang_brondol'];
+
+        //                 $overripe += $value['overripe'];
+        //                 $empty_bunch += $value['empty'];
+        //                 $rotten_bunch += $value['rotten'];
+
+        //                 $abn_partheno += $value['abn_partheno'];
+        //                 $abn_hard += $value['abn_hard'];
+        //                 $abn_sakit += $value['abn_sakit'];
+        //                 $abn_kastrasi += $value['abn_kastrasi'];
+        //                 $longstalk += $value['tangkai_panjang'];
+        //                 $vcut += $value['vcut'];
+        //                 $dirt += $value['dirt'];
+        //                 $loose_fruit += $value['loose_fruit'];
+        //                 $kelas_a += $value['kelas_a'];
+        //                 $kelas_b += $value['kelas_b'];
+        //                 $kelas_c += $value['kelas_c'];
+        //             }
+
+        //             $array_perdate = [
+        //                 'estate' => $keys,
+        //                 'afdeling' => $key,
+        //                 'jjg_grading' => $jumlah_janjang_grading,
+        //                 'jjg_spb' => $jumlah_janjang_spb,
+        //                 'brondol_0' => $brondol_0,
+        //                 'brondol_less' => $brondol_less,
+        //                 'overripe' => $overripe,
+        //                 'empty' => $empty_bunch,
+        //                 'rotten' => $rotten_bunch,
+        //                 'tangkai_panjang' => $longstalk,
+        //                 'vcuts' => $vcut,
+        //                 'tonase' => $tonase,
+        //                 'dirt' => $dirt,
+        //                 'loose_fruit' => $loose_fruit,
+        //                 'abn_partheno' => $abn_partheno,
+        //                 'abn_hard' => $abn_hard,
+        //                 'abn_sakit' => $abn_sakit,
+        //                 'abn_kastrasi' => $abn_kastrasi,
+        //                 'kelas_a' => $kelas_a,
+        //                 'kelas_b' => $kelas_b,
+        //                 'kelas_c' => $kelas_c,
+        //             ];
+
+        //             // dd($array_perdate);
+        //             $date_arr = formula_grading($array_perdate);
+
+        //             $result_wil[$keys]['wil'] = [
+        //                 'tonase' => $date_arr['tonase'] ?? 0,
+        //                 'jumlah_janjang_grading' => $date_arr['jjg_grading'] ?? 0,
+        //                 'jumlah_janjang_spb' => $date_arr['jjg_spb'] ?? 0,
+        //                 'ripeness' => $date_arr['Ripeness'] ?? 0,
+        //                 'percentage_ripeness' => $date_arr['percentase_ripenes'] ?? 0,
+        //                 'unripe' => $date_arr['Unripe'] ?? 0,
+        //                 'percentage_unripe' => $date_arr['persenstase_unripe'] ?? 0,
+        //                 'overripe' => $date_arr['overripe'] ?? 0,
+        //                 'percentage_overripe' => $date_arr['persentase_overripe'] ?? 0,
+        //                 'empty_bunch' => $date_arr['empty'] ?? 0,
+        //                 'percentage_empty_bunch' => $date_arr['persentase_empty_bunch'] ?? 0,
+        //                 'rotten_bunch' => $date_arr['rotten'] ?? 0,
+        //                 'percentage_rotten_bunch' => $date_arr['persentase_rotten_bunce'] ?? 0,
+        //                 'abnormal' => $date_arr['abnormal'] ?? 0,
+        //                 'percentage_abnormal' => $date_arr['persentase_abnormal'] ?? 0,
+        //                 'longstalk' => $date_arr['longstalk'] ?? 0,
+        //                 'percentage_longstalk' => $date_arr['persentase_stalk'] ?? 0,
+        //                 'vcut' => $date_arr['vcuts'] ?? 0,
+        //                 'percentage_vcut' => $date_arr['persentase_vcut'] ?? 0,
+        //                 'dirt_kg' => $date_arr['dirt'] ?? 0,
+        //                 'percentage_dirt' => $date_arr['persentase'] ?? 0,
+        //                 'loose_fruit_kg' => $date_arr['loose_fruit'] ?? 0,
+        //                 'percentage_loose_fruit' => $date_arr['persentase_lose_fruit'] ?? 0,
+        //                 'kelas_a' => $date_arr['kelas_a'] ?? 0,
+        //                 'kelas_b' => $date_arr['kelas_b'] ?? 0,
+        //                 'kelas_c' => $date_arr['kelas_c'] ?? 0,
+        //                 'percentage_kelas_a' => $date_arr['persentase_kelas_a'] ?? 0,
+        //                 'percentage_kelas_b' => $date_arr['persentase_kelas_b'] ?? 0,
+        //                 'percentage_kelas_c' => $date_arr['persentase_kelas_c'] ?? 0,
+
+        //             ];
+        //         }
+        //     }
+        //     $result_mill = [];
+        //     if (!empty($data_mill)) {
+        //         foreach ($data_mill as $keys => $values) {
+        //             $tonase = 0;
+        //             $jumlah_janjang_grading = 0;
+        //             $jumlah_janjang_spb = 0;
+        //             $brondol_0 = 0;
+        //             $brondol_less = 0;
+        //             $overripe = 0;
+        //             $empty_bunch = 0;
+        //             $rotten_bunch = 0;
+        //             $abn_partheno = 0;
+        //             $abn_hard = 0;
+        //             $abn_sakit = 0;
+        //             $abn_kastrasi = 0;
+        //             $longstalk = 0;
+        //             $vcut = 0;
+        //             $dirt = 0;
+        //             $loose_fruit = 0;
+        //             $kelas_a = 0;
+        //             $kelas_b = 0;
+        //             $kelas_c = 0;
+        //             foreach ($values as $key => $value) {
+        //                 $tonase += $value['tonase'];
+        //                 $jumlah_janjang_grading += $value['jjg_grading'];
+        //                 $jumlah_janjang_spb += $value['jjg_spb'];
 
 
-            }
-            // dd($result);
-            $arr = array();
-            $arr['data_perhari'] = $result;
-            // dd($result, $data);
-            return $arr;
-        } else {
-            // dd($data);
-            $calculationService = new \App\Services\CalculationGrading();
-
-            $type = 'perhari';
+        //                 // $brondol_0 += $value['unripe_tanpa_brondol'];
+        //                 // $brondol_less += $value['unripe_kurang_brondol'];
 
 
-            $result = $calculationService->getGradingData($bulan, $reg, $type);
-            // dd($result);
-            $arr = array();
-            $arr['data_pperafd'] = $result;
+        //                 $brondol_0 += is_numeric($value['unripe_tanpa_brondol']) ? $value['unripe_tanpa_brondol'] : 0;
+        //                 $brondol_less += is_numeric($value['unripe_kurang_brondol']) ? $value['unripe_kurang_brondol'] : 0;
 
-            return $arr;
-            // // dd($result, $data);
-            // echo json_encode($arr);
-            // exit();
-        }
+
+        //                 $overripe += $value['overripe'];
+        //                 $empty_bunch += $value['empty'];
+        //                 $rotten_bunch += $value['rotten'];
+
+        //                 $abn_partheno += $value['abn_partheno'];
+        //                 $abn_hard += $value['abn_hard'];
+        //                 $abn_sakit += $value['abn_sakit'];
+        //                 $abn_kastrasi += $value['abn_kastrasi'];
+        //                 $longstalk += $value['tangkai_panjang'];
+        //                 $vcut += $value['vcut'];
+        //                 $dirt += $value['dirt'];
+        //                 $loose_fruit += $value['loose_fruit'];
+        //                 $kelas_a += $value['kelas_a'];
+        //                 $kelas_b += $value['kelas_b'];
+        //                 $kelas_c += $value['kelas_c'];
+        //             }
+
+        //             $array_perdate = [
+        //                 'estate' => $keys,
+        //                 'afdeling' => $key,
+        //                 'jjg_grading' => $jumlah_janjang_grading,
+        //                 'jjg_spb' => $jumlah_janjang_spb,
+        //                 'brondol_0' => $brondol_0,
+        //                 'brondol_less' => $brondol_less,
+        //                 'overripe' => $overripe,
+        //                 'empty' => $empty_bunch,
+        //                 'rotten' => $rotten_bunch,
+        //                 'tangkai_panjang' => $longstalk,
+        //                 'vcuts' => $vcut,
+        //                 'tonase' => $tonase,
+        //                 'dirt' => $dirt,
+        //                 'loose_fruit' => $loose_fruit,
+        //                 'abn_partheno' => $abn_partheno,
+        //                 'abn_hard' => $abn_hard,
+        //                 'abn_sakit' => $abn_sakit,
+        //                 'abn_kastrasi' => $abn_kastrasi,
+        //                 'kelas_a' => $kelas_a,
+        //                 'kelas_b' => $kelas_b,
+        //                 'kelas_c' => $kelas_c,
+        //             ];
+
+        //             // dd($array_perdate);
+        //             $date_arr = formula_grading($array_perdate);
+        //             $result_mill[$keys]['mil'] = [
+        //                 'tonase' => $date_arr['tonase'],
+        //                 'jumlah_janjang_grading' => $date_arr['jjg_grading'],
+        //                 'jumlah_janjang_spb' => $date_arr['jjg_spb'],
+        //                 'ripeness' => $date_arr['Ripeness'],
+        //                 'percentage_ripeness' => $date_arr['percentase_ripenes'],
+        //                 'unripe' => $date_arr['Unripe'],
+        //                 'percentage_unripe' => $date_arr['persenstase_unripe'],
+        //                 'overripe' => $date_arr['overripe'],
+        //                 'percentage_overripe' => $date_arr['persentase_overripe'],
+        //                 'empty_bunch' => $date_arr['empty'],
+        //                 'percentage_empty_bunch' => $date_arr['persentase_empty_bunch'],
+        //                 'rotten_bunch' => $date_arr['rotten'],
+        //                 'percentage_rotten_bunch' => $date_arr['persentase_rotten_bunce'],
+        //                 'abnormal' => $date_arr['Abnormal'],
+        //                 'percentage_abnormal' => $date_arr['persentase_abnormal'],
+        //                 'longstalk' => $date_arr['tangkai_panjang'],
+        //                 'percentage_longstalk' => $date_arr['persentase_stalk'],
+        //                 'vcut' => $date_arr['vcuts'],
+        //                 'percentage_vcut' => $date_arr['persentase_vcut'],
+        //                 'dirt_kg' => $date_arr['dirt'],
+        //                 'percentage_dirt' => $date_arr['persentase'],
+        //                 'loose_fruit_kg' => $date_arr['loose_fruit'],
+        //                 'percentage_loose_fruit' => $date_arr['persentase_lose_fruit'],
+        //                 'kelas_a' => $date_arr['kelas_a'],
+        //                 'kelas_b' => $date_arr['kelas_b'],
+        //                 'kelas_c' => $date_arr['kelas_c'],
+        //                 'percentage_kelas_a' => $date_arr['persentase_kelas_a'],
+        //                 'percentage_kelas_b' => $date_arr['persentase_kelas_b'],
+        //                 'percentage_kelas_c' => $date_arr['persentase_kelas_c'],
+
+        //             ];
+        //         }
+        //     }
+        //     // dd($result_mill);
+        //     $arr = array();
+        //     $arr['data_regional'] = $result;
+        //     $arr['data_wil'] = $result_wil;
+        //     $arr['data_mill'] = $result_mill;
+
+        //     return $arr;
+        //     // dd($result, $data);
+        //     // echo json_encode($arr); //di decode ke dalam bentuk json dalam vaiavel arrview yang dapat menampung banyak isi array
+        //     // exit();
+        // } elseif ($get_type === 'perhari') {
+
+        //     $data = DB::connection('mysql2')->table('grading_mill')
+        //         ->join('estate', 'estate.est', '=', 'grading_mill.estate')
+        //         ->join('wil', 'wil.id', '=', 'estate.wil')
+        //         ->where('estate.emp', '!=', 1)
+        //         ->where('wil.regional', $get_regional)
+        //         ->where('grading_mill.datetime', 'like', '%' . $get_bulan . '%')
+        //         ->orderBy('estate.est', 'asc')
+        //         ->orderBy('grading_mill.afdeling', 'asc')
+        //         ->get();
+        //     $data = json_decode($data, true);
+
+        //     $result = [];
+        //     if (!empty($data)) {
+        //         foreach ($data as $key => $value) {
+        //             // Remove square brackets and split the string into an array
+        //             $cleaned_string = str_replace(['[', ']'], '', $value['foto_temuan']);
+        //             $foto = explode(',', $cleaned_string);
+
+        //             // Trim spaces from each element in the array
+        //             $foto = array_map('trim', $foto);
+
+        //             $array_perdate = [
+        //                 'estate' => $value['estate'],
+        //                 'afdeling' => $value['afdeling'],
+        //                 'jjg_grading' => $value['jjg_grading'],
+        //                 'jjg_spb' => $value['jjg_spb'],
+        //                 'brondol_0' => $value['unripe_tanpa_brondol'],
+        //                 'brondol_less' => $value['unripe_kurang_brondol'],
+        //                 'overripe' => $value['overripe'],
+        //                 'empty' => $value['empty'],
+        //                 'rotten' => $value['rotten'],
+        //                 'tangkai_panjang' => $value['tangkai_panjang'],
+        //                 'vcuts' => $value['vcut'],
+        //                 'tonase' => $value['tonase'],
+        //                 'dirt' => $value['dirt'],
+        //                 'loose_fruit' => $value['loose_fruit'],
+        //                 'abn_partheno' => $value['abn_partheno'],
+        //                 'abn_hard' => $value['abn_hard'],
+        //                 'abn_sakit' => $value['abn_sakit'],
+        //                 'abn_kastrasi' => $value['abn_kastrasi'],
+        //                 'kelas_a' => $value['kelas_a'],
+        //                 'kelas_b' => $value['kelas_b'],
+        //                 'kelas_c' => $value['kelas_c'],
+        //             ];
+
+        //             // dd($array_perdate);
+        //             $date_arr = formula_grading($array_perdate);
+
+        //             $no_pemanen = json_decode($value['no_pemanen'], true);
+        //             $tanpaBrondol = [];
+        //             $datakurang_brondol = [];
+        //             // dd($no_pemanen);
+        //             foreach ($no_pemanen as $keys1 => $values1) {
+        //                 $get_pemanen = isset($values1['a']) ? $values1['a'] : (isset($values1['noPemanen']) ? $values1['noPemanen'] : null);
+        //                 $get_kurangBrondol = isset($values1['b']) ? $values1['b'] : (isset($values1['kurangBrondol']) ? $values1['kurangBrondol'] : 0);
+        //                 $get_tanpaBrondol = isset($values1['c']) ? $values1['c'] : (isset($values1['tanpaBrondol']) ? $values1['tanpaBrondol'] : 0);
+        //                 if ($get_kurangBrondol != 0) {
+        //                     $datakurang_brondol['kurangBrondol_list'][] = [
+        //                         'no_pemanen' => ($get_pemanen == 999) ? 'x' : $get_pemanen,
+        //                         'kurangBrondol' => $get_kurangBrondol,
+        //                     ];
+        //                 }
+        //                 if ($get_kurangBrondol != 0) {
+        //                     $tanpaBrondol['tanpaBrondol_list'][] = [
+        //                         'no_pemanen' => ($get_pemanen == 999) ? 'x' : $get_pemanen,
+        //                         'tanpaBrondol' => $get_tanpaBrondol,
+        //                     ];
+        //                 }
+        //             }
+
+        //             // dd($datakurang_brondol, $tanpaBrondol);
+
+
+
+        //             // Output results
+
+        //             $result[] = [
+        //                 'id' => $value['id'],
+        //                 'estate' => $value['estate'],
+        //                 'afdeling' => $value['afdeling'],
+        //                 'jjg_grading' => $value['jjg_grading'],
+        //                 'no_plat' => $value['no_plat'],
+        //                 'jjg_spb' => $value['jjg_spb'],
+        //                 'datetime' => $value['datetime'],
+        //                 'tonase' => $value['tonase'],
+        //                 // 'bjr' => ($value['jjg_spb'] / $value['tonase']) * 100,
+        //                 'bjr' => $value['tonase'] > 0 ? round(($value['tonase'] / $value['jjg_grading']) * 100, 2) : 0,
+        //                 'jjg_selisih' => $date_arr['jjg_selisih'],
+        //                 'persentase_selisih' => round($date_arr['percentage_selisih_janjang']),
+        //                 'Ripeness' => $date_arr['ripeness'],
+        //                 'percentase_ripenes' => round($date_arr['percentage_ripeness'], 2),
+        //                 'Unripe' => $date_arr['unripe'],
+        //                 'persenstase_unripe' => round($date_arr['percentage_unripe'], 2),
+        //                 'nol_brondol' => $date_arr['brondol_0'],
+        //                 'persentase_nol_brondol' => round($date_arr['percentage_brondol_0'], 2),
+        //                 'kurang_brondol' => $date_arr['brondol_less'],
+        //                 'persentase_brondol' => round($date_arr['percentage_brondol_less'], 2),
+        //                 'nomor_pemanen' => 'a',
+        //                 'unripe_tanda_x' => 'a',
+        //                 'Overripe' => $date_arr['overripe'],
+        //                 'persentase_overripe' => round($date_arr['percentage_overripe'], 2),
+        //                 'empty_bunch' => $value['empty'],
+        //                 'persentase_empty_bunch' => round($date_arr['percentage_empty_bunch'], 2),
+        //                 'rotten_bunch' => $value['rotten'],
+        //                 'persentase_rotten_bunce' => round($date_arr['percentage_rotten_bunch'], 2),
+        //                 'Abnormal' => $date_arr['abnormal'],
+        //                 'persentase_abnormal' =>    round($date_arr['percentage_abnormal'], 2),
+        //                 'stalk' =>    $date_arr['tangkai_panjang'],
+        //                 'persentase_stalk' => round($date_arr['percentage_tangkai_panjang'], 2),
+        //                 'vcut' =>    $value['vcut'],
+        //                 'persentase_vcut' => round($date_arr['percentage_vcuts'], 2),
+        //                 'loose_fruit' => $value['loose_fruit'],
+        //                 'persentase_lose_fruit' => $date_arr['persentase_loose_fruit'],
+        //                 'Dirt' => $value['dirt'],
+        //                 'persentase' => $date_arr['persentase'],
+        //                 'foto' => $foto,
+        //                 'pemanen_list_tanpabrondol' => $tanpaBrondol,
+        //                 'pemanen_list_kurangbrondol' => $datakurang_brondol,
+        //                 'kelas_a' => $value['kelas_a'],
+        //                 'persentase_kelas_a' => round($date_arr['percentage_kelas_a'], 2),
+        //                 'kelas_b' => $value['kelas_b'],
+        //                 'persentase_kelas_b' => round($date_arr['percentage_kelas_b'], 2),
+        //                 'kelas_c' => $value['kelas_c'],
+        //                 'persentase_kelas_c' => round($date_arr['percentage_kelas_c'], 2),
+        //             ];
+        //         }
+        //         // dd($data, $result);
+        //         // $result now contains the processed data
+
+
+        //     }
+        //     // dd($result);
+        //     $arr = array();
+        //     $arr['data_perhari'] = $result;
+        //     // dd($result, $data);
+        //     return $arr;
+        // } else {
+        //     // dd($data);
+        //     $calculationService = new \App\Services\CalculationGrading();
+
+        //     $type = 'perhari';
+
+
+        //     $result = $calculationService->getGradingData($bulan, $reg, $type);
+        //     // dd($result);
+        //     $arr = array();
+        //     $arr['data_pperafd'] = $result;
+
+        //     return $arr;
+        //     // // dd($result, $data);
+        //     // echo json_encode($arr);
+        //     // exit();
+        // }
+
+        $calculationService = new \App\Services\CalculationGrading();
+
+        $type = 'perhari';
+
+
+        $result = $calculationService->getGradingData($bulan, $reg, $type);
+        return $result;
     }
 }
 

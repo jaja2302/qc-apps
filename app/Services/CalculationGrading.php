@@ -159,9 +159,17 @@ class CalculationGrading
                 } else {
                     // dd($result, '2');
                     foreach ($values as $key => $value) {
+                        foreach ($value as $key2 => $value2) {
+                            $data_level_0 = $this->getValueData($value2, $keys, $key);
+                            // dd($data_level_1);
+                            $data_arr_level_0 = $this->formula_grading($data_level_0);
+                            // dd($data_arr_level_1);
+                            $result[$keys][$key]['data'][] = $this->formatResult($data_arr_level_0);
+                        }
                         $data_level_1 = $this->getValueData($value);
+                        // dd($data_level_1);
                         $data_arr_level_1 = $this->formula_grading($data_level_1);
-                        $result[$keys][$key] = $this->formatResult($data_arr_level_1);
+                        $result[$keys][$key]['afdeling'] = $this->formatResult($data_arr_level_1);
                         $data_2[] = $this->formatResult($data_arr_level_1);
                     }
 
@@ -200,9 +208,10 @@ class CalculationGrading
 
     public function getValueData($value, $estate = null, $afdeling = null)
     {
-        // dd($value, 'value');
+        // dd($value, $estate, $afdeling);
 
         if ($estate && $afdeling) {
+            // dd($value, 'value');
             $cleaned_string = str_replace(['[', ']'], '', $value['foto_temuan']);
             $foto = explode(',', $cleaned_string);
 
@@ -253,7 +262,7 @@ class CalculationGrading
                 'kelas_a' => $value['kelas_a'],
                 'kelas_b' => $value['kelas_b'],
                 'kelas_c' => $value['kelas_c'],
-                'datetime' => $value['datetime'],
+                'datetime' =>  Carbon::parse($value['datetime'])->format('H:i'),
                 'no_plat' => $value['no_plat'],
                 'unit' => 1,
                 'getunit' => [0],
@@ -263,88 +272,88 @@ class CalculationGrading
                 'status_bot' => $value['status_bot'],
                 'id' => $value['id'],
             ];
+        } else {
+            $tonase = 0;
+            $jumlah_janjang_grading = 0;
+            $jumlah_janjang_spb = 0;
+            $brondol_0 = 0;
+            $brondol_less = 0;
+            $overripe = 0;
+            $empty_bunch = 0;
+            $rotten_bunch = 0;
+            $abn_partheno = 0;
+            $abn_hard = 0;
+            $abn_sakit = 0;
+            $abn_kastrasi = 0;
+            $longstalk = 0;
+            $vcut = 0;
+            $dirt = 0;
+            $loose_fruit = 0;
+            $kelas_a = 0;
+            $kelas_b = 0;
+            $kelas_c = 0;
+            $unit = count($value);
+            $estate = '-';
+            $afdeling = '=';
+            $no_plat = '-';
+            $getunit = [];
+            $inc = 0;
+            foreach ($value as $key2 => $value1) {
+                $tonase += $value1['tonase'];
+                $jumlah_janjang_grading += $value1['jjg_grading'];
+                $jumlah_janjang_spb += $value1['jjg_spb'];
+                $brondol_0 += is_numeric($value1['unripe_tanpa_brondol']) ? $value1['unripe_tanpa_brondol'] : 0;
+                $brondol_less += is_numeric($value1['unripe_kurang_brondol']) ? $value1['unripe_kurang_brondol'] : 0;
+                $overripe += $value1['overripe'];
+                $empty_bunch += $value1['empty'] ?? $value1['empty_bunch'];
+                $rotten_bunch += $value1['rotten'] ?? $value1['rotten_bunch'];
+
+                $abn_partheno += $value1['abn_partheno'];
+                $abn_hard += $value1['abn_hard'];
+                $abn_sakit += $value1['abn_sakit'];
+                $abn_kastrasi += $value1['abn_kastrasi'];
+                $longstalk += $value1['tangkai_panjang'] ?? $value1['longstalk'];
+                $vcut += $value1['vcut'];
+                $dirt += $value1['dirt'];
+                $loose_fruit += $value1['loose_fruit'];
+                $kelas_a += $value1['kelas_a'];
+                $kelas_b += $value1['kelas_b'];
+                $kelas_c += $value1['kelas_c'];
+                $no_plat = $value1['no_plat'];
+                $datetime = Carbon::parse($value1['datetime'])->format('H:i');
+                $estate = $value1['estate'];
+                $afdeling = $value1['afdeling'];
+                $getunit[] = $inc++;
+            }
+            // dd('value1');
+            return [
+                'estate' => $estate,
+                'afdeling' => $afdeling,
+                'jjg_grading' => $jumlah_janjang_grading,
+                'jjg_spb' => $jumlah_janjang_spb,
+                'unripe_tanpa_brondol' => $brondol_0,
+                'unripe_kurang_brondol' => $brondol_less,
+                'overripe' => $overripe,
+                'empty' => $empty_bunch,
+                'rotten' => $rotten_bunch,
+                'tangkai_panjang' => $longstalk,
+                'vcuts' => $vcut,
+                'tonase' => $tonase,
+                'dirt' => $dirt,
+                'loose_fruit' => $loose_fruit,
+                'abn_partheno' => $abn_partheno,
+                'abn_hard' => $abn_hard,
+                'abn_sakit' => $abn_sakit,
+                'abn_kastrasi' => $abn_kastrasi,
+                'kelas_a' => $kelas_a,
+                'kelas_b' => $kelas_b,
+                'kelas_c' => $kelas_c,
+                'datetime' => $datetime,
+                'no_plat' => $no_plat,
+                'unit' => $unit,
+                'getunit' => $getunit,
+            ];
         }
-
-        $tonase = 0;
-        $jumlah_janjang_grading = 0;
-        $jumlah_janjang_spb = 0;
-        $brondol_0 = 0;
-        $brondol_less = 0;
-        $overripe = 0;
-        $empty_bunch = 0;
-        $rotten_bunch = 0;
-        $abn_partheno = 0;
-        $abn_hard = 0;
-        $abn_sakit = 0;
-        $abn_kastrasi = 0;
-        $longstalk = 0;
-        $vcut = 0;
-        $dirt = 0;
-        $loose_fruit = 0;
-        $kelas_a = 0;
-        $kelas_b = 0;
-        $kelas_c = 0;
-        $unit = count($value);
-        $estate = '-';
-        $afdeling = '=';
-        $no_plat = '-';
-        $getunit = [];
-        $inc = 0;
-        foreach ($value as $key2 => $value1) {
-            $tonase += $value1['tonase'];
-            $jumlah_janjang_grading += $value1['jjg_grading'];
-            $jumlah_janjang_spb += $value1['jjg_spb'];
-            $brondol_0 += is_numeric($value1['unripe_tanpa_brondol']) ? $value1['unripe_tanpa_brondol'] : 0;
-            $brondol_less += is_numeric($value1['unripe_kurang_brondol']) ? $value1['unripe_kurang_brondol'] : 0;
-            $overripe += $value1['overripe'];
-            $empty_bunch += $value1['empty'] ?? $value1['empty_bunch'];
-            $rotten_bunch += $value1['rotten'] ?? $value1['rotten_bunch'];
-
-            $abn_partheno += $value1['abn_partheno'];
-            $abn_hard += $value1['abn_hard'];
-            $abn_sakit += $value1['abn_sakit'];
-            $abn_kastrasi += $value1['abn_kastrasi'];
-            $longstalk += $value1['tangkai_panjang'] ?? $value1['longstalk'];
-            $vcut += $value1['vcut'];
-            $dirt += $value1['dirt'];
-            $loose_fruit += $value1['loose_fruit'];
-            $kelas_a += $value1['kelas_a'];
-            $kelas_b += $value1['kelas_b'];
-            $kelas_c += $value1['kelas_c'];
-            $no_plat = $value1['no_plat'];
-            $datetime = Carbon::parse($value1['datetime'])->format('H:i');
-            $estate = $value1['estate'];
-            $afdeling = $value1['afdeling'];
-            $getunit[] = $inc++;
-        }
-
-        return [
-            'estate' => $estate,
-            'afdeling' => $afdeling,
-            'jjg_grading' => $jumlah_janjang_grading,
-            'jjg_spb' => $jumlah_janjang_spb,
-            'unripe_tanpa_brondol' => $brondol_0,
-            'unripe_kurang_brondol' => $brondol_less,
-            'overripe' => $overripe,
-            'empty' => $empty_bunch,
-            'rotten' => $rotten_bunch,
-            'tangkai_panjang' => $longstalk,
-            'vcuts' => $vcut,
-            'tonase' => $tonase,
-            'dirt' => $dirt,
-            'loose_fruit' => $loose_fruit,
-            'abn_partheno' => $abn_partheno,
-            'abn_hard' => $abn_hard,
-            'abn_sakit' => $abn_sakit,
-            'abn_kastrasi' => $abn_kastrasi,
-            'kelas_a' => $kelas_a,
-            'kelas_b' => $kelas_b,
-            'kelas_c' => $kelas_c,
-            'datetime' => $datetime,
-            'no_plat' => $no_plat,
-            'unit' => $unit,
-            'getunit' => $getunit,
-        ];
     }
 
 
@@ -390,6 +399,7 @@ class CalculationGrading
             'tonase' => $array['tonase'],
             'datetime' => $array['datetime'],
             'bjr' => $array['jjg_grading'] > 0 ? round(($array['tonase'] / $array['jjg_grading']) * 100, 2) : 0,
+            // 'bjr' => $array['jjg_grading'],
             'jjg_selisih' => $jumlah_selisih_janjang,
             'persentase_selisih' => round($percentage_selisih_janjang),
             'Ripeness' => $ripeness,

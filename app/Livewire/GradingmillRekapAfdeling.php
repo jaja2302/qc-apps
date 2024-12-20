@@ -66,7 +66,7 @@ class GradingmillRekapAfdeling extends Component
     {
         $this->selectedEstate = $estate;
         $this->selectedAfdeling = $afdeling;
-
+        // dd($this->selectedEstate, $this->selectedAfdeling);
         // Get available dates for the selected estate and afdeling
         $this->availableDates = ModelsGradingmill::query()
             ->selectRaw('DATE(datetime) as date')

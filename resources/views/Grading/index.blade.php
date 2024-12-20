@@ -48,7 +48,10 @@
                 <a class="nav-item nav-link" id="nav-mill-tab" data-toggle="tab" href="#nav-mill" role="tab" aria-controls="nav-mill" aria-selected="false">Rekap Mill</a>
                 <a class="nav-item nav-link" id="nav-perhari-tab" data-toggle="tab" href="#nav-perhari" role="tab" aria-controls="nav-perhari" aria-selected="false">Rekap Perhari</a>
                 <a class="nav-item nav-link" id="nav-afdeling-tab" data-toggle="tab" href="#nav-afdeling" role="tab" aria-controls="nav-afdeling" aria-selected="false">Rekap Afdeling</a>
+                {{--
+
                 <a class="nav-item nav-link" id="nav-pertanggal-tab" data-toggle="tab" href="#nav-pertanggal" role="tab" aria-controls="nav-pertanggal" aria-selected="false">Data</a>
+          --}}
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
