@@ -15,6 +15,8 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Services\CalculationGrading;
+use App\Exports\ExcelGradingRegional;
+use App\Exports\ExcelGradingMill;
 
 class GradingController extends Controller
 {
@@ -342,17 +344,20 @@ class GradingController extends Controller
             $date = $request->input('getdate');
             $reg = $request->input('getregional');
             $type = 'perbulan';
-            $result = getdatamill($date, $reg, $type);
-            return Excel::download(new Gradingregional($result, $type), 'Excel Grading Regional-' . $date . '-' . 'Bulan-' . $reg . '.xlsx');
+            // $type = 'perhari';
+
+            $result = $this->calculationGrading->getGradingData($date, $reg, $type);
+            // dd($result, $type)
+            return Excel::download(new ExcelGradingRegional($result), 'Excel Grading Regional-' . $date . '-' . 'Bulan-' . $reg . '.xlsx');
         } else if ($check == 'rekapdua') {
             $date = $request->input('getdatedua');
             $reg = $request->input('getregionaldua');
-            $type = 'perbulan';
-            $data = getdatamill($date, $reg, $type);
+            // $type = 'perbulan';
+            // $data = getdatamill($date, $reg, $type);
             // dd($data);
-
-            $result['data_mill'] = $data['data_mill'];
-            return Excel::download(new Gradingregional($result, $type), 'Excel Grading Regional-' . $date . '-' . 'Bulan-' . $reg . '.xlsx');
+            $type = 'perbulan';
+            $result = $this->calculationGrading->getGradingData($date, $reg, $type);
+            return Excel::download(new ExcelGradingMill($result['data_mill'], $type), 'Excel Grading Regional-' . $date . '-' . 'Bulan-' . $reg . '.xlsx');
         } else if ($check == 'rekaptiga') {
             $date = $request->input('getdatetiga');
             $reg = $request->input('getregionaltiga');

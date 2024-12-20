@@ -4,29 +4,22 @@ namespace App\Exports;
 
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Events\AfterSheet;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
-use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class Gradingregional implements WithMultipleSheets
+
+class ExcelGradingRegional implements WithMultipleSheets
 {
     /**
      * @return \Illuminate\Support\Collection
      */
     protected $data;
-    protected $tipe;
 
-    use Exportable;
-    public function __construct(array $arrView, string $tipe)
+    public function __construct(array $data)
     {
-        $this->data = $arrView;
-        $this->tipe = $tipe;
-        // dd($tipe);
-        // dd($this->data);
+        $this->data = $data;
+        // dd($this->data, 'adios');
     }
 
 
@@ -34,31 +27,28 @@ class Gradingregional implements WithMultipleSheets
     {
         $sheets = [];
 
-        foreach ($this->data as $region => $data) {
-            $sheets[] = new class($region, $data, $this->tipe) implements FromView, WithTitle {
-                private $region;
+        foreach ($this->data as $title => $data) {
+            $sheets[] = new class($title, $data) implements FromView, WithTitle {
+                private $title;
                 private $data;
-                private $tipe;
 
-                public function __construct($region, $data, $tipe)
+                public function __construct($title, $data)
                 {
-                    $this->region = $region;
+                    $this->title = $title;
                     $this->data = $data;
-                    $this->tipe = $tipe;
                 }
 
                 public function view(): View
                 {
                     // dd($this->data);
-                    return view('Grading.Exportexcel', [
+                    return view('Grading.ExportRegionalExcel', [
                         'data' => $this->data,
-                        'type' => $this->tipe
                     ]);
                 }
 
                 public function title(): string
                 {
-                    return $this->region;
+                    return $this->title;
                 }
 
                 public function registerEvents(): array
@@ -77,7 +67,7 @@ class Gradingregional implements WithMultipleSheets
                 }
             };
         }
-
+        // dd($sheets);
         return $sheets;
     }
 }
