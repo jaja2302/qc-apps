@@ -298,6 +298,7 @@ class CalculationGrading
             $no_plat = '-';
             $getunit = [];
             $inc = 0;
+            $datetime = '-';
             foreach ($value as $key2 => $value1) {
                 $tonase += $value1['tonase'];
                 $jumlah_janjang_grading += $value1['jjg_grading'];
@@ -397,7 +398,7 @@ class CalculationGrading
             'abn_kastrasi' => $array['abn_kastrasi'],
             'unit' => $array['unit'],
             'tonase' => $array['tonase'],
-            'datetime' => $array['datetime'],
+            'datetime' => $array['datetime'] ?? '-',
             'bjr' => $array['jjg_grading'] > 0 ? round(($array['tonase'] / $array['jjg_grading']), 2) : 0,
             // 'bjr' => $array['jjg_grading'],
             'jjg_selisih' => $jumlah_selisih_janjang,
@@ -446,7 +447,7 @@ class CalculationGrading
         return [
             'estate' => $array['estate'],
             'afdeling' => $array['afdeling'],
-            'datetime' => $array['datetime'],
+            'datetime' => $array['datetime'] ?? '-',
             'tonase' => $array['tonase'],
             'jjg_grading' => $array['jjg_grading'],
             'jjg_spb' => $array['jjg_spb'],

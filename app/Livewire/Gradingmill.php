@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\DeletedGradingmill;
 
 class Gradingmill extends Component
 {
@@ -24,6 +25,10 @@ class Gradingmill extends Component
     public $listmill = [];
     public $modal_data = [];
     public $itemId;
+    public $showDeleteModal = false;
+    public $deleteId = null;
+
+
 
     public function mount()
     {
@@ -186,7 +191,19 @@ class Gradingmill extends Component
             $this->dispatch('showModal');
         }
     }
-
+    public function confirmDelete($id)
+    {
+        // dd($id);
+        $this->deleteId = $id;
+        $this->showDeleteModal = true;
+        $this->dispatch('showDeleteModal', $id);
+    }
+    public function cancelDelete()
+    {
+        $this->deleteId = null;
+        $this->showDeleteModal = false;
+        $this->dispatch('hideDeleteModal');
+    }
     // Delete method: Delete item from the database
     public function delete($id)
     {
@@ -195,8 +212,23 @@ class Gradingmill extends Component
 
             try {
                 $data =  ModelsGradingmill::find($id);
+                if (!$data) {
+                    $this->addError('modal_error', 'Data tidak ditemukan.');
+                    return;
+                }
+
                 $check_status_departement = can_edit_based_departement($data['mill']);
                 if ($check_status_departement) {
+                    // dd($data->toArray());
+                    DeletedGradingmill::create([
+                        'estate' => $data['estate'],
+                        'afdeling' => $data['afdeling'],
+                        'deleted_data' => json_encode($data->toArray()),
+                        'deleted_by' => auth()->user()->user_id,
+                        'deleted_at' => now(),
+                    ]);
+
+
                     $data->delete();
                     session()->flash('message', 'Item deleted successfully!');
                     $this->dispatch('refreshComponent');

@@ -554,13 +554,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <!-- <div class="row mb-3">
-                                <label for="keterangan" class="form-label">Keterangan</label>
-                                <textarea class="form-control" wire:model="modal_data.{{ $key }}.keterangan"></textarea>
-                            </div> -->
                         @php
-
-                        // Fetch the user's full name based on the user_id from the items array
                         $pengguna = App\Models\Pengguna::where('user_id', $items['update_by'])->first()->nama_lengkap ?? '-';
                         @endphp
 
@@ -569,11 +563,14 @@
 
                         </div>
                         <label for="update_date" class="form-label">Update date: {{ $items['update_date'] ?? '-' }}</label>
-                        <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary" data-array-key="{{ $key }}">Update</button>
-                            <button type="button" class="btn btn-danger btn-sm" wire:click="delete({{ $items['id'] }})">
-                                Delete
+                        <div class="d-flex justify-content-end gap-3">
+                            <button type="submit" class="btn btn-primary px-4" data-array-key="{{ $key }}">
+                                <i class="fas fa-save me-2"></i>Update
                             </button>
+                            <button type="button" class="btn btn-danger px-4" wire:click="confirmDelete({{ $items['id'] }})">
+                                <i class="fas fa-trash me-2"></i>Delete
+                            </button>
+
                         </div>
 
                     </form>
@@ -606,6 +603,27 @@
             </div>
         </div>
     </div>
+    <!-- Add this delete confirmation modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" wire:click="cancelDelete">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this item?</p>
+                    <p>ID: {{ $deleteId }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" wire:click="cancelDelete">Cancel</button>
+                    <button type="button" class="btn btn-danger" wire:click="delete({{ $deleteId }})">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script type="module">
         document.addEventListener('livewire:init', () => {
             Livewire.on('showModal', (data) => {
@@ -628,6 +646,23 @@
                 // Show modal programmatically
                 myModal.hide();
                 // $('#exampleModal').modal('hide');
+            });
+
+            Livewire.on('showDeleteModal', (data) => {
+                const modalElement = document.getElementById('deleteModal');
+                const myModal = new bootstrap.Modal(modalElement);
+                myModal.show();
+                // console.log(data);
+            });
+
+            Livewire.on('hideDeleteModal', () => {
+                const modalElement = document.getElementById('deleteModal');
+                const myModal = new bootstrap.Modal(modalElement);
+
+                if (myModal) {
+                    myModal.hide();
+                    location.reload();
+                }
             });
         });
     </script>
