@@ -14,15 +14,29 @@ class CalculationGrading
      */
     private function getBaseQuery($regional, $bulan, $mill, $estate, $afdeling)
     {
-        // dd($regional, $bulan, $mill);
         if ($mill) {
-            return Gradingmill::where('datetime', 'like', '%' . $bulan . '%')
+            // Only apply 5 AM cutoff logic for mill queries
+            $isFullDate = strlen($bulan) > 7;
+            $dateAdjustment = "CASE 
+                WHEN TIME(datetime) < '05:00:00' 
+                THEN DATE_SUB(DATE(datetime), INTERVAL 1 DAY)
+                ELSE DATE(datetime)
+            END";
+
+            return Gradingmill::whereRaw(
+                $isFullDate
+                    ? "$dateAdjustment = ?"
+                    : "DATE_FORMAT($dateAdjustment, '%Y-%m') = ?",
+                [$bulan]
+            )
                 ->whereHas('Listmill', function ($query) use ($mill) {
                     $query->where('id', $mill);
                 })
                 ->with('Listmill')
                 ->orderBy('afdeling', 'asc');
         }
+
+        // Original queries for estate and other cases remain unchanged
         if ($estate && $afdeling) {
             return DB::connection('mysql2')->table('grading_mill')
                 ->select('*')
@@ -30,6 +44,7 @@ class CalculationGrading
                 ->where('afdeling', $afdeling)
                 ->where('datetime', 'LIKE', '%' . $bulan . '%');
         }
+
         return DB::connection('mysql2')->table('grading_mill')
             ->select('grading_mill.*', 'grading_mill.id as id_data')
             ->join('estate', 'estate.est', '=', 'grading_mill.estate')
@@ -84,7 +99,6 @@ class CalculationGrading
     private function CalculationGrading($query, $bulan, $regional, $type, $mill, $estate, $afdeling)
     {
         $data = collect($query->get());
-        // dd($data);
         switch ($type) {
             case 'perbulan':
                 $data = $data->groupBy(['estate']);
@@ -93,12 +107,10 @@ class CalculationGrading
 
                 $data_wil = $this->groupBy($data, $query_mill_wil['wil'], 'wil');
                 $data_mill = $this->groupBy($data, $query_mill_wil['mil'], 'mil');
-                // dd($data);
 
                 $result = $this->processGradingData($data, $type);
                 $result_wil = $this->processGradingData($data_wil, $type);
                 $result_mill = $this->processGradingData($data_mill, $type);
-                // dd($data_mill);
                 return [
                     "data_regional" => $result,
                     "data_wil" => $result_wil,
@@ -112,7 +124,6 @@ class CalculationGrading
                     $data = json_decode($data, true);
                 }
 
-                // dd($data);,
                 return $this->processGradingData($data, $type, $estate, $afdeling);
         }
         return $data;
@@ -141,19 +152,14 @@ class CalculationGrading
 
     private function processGradingData($data, $type, $estate = null, $afdeling = null)
     {
-        // dd($data, $type);
         $result = [];
         foreach ($data as $keys => $values) {
 
             if ($type !== 'perbulan') {
-                // dd($values, 'no perbulan');
                 $data_2 = [];
 
                 if ($estate && $afdeling) {
-                    // dd($estate, $afdeling);
-                    // dd($result, '1');
                     $data_level_1 = $this->getValueData($values, $estate, $afdeling);
-                    // dd($data_level_1);
                     $data_arr_level_1 = $this->formula_grading($data_level_1);
                     $result[$keys] = $this->formatResult($data_arr_level_1);
                 } else {
@@ -161,9 +167,7 @@ class CalculationGrading
                     foreach ($values as $key => $value) {
                         foreach ($value as $key2 => $value2) {
                             $data_level_0 = $this->getValueData($value2, $keys, $key);
-                            // dd($data_level_1);
                             $data_arr_level_0 = $this->formula_grading($data_level_0);
-                            // dd($data_arr_level_1);
                             $result[$keys][$key]['data'][] = $this->formatResult($data_arr_level_0);
                         }
                         $data_level_1 = $this->getValueData($value);
@@ -181,24 +185,13 @@ class CalculationGrading
 
                     $data_level_2 = $this->getValueData($data_2);
                     $data_arr_level_2 = $this->formula_grading($data_level_2);
-                    // Override the unit count in the total
                     $data_arr_level_2['unit'] = $total_units;
                     $result[$keys]['Total'] = $this->formatResult($data_arr_level_2);
                 }
             } else {
-                // dd($values, 'perbulan');
-                // // For estate totals, sum up all units from afdelings
-                // $total_units = 0;
-                // foreach ($values as $value) {
-                //     $total_units += count($value); // Count arrays in each afdeling
-                // }
-                // dd($values, 'perbulan');
                 $data_level_3 = $this->getValueData($values);
-                // dd($data_level_3);
                 $data_arr_level_3 = $this->formula_grading($data_level_3);
                 $result[$keys]['data'] = $this->formatResult($data_arr_level_3);
-                // Override the unit count for totals
-                // $result[$keys]['data']['unit'] = $total_units;
             }
         }
         // dd($result);

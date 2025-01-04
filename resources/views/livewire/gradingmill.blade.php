@@ -190,7 +190,7 @@
                     <td>{{round($items4['persentase_unripe_kurang_brondol'],2)}}</td>
                     @if(can_edit())
                     <td>
-                        <button type="button" class="btn btn-warning btn-sm" wire:click="formdata('{{ $key }}', '{{ $key2 }}')">
+                        <button type="button" class="btn btn-warning btn-sm" wire:click="formdata('{{$items4['id']}}')">
                             Edit
                         </button>
 
@@ -564,11 +564,13 @@
                         </div>
                         <label for="update_date" class="form-label">Update date: {{ $items['update_date'] ?? '-' }}</label>
                         <div class="d-flex justify-content-end gap-3">
-                            <button type="submit" class="btn btn-primary px-4" data-array-key="{{ $key }}">
-                                <i class="fas fa-save me-2"></i>Update
-                            </button>
+
                             <button type="button" class="btn btn-danger px-4" wire:click="confirmDelete({{ $items['id'] }})">
                                 <i class="fas fa-trash me-2"></i>Delete
+                            </button>
+
+                            <button type="submit" class="btn btn-primary px-4" data-array-key="{{ $key }}">
+                                <i class="fas fa-save me-2"></i>Update
                             </button>
 
                         </div>

@@ -62,7 +62,7 @@ class Gradingmill extends Component
         $reg = $this->inputregional;
         $mill = $this->mill_id;
         $bulan = $this->inputbulan;
-
+        // dd($bulan);
 
         // Debugging values
         // dd($reg, $mill);
@@ -102,12 +102,11 @@ class Gradingmill extends Component
     {
         return view('livewire.gradingmill');
     }
-    public function formdata($estate, $afdeling)
+    public function formdata($id)
     {
+        // dd($id);
         $data = ModelsGradingmill::query()
-            ->where('estate', $estate)
-            ->where('afdeling', $afdeling)
-            ->where('datetime', 'like', '%' . $this->inputbulan . '%')
+            ->where('id', $id)
             ->get();
         $this->modal_data = json_decode($data, true);
         // dd($this->modal_data);
@@ -154,6 +153,8 @@ class Gradingmill extends Component
         if (can_edit()) {
             $this->validate();
             $data = $this->modal_data[$id];
+
+            // dd($data, $id);
             $check_status_departement = can_edit_based_departement($data['mill']);
 
             if ($check_status_departement) {
