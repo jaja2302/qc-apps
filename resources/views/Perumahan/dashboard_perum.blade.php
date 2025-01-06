@@ -1,5 +1,11 @@
 <x-layout.app>
 
+    <div class="alert alert-danger">
+        Pengumuman sidak perumahan pada tahun 2025 sudah di nonaktifkan
+    </div>
+    {{--
+
+
     <style>
         .table-wrapper {
             overflow-x: auto;
@@ -47,137 +53,137 @@
                         <div class="row w-100">
                             <div class="col-md-2 offset-md-8">
                                 {{csrf_field()}}
-                                <select class="form-control" id="estreg">
-                                    @foreach($option_reg as $key => $item)
-                                    <option value="{{ $item['id'] }}">{{ $item['nama'] }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+    <select class="form-control" id="estreg">
+        @foreach($option_reg as $key => $item)
+        <option value="{{ $item['id'] }}">{{ $item['nama'] }}</option>
+        @endforeach
+    </select>
+    </div>
 
-                            <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
-                                {{csrf_field()}}
-                                <select class="form-control" id="tahunest">
-                                    @foreach($list_tahun as $item)
-                                    <option value="{{$item}}">{{$item}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary mb-3" style="float: right" id="btnShoWEst">Show</button>
+    <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+        {{csrf_field()}}
+        <select class="form-control" id="tahunest">
+            @foreach($list_tahun as $item)
+            <option value="{{$item}}">{{$item}}</option>
+            @endforeach
+        </select>
+    </div>
+    </div>
+    <button class="btn btn-primary mb-3" style="float: right" id="btnShoWEst">Show</button>
+    </div>
+
+    <div class="table-wrapper">
+        <table class="my-table" id="test">
+            <thead>
+                <tr>
+                    <th rowspan="3">No</th>
+                    <th rowspan="3">UNIT KERJA</th>
+                    <th rowspan="3">KODE</th>
+                    <th rowspan="3">PIC</th>
+                    <th colspan="14" id="yearHeader2" style="text-align: center;">2023</th>
+
+                </tr>
+                <tr id="month_header2">
+                    <td id="Jan">Jan</td>
+                    <td id="Feb">Feb</td>
+                    <td id="Mar">Mar</td>
+                    <td id="Apr">Apr</td>
+                    <td id="Maye">May</td>
+                    <td id="Jun">Jun</td>
+                    <td id="Jul">Jul</td>
+                    <td id="Aug">Aug</td>
+                    <td id="Sept">Sep</td>
+                    <td id="Oct">October</td>
+                    <td id="Nov">Nov</td>
+                    <td id="Dec">December</td>
+                    <td rowspan="2" id="Ave">Ave</td>
+                    <td rowspan="2" id="Status">Status</td>
+                </tr>
+                <tr id="visit">
+
+                </tr>
+            </thead>
+            <tbody id="data_est">
+
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+
+    <div class=" tab-pane fade" id="nav-data" role="tabpanel" aria-labelledby="nav-data-tab">
+        <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark">
+            <h5><b>SUMMARY SCORE PERUMAHAN AFDELING REGIONAL - I
+
+                </b></h5>
+        </div>
+        <div class="content">
+            <div class="d-flex justify-content-end mt-3 mb-2 ml-3 mr-3" style="padding-top: 20px;">
+                <div class="row w-100">
+                    <div class="col-md-2 offset-md-8">
+                        {{csrf_field()}}
+                        <select class="form-control" id="afdreg">
+                            @foreach($option_reg as $key => $item)
+                            <option value="{{ $item['id'] }}">{{ $item['nama'] }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
-                    <div class="table-wrapper">
-                        <table class="my-table" id="test">
-                            <thead>
-                                <tr>
-                                    <th rowspan="3">No</th>
-                                    <th rowspan="3">UNIT KERJA</th>
-                                    <th rowspan="3">KODE</th>
-                                    <th rowspan="3">PIC</th>
-                                    <th colspan="14" id="yearHeader2" style="text-align: center;">2023</th>
-
-                                </tr>
-                                <tr id="month_header2">
-                                    <td id="Jan">Jan</td>
-                                    <td id="Feb">Feb</td>
-                                    <td id="Mar">Mar</td>
-                                    <td id="Apr">Apr</td>
-                                    <td id="Maye">May</td>
-                                    <td id="Jun">Jun</td>
-                                    <td id="Jul">Jul</td>
-                                    <td id="Aug">Aug</td>
-                                    <td id="Sept">Sep</td>
-                                    <td id="Oct">October</td>
-                                    <td id="Nov">Nov</td>
-                                    <td id="Dec">December</td>
-                                    <td rowspan="2" id="Ave">Ave</td>
-                                    <td rowspan="2" id="Status">Status</td>
-                                </tr>
-                                <tr id="visit">
-
-                                </tr>
-                            </thead>
-                            <tbody id="data_est">
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-
-                <div class=" tab-pane fade" id="nav-data" role="tabpanel" aria-labelledby="nav-data-tab">
-                    <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark">
-                        <h5><b>SUMMARY SCORE PERUMAHAN AFDELING REGIONAL - I
-
-                            </b></h5>
-                    </div>
-                    <div class="content">
-                        <div class="d-flex justify-content-end mt-3 mb-2 ml-3 mr-3" style="padding-top: 20px;">
-                            <div class="row w-100">
-                                <div class="col-md-2 offset-md-8">
-                                    {{csrf_field()}}
-                                    <select class="form-control" id="afdreg">
-                                        @foreach($option_reg as $key => $item)
-                                        <option value="{{ $item['id'] }}">{{ $item['nama'] }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
-                                    {{csrf_field()}}
-                                    <select class="form-control" id="tahunafd">
-                                        @foreach($list_tahun as $item)
-                                        <option value="{{$item}}">{{$item}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <button class="btn btn-primary mb-3" style="float: right" id="btnShow">Show</button>
-
-                        </div>
-                    </div>
-
-
-
-                    <div class="table-wrapper">
-                        <table class="my-table">
-                            <thead>
-                                <tr>
-                                    <th rowspan="2">No</th>
-                                    <th rowspan="2">EST</th>
-                                    <th rowspan="2">AFDELING</th>
-                                    <th rowspan="2">Asisten</th>
-
-                                    <th colspan="14" id="yearHeader" style="text-align: center;">2023</th>
-
-                                </tr>
-                                <tr id="month_header">
-                                    <td id="January">Jan</td>
-                                    <td id="February">Feb</td>
-                                    <td id="March">Mar</td>
-                                    <td id="April">Apr</td>
-                                    <td id="May">May</td>
-                                    <td id="June">Jun</td>
-                                    <td id="July">Jul</td>
-                                    <td id="August">Aug</td>
-                                    <td id="September">Sep</td>
-                                    <td id="October">October</td>
-                                    <td id="November">Nov</td>
-                                    <td id="December">December</td>
-                                    <td id="Ave">Ave</td>
-                                    <td id="Status">Status</td>
-                                </tr>
-
-                            </thead>
-                            <tbody id="data_afd">
-
-
-                            </tbody>
-                        </table>
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                        {{csrf_field()}}
+                        <select class="form-control" id="tahunafd">
+                            @foreach($list_tahun as $item)
+                            <option value="{{$item}}">{{$item}}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
+                <button class="btn btn-primary mb-3" style="float: right" id="btnShow">Show</button>
+
             </div>
         </div>
+
+
+
+        <div class="table-wrapper">
+            <table class="my-table">
+                <thead>
+                    <tr>
+                        <th rowspan="2">No</th>
+                        <th rowspan="2">EST</th>
+                        <th rowspan="2">AFDELING</th>
+                        <th rowspan="2">Asisten</th>
+
+                        <th colspan="14" id="yearHeader" style="text-align: center;">2023</th>
+
+                    </tr>
+                    <tr id="month_header">
+                        <td id="January">Jan</td>
+                        <td id="February">Feb</td>
+                        <td id="March">Mar</td>
+                        <td id="April">Apr</td>
+                        <td id="May">May</td>
+                        <td id="June">Jun</td>
+                        <td id="July">Jul</td>
+                        <td id="August">Aug</td>
+                        <td id="September">Sep</td>
+                        <td id="October">October</td>
+                        <td id="November">Nov</td>
+                        <td id="December">December</td>
+                        <td id="Ave">Ave</td>
+                        <td id="Status">Status</td>
+                    </tr>
+
+                </thead>
+                <tbody id="data_afd">
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+    </div>
     </div>
 
     <script type="module">
@@ -661,5 +667,5 @@
             });
         }
     </script>
-
+    --}}
 </x-layout.app>

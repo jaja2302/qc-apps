@@ -53,6 +53,11 @@
         }
     </style>
 
+    <div class="alert alert-danger">
+        Pengumuman sidak perumahan pada tahun 2025 sudah di nonaktifkan
+    </div>
+
+    {{--
 
     <div class="content-wrapper">
         <div class="card table_wrapper">
@@ -69,398 +74,398 @@
                     <div class="logo-container">
 
                         <img src="{{ asset('img/Logo-SSS.png') }}" alt="Logo" class="logo">
-                        <div class="text-container">
-                            <div class="pt-name">PT. SAWIT SUMBERMAS SARANA, TBK</div>
-                            <div class="qc-name">QUALITY CONTROL</div>
-                        </div>
+    <div class="text-container">
+        <div class="pt-name">PT. SAWIT SUMBERMAS SARANA, TBK</div>
+        <div class="qc-name">QUALITY CONTROL</div>
+    </div>
 
-                    </div>
-                    <div class="center-space"></div>
-                    <div class="right-container">
-                        <div class="date">
-                            {{ csrf_field() }}
-                            <input type="hidden" name="est" id="est" value="{{$est}}">
-                            <select class="form-control" name="date" id="inputDate">
-                                <option value="" disabled selected hidden>Pilih tanggal</option>
-                                @foreach($date as $item)
-                                <option value="{{ $item }}">{{ $item }}</option>
-                                @endforeach
-                            </select>
-                            <button type="button" class="ml-2 btn btn-primary mb-2" id="empData">Show</button>
-                        </div>
-                        <div class="afd mt-2"> ESTATE/ AFD : {{$est}}</div>
-                        <div class="afd">Tahun/Bulan : <span id="selectedDate">{{ $tanggal }}</span></div>
-                        <!-- <button id="back-to-data-btn" class="btn btn-primary" onclick="downloadpdf()">Download PDF</button> -->
+    </div>
+    <div class="center-space"></div>
+    <div class="right-container">
+        <div class="date">
+            {{ csrf_field() }}
+            <input type="hidden" name="est" id="est" value="{{$est}}">
+            <select class="form-control" name="date" id="inputDate">
+                <option value="" disabled selected hidden>Pilih tanggal</option>
+                @foreach($date as $item)
+                <option value="{{ $item }}">{{ $item }}</option>
+                @endforeach
+            </select>
+            <button type="button" class="ml-2 btn btn-primary mb-2" id="empData">Show</button>
+        </div>
+        <div class="afd mt-2"> ESTATE/ AFD : {{$est}}</div>
+        <div class="afd">Tahun/Bulan : <span id="selectedDate">{{ $tanggal }}</span></div>
+        <!-- <button id="back-to-data-btn" class="btn btn-primary" onclick="downloadpdf()">Download PDF</button> -->
 
-                        <form action="{{ route('downloadPDF') }}" method="POST" class="form-inline" style="display: inline;" target="_blank" id="downloadPDF">
-                            {{ csrf_field() }}
-                            <input type="hidden" name="estPDF" id="estPDF" value="{{$est}}">
-                            <input type="hidden" name="tglpdfnew" id="tglpdfnew">
-                            <button type="submit" class="btn btn-primary" id="downloadpdf" disabled>
-                                Download PDF
-                            </button>
-                        </form>
+        <form action="{{ route('downloadPDF') }}" method="POST" class="form-inline" style="display: inline;" target="_blank" id="downloadPDF">
+            {{ csrf_field() }}
+            <input type="hidden" name="estPDF" id="estPDF" value="{{$est}}">
+            <input type="hidden" name="tglpdfnew" id="tglpdfnew">
+            <button type="submit" class="btn btn-primary" id="downloadpdf" disabled>
+                Download PDF
+            </button>
+        </form>
 
-                        <form action="{{ route('downloadBAemp') }}" method="POST" class="form-inline" style="display: inline;" target="_blank" id="download-form">
-                            {{ csrf_field() }}
-                            <input type="hidden" name="estBA" id="estpdf" value="{{$est}}">
-                            <input type="hidden" name="tglPDF" id="tglPDF">
-                            <button type="submit" class="btn btn-primary" id="downloadba" disabled>
-                                Download BA
-                            </button>
-                        </form>
-                        <button id="back-to-data-btn" class="btn btn-primary" onclick="goBack()">Back to Home</button>
-                    </div>
+        <form action="{{ route('downloadBAemp') }}" method="POST" class="form-inline" style="display: inline;" target="_blank" id="download-form">
+            {{ csrf_field() }}
+            <input type="hidden" name="estBA" id="estpdf" value="{{$est}}">
+            <input type="hidden" name="tglPDF" id="tglPDF">
+            <button type="submit" class="btn btn-primary" id="downloadba" disabled>
+                Download BA
+            </button>
+        </form>
+        <button id="back-to-data-btn" class="btn btn-primary" onclick="goBack()">Back to Home</button>
+    </div>
 
-                </div>
-            </div>
-            <br>
+    </div>
+    </div>
+    <br>
 
-            <div class="d-flex justify-content-end mr-3">
-                <button class="btn btn-primary ms-auto" id="toggleButton">Preview Penilaian</button>
-                @if (can_edit())
-                <button class="btn btn-primary ms-auto ml-3" id="addnewimg">Tambah Foto Baru</button>
-                @endif
+    <div class="d-flex justify-content-end mr-3">
+        <button class="btn btn-primary ms-auto" id="toggleButton">Preview Penilaian</button>
+        @if (can_edit())
+        <button class="btn btn-primary ms-auto ml-3" id="addnewimg">Tambah Foto Baru</button>
+        @endif
 
-            </div>
+    </div>
 
 
-            <div class="mt-3 text-center" id="content" style="display: none; width: 100%;">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="perumahanx-tab" data-toggle="tab" href="#perumahanx" role="tab" aria-controls="perumahanx" aria-selected="true">Perumahan</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="landscapex-tab" data-toggle="tab" href="#landscapex" role="tab" aria-controls="landscapex" aria-selected="false">Landscape</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="lingkunganx-tab" data-toggle="tab" href="#lingkunganx" role="tab" aria-controls="lingkunganx" aria-selected="false">Lingkungan</a>
-                    </li>
-                </ul>
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="perumahanx" role="tabpanel" aria-labelledby="perumahanx-tab">
-                        <div class="d-flex justify-content-center mt-3 mb-2 border border-dark">
+    <div class="mt-3 text-center" id="content" style="display: none; width: 100%;">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="perumahanx-tab" data-toggle="tab" href="#perumahanx" role="tab" aria-controls="perumahanx" aria-selected="true">Perumahan</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="landscapex-tab" data-toggle="tab" href="#landscapex" role="tab" aria-controls="landscapex" aria-selected="false">Landscape</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="lingkunganx-tab" data-toggle="tab" href="#lingkunganx" role="tab" aria-controls="lingkunganx" aria-selected="false">Lingkungan</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="perumahanx" role="tabpanel" aria-labelledby="perumahanx-tab">
+                <div class="d-flex justify-content-center mt-3 mb-2 border border-dark">
 
-                            <div class="d-flex justify-content-center mt-3 mb-2 border border-dark">
-                                <table class="table table-primary" id="tabPerum">
-                                    <thead>
-                                        <!-- Your table header content -->
-                                    </thead>
-                                    <tbody>
-                                        <!-- Your table body content -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="landscapex" role="tabpanel" aria-labelledby="landscapex-tab">
-                        <div class="d-flex justify-content-center mt-3 mb-2 border border-dark">
-
-                            <div class="d-flex justify-content-center mt-3 mb-2 border border-dark">
-                                <table class="table table-primary" id="tablangscape">
-                                    <thead>
-                                        <!-- Your table header content -->
-                                    </thead>
-                                    <tbody>
-                                        <!-- Your table body content -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="lingkunganx" role="tabpanel" aria-labelledby="lingkunganx-tab">
-                        <div class="d-flex justify-content-center mt-3 mb-2 border border-dark">
-
-                            <div class="d-flex justify-content-center mt-3 mb-2 border border-dark">
-                                <table class="table table-primary" id="tablingk">
-                                    <thead>
-                                        <!-- Your table header content -->
-                                    </thead>
-                                    <tbody>
-                                        <!-- Your table body content -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                    <div class="d-flex justify-content-center mt-3 mb-2 border border-dark">
+                        <table class="table table-primary" id="tabPerum">
+                            <thead>
+                                <!-- Your table header content -->
+                            </thead>
+                            <tbody>
+                                <!-- Your table body content -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+            <div class="tab-pane fade" id="landscapex" role="tabpanel" aria-labelledby="landscapex-tab">
+                <div class="d-flex justify-content-center mt-3 mb-2 border border-dark">
 
-            <div class="card table_wrapper">
-
-
-                <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark  custom_background">
-                    <h2>Temuan ESTATE</h2>
-                </div>
-
-
-                <style>
-                    /* Add this CSS to create the hover effect */
-                    .card-title,
-                    .card-text {
-                        opacity: 0;
-                        /* Set the initial opacity to 0 to hide the title and text */
-                        transition: opacity 0.3s ease-in-out;
-                        /* Add a smooth transition effect */
-                    }
-
-                    .card:hover .card-title,
-                    .card:hover .card-text {
-                        opacity: 1;
-                        /* Set the opacity to 1 on hover to show the title and text */
-                    }
-                </style>
-
-
-                <div class="text-center mt-3 mb-2 border border-dark" id="perumahan">
-                </div>
-
-                <div class="text-center mt-3 mb-2 border border-dark" id="landscape">
-                </div>
-
-                <div class="text-center mt-3 mb-2 border border-dark" id="lingkungan">
-                </div>
-            </div>
-
-
-            <div class="card table_wrapper">
-                <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark custom_background">
-                    <h2>Temuan AFDELING</h2>
-                </div>
-                <div class="text-center mt-3 mb-2 border border-dark" id="afd_rmh">
-                </div>
-
-                <div class="text-center mt-3 mb-2 border border-dark" id="afd_landscape">
-                </div>
-                <div class="text-center mt-3 mb-2 border border-dark" id="afd_lingkungan">
-                </div>
-            </div>
-            <input type="file" id="fileInput" style="display: none;">
-            <style>
-                .btn-container {
-                    display: flex;
-                    gap: 10px;
-                    /* Adjust the spacing between buttons as needed */
-                }
-            </style>
-
-
-
-            <!-- Button to trigger the modal -->
-            <!-- <button class="edit-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">Edit Nilai</button> -->
-
-            <!-- Modal -->
-            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editModalLabel">Edit Nilai</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
-                            <form id="editForm">
-
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="mb-3" style="margin:10px">
-                                            <input type="hidden" class="form-control" id="id">
-                                            <input type="hidden" class="form-control" id="type">
-                                            <p style="text-align:center">Instalasi Air</p>
-                                            <label for="nilai_1" class="form-label">Lancar Masuk (air dapat mengalir dengan lancar 24 jam ke dalam rumah) </label>
-                                            <input type="number" class="form-control" id="nilai_1">
-                                            <label for="nilai_2" class="form-label">Kontrol (Setiap bak mandi menggunakan pelampung)</label>
-                                            <input type="number" class="form-control" id="nilai_2">
-                                            <label for="nilai_3" class="form-label">Lancar Keluar (saluran pembuangan air lancar)</label>
-                                            <input type="number" class="form-control" id="nilai_3">
-                                        </div>
-
-                                        <div class="mb-3" style="margin:10px">
-                                            <p style="text-align:center">Kebersihan di dalam rumah</p>
-                                            <label for="nilai_1" class="form-label">Kaca & ventilasi (bersih dan tidak rusak) </label>
-                                            <input type="number" class="form-control" id="nilai_4">
-                                            <label for="nilai_2" class="form-label">Plafon (bersih dan tidak rusak) </label>
-                                            <input type="number" class="form-control" id="nilai_5">
-                                            <label for="nilai_3" class="form-label">Dinding (bersih dan tidak rusak)</label>
-                                            <input type="number" class="form-control" id="nilai_6">
-                                            <label for="nilai_3" class="form-label">Lantai (bersih dan tidak rusak) </label>
-                                            <input type="number" class="form-control" id="nilai_7">
-                                            <label for="nilai_3" class="form-label">Kamar Mandi (bersih dan tidak rusak) </label>
-                                            <input type="number" class="form-control" id="nilai_8">
-                                        </div>
-                                        <div class="mb-3" style="margin:10px">
-                                            <p style="text-align:center">Listrik</p>
-                                            <label for="nilai_1" class="form-label">Instalasi (aman dan rapi) </label>
-                                            <input type="number" class="form-control" id="nilai_9">
-                                        </div>
-                                        <div class="mb-3" style="margin:10px">
-                                            <p style="text-align:center">Alat Pemadam Api Ringan (APAR) </p>
-                                            <label for="nilai_1" class="form-label">G2 -> 1 Unit; G4 -> 1 Unit; G6 -> 2 Unit; G10 -> 3 Unit </label>
-                                            <input type="number" class="form-control" id="nilai_10">
-                                        </div>
-                                        <div class="mb-3" style="margin:10px">
-                                            <p style="text-align:center">Halaman Rumah</p>
-                                            <label for="nilai_1" class="form-label">Bersih</label>
-                                            <input type="number" class="form-control" id="nilai_11">
-                                        </div>
-                                        <div class="mb-3" style="margin:10px">
-                                            <p style="text-align:center">Jemuran</p>
-                                            <label for="nilai_1" class="form-label">Rapi dan seragam </label>
-                                            <input type="number" class="form-control" id="nilai_12">
-                                        </div>
-                                        <div class="mb-3" style="margin:10px">
-                                            <p style="text-align:center">Estetika</p>
-                                            <label for="nilai_1" class="form-label">Ditanami Bunga, Buah & sayur mayur </label>
-                                            <input type="number" class="form-control" id="nilai_13">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary">Save Changes</button>
-                            </form>
-                        </div>
+                    <div class="d-flex justify-content-center mt-3 mb-2 border border-dark">
+                        <table class="table table-primary" id="tablangscape">
+                            <thead>
+                                <!-- Your table header content -->
+                            </thead>
+                            <tbody>
+                                <!-- Your table body content -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+            <div class="tab-pane fade" id="lingkunganx" role="tabpanel" aria-labelledby="lingkunganx-tab">
+                <div class="d-flex justify-content-center mt-3 mb-2 border border-dark">
 
-
-            <div class="modal fade" id="editModallandscape" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editModalLabel">Edit Nilai</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
-                            <form id="editFormlandcsape">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="mb-3" style="margin:10px">
-                                            <input type="hidden" class="form-control" id="id">
-                                            <input type="hidden" class="form-control" id="type">
-                                            <p style="text-align:center">Material</p>
-                                            <label for="nilai_1" class="form-label">Ornamen-ornamen penghias taman </label>
-                                            <input type="number" class="form-control" id="nilai_l1">
-                                        </div>
-                                        <div class="mb-3" style="margin:10px">
-                                            <p style="text-align:center">Komposisi Tanaman</p>
-                                            <label for="nilai_2" class="form-label">Jumlah Tanaman Hias (diharapkan >5 jenis tanaman hias)</label>
-                                            <input type="number" class="form-control" id="nilai_l2">
-                                        </div>
-                                        <div class="mb-3" style="margin:10px">
-                                            <p style="text-align:center">Kondisi Fisik Tanaman</p>
-                                            <label for="nilai_3" class="form-label">Kondisi Fisik Tanaman</label>
-                                            <input type="number" class="form-control" id="nilai_l3">
-                                            <label for="nilai_1" class="form-label">Kebersihan Lingkungan </label>
-                                            <input type="number" class="form-control" id="nilai_l4">
-                                        </div>
-                                        <div class="mb-3" style="margin:10px">
-                                            <p style="text-align:center">Design</p>
-                                            <label for="nilai_2" class="form-label">Bentuk Taman: Simetris (1), Lengkung (2), Vertikal (3) </label>
-                                            <input type="number" class="form-control" id="nilai_l5">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary">Save Changes</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="modal fade" id="editModallkungan" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editModalLabel">Edit Nilai</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
-                            <form id="editFormlingkn">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="mb-3" style="margin:10px">
-                                            <input type="hidden" class="form-control" id="id">
-                                            <input type="hidden" class="form-control" id="type">
-                                            <p style="text-align:center">Filter Air </p>
-                                            <label for="nilai_1" class="form-label">Tersedia 1 Unit untuk afdeling/estate yang tidak dialiri air bersih dari Pabrik </label>
-                                            <input type="number" class="form-control" id="nilai_k1">
-                                        </div>
-                                        <div class="mb-3" style="margin:10px">
-                                            <p style="text-align:center">Profil Tank</p>
-                                            <label for="nilai_2" class="form-label">Kapasitas minimal setara 200 Liter untuk 1 pintu </label>
-                                            <input type="number" class="form-control" id="nilai_k2">
-                                        </div>
-                                        <div class="mb-3" style="margin:10px">
-                                            <p style="text-align:center">Tempat Penitipan Anak</p>
-                                            <label for="nilai_3" class="form-label">Karpet (Kecuali TPA dengan Keramik) </label>
-                                            <input type="number" class="form-control" id="nilai_k3">
-                                            <label for="nilai_1" class="form-label">Mainan </label>
-                                            <input type="number" class="form-control" id="nilai_k4">
-                                            <label for="nilai_1" class="form-label">Pagar </label>
-                                            <input type="number" class="form-control" id="nilai_k5">
-                                        </div>
-                                        <div class="mb-3" style="margin:10px">
-                                            <p style="text-align:center">Musholla/Masjid</p>
-                                            <label for="nilai_2" class="form-label">Ketersediaan air</label>
-                                            <input type="number" class="form-control" id="nilai_k6">
-                                            <label for="nilai_2" class="form-label">Saluran Pembuangan air </label>
-                                            <input type="number" class="form-control" id="nilai_k7">
-                                            <label for="nilai_2" class="form-label">Kebersihan lingkungan </label>
-                                            <input type="number" class="form-control" id="nilai_k8">
-                                        </div>
-                                        <div class="mb-3" style="margin:10px">
-                                            <p style="text-align:center">Drainase</p>
-                                            <label for="nilai_2" class="form-label">Bersihir</label>
-                                            <input type="number" class="form-control" id="nilai_k9">
-                                            <label for="nilai_2" class="form-label">Lancar </label>
-                                            <input type="number" class="form-control" id="nilai_k10">
-                                        </div>
-                                        <div class="mb-3" style="margin:10px">
-                                            <p style="text-align:center">Ketersediaan Tong Sampah</p>
-                                            <label for="nilai_2" class="form-label">Sedikitnya tersedia 1 tong sampah untuk 1 kopel rumah</label>
-                                            <input type="number" class="form-control" id="nilai_k11">
-                                        </div>
-                                        <div class="mb-3" style="margin:10px">
-                                            <p style="text-align:center">Tempat Pembuangan Akhir</p>
-                                            <label for="nilai_2" class="form-label">Tidak ada ceceran sampah</label>
-                                            <input type="number" class="form-control" id="nilai_k12">
-                                            <label for="nilai_2" class="form-label">Tidak ada penumpukan sampah</label>
-                                            <input type="number" class="form-control" id="nilai_k13">
-                                        </div>
-                                        <div class="mb-3" style="margin:10px">
-                                            <p style="text-align:center">Parkir Motor</p>
-                                            <label for="nilai_2" class="form-label">Tersedia bangunan khusus</label>
-                                            <input type="number" class="form-control" id="nilai_k14">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary">Save Changes</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="myModalLabel">Image Details</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <img src="" alt="" class="img-fluid" id="modalImage">
-                            <p id="modalComment"></p>
-                        </div>
+                    <div class="d-flex justify-content-center mt-3 mb-2 border border-dark">
+                        <table class="table table-primary" id="tablingk">
+                            <thead>
+                                <!-- Your table header content -->
+                            </thead>
+                            <tbody>
+                                <!-- Your table body content -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="card table_wrapper">
+
+
+        <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark  custom_background">
+            <h2>Temuan ESTATE</h2>
+        </div>
+
+
+        <style>
+            /* Add this CSS to create the hover effect */
+            .card-title,
+            .card-text {
+                opacity: 0;
+                /* Set the initial opacity to 0 to hide the title and text */
+                transition: opacity 0.3s ease-in-out;
+                /* Add a smooth transition effect */
+            }
+
+            .card:hover .card-title,
+            .card:hover .card-text {
+                opacity: 1;
+                /* Set the opacity to 1 on hover to show the title and text */
+            }
+        </style>
+
+
+        <div class="text-center mt-3 mb-2 border border-dark" id="perumahan">
+        </div>
+
+        <div class="text-center mt-3 mb-2 border border-dark" id="landscape">
+        </div>
+
+        <div class="text-center mt-3 mb-2 border border-dark" id="lingkungan">
+        </div>
+    </div>
+
+
+    <div class="card table_wrapper">
+        <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark custom_background">
+            <h2>Temuan AFDELING</h2>
+        </div>
+        <div class="text-center mt-3 mb-2 border border-dark" id="afd_rmh">
+        </div>
+
+        <div class="text-center mt-3 mb-2 border border-dark" id="afd_landscape">
+        </div>
+        <div class="text-center mt-3 mb-2 border border-dark" id="afd_lingkungan">
+        </div>
+    </div>
+    <input type="file" id="fileInput" style="display: none;">
+    <style>
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            /* Adjust the spacing between buttons as needed */
+        }
+    </style>
+
+
+
+    <!-- Button to trigger the modal -->
+    <!-- <button class="edit-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">Edit Nilai</button> -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Nilai</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                    <form id="editForm">
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-3" style="margin:10px">
+                                    <input type="hidden" class="form-control" id="id">
+                                    <input type="hidden" class="form-control" id="type">
+                                    <p style="text-align:center">Instalasi Air</p>
+                                    <label for="nilai_1" class="form-label">Lancar Masuk (air dapat mengalir dengan lancar 24 jam ke dalam rumah) </label>
+                                    <input type="number" class="form-control" id="nilai_1">
+                                    <label for="nilai_2" class="form-label">Kontrol (Setiap bak mandi menggunakan pelampung)</label>
+                                    <input type="number" class="form-control" id="nilai_2">
+                                    <label for="nilai_3" class="form-label">Lancar Keluar (saluran pembuangan air lancar)</label>
+                                    <input type="number" class="form-control" id="nilai_3">
+                                </div>
+
+                                <div class="mb-3" style="margin:10px">
+                                    <p style="text-align:center">Kebersihan di dalam rumah</p>
+                                    <label for="nilai_1" class="form-label">Kaca & ventilasi (bersih dan tidak rusak) </label>
+                                    <input type="number" class="form-control" id="nilai_4">
+                                    <label for="nilai_2" class="form-label">Plafon (bersih dan tidak rusak) </label>
+                                    <input type="number" class="form-control" id="nilai_5">
+                                    <label for="nilai_3" class="form-label">Dinding (bersih dan tidak rusak)</label>
+                                    <input type="number" class="form-control" id="nilai_6">
+                                    <label for="nilai_3" class="form-label">Lantai (bersih dan tidak rusak) </label>
+                                    <input type="number" class="form-control" id="nilai_7">
+                                    <label for="nilai_3" class="form-label">Kamar Mandi (bersih dan tidak rusak) </label>
+                                    <input type="number" class="form-control" id="nilai_8">
+                                </div>
+                                <div class="mb-3" style="margin:10px">
+                                    <p style="text-align:center">Listrik</p>
+                                    <label for="nilai_1" class="form-label">Instalasi (aman dan rapi) </label>
+                                    <input type="number" class="form-control" id="nilai_9">
+                                </div>
+                                <div class="mb-3" style="margin:10px">
+                                    <p style="text-align:center">Alat Pemadam Api Ringan (APAR) </p>
+                                    <label for="nilai_1" class="form-label">G2 -> 1 Unit; G4 -> 1 Unit; G6 -> 2 Unit; G10 -> 3 Unit </label>
+                                    <input type="number" class="form-control" id="nilai_10">
+                                </div>
+                                <div class="mb-3" style="margin:10px">
+                                    <p style="text-align:center">Halaman Rumah</p>
+                                    <label for="nilai_1" class="form-label">Bersih</label>
+                                    <input type="number" class="form-control" id="nilai_11">
+                                </div>
+                                <div class="mb-3" style="margin:10px">
+                                    <p style="text-align:center">Jemuran</p>
+                                    <label for="nilai_1" class="form-label">Rapi dan seragam </label>
+                                    <input type="number" class="form-control" id="nilai_12">
+                                </div>
+                                <div class="mb-3" style="margin:10px">
+                                    <p style="text-align:center">Estetika</p>
+                                    <label for="nilai_1" class="form-label">Ditanami Bunga, Buah & sayur mayur </label>
+                                    <input type="number" class="form-control" id="nilai_13">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="editModallandscape" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Nilai</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                    <form id="editFormlandcsape">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-3" style="margin:10px">
+                                    <input type="hidden" class="form-control" id="id">
+                                    <input type="hidden" class="form-control" id="type">
+                                    <p style="text-align:center">Material</p>
+                                    <label for="nilai_1" class="form-label">Ornamen-ornamen penghias taman </label>
+                                    <input type="number" class="form-control" id="nilai_l1">
+                                </div>
+                                <div class="mb-3" style="margin:10px">
+                                    <p style="text-align:center">Komposisi Tanaman</p>
+                                    <label for="nilai_2" class="form-label">Jumlah Tanaman Hias (diharapkan >5 jenis tanaman hias)</label>
+                                    <input type="number" class="form-control" id="nilai_l2">
+                                </div>
+                                <div class="mb-3" style="margin:10px">
+                                    <p style="text-align:center">Kondisi Fisik Tanaman</p>
+                                    <label for="nilai_3" class="form-label">Kondisi Fisik Tanaman</label>
+                                    <input type="number" class="form-control" id="nilai_l3">
+                                    <label for="nilai_1" class="form-label">Kebersihan Lingkungan </label>
+                                    <input type="number" class="form-control" id="nilai_l4">
+                                </div>
+                                <div class="mb-3" style="margin:10px">
+                                    <p style="text-align:center">Design</p>
+                                    <label for="nilai_2" class="form-label">Bentuk Taman: Simetris (1), Lengkung (2), Vertikal (3) </label>
+                                    <input type="number" class="form-control" id="nilai_l5">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="editModallkungan" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Nilai</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                    <form id="editFormlingkn">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-3" style="margin:10px">
+                                    <input type="hidden" class="form-control" id="id">
+                                    <input type="hidden" class="form-control" id="type">
+                                    <p style="text-align:center">Filter Air </p>
+                                    <label for="nilai_1" class="form-label">Tersedia 1 Unit untuk afdeling/estate yang tidak dialiri air bersih dari Pabrik </label>
+                                    <input type="number" class="form-control" id="nilai_k1">
+                                </div>
+                                <div class="mb-3" style="margin:10px">
+                                    <p style="text-align:center">Profil Tank</p>
+                                    <label for="nilai_2" class="form-label">Kapasitas minimal setara 200 Liter untuk 1 pintu </label>
+                                    <input type="number" class="form-control" id="nilai_k2">
+                                </div>
+                                <div class="mb-3" style="margin:10px">
+                                    <p style="text-align:center">Tempat Penitipan Anak</p>
+                                    <label for="nilai_3" class="form-label">Karpet (Kecuali TPA dengan Keramik) </label>
+                                    <input type="number" class="form-control" id="nilai_k3">
+                                    <label for="nilai_1" class="form-label">Mainan </label>
+                                    <input type="number" class="form-control" id="nilai_k4">
+                                    <label for="nilai_1" class="form-label">Pagar </label>
+                                    <input type="number" class="form-control" id="nilai_k5">
+                                </div>
+                                <div class="mb-3" style="margin:10px">
+                                    <p style="text-align:center">Musholla/Masjid</p>
+                                    <label for="nilai_2" class="form-label">Ketersediaan air</label>
+                                    <input type="number" class="form-control" id="nilai_k6">
+                                    <label for="nilai_2" class="form-label">Saluran Pembuangan air </label>
+                                    <input type="number" class="form-control" id="nilai_k7">
+                                    <label for="nilai_2" class="form-label">Kebersihan lingkungan </label>
+                                    <input type="number" class="form-control" id="nilai_k8">
+                                </div>
+                                <div class="mb-3" style="margin:10px">
+                                    <p style="text-align:center">Drainase</p>
+                                    <label for="nilai_2" class="form-label">Bersihir</label>
+                                    <input type="number" class="form-control" id="nilai_k9">
+                                    <label for="nilai_2" class="form-label">Lancar </label>
+                                    <input type="number" class="form-control" id="nilai_k10">
+                                </div>
+                                <div class="mb-3" style="margin:10px">
+                                    <p style="text-align:center">Ketersediaan Tong Sampah</p>
+                                    <label for="nilai_2" class="form-label">Sedikitnya tersedia 1 tong sampah untuk 1 kopel rumah</label>
+                                    <input type="number" class="form-control" id="nilai_k11">
+                                </div>
+                                <div class="mb-3" style="margin:10px">
+                                    <p style="text-align:center">Tempat Pembuangan Akhir</p>
+                                    <label for="nilai_2" class="form-label">Tidak ada ceceran sampah</label>
+                                    <input type="number" class="form-control" id="nilai_k12">
+                                    <label for="nilai_2" class="form-label">Tidak ada penumpukan sampah</label>
+                                    <input type="number" class="form-control" id="nilai_k13">
+                                </div>
+                                <div class="mb-3" style="margin:10px">
+                                    <p style="text-align:center">Parkir Motor</p>
+                                    <label for="nilai_2" class="form-label">Tersedia bangunan khusus</label>
+                                    <input type="number" class="form-control" id="nilai_k14">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Image Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img src="" alt="" class="img-fluid" id="modalImage">
+                    <p id="modalComment"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
     </div>
 
     <script type="module">
@@ -3046,4 +3051,5 @@
             });
         }
     </script>
+    --}}
 </x-layout.app>

@@ -119,17 +119,21 @@
                                 </p>
                             </a>
                         </li>
+                        {{--
+
+
                         <li class="nav-item">
                             <a href="{{ asset('/dashboard_perum') }}" class="nav-link">
-                                <div class="nav-icon lottie-animation" data-animation-path="{{ asset('img/homejson.json') }}">
-                                </div>
+                        <div class="nav-icon lottie-animation" data-animation-path="{{ asset('img/homejson.json') }}">
+                        </div>
 
-                                <p style="font-size: 15px;">
-                                    PERUMAHAN
+                        <p style="font-size: 15px;">
+                            PERUMAHAN
 
-                                </p>
-                            </a>
+                        </p>
+                        </a>
                         </li>
+                        --}}
                         <li class="nav-item">
                             <a href="{{ asset('/gradingdahsboard') }}" class="nav-link">
                                 <div class="nav-icon lottie-animation" data-animation-path="{{ asset('img/mill.json') }}">
