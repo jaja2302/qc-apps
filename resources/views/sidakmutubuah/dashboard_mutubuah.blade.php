@@ -1258,7 +1258,7 @@
         </section>
 
 
-        @if (session('jabatan') == 'Manager' || session('jabatan') == 'Askep' || session('jabatan') == 'Asisten'|| session('jabatan') == 'Askep/Asisten' )
+        @if (can_edit_all_atasan())
         <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -1340,13 +1340,14 @@
         ////untuk mode single and full mode
         let checkdata = @json($check);
         let recordsdupt = @json($idduplicate);
+
+        // console.log(checkdata);
+        // console.log(recordsdupt);
         if (checkdata === 'ada') {
             const modalElement = document.getElementById('confirmationModal');
             if (modalElement) {
                 new bootstrap.Modal(modalElement).show();
             }
-
-
             // Attach a click event to the "Yes" button
             $('#confirmBtn').on('click', function() {
                 // User clicked 'Yes', proceed with your actions
@@ -1393,7 +1394,12 @@
         var lokasiKerja = "{{ session('lok') }}";
         var isTableHeaderModified = false;
         $(document).ready(function() {
+            const defaultRegional = $('#default_regional').val();
 
+            // Set the regional select value
+            $('#reg_sbiThun').val(defaultRegional);
+            $('#regionalData').val(defaultRegional);
+            $('#regional_data').val(defaultRegional);
             if (lokasiKerja == 'Regional II' && !isTableHeaderModified) {
                 $('#regionalPanen').val('2');
                 $('#regionalDataweek').val('2');
@@ -3140,7 +3146,7 @@
                                             cell.style.color = "black";
                                         }
                                     }
-                                    cell.style.backgroundColor = '#C7E1AA';
+
                                     if (cellIndex === 3) {
                                         const item4Value = parseFloat(dataItems.item4); // Convert to a number
                                         if (item4Value >= 95) {
@@ -4365,7 +4371,7 @@
 
                     tbody2.appendChild(tx);
 
-                    var tbody3 = document.getElementById('weeks3');
+                    var tbody3 = document.getElementById('week3');
 
                     if (mutu_buah[2] !== undefined) {
                         var tab3 = mutu_buah[2][1];
@@ -4712,7 +4718,7 @@
                                 item1: wil4,
                                 item2: 'GM',
                                 item3: item3s,
-                                item4: arrWIl3['All_skor'],
+                                item4: (arrWIl3['All_skor'] < 0) ? 0 : arrWIl3['All_skor'],
                                 item5: arrWIl3['rankWil'],
                             };
 
