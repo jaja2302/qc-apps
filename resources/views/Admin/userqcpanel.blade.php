@@ -35,6 +35,7 @@
     <div class="container-fluid">
 
         <div class="col-sm-12">
+            {{--
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -87,6 +88,8 @@
                     </div>
                 </div>
             </div>
+
+--}}
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark">
@@ -828,97 +831,97 @@
             });
         });
 
-        document.getElementById("tambahUserBtn").addEventListener("click", function() {
+        // document.getElementById("tambahUserBtn").addEventListener("click", function() {
 
-            var _token = $('input[name="_token"]').val();
-            var lokasi = "{{ session('lok') }}";
+        //     var _token = $('input[name="_token"]').val();
+        //     var lokasi = "{{ session('lok') }}";
 
-            const actionType = "add";
+        //     const actionType = "add";
 
-            Swal.mixin({
-                input: 'text',
-                confirmButtonText: 'Next →',
-                showCancelButton: true,
-                progressSteps: ['1', '2', '3', '4'] // Add as many steps as needed
-            }).queue([{
-                    title: 'Nama',
-                    text: 'Masukan Nama user'
-                },
-                {
-                    title: 'Email',
-                    text: 'Masukan Email user'
-                },
-                {
-                    title: 'Jabatan',
-                    input: 'select', // Use 'select' input type for dropdown
-                    text: 'Pilih Jabatan User',
-                    inputOptions: {
-                        'Admin': 'Admin',
-                        'Askep': 'Askep',
-                        'Manager': 'Manager',
-                        'Asisten': 'Asisten',
-                        'Kosong': 'Tidak Ada'
-                    }
-                },
-                {
-                    title: 'Password User',
-                    input: 'password',
-                    text: 'Masukan Password'
-                },
-            ]).then((result) => {
-                if (result.value) {
-                    const answers = result.value;
-                    const username = answers[0];
-                    const email = answers[1];
-                    const jabatan = answers[2];
-                    const password = answers[3];
+        //     Swal.mixin({
+        //         input: 'text',
+        //         confirmButtonText: 'Next →',
+        //         showCancelButton: true,
+        //         progressSteps: ['1', '2', '3', '4'] // Add as many steps as needed
+        //     }).queue([{
+        //             title: 'Nama',
+        //             text: 'Masukan Nama user'
+        //         },
+        //         {
+        //             title: 'Email',
+        //             text: 'Masukan Email user'
+        //         },
+        //         {
+        //             title: 'Jabatan',
+        //             input: 'select', // Use 'select' input type for dropdown
+        //             text: 'Pilih Jabatan User',
+        //             inputOptions: {
+        //                 'Admin': 'Admin',
+        //                 'Askep': 'Askep',
+        //                 'Manager': 'Manager',
+        //                 'Asisten': 'Asisten',
+        //                 'Kosong': 'Tidak Ada'
+        //             }
+        //         },
+        //         {
+        //             title: 'Password User',
+        //             input: 'password',
+        //             text: 'Masukan Password'
+        //         },
+        //     ]).then((result) => {
+        //         if (result.value) {
+        //             const answers = result.value;
+        //             const username = answers[0];
+        //             const email = answers[1];
+        //             const jabatan = answers[2];
+        //             const password = answers[3];
 
 
-                    // You can now use these values to perform your desired actions (e.g., AJAX request to add the user)
-                    // console.log("Username:", username);
-                    // console.log("Email:", email);
-                    // console.log("Jabatan:", jabatan);
-                    // console.log("Password:", password);
+        //             // You can now use these values to perform your desired actions (e.g., AJAX request to add the user)
+        //             // console.log("Username:", username);
+        //             // console.log("Email:", email);
+        //             // console.log("Jabatan:", jabatan);
+        //             // console.log("Password:", password);
 
-                    // Swal.fire({
-                    //     title: 'All done!',
-                    //     html: `
-                    //     Your answers:
-                    //     <pre><code>${JSON.stringify(answers)}</code></pre>
-                    // `,
-                    //     confirmButtonText: 'Lovely!'
-                    // });
+        //             // Swal.fire({
+        //             //     title: 'All done!',
+        //             //     html: `
+        //             //     Your answers:
+        //             //     <pre><code>${JSON.stringify(answers)}</code></pre>
+        //             // `,
+        //             //     confirmButtonText: 'Lovely!'
+        //             // });
 
-                    // Assuming you have _token and rowData defined elsewhere in your code
-                    $.ajax({
-                        type: 'POST',
-                        url: '{{ route("updateUserqc") }}',
-                        data: {
-                            _token: _token,
-                            emailValue: email,
-                            passwordValue: password,
-                            namaLengkapValue: username,
-                            jabatan_input: jabatan,
-                            lokasi: lokasi,
-                            statusAkun: 1,
-                            actionType: actionType
-                        },
-                        success: function(response) {
-                            Swal.fire('Disimpan!', 'User QC sudah diupdate!', 'success');
-                            setTimeout(function() {
-                                location.reload();
-                            }, 3000); // 3000 milliseconds = 3 seconds
-                        },
-                        error: function(error) {
-                            Swal.fire('Gagal', 'An error occurred while updating user data.', 'error');
-                            setTimeout(function() {
-                                // location.reload();
-                            }, 3000); // 3000 milliseconds = 3 seconds
-                        }
-                    });
-                }
-            });
-        });
+        //             // Assuming you have _token and rowData defined elsewhere in your code
+        //             $.ajax({
+        //                 type: 'POST',
+        //                 url: '{{ route("updateUserqc") }}',
+        //                 data: {
+        //                     _token: _token,
+        //                     emailValue: email,
+        //                     passwordValue: password,
+        //                     namaLengkapValue: username,
+        //                     jabatan_input: jabatan,
+        //                     lokasi: lokasi,
+        //                     statusAkun: 1,
+        //                     actionType: actionType
+        //                 },
+        //                 success: function(response) {
+        //                     Swal.fire('Disimpan!', 'User QC sudah diupdate!', 'success');
+        //                     setTimeout(function() {
+        //                         location.reload();
+        //                     }, 3000); // 3000 milliseconds = 3 seconds
+        //                 },
+        //                 error: function(error) {
+        //                     Swal.fire('Gagal', 'An error occurred while updating user data.', 'error');
+        //                     setTimeout(function() {
+        //                         // location.reload();
+        //                     }, 3000); // 3000 milliseconds = 3 seconds
+        //                 }
+        //             });
+        //         }
+        //     });
+        // });
 
         $(document).ready(function() {
             if ($('.alert-success').length) {

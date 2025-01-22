@@ -1241,7 +1241,7 @@
                                 </div>
                                 <div class="details">
                                     <div>{{$data['statusdata']['nama_asisten']}}</div>
-                                    <div>Asisten <span>{{$data['statusdata']['lok_asisten']}}</span> </div>
+                                    <div>Asisten <span>{{$data['est']}} {{$data['afd']}}</span> </div>
                                 </div>
                             </div>
                             @else
@@ -1258,7 +1258,7 @@
                                 </div>
                                 <div class="details">
                                     <div>{{$data['statusdata']['nama_askep']}}</div>
-                                    <div>Askep <span>{{$data['statusdata']['lok_askep']}}</span> </div>
+                                    <div>Askep <span>{{$data['est']}}</span> </div>
                                 </div>
                             </div>
                             @elseif($data['statusdata']['nama_maneger'] != null)
@@ -1270,7 +1270,7 @@
                                 </div>
                                 <div class="details">
                                     <div>{{$data['statusdata']['nama_maneger']}}</div>
-                                    <div>Manager <span>{{$data['statusdata']['lok_manager']}}</span> </div>
+                                    <div>Manager <span>{{$data['est']}}</span> </div>
                                 </div>
                             </div>
                             @else

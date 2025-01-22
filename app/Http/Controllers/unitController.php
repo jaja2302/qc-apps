@@ -11,6 +11,7 @@ use Nette\Utils\DateTime;
 use Yajra\DataTables\Facades\DataTables;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 
 // use \PDF;
 class unitController extends Controller
@@ -29,6 +30,8 @@ class unitController extends Controller
             ->get();
 
         $queryEstate = json_decode($queryEstate, true);
+
+        // dd($queryEstate);
 
         $dataRaw = array();
 
@@ -322,7 +325,7 @@ class unitController extends Controller
             ->where('wil.regional', $regional)
             ->where('estate.nama', '!=', 'PLASMA')
             // ->where('wil.nama', '!=', 'Plasma')
-            ->whereNotIn('estate.est', ['SRE', 'LDE', 'NBM', 'REG-1', 'SLM', 'SR', 'TC', 'SRS', 'SGM', 'SYM', 'SKM', 'KTM'])
+            ->whereNotIn('estate.est', ['SRE', 'LDE', 'REG-1', 'REG-2', 'REG-3', 'REG-4', 'SRS', 'TC'])
             ->get();
 
         $queryEstate = json_decode($queryEstate, true);
@@ -371,6 +374,8 @@ class unitController extends Controller
         }
 
         // dd($dataRaw);
+
+
 
         $dataResult = array();
         $countDataPerEstate = array();
@@ -626,6 +631,7 @@ class unitController extends Controller
         $arrView = array();
         $arrId = array();
         foreach ($dataResult as $key => $value) {
+            // dd($value);
             $arrView[$key][] = $value['wil'];
             $arrId[$key][] = '-';
             $arrView[$key][] = $value['estate'];
@@ -688,7 +694,7 @@ class unitController extends Controller
             $countRes[$inc2] = $value;
             $inc2++;
         }
-
+        // dd($arrView);
         $arrResult['arrView'] = $arrView;
         $arrResult['arrId'] = $arrId;
         $arrResult['arrHeader'] = $arrHeader;
@@ -907,42 +913,8 @@ class unitController extends Controller
             }
         }
 
-
-
-        // foreach ($dataResult as $key => $value) {
-        //     foreach ($resultCount as $key2 => $data) {
-        //         // dd($key2);
-        //         for ($i = 1; $i <= $data; $i++) {
-        //             if (array_key_exists($key2 . '_' . $i, $value)) {
-        //                 // $dataResult[$key][$key2 . '_' . $i] = 0;
-
-        //             } else {
-        //                 if (!array_key_exists('skor_bulan_' . $key2, $value)) {
-        //                     $dataResult[$key]['skor_bulan_' . $key2] = 0;
-        //                 }
-        //                 $dataResult[$key][$key2 . '_' . $i] = 0;
-        //             }
-        //         }
-        //     }
-        // }
-
-        // dd($dataResult);
-        // dd($dataResult['KNE']['November']);
-        // if (array_key_exists(('November'), $dataResult['KNE'])) {
-        //     if (is_array($dataResult['KNE']['November'])) {
-        //         foreach ($dataResult['KNE']['November'] as $key => $value) {
-        //             print_r($value);
-        //         }
-        //     } else {
-        //         dd('tidak');
-        //     }
-        // } else {
-        //     dd('tidak ada');
-        // }
-
-        // dd($dataResult);
         $bulanJson = json_encode($bulan);
-
+        // dd($dataResult);
         return view('Gudang.dashboard', ['curr_year' => $currentYear, 'years_list' => $years_list, 'dataResult' => $dataResult, 'resultCount' => $resultCount, 'bulanJson' => $bulanJson, 'bulan' => $bulan, 'total_column_bulan' => $total_column_bulan, 'resultCountJson' => $resultCountJson]);
     }
     public function tambah()

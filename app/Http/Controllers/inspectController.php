@@ -8488,124 +8488,169 @@ class inspectController extends Controller
 
     public function verifaction(Request $request)
     {
-        // Retrieve input values from the request
-        $Tanggal = $request->input('Tanggal');
-        $user_id = $request->input('user_id');
-        $est = $request->input('est');
-        $afd = $request->input('afd');
-        $menu = $request->input('menu');
-
-        $nama = $request->input('nama');
-        $action = $request->input('action');
-        $tanggal_approve = $request->input('tanggal_approve');
-        $departemen = $request->input('departemen');
-        $lokasikerja = $request->input('lokasikerja');
-
-        $data_user = Pengguna::where('user_id', $user_id)
-            ->with(['Jabatan', 'Departement'])
-            ->first();
-
-        $jabatan = ($request->input('jabatan') === null)
-            ? $data_user->Jabatan->nama
-            : $request->input('jabatan');
-
-        // dd($data_user,$jabatan);
-        // dd($Tanggal, $est, $afd,$menu,$jabatan,$nama,$action,$tanggal_approve,$departemen,$lokasikerja);
         try {
             DB::beginTransaction();
-            $currentStatus = DB::connection('mysql2')->table('verification')
-                ->select("verification.*")
-                ->where('datetime', 'like', '%' . $Tanggal . '%')
-                ->where('est', $est)
-                ->where('afd', $afd)
-                ->where('menu', $menu)
-                ->first();
 
-            // dd($est, $afd, $menu, $currentStatus);
-            if ($data_user->id_jabatan !== null && $data_user->id_departement !== null) {
-                $verifby_askep = $data_user->Jabatan->nama === 'Askep' ? 1 : 0;
-                $verifby_manager = $data_user->Jabatan->nama === 'Manager' ? 1 : 0;
-                $verifby_asisten = ($data_user->Jabatan->nama === 'Asisten' || $data_user->Jabatan->nama === 'Asisten Afdeling') ? 1 : 0;
+            $inputs = $this->getRequestInputs($request);
+            $data_user = $this->getUserData($inputs['user_id']);
+            $jabatan = $this->determineJabatan($data_user, $request->input('jabatan'));
+            $verificationFlags = $this->getVerificationFlags($data_user, $jabatan);
+
+            $currentStatus = $this->getCurrentStatus($inputs);
+
+            if ($currentStatus === null) {
+                $this->createNewVerification($inputs, $verificationFlags, $jabatan);
             } else {
-                $verifby_askep = $jabatan === 'Askep' ? 1 : 0;
-                $verifby_manager = $jabatan === 'Manager' ? 1 : 0;
-                $verifby_asisten = ($jabatan === 'Asisten' || $jabatan === 'Asisten Afdeling') ? 1 : 0;
+                $this->updateExistingVerification($currentStatus, $jabatan, $inputs, $verificationFlags);
             }
-            // dd($verifby_askep, $verifby_manager, $verifby_asisten);
-            if ($currentStatus == null) {
 
-                $data = [
-                    'est' => $est,
-                    'afd' => $afd,
-                    'datetime' => $Tanggal,
-                    'menu' => $menu,
-                    'verifby_askep' => $verifby_askep,
-                    'verifby_manager' => $verifby_manager,
-                    'verifby_asisten' => $verifby_asisten,
-                    'action' => $action,
-                ];
-
-                if ($jabatan === 'Askep') {
-                    $data['detail_askep'] = $departemen;
-                    $data['nama_askep'] = $nama;
-                    $data['approve_askep'] = $tanggal_approve;
-                    $data['lok_askep'] = $lokasikerja;
-                } elseif ($jabatan === 'Asisten' || $jabatan === 'Asisten Afdeling') {
-                    $data['detail_asisten'] = $departemen;
-                    $data['nama_asisten'] = $nama;
-                    $data['approve_asisten'] = $tanggal_approve;
-                    $data['lok_asisten'] = $lokasikerja;
-                } else {
-                    $data['detail_manager'] = $departemen;
-                    $data['nama_maneger'] = $nama;
-                    $data['approve_maneger'] = $tanggal_approve;
-                    $data['lok_manager'] = $lokasikerja;
-                }
-
-                DB::connection('mysql2')->table('verification')->insert($data);
-                // dd('case1');
-
-                DB::commit();
-                return response()->json('success', 200);
-            } else {
-                // dd('ada');
-                if ($jabatan === 'Askep') {
-                    DB::connection('mysql2')->table('verification')->where('id', $currentStatus->id)->update([
-                        'verifby_askep' => $verifby_askep,
-                        'detail_askep' => $departemen,
-                        'nama_askep' => $nama,
-                        'approve_askep' => $tanggal_approve,
-                        'lok_askep' => $lokasikerja,
-                    ]);
-                } else if ($jabatan === 'Asisten' || $jabatan === 'Asisten Afdeling') {
-                    DB::connection('mysql2')->table('verification')->where('id', $currentStatus->id)->update([
-                        'verifby_asisten' => $verifby_asisten,
-                        'detail_asisten' => $departemen,
-                        'nama_asisten' => $nama,
-                        'approve_asisten' => $tanggal_approve,
-                        'lok_asisten' => $lokasikerja,
-                    ]);
-                } else if ($jabatan === 'Manager') {
-                    DB::connection('mysql2')->table('verification')->where('id', $currentStatus->id)->update([
-                        'verifby_manager' => $verifby_manager,
-                        'detail_manager' => $departemen,
-                        'nama_maneger' => $nama,
-                        'approve_maneger' => $tanggal_approve,
-                        'lok_manager' => $lokasikerja,
-                    ]);
-                } else {
-                    //  dd('case2',$jabatan);
-                    DB::rollback();
-                    return response()->json('error', 400);
-                }
-                // dd('case3');
-                DB::commit();
-                return response()->json('success', 200);
-            }
+            DB::commit();
+            return response()->json('success', 200);
         } catch (\Throwable $th) {
-            // dd($th);
             DB::rollback();
             return response()->json(['error' => $th->getMessage()], 500);
         }
+    }
+
+    private function getRequestInputs(Request $request)
+    {
+        return [
+            'Tanggal' => $request->input('Tanggal'),
+            'user_id' => $request->input('user_id'),
+            'est' => $request->input('est'),
+            'afd' => $request->input('afd'),
+            'menu' => $request->input('menu'),
+            'nama' => $request->input('nama'),
+            'action' => $request->input('action'),
+            'tanggal_approve' => $request->input('tanggal_approve'),
+            'departemen' => $request->input('departemen'),
+            'lokasikerja' => $request->input('lokasikerja')
+        ];
+    }
+
+    private function getUserData($user_id)
+    {
+        return Pengguna::where('user_id', $user_id)
+            ->with(['Jabatan', 'Departement'])
+            ->first();
+    }
+
+    private function determineJabatan($data_user, $request_jabatan)
+    {
+        return ($request_jabatan === null)
+            ? $data_user->Jabatan->nama
+            : $request_jabatan;
+    }
+
+    private function getVerificationFlags($data_user, $jabatan)
+    {
+        if ($data_user->Jabatan) {
+            return [
+                'verifby_askep' => $data_user->Jabatan->nama === 'Askep' ? 1 : 0,
+                'verifby_manager' => $data_user->Jabatan->nama === 'Manager' ? 1 : 0,
+                'verifby_asisten' => ($data_user->Jabatan->nama === 'Asisten' || $data_user->Jabatan->nama === 'Asisten Afdeling') ? 1 : 0,
+                'new_jabatan' => $data_user->Jabatan->nama
+            ];
+        }
+
+        return [
+            'verifby_askep' => $jabatan === 'Askep' ? 1 : 0,
+            'verifby_manager' => $jabatan === 'Manager' ? 1 : 0,
+            'verifby_asisten' => ($jabatan === 'Asisten' || $jabatan === 'Asisten Afdeling') ? 1 : 0,
+            'new_jabatan' => $jabatan
+        ];
+    }
+
+    private function getCurrentStatus($inputs)
+    {
+        return DB::connection('mysql2')->table('verification')
+            ->select("verification.*")
+            ->where('datetime', 'like', '%' . $inputs['Tanggal'] . '%')
+            ->where('est', $inputs['est'])
+            ->where('afd', $inputs['afd'])
+            ->where('menu', $inputs['menu'])
+            ->first();
+    }
+
+    private function createNewVerification($inputs, $flags, $jabatan)
+    {
+        $data = [
+            'est' => $inputs['est'],
+            'afd' => $inputs['afd'],
+            'datetime' => $inputs['Tanggal'],
+            'menu' => $inputs['menu'],
+            'verifby_askep' => $flags['verifby_askep'],
+            'verifby_manager' => $flags['verifby_manager'],
+            'verifby_asisten' => $flags['verifby_asisten'],
+            'action' => $inputs['action']
+        ];
+
+        $this->addJabatanSpecificData($data, $jabatan, $inputs);
+
+        DB::connection('mysql2')->table('verification')->insert($data);
+    }
+
+    private function updateExistingVerification($currentStatus, $jabatan, $inputs, $flags)
+    {
+        $updateData = $this->getUpdateData($jabatan, $inputs, $flags);
+
+        if ($updateData) {
+            DB::connection('mysql2')->table('verification')
+                ->where('id', $currentStatus->id)
+                ->update($updateData);
+        } else {
+            throw new \Exception('Invalid jabatan');
+        }
+    }
+
+    private function addJabatanSpecificData(&$data, $jabatan, $inputs)
+    {
+        if ($jabatan === 'Askep') {
+            $data['detail_askep'] = $inputs['departemen'];
+            $data['nama_askep'] = $inputs['nama'];
+            $data['approve_askep'] = $inputs['tanggal_approve'];
+            $data['lok_askep'] = $inputs['lokasikerja'];
+        } elseif ($jabatan === 'Asisten' || $jabatan === 'Asisten Afdeling') {
+            $data['detail_asisten'] = $inputs['departemen'];
+            $data['nama_asisten'] = $inputs['nama'];
+            $data['approve_asisten'] = $inputs['tanggal_approve'];
+            $data['lok_asisten'] = $inputs['lokasikerja'];
+        } else {
+            $data['detail_manager'] = $inputs['departemen'];
+            $data['nama_maneger'] = $inputs['nama'];
+            $data['approve_maneger'] = $inputs['tanggal_approve'];
+            $data['lok_manager'] = $inputs['lokasikerja'];
+        }
+    }
+
+    private function getUpdateData($jabatan, $inputs, $flags)
+    {
+        if ($jabatan === 'Askep') {
+            return [
+                'verifby_askep' => $flags['verifby_askep'],
+                'detail_askep' => $inputs['departemen'],
+                'nama_askep' => $inputs['nama'],
+                'approve_askep' => $inputs['tanggal_approve'],
+                'lok_askep' => $inputs['lokasikerja']
+            ];
+        } elseif ($jabatan === 'Asisten' || $jabatan === 'Asisten Afdeling') {
+            return [
+                'verifby_asisten' => $flags['verifby_asisten'],
+                'detail_asisten' => $inputs['departemen'],
+                'nama_asisten' => $inputs['nama'],
+                'approve_asisten' => $inputs['tanggal_approve'],
+                'lok_asisten' => $inputs['lokasikerja']
+            ];
+        } elseif ($jabatan === 'Manager') {
+            return [
+                'verifby_manager' => $flags['verifby_manager'],
+                'detail_manager' => $inputs['departemen'],
+                'nama_maneger' => $inputs['nama'],
+                'approve_maneger' => $inputs['tanggal_approve'],
+                'lok_manager' => $inputs['lokasikerja']
+            ];
+        }
+
+        return null;
     }
 }

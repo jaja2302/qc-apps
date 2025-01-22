@@ -86,6 +86,8 @@ class AbsensiController extends Controller
         $regional = $request->input('regional');
         $bulan = $request->input('dateMonth');
 
+        // dd($bulan, $regional);
+
         $regs = DB::connection('mysql2')->table('reg')
             ->where('reg.id', $regional)
             ->pluck('nama');
@@ -145,13 +147,13 @@ class AbsensiController extends Controller
         $user_Data = Pengguna::whereIn('id_jabatan', [1, 8])
             ->with('Jabatan', 'Departement')
             ->where('lokasi_kerja', $regs)
-            ->whereHas('Departement', function ($query) {
-                $query->where('departement.id', 43);  // Specify the table name
-            })
+            // ->whereHas('Departement', function ($query) {
+            //     $query->where('departement.id', 43);  // Specify the table name
+            // })
             ->get();
         $user_Data = $user_Data->groupBy('user_id');
         $user_Data = json_decode($user_Data, true);
-        // dd($user_data);
+        // dd($user_Data);
 
         $user_default = [];
 
@@ -175,7 +177,7 @@ class AbsensiController extends Controller
                 $user_default[$key]['total'] = 0;
             }
         }
-
+        // dd($user_default, $datesnew, $user_Data);
 
         // dd($user_default);
         $user_absensi = DB::connection('mysql2')->table('absensi_qc')
@@ -282,7 +284,7 @@ class AbsensiController extends Controller
 
 
 
-        // dd($result);
+        // dd($user_default, $tanggal_values);
 
 
 
@@ -300,6 +302,7 @@ class AbsensiController extends Controller
             }
         }
 
+        // dd($get_data, $result);
         // dd($tanggal_values);
 
         $user_ci = DB::connection('mysql2')->table('absensi_qc')
@@ -329,8 +332,10 @@ class AbsensiController extends Controller
 
                 $start = $pekerjaan[0];
                 $end = $pekerjaan[1];
-                $get_cuti[$key][$key2]['start'] = $start;
-                $get_cuti[$key][$key2]['end'] = $end;
+
+                // dd($value2, $start, $end);
+                // $get_cuti[$key][$key2]['start'] = $start;
+                // $get_cuti[$key][$key2]['end'] = $end;
 
                 // dd($value2);
                 // Generate dates from start to end
@@ -374,11 +379,8 @@ class AbsensiController extends Controller
                 $final_data[$key] = $value;
             }
         }
-        $updatedArray = [];
 
-
-
-        // Your existing code
+        // dd($final_data, $get_data, $get_cuti);
         foreach ($final_data as $key => $value) {
             // Initialize the count for each entry
             $count = 0;

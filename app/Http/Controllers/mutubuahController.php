@@ -96,6 +96,7 @@ class mutubuahController extends Controller
         $regdata = empty($getreg) || $getreg->isEmpty() ? 1 : $getreg;
 
         // dd($getreg, $regdata);
+        $now = date('Y-m-d');
         $sidakmtb = DB::connection('mysql2')->table('sidak_mutu_buah')
             ->select('sidak_mutu_buah.*')
             ->join('estate', 'estate.est', '=', 'sidak_mutu_buah.estate')
@@ -103,8 +104,8 @@ class mutubuahController extends Controller
             ->where('estate.emp', '!=', 1)
             ->where('wil.regional', $regdata)
             // ->whereDate('datetime', today())
-            // ->where('sidak_mutu_buah.datetime', 'like', '%2025-01-04%')
-            ->whereYear('sidak_mutu_buah.datetime', '=', 2025)
+            ->where('sidak_mutu_buah.datetime', 'like', '%' . $now . '%')
+            // ->whereYear('sidak_mutu_buah.datetime', '=', 2025)
             ->get();
         $columns = [
             'estate',
