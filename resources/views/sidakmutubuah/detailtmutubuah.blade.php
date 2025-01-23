@@ -349,6 +349,8 @@
             <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark ">
                 <h2>REKAP HARIAN SIDAK MUTU BUAH </h2>
             </div>
+
+            @if ($edit_permittion)
             <div class="alert alert-danger d-none d-flex flex-column align-items-start justify-content-between" role="alert" id="notverif">
                 <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
                     <use xlink:href="#exclamation-triangle-fill" />
@@ -379,6 +381,8 @@
                     Data Sudah Tervertifikasi
                 </div>
             </div>
+            @endif
+
             <div class="header-container">
 
                 <div class="header d-flex justify-content-center mt-3 mb-2 ml-3 mr-3">
@@ -1007,7 +1011,7 @@
                 // Call the fetchAndUpdateData function to update the data
             });
 
-            var currentUserName = "{{ session('jabatan') }}";
+            var currentUserName = "{{ $jabatan }}";
 
             //untuk mengirim parameter tanggal ke download pdf BA
             document.addEventListener('DOMContentLoaded', function() {

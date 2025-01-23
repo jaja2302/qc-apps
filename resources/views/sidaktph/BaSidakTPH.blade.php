@@ -366,6 +366,8 @@
             <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark ">
                 <h2>REKAP HARIAN SIDAK TPH </h2>
             </div>
+
+            @if ($edit_permittion)
             <div class="alert alert-danger d-none d-flex flex-column align-items-start justify-content-between" role="alert" id="notverif">
                 <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
                     <use xlink:href="#exclamation-triangle-fill" />
@@ -395,7 +397,7 @@
                     Data Sudah Tervertifikasi
                 </div>
             </div>
-
+            @endif
             <div class="header d-flex justify-content-center mt-3 mb-2 ml-3 mr-3">
                 <div class="logo-container">
                     <img src="{{ asset('img/Logo-SSS.png') }}" alt="Logo" class="logo">
@@ -753,9 +755,9 @@
         const canedit = @json(can_edit());
         const can_edit_mananger_askep = @json(can_edit_mananger_askep());
 
-        var currentUserName = "{{ session('jabatan') }}";
+        var currentUserName = "{{ $jabatan }}";
         var user_id = "{{ auth()->user()->user_id }}";
-        var user_name = "{{ session('user_name') }}";
+        var user_name = "{{ $user_name }}";
         document.addEventListener("DOMContentLoaded", function() {
             var inputDate = document.getElementById("inputDate");
             // var showFindingYear = document.getElementById("showFindingYear");

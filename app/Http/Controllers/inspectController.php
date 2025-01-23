@@ -17,6 +17,7 @@ use App\Models\Pengguna;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use App\Models\Departement;
 
 require_once(app_path('helpers.php'));
 
@@ -952,6 +953,8 @@ class inspectController extends Controller
 
     public function dataDetail($est, $afd, $date, $reg, Request $request)
     {
+        // dd(auth()->user()->Jabatan);
+
         $selectedDate = new \DateTime($date);
         $selectedMonth = $selectedDate->format('m');
         $selectedYear = $selectedDate->format('Y');
@@ -997,7 +1000,8 @@ class inspectController extends Controller
         // Optionally, convert the collection to an array
         $uniqueDates = $allDates->toArray();
 
-
+        $edit_permittion = check_edit_permittion($est);
+        // dd($edit_permittion);
 
 
         $arrView = array();
@@ -1009,6 +1013,9 @@ class inspectController extends Controller
         $arrView['afd'] =  $afd;
         $arrView['reg'] =  $reg;
         $arrView['tanggal'] =  $date;
+        $arrView['edit_permittion'] = $edit_permittion;
+        $arrView['jabatan'] = auth()->user()->Jabatan->nama ?? auth()->user()->jabatan;
+        $arrView['user_name'] = auth()->user()->nama_lengkap;
         json_encode($arrView);
         return view('Qcinspeksi.dataDetail', $arrView);
     }

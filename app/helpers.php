@@ -13516,3 +13516,35 @@ if (!function_exists('GetDepartementFamily')) {
         return $getChildDepartments($parentId, $allDepartments);
     }
 }
+
+if (!function_exists('check_edit_permittion')) {
+    function check_edit_permittion($est)
+    {
+
+        $json_deps = auth()->user()->json_deps;
+        $deps = json_decode($json_deps, true);
+
+        $departmentIds = [];
+        foreach ($deps as $dep) {
+            // Get all department IDs from the array
+            foreach ($dep as $key => $value) {
+                if (str_starts_with($key, 'departement') && $value !== null) {
+                    $departmentIds[] = $value;
+                }
+                if (str_starts_with($key, 'departementsub') && $value !== null) {
+                    $departmentIds[] = $value;
+                }
+            }
+        }
+
+        // Get department names from the IDs
+        $departement = Departement::whereIn('id', $departmentIds)
+            ->pluck('nama', 'id')
+            ->toArray();
+        $edit_permittion = false;
+        if (in_array($est, $departement)) {
+            $edit_permittion = true;
+        }
+        return $edit_permittion;
+    }
+}

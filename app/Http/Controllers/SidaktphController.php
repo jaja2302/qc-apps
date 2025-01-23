@@ -2117,6 +2117,8 @@ class SidaktphController extends Controller
             ->orderBy('sidak_tph.blok', 'asc')
             ->get()->toArray();
 
+        $edit_permittion = check_edit_permittion($est);
+
         $arrView = array();
         $afd = '-';
 
@@ -2125,7 +2127,9 @@ class SidaktphController extends Controller
         $arrView['regional'] =  $regional;
         $arrView['afd'] =  $afd;
         $arrView['filter'] =  $unique_dates;
-
+        $arrView['edit_permittion'] = $edit_permittion;
+        $arrView['jabatan'] = auth()->user()->Jabatan->nama ?? auth()->user()->jabatan;
+        $arrView['user_name'] = auth()->user()->nama_lengkap;
         // $formattedStartDate = $startDate->format('d-m-Y');
         // $formattedEndDate = $endDate->format('d-m-Y');
         json_encode($arrView);

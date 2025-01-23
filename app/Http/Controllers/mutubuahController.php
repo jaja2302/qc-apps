@@ -4194,7 +4194,7 @@ class mutubuahController extends Controller
             }
         }
 
-
+        $edit_permittion = check_edit_permittion($est);
 
         $arrView = array();
         $arrView['query'] = $queryMTbuah;
@@ -4202,6 +4202,9 @@ class mutubuahController extends Controller
         $arrView['afd'] = $afd;
         $arrView['bulan'] = $bulan;
         $arrView['tanggal'] = $dates;
+        $arrView['edit_permittion'] = $edit_permittion;
+        $arrView['jabatan'] = auth()->user()->Jabatan->nama ?? auth()->user()->jabatan;
+        $arrView['user_name'] = auth()->user()->nama_lengkap;
 
         json_encode($arrView);
 
