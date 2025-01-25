@@ -25,63 +25,37 @@ class inspeksidashController extends Controller
         $bulan = $request->get('date');
 
         $result = rekap_qcinspeks_perbulan($regional, $bulan);
-        // dd($result);
+        // dd($result['data_wilayah']);
 
-        $rekap_per_afdeling = $result['data'];
-        foreach ($rekap_per_afdeling as $key => &$value) {
-            if (isset($value['wilayah'])) {
-                unset($value['wilayah']);
-            }
-            foreach ($value as $key1 => &$value1) {
-                // Check if the sub-array is an array and if 'est' key exists
-                if (is_array($value1) && isset($value1['estate'])) {
-                    unset($value1['estate']);
-                }
-            }
-            unset($value1);
-        }
-        unset($value);
-
-        $rekap_per_estate = $result['data'];
-        foreach ($rekap_per_estate as $key => &$value) {
-            if (isset($value['wilayah'])) {
-                unset($value['wilayah']);
-            }
-            foreach ($value as $key1 => &$value1) {
-                if (is_array($value1)) {
-                    foreach ($value1 as $k => $v) {
-                        if ($k !== 'estate') {
-                            unset($value1[$k]);
-                        }
-                    }
-                }
-            }
-        }
-        unset($value1);
-        unset($value);
-        // dd($rekap_per_estate);
-
-        $filtered_rekap_per_wil = $result['data'];
-        $rekap_per_wil = [];
-
-        foreach ($filtered_rekap_per_wil as $key => $value) {
-            foreach ($value as $key1 => $value1) {
-                if ($key1 === 'wilayah') {
-                    $rekap_per_wil[$key] = $value1['wil'];
-                }
-            }
-        }
-        // dd($filtered_rekap_per_wil);
-
-        // dd($rekap_per_estate);
         $arr = array();
 
-        $arr['rekap_per_afdeling'] = $rekap_per_afdeling;
-        $arr['rekap_per_estate'] = $rekap_per_estate;
-        $arr['rekap_per_wil'] = $rekap_per_wil;
+        $arr['rekap_per_afdeling'] = $result['data_afdeling'];
+        $arr['rekap_per_estate'] = $result['data_estate'];
+        $arr['rekap_per_wil'] = $result['data_wilayah'];
         $arr['rekap_per_reg'] = $result['datareg'];
 
+        $chart_for_estate = [];
+        foreach ($result['data_estate'] as $regional => $estates) {
+            foreach ($estates as $estate_name => $estate_data) {
+                if (isset($estate_data['estate'])) {
+                    $chart_for_estate[$estate_name] = $estate_data['estate'];
+                }
+            }
+        }
 
+        $arr['chart_for_estate'] = $chart_for_estate;
+
+        $chart_for_wilayah = [];
+        foreach ($result['data_wilayah'] as $regional => $data) {
+            if (isset($data['wilayah']['wil'])) {
+                $wilayah_key = "WIL-" . $regional; // atau bisa menggunakan $data['wilayah']['wil']['est']
+                $chart_for_wilayah[$wilayah_key] = $data['wilayah']['wil'];
+            }
+        }
+
+        $arr['chart_for_wilayah'] = $chart_for_wilayah;
+
+        // dd($chart_for_wilayah, $chart_for_estate);
         // dd($rekap_per_afdeling, $rekap_per_estate);
         // Return JSON response if needed
         return response()->json($arr);
@@ -116,6 +90,8 @@ class inspeksidashController extends Controller
 
     public function graphfilter(Request $request)
     {
+
+        // dd($request->all());
         $estData = $request->input('est');
         $yearGraph = $request->input('yearGraph');
         $reg = $request->input('reg');
@@ -141,20 +117,6 @@ class inspeksidashController extends Controller
         $DataEstate = json_decode($DataEstate, true);
 
         //menghitung buat table tampilkan pertahun
-
-        //bagian querry
-        //mutu ancak
-        // $querytahun = DB::connection('mysql2')->table('mutu_ancak_new')
-        //     ->select("mutu_ancak_new.*", DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%M") as bulan'), DB::raw('DATE_FORMAT(mutu_ancak_new.datetime, "%Y") as tahun'))
-        //     ->whereYear('datetime', $yearGraph)
-        //     // ->where('estate', 'KNE')
-        //     ->orderBy('datetime', 'DESC')
-        //     ->orderBy(DB::raw('SECOND(datetime)'), 'DESC')
-        //     ->get();
-
-        // $querytahun = $querytahun->groupBy(['estate', 'afdeling']);
-        // $querytahun = json_decode($querytahun, true);
-
 
         $querytahun = [];
 
@@ -1677,7 +1639,7 @@ class inspeksidashController extends Controller
 
         $arrView = array();
 
-        // dd($queryEste);
+        dd($chartBTT);
 
         $arrView['GraphBtt'] =  $chartBTT;
         $arrView['GraphBuah'] =  $chartBuah;

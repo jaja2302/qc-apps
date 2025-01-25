@@ -226,18 +226,21 @@ function setBackgroundColorCell(cell, score) {
 
 function TableForWilReg(data, tableBody) {
     let item1 = data['afd'] ?? data['wil'] ?? 'WIL';
-    let item2 = data['est']  ?? data['wil'];;
+    let item2 = data['est'] ?? data['wil'];
     let item3 = data['gm'] ?? data['rh'] ?? '-';
     let item4;
+    
     if (data['TOTAL_SKORbh'] !== undefined) {
-        if (data['check_databh'] === "kosong" && data['check_datacak'] === "kosong" & data['check_datatrans'] === "kosong") {
+        if (data['check_databh'] === "kosong" && data['check_datacak'] === "kosong" && data['check_datatrans'] === "kosong") {
             item4 = '-';
-        }else{
+        } else {
             item4 = data['TOTAL_SKORbh'] + data['totalSkortrans'] + data['skor_akhircak'];
         }
-      
-    }else{
-        item4 = data['skor'].toFixed(2) ;
+    } else {
+        // Add null check for data['skor']
+        item4 = data['skor'] !== undefined && data['skor'] !== null ? 
+            Number(data['skor']).toFixed(2) : 
+            '-';
     }
     let item5 = '-';
 

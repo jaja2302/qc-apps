@@ -162,8 +162,7 @@
                                 <div class="col-sm-6">
                                     <div class="card">
                                         <div class="card-body">
-                                            <p style="font-size: 15px; text-align: center;"><b><u>BRONDOLAN
-                                                        TINGGAL</u></b></p>
+                                            <p style="font-size: 15px; text-align: center;"><b><u>BRONDOLAN TINGGAL</u></b></p>
                                             <div id="brondolanGraph"></div>
                                         </div>
                                     </div>
@@ -929,35 +928,9 @@
                                 <!-- Options will be populated dynamically based on the selected wilayah preset value -->
                             </select>
                         </div>
-
-                        <!-- <div class="col-md-4">
-                                    {{ csrf_field() }}
-                                    <select class="form-control" id="estData" name="estData">
-
-                                    </select>
-                                </div> -->
                     </div>
-                    <button class="btn btn-primary mb-3 ml-3" id="GraphFilter">Show</button>
-                    <!-- <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
-                                    {{ csrf_field() }}
-                                    <select class="form-control" id="estData" name="estData">
-                                        @foreach($listEstate as $item)
-                                        <option value={{$item}}>{{$item}}</option>
-                                        @endforeach
-                                    </select>
-                                </div> -->
 
                 </div>
-
-                <!-- <div class="row text-center">
-                            <div class="col">
-                                <div class="card-body">
-                                    <p style="font-size: 15px"><b><u>HISTORIS SKOR</u></b></p>
-                                    <div id="skorGraph"></div>
-                                </div>
-                            </div>
-                        </div> -->
-
                 <div class="container-fluid">
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
@@ -1195,15 +1168,15 @@
                 llon.classList.add("col-lg-4");
 
 
-                tahun1.style.display = "";
-                tahun2.style.display = "";
-                tahun3.style.display = "";
-                // tahun4.style.display = "none";
-                resetClassList(tahun4);
+                // tahun1.style.display = "";
+                // tahun2.style.display = "";
+                // tahun3.style.display = "";
+                // // tahun4.style.display = "none";
+                // resetClassList(tahun4);
 
-                tahun1.classList.add("col-lg-4");
-                tahun2.classList.add("col-lg-4");
-                tahun3.classList.add("col-lg-4");
+                // tahun1.classList.add("col-lg-4");
+                // tahun2.classList.add("col-lg-4");
+                // tahun3.classList.add("col-lg-4");
 
                 const thElement1 = document.getElementById('thead1');
                 const thElement2 = document.getElementById('thead2');
@@ -1295,15 +1268,15 @@
 
 
 
-                tahun1.style.display = "";
-                tahun2.style.display = "";
-                tahun3.style.display = "none";
-                // tahun4.style.display = "none";
-                resetClassList(tahun3);
-                resetClassList(tahun4);
+                // tahun1.style.display = "";
+                // tahun2.style.display = "";
+                // tahun3.style.display = "none";
+                // // tahun4.style.display = "none";
+                // resetClassList(tahun3);
+                // resetClassList(tahun4);
 
-                tahun1.classList.add("col-lg-6");
-                tahun2.classList.add("col-lg-6");
+                // tahun1.classList.add("col-lg-6");
+                // tahun2.classList.add("col-lg-6");
 
 
             } else if ((lokasiKerja == 'Regional IV' || lokasiKerja == 'Regional 4') && !isTableHeaderModified) {
@@ -1395,15 +1368,15 @@
                 llon.classList.add("col-lg-4");
 
 
-                tahun1.style.display = "";
-                tahun2.style.display = "";
-                tahun3.style.display = "";
-                // tahun4.style.display = "none";
-                resetClassList(tahun4);
+                // tahun1.style.display = "";
+                // tahun2.style.display = "";
+                // tahun3.style.display = "";
+                // // tahun4.style.display = "none";
+                // resetClassList(tahun4);
 
-                tahun1.classList.add("col-lg-4");
-                tahun2.classList.add("col-lg-4");
-                tahun3.classList.add("col-lg-4");
+                // tahun1.classList.add("col-lg-4");
+                // tahun2.classList.add("col-lg-4");
+                // tahun3.classList.add("col-lg-4");
 
 
 
@@ -1418,8 +1391,7 @@
             getFindData();
             dataDashboard();
             dashboard_tahun();
-            graphFilter();
-            // dashboard_week();
+
 
 
             buttonimg.style.display = 'none';
@@ -2081,33 +2053,10 @@
         chartGrain.render();
         var chartFruit = new ApexCharts(document.querySelector("#buahGraph"), options);
         chartFruit.render();
-
         var chartGrainWil = new ApexCharts(document.querySelector("#brondolanGraphWil"), will);
         chartGrainWil.render();
         var chartFruitWil = new ApexCharts(document.querySelector("#buahGraphWil"), will);
         chartFruitWil.render();
-        ///chart untuk pertahun
-        // var chartGrainYear = new ApexCharts(document.querySelector("#brondolanGraphYear"), options);
-        // chartGrainYear.render();
-        // var chartFruitYear = new ApexCharts(document.querySelector("#buahGraphYear"), options);
-        // chartFruitYear.render();
-
-        // var chartGrainWilYear = new ApexCharts(document.querySelector("#brondolanGraphWilYear"), will);
-        // chartGrainWilYear.render();
-
-        // var chartFruitWilYear = new ApexCharts(document.querySelector("#buahGraphWilYear"), will);
-        // chartFruitWilYear.render();
-        //chart untuk perminggu 
-        // var chartGrains = new ApexCharts(document.querySelector("#brondolanGraphs"), options);
-        // chartGrains.render();
-        // var chartFruits = new ApexCharts(document.querySelector("#buahGraphs"), options);
-        // chartFruits.render();
-
-        // var chartGrainWils = new ApexCharts(document.querySelector("#brondolanGraphWils"), will);
-        // chartGrainWils.render();
-        // var chartFruitWils = new ApexCharts(document.querySelector("#buahGraphWils"), will);
-        // chartFruitWils.render();
-
         // mutu buah
         var mtb_mentah = new ApexCharts(document.querySelector("#mtb_mentah"), options);
         mtb_mentah.render();
@@ -2232,6 +2181,8 @@
                     var rekap_per_estate = result['rekap_per_estate']
                     var rekap_per_wil = result['rekap_per_wil']
                     var rekap_per_reg = result['rekap_per_reg']
+                    var chart_for_estate = result['chart_for_estate']
+                    var chart_for_wilayah = result['chart_for_wilayah']
                     // var datachart = result['datachart']
 
                     // console.log(rekapafd);
@@ -2257,14 +2208,239 @@
                     let table2_wil = rekap_per_wil[2] ?? rekap_per_wil[5] ?? rekap_per_wil[8] ?? rekap_per_wil[11]
                     let table3_wil = rekap_per_wil[3] ?? rekap_per_wil[6] ?? []
                     let theadreg = document.getElementById('theadreg');
-                    // console.log(rekap_per_wil);
-                    // console.log(rekap_per_reg);
-                    TableForWilReg(rekap_per_reg, theadreg);
-                    TableForWilReg(table1_wil, tbody1);
-                    TableForWilReg(table2_wil, tbody2);
-                    TableForWilReg(table3_wil, tbody3);
+                    // console.log(table2_wil);
+                    // MUTU ANCAK 
+                    chartGrain.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_estate) || []
+                        },
+                    })
+                    chartGrain.updateSeries([{
+                        name: 'Brondoln Tinggal',
+                        data: Object.values(chart_for_estate).map(estate => estate.total_brdcak) || []
+                    }])
+
+                    chartFruit.updateSeries([{
+                        name: 'Buah Tinggal',
+                        data: Object.values(chart_for_estate).map(estate => estate.buah_jjgcak) || []
+                    }])
+                    chartFruit.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_estate) || []
+                        },
+                    })
+
+                    chartGrainWil.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_wilayah) || []
+                        },
+                    })
+                    chartGrainWil.updateSeries([{
+                        name: 'Brondoln Tinggal',
+                        data: Object.values(chart_for_wilayah).map(estate => estate.total_brdcak) || []
+                    }])
+
+                    chartFruitWil.updateSeries([{
+                        name: 'Buah Tinggal',
+                        data: Object.values(chart_for_wilayah).map(estate => estate.buah_jjgcak) || []
+                    }])
+                    chartFruitWil.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_wilayah) || []
+                        },
+                    })
+
+                    // MUTU BUAH 
+                    mtb_mentah.updateSeries([{
+                        name: 'JANJANG MENTAH',
+                        data: Object.values(chart_for_estate).map(estate => estate.total_mentahbh) || []
+                    }])
+                    mtb_mentah.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_estate) || []
+                        },
+                    })
+
+                    mtb_masak.updateSeries([{
+                        name: 'JANJANG MASAK',
+                        data: Object.values(chart_for_estate).map(estate => estate.total_masakbh) || []
+                    }])
+                    mtb_masak.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_estate) || []
+                        },
+                    })
 
 
+                    mtb_over.updateSeries([{
+                        name: 'JANJANG OVER',
+                        data: Object.values(chart_for_estate).map(estate => estate.total_overbh) || []
+                    }])
+                    mtb_over.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_estate) || []
+                        },
+                    })
+
+
+                    mtb_abnr.updateSeries([{
+                        name: 'JANJANG ABNORMAL',
+                        data: Object.values(chart_for_estate).map(estate => estate.total_abnormalbh) || []
+                    }])
+                    mtb_abnr.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_estate) || []
+                        },
+                    })
+
+
+                    mtb_kosong.updateSeries([{
+                        name: 'JANJANG KOSONG',
+                        data: Object.values(chart_for_estate).map(estate => estate.total_jjgKosongbh) || []
+                    }])
+                    mtb_kosong.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_estate) || []
+                        },
+                    })
+
+
+                    mtb_vcuts.updateSeries([{
+                        name: 'VCUT',
+                        data: Object.values(chart_for_estate).map(estate => estate.total_vcutbh) || []
+                    }])
+                    mtb_vcuts.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_estate) || []
+                        },
+                    })
+
+                    mtb_mentahwil.updateSeries([{
+                        name: 'JANJANG MENTAH',
+                        data: Object.values(chart_for_wilayah).map(estate => estate.total_mentahbh) || []
+                    }])
+                    mtb_mentahwil.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_wilayah) || []
+                        },
+                    })
+
+                    mtb_masakwil.updateSeries([{
+                        name: 'JANJANG MASAK',
+                        data: Object.values(chart_for_wilayah).map(estate => estate.total_masakbh) || []
+                    }])
+                    mtb_masakwil.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_wilayah) || []
+                        },
+                    })
+
+
+                    mtb_overwil.updateSeries([{
+                        name: 'JANJANG OVER',
+                        data: Object.values(chart_for_wilayah).map(estate => estate.total_overbh) || []
+                    }])
+                    mtb_overwil.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_wilayah) || []
+                        },
+                    })
+
+
+                    mtb_abnrwil.updateSeries([{
+                        name: 'JANJANG ABNORMAL',
+                        data: Object.values(chart_for_wilayah).map(estate => estate.total_abnormalbh) || []
+                    }])
+                    mtb_abnrwil.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_wilayah) || []
+                        },
+                    })
+
+
+                    mtb_kosongwil.updateSeries([{
+                        name: 'JANJANG KOSONG',
+                        data: Object.values(chart_for_wilayah).map(estate => estate.total_jjgKosongbh) || []
+                    }])
+                    mtb_kosongwil.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_wilayah) || []
+                        },
+                    })
+
+
+                    mtb_vcutswil.updateSeries([{
+                        name: 'VCUT',
+                        data: Object.values(chart_for_wilayah).map(estate => estate.total_vcutbh) || []
+                    }])
+                    mtb_vcutswil.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_wilayah) || []
+                        },
+                    })
+
+
+                    // MUTU TRANSPORT 
+
+                    transprot_brd.updateSeries([{
+                        name: 'BRD DI TPH',
+                        data: Object.values(chart_for_estate).map(estate => estate.total_brdtrans) || []
+                    }])
+                    transprot_brd.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_estate) || []
+                        },
+                    })
+
+
+                    transport_buah.updateSeries([{
+                        name: 'BUAH DI TPH',
+                        data: Object.values(chart_for_estate).map(estate => estate.total_buahtrans) || []
+                    }])
+                    transport_buah.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_estate) || []
+                        },
+                    })
+
+
+                    transportwil_brd.updateSeries([{
+                        name: 'BRD DI TPH',
+                        data: Object.values(chart_for_wilayah).map(estate => estate.total_brdtrans) || []
+                    }])
+                    transportwil_brd.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_wilayah) || []
+                        },
+                    })
+
+
+                    transportwil_buah.updateSeries([{
+                        name: 'BUAH DI TPH',
+                        data: Object.values(chart_for_wilayah).map(estate => estate.total_buahtrans) || []
+                    }])
+                    transportwil_buah.updateOptions({
+                        xaxis: {
+                            categories: Object.keys(chart_for_wilayah) || []
+                        },
+                    })
+
+
+                    if (rekap_per_reg) {
+                        TableForWilReg(rekap_per_reg, theadreg);
+                    }
+
+                    if (table2_wil) {
+                        TableForWilReg(table2_wil, tbody2);
+                    }
+
+                    if (table3_wil) {
+                        TableForWilReg(table3_wil, tbody3);
+                    }
+
+                    if (table1_wil) {
+                        TableForWilReg(table1_wil, tbody1);
+                    }
 
 
                 }
@@ -2875,18 +3051,6 @@
         var GraphTranBH = new ApexCharts(document.querySelector("#tr_buah_Graph"), options);
         GraphTranBH.render();
 
-        document.getElementById('GraphFilter').onclick = function() {
-            Swal.fire({
-                title: 'Loading',
-                html: '<span class="loading-text">Mohon Tunggu...</span>',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                willOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-            graphFilter()
-        }
 
 
 
@@ -3192,825 +3356,6 @@
         // Initial population of the wilayah preset options based on the default regional value
         var defaultRegional = $('#regGrafik').val();
         populateWilayahOptions(defaultRegional);
-
-        function graphFilter() {
-            var est = ''
-            var yearGraph = ''
-            var reg = ''
-            var wilayahGrafik = ''
-            var est = document.getElementById('estateGrafik').value
-            var wilayahGrafik = document.getElementById('wilayahGrafik').value
-
-            var yearGraph = document.getElementById('yearGraph').value
-            var reg = document.getElementById('regGrafik').value
-            var _token = $('input[name="_token"]').val();
-            $.ajax({
-                url: "{{ route('graphfilter') }}",
-                method: "GET",
-                data: {
-                    est,
-                    yearGraph,
-                    reg,
-                    wilayahGrafik,
-                    _token: _token
-                },
-                success: function(result) {
-                    Swal.close();
-                    // console.log(est)
-                    // console.log(yearGraph)
-                    var parseResult = JSON.parse(result)
-                    //list estate
-
-
-                    var chart_btt = Object.entries(parseResult['GraphBtt'])
-                    var chart_buah = Object.entries(parseResult['GraphBuah'])
-                    var chart_skor = Object.entries(parseResult['GraphSkorTotal'])
-                    var list_est = Object.entries(parseResult['list_est'])
-                    var mtbuah_mth = Object.entries(parseResult['mtbuah_mth'])
-                    var mtbuah_masak = Object.entries(parseResult['mtbuah_masak'])
-
-
-
-                    var mtbuah_over = Object.entries(parseResult['mtbuah_over'])
-                    var mtbuah_ksng = Object.entries(parseResult['mtbuah_ksng'])
-                    var mtbuah_vcut = Object.entries(parseResult['mtbuah_vcut'])
-                    var mtbuah_abr = Object.entries(parseResult['mtbuah_abr'])
-
-
-                    var mttransbrd = Object.entries(parseResult['mttransbrd'])
-                    var mttransbb = Object.entries(parseResult['mttransbb'])
-                    var rekap_wil = Object.entries(parseResult['rekap_wil'])
-
-                    var est_values = list_est.map(item => item[1].est);
-                    // console.log(est_values);
-                    // console.log(rekap_wil);
-
-                    var regGrafik = document.getElementById("regGrafik");
-
-
-
-                    var graphBtt = '['
-                    chart_btt.forEach(element => {
-                        graphBtt += '"' + element[1] + '",'
-                    });
-                    graphBtt = graphBtt.substring(0, graphBtt.length - 1);
-                    graphBtt += ']'
-
-                    var graphBuah = '['
-                    chart_buah.forEach(element => {
-                        graphBuah += '"' + element[1] + '",'
-                    });
-                    graphBuah = graphBuah.substring(0, graphBuah.length - 1);
-                    graphBuah += ']'
-
-                    var graphSkor = '['
-                    chart_skor.forEach(element => {
-                        graphSkor += '"' + element[1] + '",'
-                    });
-                    graphSkor = graphSkor.substring(0, graphSkor.length - 1);
-                    graphSkor += ']'
-
-                    // mutu buah
-                    var buahmth = '['
-                    mtbuah_mth.forEach(element => {
-                        buahmth += '"' + element[1] + '",'
-                    });
-                    buahmth = buahmth.substring(0, buahmth.length - 1);
-                    buahmth += ']'
-
-                    var buahmsk = '['
-                    mtbuah_masak.forEach(element => {
-                        buahmsk += '"' + element[1] + '",'
-                    });
-                    buahmsk = buahmsk.substring(0, buahmsk.length - 1);
-                    buahmsk += ']'
-
-
-
-
-
-                    var buahovr = '['
-                    mtbuah_over.forEach(element => {
-                        buahovr += '"' + element[1] + '",'
-                    });
-                    buahovr = buahovr.substring(0, buahovr.length - 1);
-                    buahovr += ']'
-
-                    var buahKsong = '['
-                    mtbuah_ksng.forEach(element => {
-                        buahKsong += '"' + element[1] + '",'
-                    });
-                    buahKsong = buahKsong.substring(0, buahKsong.length - 1);
-                    buahKsong += ']'
-
-                    var buahvcuts = '['
-                    mtbuah_vcut.forEach(element => {
-                        buahvcuts += '"' + element[1] + '",'
-                    });
-                    buahvcuts = buahvcuts.substring(0, buahvcuts.length - 1);
-                    buahvcuts += ']'
-
-                    var buahbrnrm = '['
-                    mtbuah_abr.forEach(element => {
-                        buahbrnrm += '"' + element[1] + '",'
-                    });
-                    buahbrnrm = buahbrnrm.substring(0, buahbrnrm.length - 1);
-                    buahbrnrm += ']'
-
-
-                    var transbrd = '['
-                    mttransbrd.forEach(element => {
-                        transbrd += '"' + element[1] + '",'
-                    });
-                    transbrd = transbrd.substring(0, transbrd.length - 1);
-                    transbrd += ']'
-
-                    var transbuah = '['
-                    mttransbb.forEach(element => {
-                        transbuah += '"' + element[1] + '",'
-                    });
-                    transbuah = transbuah.substring(0, transbuah.length - 1);
-                    transbuah += ']'
-
-
-                    var bttJson = JSON.parse(graphBtt)
-                    var bhJson = JSON.parse(graphBuah)
-                    var skorJson = JSON.parse(graphSkor)
-
-                    var mths = JSON.parse(buahmth)
-                    var masak = JSON.parse(buahmsk)
-
-                    var ovr = JSON.parse(buahovr)
-                    var Ksong = JSON.parse(buahKsong)
-                    var vcuts = JSON.parse(buahvcuts)
-                    var brnrm = JSON.parse(buahbrnrm)
-                    var trbrd = JSON.parse(transbrd)
-                    var trbuah = JSON.parse(transbuah)
-
-
-                    // console.log(ovr);
-                    // <!-- var wil_rekap = rekap_wil.map(item => item[0]); -->
-                    // console.log(wil_rekap);
-                    chartScore.updateSeries([{
-                        name: est,
-                        data: skorJson
-                    }, ])
-
-
-
-                    chartScore.updateOptions({
-                        yaxis: {
-                            show: true,
-                            showAlways: true,
-                            showForNullSeries: true,
-                            seriesName: est,
-                            opposite: false,
-                            reversed: false,
-                            logarithmic: false,
-                            logBase: 10,
-                            tickAmount: 5,
-                            min: 0,
-                            max: 100,
-                            forceNiceScale: false,
-                            floating: false,
-                            decimalsInFloat: undefined,
-                            crosshairs: {
-                                show: true,
-                                position: 'back',
-                                stroke: {
-                                    color: '#b6b6b6',
-                                    width: 1,
-                                    dashArray: 0,
-                                },
-                            },
-                            tooltip: {
-                                enabled: true,
-                                offsetX: 0,
-                            },
-
-                        },
-                        annotations: {
-                            yaxis: [{
-                                    y: 95,
-                                    y2: 100,
-                                    borderColor: '#000',
-                                    fillColor: '#96be25',
-                                    opacity: 0.4,
-                                    label: {
-                                        text: ' '
-                                    }
-                                }, {
-                                    y: 85,
-                                    y2: 95,
-                                    borderColor: '#000',
-                                    fillColor: '#78ac44',
-                                    opacity: 0.4,
-                                    label: {
-                                        text: ''
-                                    }
-                                }, {
-                                    y: 75,
-                                    y2: 85,
-                                    borderColor: '#000',
-                                    fillColor: '#fffc04',
-                                    opacity: 0.4,
-                                    label: {
-                                        text: 'Standar QC'
-                                    }
-                                }, {
-                                    y: 65,
-                                    y2: 75,
-                                    borderColor: '#000',
-                                    fillColor: '#f07c34',
-                                    opacity: 0.4,
-                                    label: {
-                                        text: ''
-                                    }
-                                }, {
-                                    y: 0,
-                                    y2: 65,
-                                    borderColor: '#000',
-                                    fillColor: '#ff0404',
-                                    opacity: 0.4,
-
-
-                                    label: {
-                                        text: ''
-                                    }
-                                }
-
-                            ]
-                        },
-                    });
-
-
-
-
-                    var seriesData = [];
-
-                    for (var i = 0; i < rekap_wil.length; i++) {
-                        var item = rekap_wil[i];
-                        var name = item[0];
-                        var data = Object.values(item[1]).map(function(value) {
-                            return value || 0;
-                        });
-                        var series = {
-                            name: name,
-                            data: data
-                        };
-
-                        // Assign different colors to each series
-                        var color = getRandomColor(); // Generate a random color for each series
-                        series.color = color;
-
-                        seriesData.push(series);
-                    }
-
-                    options.series = seriesData;
-
-                    function getColorByNumber(number) {
-                        const colors = ["red", "blue", "yellow", "green", "pink", "black"];
-
-                        // If the number is out of range, return a random color instead
-                        if (number < 1 || number > colors.length) {
-                            return getRandomColor();
-                        }
-
-                        return colors[number - 1];
-                    }
-
-                    function getRandomColor() {
-                        var letters = "0123456789ABCDEF";
-                        var color = "#";
-                        for (var i = 0; i < 6; i++) {
-                            color += letters[Math.floor(Math.random() * 16)];
-                        }
-                        return color;
-                    }
-
-
-                    chartScorePerwil.updateOptions(options);
-                    chartScorePerwil.updateOptions({
-                        stroke: {
-                            curve: 'smooth',
-                        }
-                    });
-
-
-
-                    chartScoreBron.updateSeries([{
-                            name: est,
-                            data: bttJson
-                        },
-
-
-                    ])
-                    chartScoreBron.updateOptions({
-                        colors: ['#041014'],
-                        yaxis: [{
-                            axisTicks: {
-                                show: true
-                            },
-                            axisBorder: {
-                                show: true,
-                                color: "#FF1654"
-                            },
-                            labels: {
-                                style: {
-                                    colors: "#FF1654"
-                                }
-                            },
-                            title: {
-                                text: est,
-                                style: {
-                                    color: "#FF1654"
-                                }
-                            }
-                        }],
-                        annotations: {
-                            yaxis: [{
-                                y: 0,
-                                y2: 1,
-                                borderColor: '#000',
-                                fillColor: '#96be25',
-                                opacity: 0.4,
-                                label: {
-                                    text: ' '
-                                }
-                            }, {
-                                y: 1,
-                                y2: 10,
-                                borderColor: '#000',
-                                fillColor: '#ff0404',
-                                opacity: 0.4,
-                                label: {
-                                    text: 'Standar QC'
-                                }
-                            }]
-                        },
-                    });
-                    chatScoreJan.updateSeries([{
-                            name: est,
-                            data: bhJson
-                        },
-
-
-                    ])
-                    chatScoreJan.updateOptions({
-                        colors: ['#041014'],
-                        yaxis: [{
-                            axisTicks: {
-                                show: true
-                            },
-                            axisBorder: {
-                                show: true,
-                                color: "#FF1654"
-                            },
-                            labels: {
-                                style: {
-                                    colors: "#FF1654"
-                                }
-                            },
-                            title: {
-                                text: est,
-                                style: {
-                                    color: "#FF1654"
-                                }
-                            }
-                        }],
-                        annotations: {
-                            yaxis: [{
-                                y: -10,
-                                y2: 0,
-                                borderColor: '#000',
-                                fillColor: '#96be25',
-                                opacity: 0.4,
-                                label: {
-                                    text: ' '
-                                }
-                            }, {
-                                y: 0,
-                                y2: 10,
-                                borderColor: '#000',
-                                fillColor: '#ff0404',
-                                opacity: 0.4,
-                                label: {
-                                    text: 'Standar QC'
-                                }
-                            }]
-                        },
-                    });
-                    // console.log(mths);
-                    GraphBhmth.updateSeries([{
-                        name: est,
-                        data: mths
-                    }, ])
-                    GraphBhmth.updateOptions({
-                        colors: ['#041014'],
-                        yaxis: [{
-                            axisTicks: {
-                                show: true
-                            },
-                            axisBorder: {
-                                show: true,
-                                color: "#FF1654"
-                            },
-                            labels: {
-                                style: {
-                                    colors: "#FF1654"
-                                }
-                            },
-                            title: {
-                                text: est,
-                                style: {
-                                    color: "#FF1654"
-                                }
-                            }
-                        }],
-                        annotations: {
-                            yaxis: [{
-                                y: 1,
-                                y2: 100,
-                                borderColor: '#000',
-
-                                fillColor: '#ff0404', //merah
-                                opacity: 0.4,
-                                label: {
-                                    text: ' '
-                                }
-                            }, {
-                                y: -10,
-                                y2: 1,
-                                borderColor: '#000',
-                                fillColor: '#96be25', //biru
-                                opacity: 0.4,
-                                label: {
-                                    text: 'Standar QC'
-                                }
-                            }]
-                        },
-                    });
-                    GraphBhMsak.updateSeries([{
-                            name: est,
-                            data: masak
-                        },
-
-                    ])
-                    GraphBhMsak.updateOptions({
-                        colors: ['#041014'],
-                        yaxis: [{
-                            axisTicks: {
-                                show: true
-                            },
-                            axisBorder: {
-                                show: true,
-                                color: "#FF1654"
-                            },
-                            labels: {
-                                style: {
-                                    colors: "#FF1654"
-                                }
-                            },
-                            title: {
-                                text: est,
-                                style: {
-                                    color: "#FF1654"
-                                }
-                            }
-                        }],
-                        annotations: {
-                            yaxis: [{
-                                y: 1,
-                                y2: 90,
-                                borderColor: '#000',
-
-                                fillColor: '#ff0404', //merah
-                                opacity: 0.4,
-                                label: {
-                                    text: ' '
-                                }
-                            }, {
-                                y: 90,
-                                y2: 100,
-                                borderColor: '#000',
-                                fillColor: '#96be25', //biru
-                                opacity: 0.4,
-                                label: {
-                                    text: 'Standar QC'
-                                }
-                            }]
-                        },
-                    });
-                    GraphBhOver.updateSeries([{
-                            name: est,
-                            data: ovr
-                        },
-
-                    ])
-                    GraphBhOver.updateOptions({
-                        colors: ['#041014'],
-                        yaxis: [{
-                            axisTicks: {
-                                show: true
-                            },
-                            axisBorder: {
-                                show: true,
-                                color: "#FF1654"
-                            },
-                            labels: {
-                                style: {
-                                    colors: "#FF1654"
-                                }
-                            },
-                            title: {
-                                text: est,
-                                style: {
-                                    color: "#FF1654"
-                                }
-                            }
-                        }],
-                        annotations: {
-                            yaxis: [{
-                                y: 2,
-                                y2: 100,
-                                borderColor: '#000',
-
-                                fillColor: '#ff0404', //merah
-                                opacity: 0.4,
-                                label: {
-                                    text: ' '
-                                }
-                            }, {
-                                y: 0,
-                                y2: 2,
-                                borderColor: '#000',
-                                fillColor: '#96be25', //biru
-                                opacity: 0.4,
-                                label: {
-                                    text: 'Standar QC'
-                                }
-                            }]
-                        },
-                    });
-                    GraphBhEmpty.updateSeries([{
-                            name: est,
-                            data: Ksong
-                        },
-
-                    ])
-                    GraphBhEmpty.updateOptions({
-                        colors: ['#041014'],
-                        yaxis: [{
-                            axisTicks: {
-                                show: true
-                            },
-                            axisBorder: {
-                                show: true,
-                                color: "#FF1654"
-                            },
-                            labels: {
-                                style: {
-                                    colors: "#FF1654"
-                                }
-                            },
-                            title: {
-                                text: est,
-                                style: {
-                                    color: "#FF1654"
-                                }
-                            }
-                        }],
-                        annotations: {
-                            yaxis: [{
-                                y: 1,
-                                y2: 100,
-                                borderColor: '#000',
-
-                                fillColor: '#ff0404', //merah
-                                opacity: 0.4,
-                                label: {
-                                    text: ' '
-                                }
-                            }, {
-                                y: -10,
-                                y2: 1,
-                                borderColor: '#000',
-                                fillColor: '#96be25', //biru
-                                opacity: 0.4,
-                                label: {
-                                    text: 'Standar QC'
-                                }
-                            }]
-                        },
-                    });
-                    GraphBhvcute.updateSeries([{
-                        name: est,
-                        data: vcuts
-                    }, ])
-                    GraphBhvcute.updateOptions({
-                        colors: ['#041014'],
-                        yaxis: [{
-                            axisTicks: {
-                                show: true
-                            },
-                            axisBorder: {
-                                show: true,
-                                color: "#FF1654"
-                            },
-                            labels: {
-                                style: {
-                                    colors: "#FF1654"
-                                }
-                            },
-                            title: {
-                                text: est,
-                                style: {
-                                    color: "#FF1654"
-                                }
-                            }
-                        }],
-                        annotations: {
-                            yaxis: [{
-                                y: 2,
-                                y2: 100,
-                                borderColor: '#000',
-
-                                fillColor: '#ff0404', //merah
-                                opacity: 0.4,
-                                label: {
-                                    text: ' '
-                                }
-                            }, {
-
-                                y: -10,
-                                y2: 2,
-                                borderColor: '#000',
-                                fillColor: '#96be25', //biru
-                                opacity: 0.4,
-                                label: {
-                                    text: 'Standar QC'
-                                }
-                            }]
-                        },
-                    });
-                    GraphBhAbnrl.updateSeries([{
-                            name: est,
-                            data: brnrm
-                        },
-
-                    ])
-                    GraphBhAbnrl.updateOptions({
-                        colors: ['#041014'],
-                        yaxis: [{
-                            axisTicks: {
-                                show: true
-                            },
-                            axisBorder: {
-                                show: true,
-                                color: "#FF1654"
-                            },
-                            labels: {
-                                style: {
-                                    colors: "#FF1654"
-                                }
-                            },
-                            title: {
-                                text: est,
-                                style: {
-                                    color: "#FF1654"
-                                }
-                            }
-                        }],
-                        annotations: {
-                            yaxis: [{
-                                y: 1,
-                                y2: 100,
-                                borderColor: '#000',
-
-                                fillColor: '#ff0404', //merah
-                                opacity: 0.4,
-                                label: {
-                                    text: ' '
-                                }
-                            }, {
-                                y: -10,
-                                y2: 1,
-                                borderColor: '#000',
-                                fillColor: '#96be25', //biru
-                                opacity: 0.4,
-                                label: {
-                                    text: 'Standar QC'
-                                }
-                            }]
-                        },
-                    });
-
-
-                    GraphTranBrd.updateSeries([{
-                        name: est,
-                        data: trbrd
-                    }, ])
-                    GraphTranBrd.updateOptions({
-                        colors: ['#041014'],
-                        yaxis: [{
-                            axisTicks: {
-                                show: true
-                            },
-                            axisBorder: {
-                                show: true,
-                                color: "#FF1654"
-                            },
-                            labels: {
-                                style: {
-                                    colors: "#FF1654"
-                                }
-                            },
-                            title: {
-                                text: est,
-                                style: {
-                                    color: "#FF1654"
-                                }
-                            }
-                        }],
-                        annotations: {
-                            yaxis: [{
-                                y: 3,
-                                y2: 100,
-                                borderColor: '#000',
-
-                                fillColor: '#ff0404', //merah
-                                opacity: 0.4,
-                                label: {
-                                    text: ' '
-                                }
-                            }, {
-                                y: 0,
-                                y2: 3,
-                                borderColor: '#000',
-                                fillColor: '#96be25', //biru
-                                opacity: 0.4,
-                                label: {
-                                    text: 'Standar QC'
-                                }
-                            }]
-                        },
-                    });
-
-                    GraphTranBH.updateSeries([{
-                            name: est,
-                            data: trbuah
-                        },
-
-                    ])
-                    GraphTranBH.updateOptions({
-                        colors: ['#041014'],
-                        yaxis: [{
-                            axisTicks: {
-                                show: true
-                            },
-                            axisBorder: {
-                                show: true,
-                                color: "#FF1654"
-                            },
-                            labels: {
-                                style: {
-                                    colors: "#FF1654"
-                                }
-                            },
-                            title: {
-                                text: est,
-                                style: {
-                                    color: "#FF1654"
-                                }
-                            }
-                        }],
-                        annotations: {
-                            yaxis: [{
-                                y: 0,
-                                y2: 100,
-                                borderColor: '#000',
-
-                                fillColor: '#ff0404', //merah
-                                opacity: 0.4,
-                                label: {
-                                    text: ' '
-                                }
-                            }, {
-                                y: -10,
-                                y2: 0,
-                                borderColor: '#000',
-                                fillColor: '#96be25', //biru
-                                opacity: 0.4,
-                                label: {
-                                    text: 'Standar QC'
-                                }
-                            }]
-                        },
-                    });
-
-                }
-            });
-        }
 
 
 

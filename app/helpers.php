@@ -2240,7 +2240,7 @@ if (!function_exists('rekap_pertahun')) {
                         'tglcak' =>  $brtgl_panenWil,
                         'total_brdcak' =>  $totalPKTwil,
                         'brd_jjgcak' =>  $brdPerwil,
-                        'buah/jjgwilcak' =>  $sumPerBHWil,
+                        'buah_jjgwilcak' =>  $sumPerBHWil,
                         'bhts_scak' =>  $bhts_panenWil,
                         'bhtm1cak' =>  $bhtm1_panenWil,
                         'bhtm2cak' =>  $bhtm2_panenWil,
@@ -2335,7 +2335,7 @@ if (!function_exists('rekap_pertahun')) {
                     'tglcak' =>  $brtgl_panenWil,
                     'total_brdcak' =>  $totalPKTwil,
                     'brd_jjgcak' =>  $brdPerwil,
-                    'buah/jjgwilcak' =>  $sumPerBHWil,
+                    'buah_jjgwilcak' =>  $sumPerBHWil,
                     'bhts_scak' =>  $bhts_panenWil,
                     'bhtm1cak' =>  $bhtm1_panenWil,
                     'bhtm2cak' =>  $bhtm2_panenWil,
@@ -4060,7 +4060,7 @@ if (!function_exists('rekap_qcinspeks_perbulan')) {
                 'tglcak' =>  $brtgl_panenWil,
                 'total_brdcak' =>  $totalPKTwil,
                 'brd_jjgcak' =>  $brdPerwil,
-                'buah/jjgwilcak' =>  $sumPerBHWil,
+                'buah_jjgwilcak' =>  $sumPerBHWil,
                 'bhts_scak' =>  $bhts_panenWil,
                 'bhtm1cak' =>  $bhtm1_panenWil,
                 'bhtm2cak' =>  $bhtm2_panenWil,
@@ -4100,7 +4100,7 @@ if (!function_exists('rekap_qcinspeks_perbulan')) {
                 'tglcak' => 0,
                 'total_brdcak' => 0,
                 'brd_jjgcak' => 0,
-                'buah/jjgwilcak' => 0,
+                'buah_jjgwilcak' => 0,
                 'bhts_scak' => 0,
                 'bhtm1cak' => 0,
                 'bhtm2cak' => 0,
@@ -5373,7 +5373,92 @@ if (!function_exists('rekap_qcinspeks_perbulan')) {
             }
         }
 
+
         // dd($rekap);
+        //         array:3 [▼ // app\helpers.php:5376
+        // 1 => array:5 [▼
+        //     "KNE" => array:5 [▼
+        //     "OA" => array:65 [▶]
+        //     "OB" => array:65 [▶]
+        //     "OC" => array:65 [▶]
+        //     "OD" => array:65 [▶]
+        //     "estate" => array:65 [▶]
+        //     ]
+        //     "PLE" => array:5 [▶]
+        //     "RDE" => array:5 [▶]
+        //     "SLE" => array:5 [▶]
+        //     "wilayah" => array:1 [▼
+        //     "wil" => array:66 [▶]
+        //     ]
+        // ]
+        // 2 => array:5 [▼
+        //     "BKE" => array:7 [▼
+        //     "OA" => array:65 [▶]
+        //     "OB" => array:65 [▶]
+        //     "OC" => array:65 [▶]
+        //     "OD" => array:65 [▶]
+        //     "OE" => array:65 [▶]
+        //     "OF" => array:65 [▶]
+        //     "estate" => array:65 [▶]
+        //     ]
+        //     "KDE" => array:5 [▶]
+        //     "RGE" => array:5 [▶]
+        //     "SGE" => array:5 [▶]
+        //     "wilayah" => array:1 [▶]
+        // ]
+        // 3 => array:8 [▼
+        //     "BGE" => array:2 [▶]
+        //     "NBE" => array:5 [▶]
+        //     "SYE" => array:7 [▶]
+        //     "UPE" => array:6 [▶]
+        //     "SRE" => array:2 [▶]
+        //     "LDE" => array:2 [▶]
+        //     "MUA" => array:1 [▶]
+        //     "wilayah" => array:1 [▶]
+        // ]
+        // ]
+
+        // ... existing code ...
+
+        // Memisahkan array berdasarkan wilayah, estate, dan afdeling
+        $array_wilayah = [];
+        $array_estate = [];
+        $array_afdeling = [];
+
+        foreach ($rekap as $key => $value) {
+            // Array wilayah
+            if (isset($value['wilayah'])) {
+                $array_wilayah[$key] = ['wilayah' => $value['wilayah']];
+            }
+
+            // Array estate dan afdeling
+            foreach ($value as $estate_key => $estate_value) {
+                if ($estate_key !== 'wilayah') {
+                    // Array estate
+                    if (isset($estate_value['estate'])) {
+                        if (!isset($array_estate[$key])) {
+                            $array_estate[$key] = [];
+                        }
+                        $array_estate[$key][$estate_key] = ['estate' => $estate_value['estate']];
+                    }
+
+                    // Array afdeling
+                    $afdelings = array_filter(array_keys($estate_value), function ($k) {
+                        return in_array($k, ['OA', 'OB', 'OC', 'OD', 'OE', 'OF']);
+                    });
+
+                    if (!empty($afdelings)) {
+                        if (!isset($array_afdeling[$key])) {
+                            $array_afdeling[$key] = [];
+                        }
+                        $array_afdeling[$key][$estate_key] = array_intersect_key($estate_value, array_flip($afdelings));
+                    }
+                }
+            }
+        }
+
+        // dd($array_estate, $array_afdeling, $array_wilayah);
+
         $dataReg = array();
 
         $ha_samplecak = 0;
@@ -5573,7 +5658,15 @@ if (!function_exists('rekap_qcinspeks_perbulan')) {
         $dataReg['check_databh'] = 'ada';
 
         // dd($rekap);
-        return  ['data' => $rekap, 'reg' => $regional, 'bulan' => $bulan, 'datareg' => $dataReg];
+        return  [
+            'data' => $rekap,
+            'data_estate' => $array_estate,
+            'data_afdeling' => $array_afdeling,
+            'data_wilayah' => $array_wilayah,
+            'reg' => $regional,
+            'bulan' => $bulan,
+            'datareg' => $dataReg
+        ];
     }
 }
 
@@ -13517,34 +13610,70 @@ if (!function_exists('GetDepartementFamily')) {
     }
 }
 
+
 if (!function_exists('check_edit_permittion')) {
-    function check_edit_permittion($est)
+    function check_edit_permittion($establishment)
     {
+        $user = auth()->user();
+        $jsonDepartments = $user->json_deps;
+        $userDepartments = $user->Departement;
 
-        $json_deps = auth()->user()->json_deps;
-        $deps = json_decode($json_deps, true);
 
-        $departmentIds = [];
-        foreach ($deps as $dep) {
-            // Get all department IDs from the array
-            foreach ($dep as $key => $value) {
-                if (str_starts_with($key, 'departement') && $value !== null) {
-                    $departmentIds[] = $value;
+        // dd($GetDepartementFamily);
+        // dd($userDepartments, $jsonDepartments);
+
+        // if (!$jsonDepartments && !$userDepartments) {
+        //     return false;
+        // }
+
+        // dd($userDepartments);
+        if (!$userDepartments) {
+            // dd('no user departments');
+            return false;
+        }
+
+        // $departmentNames = [];
+
+        // if ($jsonDepartments) {
+        //     $departments = json_decode($jsonDepartments, true);
+        //     $departmentIds = collectDepartmentIds($departments);
+
+        //     $departmentNames = Departement::whereIn('id', $departmentIds)
+        //         ->pluck('nama', 'id')
+        //         ->toArray();
+        // }
+
+        if ($userDepartments) {
+            $GetDepartementFamily = GetDepartementFamily($userDepartments[0]->id_parent);
+            $departmentNames = Departement::whereIn('id', $GetDepartementFamily)
+                ->pluck('nama', 'id')
+                ->toArray();
+
+            // dd($departmentNames);
+        }
+
+        return in_array($establishment, $departmentNames);
+    }
+}
+
+if (!function_exists('collectDepartmentIds')) {
+    function collectDepartmentIds($departments)
+    {
+        $ids = [];
+        foreach ($departments as $department) {
+            foreach ($department as $key => $value) {
+                if ($value === null) {
+                    continue;
                 }
-                if (str_starts_with($key, 'departementsub') && $value !== null) {
-                    $departmentIds[] = $value;
+
+                if (
+                    str_starts_with($key, 'departement') ||
+                    str_starts_with($key, 'departementsub')
+                ) {
+                    $ids[] = $value;
                 }
             }
         }
-
-        // Get department names from the IDs
-        $departement = Departement::whereIn('id', $departmentIds)
-            ->pluck('nama', 'id')
-            ->toArray();
-        $edit_permittion = false;
-        if (in_array($est, $departement)) {
-            $edit_permittion = true;
-        }
-        return $edit_permittion;
+        return $ids;
     }
 }
