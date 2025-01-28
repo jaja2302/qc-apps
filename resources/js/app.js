@@ -225,38 +225,44 @@ function setBackgroundColorCell(cell, score) {
 }
 
 function TableForWilReg(data, tableBody) {
-    let item1 = data['afd'] ?? data['wil'] ?? 'WIL';
-    let item2 = data['est'] ?? data['wil'];
-    let item3 = data['gm'] ?? data['rh'] ?? '-';
+    // console.log(data);
+    let item1 = data['afd'] ?? data['wil'] ?? data['wilayah']['wil']['est'] ?? 'WIL';
+    let item2 = data['est'] ?? data['wil'] ?? 'WIL-' + data['wilayah']['wil']['est'] ?? 'WIL';
+    let item3 = data['gm'] ?? data['rh'] ?? data['nama_staff'] ?? data['wilayah']['wil']['gm'] ?? '-';
     let item4;
     
-    if (data['TOTAL_SKORbh'] !== undefined) {
-        if (data['check_databh'] === "kosong" && data['check_datacak'] === "kosong" && data['check_datatrans'] === "kosong") {
+    let check_databh = data['check_databh'] ?? data['wilayah']['wil']['check_databh']
+    let check_datacak = data['check_datacak'] ?? data['wilayah']['wil']['check_datacak']
+    let check_datatrans = data['check_datatrans'] ?? data['wilayah']['wil']['check_datatrans']
+
+    let datatrans = data['datatrans'] ?? data['totalSkortrans'] ?? data['wilayah']['wil']['datatrans'] 
+    let datacak = data['datacak'] ?? data['skor_akhircak'] ?? data['wilayah']['wil']['datacak']
+    let databh = data['databh'] ?? data['TOTAL_SKORbh'] ?? data['wilayah']['wil']['databh']
+
+    if (databh !== undefined) {
+        if (check_databh === "kosong" && check_datacak === "kosong" && check_datatrans === "kosong") {
             item4 = '-';
         } else {
-            item4 = data['TOTAL_SKORbh'] + data['totalSkortrans'] + data['skor_akhircak'];
+            item4 = databh + datatrans + datacak;
         }
     } else {
-        // Add null check for data['skor']
-        item4 = data['skor'] !== undefined && data['skor'] !== null ? 
-            Number(data['skor']).toFixed(2) : 
-            '-';
+        item4 = datatrans + datacak;
     }
-    let item5 = '-';
+
 
     var tr = document.createElement('tr');
     let itemElement1 = document.createElement('td');
     let itemElement2 = document.createElement('td');
     let itemElement3 = document.createElement('td');
     let itemElement4 = document.createElement('td');
-    let itemElement5 = document.createElement('td');
+
 
     itemElement1.classList.add("text-center");
     itemElement1.innerText = item1;
     itemElement2.innerText = item2;
     itemElement3.innerText = item3;
     itemElement4.innerText = item4;
-    itemElement5.innerText = item5;
+
 
     setBackgroundColor(itemElement4, item4);
     tr.style.backgroundColor = "#FCF086";
@@ -264,7 +270,6 @@ function TableForWilReg(data, tableBody) {
     tr.appendChild(itemElement2);
     tr.appendChild(itemElement3);
     tr.appendChild(itemElement4);
-    tr.appendChild(itemElement5);
 
     tableBody.appendChild(tr);
 }

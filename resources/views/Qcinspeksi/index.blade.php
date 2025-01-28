@@ -1,4 +1,5 @@
 <x-layout.app>
+    <link rel="stylesheet" href="{{ asset('css/qc-inspeksi.css') }}">
 
     <div class="card">
         <nav>
@@ -129,20 +130,12 @@
 
 
                 <div class="col-sm-12">
-                    <table class="table table-bordered" id="tabblan4">
-                        <thead id="theadreg">
-                            <tr>
-                                <th colspan="1">REG-I</th>
-                                <th colspan="1">RH-1</th>
-                                <th colspan="1">Akhmad Faisyal</th>
-                                <th colspan="8" style="background-color: white;"></th>
-                            </tr>
+                    <table class="table table-bordered">
+                        <thead id="tbodySkorRHMonth">
                         </thead>
-                        <tbody style="background-color: whitesmoke">
-                            <!-- Isi tabel di sini -->
-                        </tbody>
                     </table>
                 </div>
+
                 <div class="container-fluid">
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
@@ -586,87 +579,6 @@
                     </div>
                 </div>
 
-                <style>
-                    .table-wrapper {
-                        overflow-x: auto;
-                        overflow-y: auto;
-                        max-height: 600px;
-                    }
-
-                    .my-table {
-                        width: 100%;
-                        font-size: 0.8rem;
-                        border-collapse: collapse;
-                    }
-
-                    .my-table th,
-                    .my-table td {
-                        padding: 5px;
-                        text-align: center;
-                        border: 1px solid #ccc;
-                    }
-
-                    .my-table thead {
-                        background-color: #f2f2f2;
-                    }
-
-
-
-                    .my-table tbody tr:nth-child(even) {
-                        background-color: #f8f8f8;
-                    }
-
-                    .my-table tbody tr:hover {
-                        background-color: #eaeaea;
-                    }
-
-
-                    .center {
-                        display: flex;
-                        justify-content: center;
-                    }
-
-                    .my-table thead th.sticky {
-                        position: -webkit-sticky;
-                        position: sticky;
-                        top: 0;
-                        z-index: 10;
-                        background-color: inherit;
-                    }
-
-                    .my-table thead th.sticky-sub {
-                        position: -webkit-sticky;
-                        position: sticky;
-                        top: 30px;
-                        /* Adjust this value based on the height of the first row in the header */
-                        z-index: 10;
-                        background-color: inherit;
-                    }
-
-                    .my-table thead th.sticky-third-row {
-                        position: -webkit-sticky;
-                        position: sticky;
-                        top: 90px;
-                        /* Adjust this value based on the total height of the first two rows in the header */
-                        z-index: 10;
-                        background-color: inherit;
-                    }
-
-                    .my-table thead th.sticky-second-row {
-                        position: -webkit-sticky;
-                        position: sticky;
-                        top: 60px;
-                        z-index: 10;
-                        background-color: inherit;
-                    }
-
-                    .my-table tbody td.sticky-cell {
-                        position: -webkit-sticky;
-                        position: sticky;
-                        z-index: 5;
-                        background-color: white;
-                    }
-                </style>
 
                 <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 border border-dark">
                     <div class="table-wrapper">
@@ -928,6 +840,7 @@
                                 <!-- Options will be populated dynamically based on the selected wilayah preset value -->
                             </select>
                         </div>
+                        <button class="btn btn-primary mb-3 ml-3" id="GraphFilter">Show</button>
                     </div>
 
                 </div>
@@ -1131,268 +1044,206 @@
 
         var lokasiKerja = "{{ session('lok') }}";
         var isTableHeaderModified = false;
-
         $(document).ready(function() {
-            if ((lokasiKerja == 'Regional II' || lokasiKerja == 'Regional 2') && !isTableHeaderModified) {
-                $('#regionalPanen').val('2');
-                $('#regionalDataweek').val('2');
-                $('#regionalData').val('2');
-                $('#regDataIns').val('2');
-                $('#regFind').val('2');
-
-                const nons = document.getElementById("Tab1");
-                const nonx = document.getElementById("Tab2");
-                const llon = document.getElementById("Tab3");
-                const non = document.getElementById("Tab4");
-                const tahun1 = document.getElementById("Tabs1");
-                const tahun2 = document.getElementById("Tabs2");
-                const tahun3 = document.getElementById("Tabs3");
-                const tahun4 = document.getElementById("Tabs4");
-
-
-                function resetClassList(element) {
-                    // element.classList.remove("col-lg-4");
-                    // element.classList.add("col-md-4");
-                }
-
-
-
-                nons.style.display = "";
-                nonx.style.display = "";
-                llon.style.display = "";
-                // non.style.display = "none";
-                resetClassList(non);
-
-                nons.classList.add("col-lg-4");
-                nonx.classList.add("col-lg-4");
-                llon.classList.add("col-lg-4");
-
-
-                // tahun1.style.display = "";
-                // tahun2.style.display = "";
-                // tahun3.style.display = "";
-                // // tahun4.style.display = "none";
-                // resetClassList(tahun4);
-
-                // tahun1.classList.add("col-lg-4");
-                // tahun2.classList.add("col-lg-4");
-                // tahun3.classList.add("col-lg-4");
-
-                const thElement1 = document.getElementById('thead1');
-                const thElement2 = document.getElementById('thead2');
-                const thElement3 = document.getElementById('thead3');
-                const thElement4 = document.getElementById('thead3x');
-                const thElement1x = document.getElementById('theads1');
-                const thElement2x = document.getElementById('theads2');
-                const thElement3x = document.getElementById('theads3');
-                const thElement4x = document.getElementById('theads3x');
-                thElement1.textContent = 'WILAYAH IV';
-                thElement2.textContent = 'WILAYAH V';
-                thElement3.textContent = 'WILAYAH VI';
-                // thElement4.textContent = 'PLASMA II';
-                thElement1x.textContent = 'WILAYAH IV';
-                thElement2x.textContent = 'WILAYAH V';
-                thElement3x.textContent = 'WILAYAH VI';
-                // thElement4x.textContent = 'PLASMA II';
-
-                thElement1.classList.add("text-center");
-                thElement2.classList.add("text-center");
-                thElement3.classList.add("text-center");
-                // thElement4.classList.add("text-center");
-                thElement1x.classList.add("text-center");
-                thElement2x.classList.add("text-center");
-                thElement3x.classList.add("text-center");
-                // thElement4x.classList.add("text-center");
-
-            } else if ((lokasiKerja == 'Regional III' || lokasiKerja == 'Regional 3') && !isTableHeaderModified) {
-                $('#regionalPanen').val('3');
-                $('#regionalDataweek').val('3');
-                $('#regionalData').val('3');
-                $('#regDataIns').val('3');
-                $('#regFind').val('3');
-                // $('#regGrafik').val('3');
-
-                const thElement1 = document.getElementById('thead1');
-                const thElement2 = document.getElementById('thead2');
-                const thElement3 = document.getElementById('thead3');
-                const thElement4 = document.getElementById('thead3x');
-                const thElement1x = document.getElementById('theads1');
-                const thElement2x = document.getElementById('theads2');
-                const thElement3x = document.getElementById('theads3');
-                const thElement4x = document.getElementById('theads3x');
-                thElement1.textContent = 'WILAYAH VII';
-                thElement2.textContent = 'WILAYAH VIII';
-                thElement3.textContent = 'WILAYAH VIII';
-                // thElement4.textContent = 'PLASMA III';
-                thElement1x.textContent = 'WILAYAH VII';
-                thElement2x.textContent = 'WILAYAH VIII';
-                thElement3x.textContent = 'WILAYAH VIII';
-                // thElement4x.textContent = 'PLASMA III';
-
-                thElement1.classList.add("text-center");
-                thElement2.classList.add("text-center");
-                thElement3.classList.add("text-center");
-                // thElement4.classList.add("text-center");
-                thElement1x.classList.add("text-center");
-                thElement2x.classList.add("text-center");
-                thElement3x.classList.add("text-center");
-                // thElement4x.classList.add("text-center");
-
-
-                const nons = document.getElementById("Tab1");
-                const nonx = document.getElementById("Tab2");
-                const llon = document.getElementById("Tab3");
-                const non = document.getElementById("Tab4");
-                const tahun1 = document.getElementById("Tabs1");
-                const tahun2 = document.getElementById("Tabs2");
-                const tahun3 = document.getElementById("Tabs3");
-                const tahun4 = document.getElementById("Tabs4");
-
-
-                function resetClassList(element) {
-                    // element.classList.remove("col-lg-4");
-                    // element.classList.add("col-md-4");
-                }
-
-
-
-                nons.style.display = "";
-                nonx.style.display = "";
-                llon.style.display = "none";
-                // non.style.display = "none";
-                resetClassList(llon);
-                resetClassList(non);
-
-                nons.classList.add("col-lg-6");
-                nonx.classList.add("col-lg-6");
-
-
-
-                // tahun1.style.display = "";
-                // tahun2.style.display = "";
-                // tahun3.style.display = "none";
-                // // tahun4.style.display = "none";
-                // resetClassList(tahun3);
-                // resetClassList(tahun4);
-
-                // tahun1.classList.add("col-lg-6");
-                // tahun2.classList.add("col-lg-6");
-
-
-            } else if ((lokasiKerja == 'Regional IV' || lokasiKerja == 'Regional 4') && !isTableHeaderModified) {
-                $('#regionalPanen').val('4');
-                $('#regionalDataweek').val('4');
-                $('#regionalData').val('4');
-                $('#regDataIns').val('4');
-                $('#regFind').val('4');
-                // $('#regGrafik').val('4');
-
-
-                const nons = document.getElementById("Tab1");
-                const nonx = document.getElementById("Tab2");
-                const llon = document.getElementById("Tab3");
-                const non = document.getElementById("Tab4");
-                const tahun1 = document.getElementById("Tabs1");
-                const tahun2 = document.getElementById("Tabs2");
-                const tahun3 = document.getElementById("Tabs3");
-                const tahun4 = document.getElementById("Tabs4");
-
-
-                function resetClassList(element) {
-                    // element.classList.remove("col-lg-4");
-                    // element.classList.add("col-md-4");
-                }
-
-
-
-                llon.style.display = "none";
-                // non.style.display = "none";
-                resetClassList(llon);
-                resetClassList(non);
-                nons.classList.add("col-lg-6");
-                nonx.classList.add("col-lg-6");
-
-                tahun3.style.display = "none";
-                // tahun4.style.display = "none";
-                resetClassList(tahun3);
-                resetClassList(tahun4);
-                tahun1.classList.add("col-lg-6");
-                tahun2.classList.add("col-lg-6");
-
-                const thElement1 = document.getElementById('thead1');
-                const thElement2 = document.getElementById('thead2');
-                const thElement1x = document.getElementById('theads1');
-                const thElement2x = document.getElementById('theads2');
-
-                thElement1.textContent = 'WILAYAH Inti';
-                thElement2.textContent = 'WILAYAH Plasma';
-                thElement1x.textContent = 'WILAYAH Inti';
-                thElement2x.textContent = 'WILAYAH Plasma';
-
-                thElement1.classList.add("text-center");
-                thElement2.classList.add("text-center");
-                thElement1x.classList.add("text-center");
-                thElement2x.classList.add("text-center");
-            } else if ((lokasiKerja == 'Regional I' || lokasiKerja == 'Regional 1') && !isTableHeaderModified) {
-                $('#regionalPanen').val('1');
-                $('#regionalDataweek').val('1');
-                $('#regionalData').val('1');
-                $('#regDataIns').val('1');
-                $('#regFind').val('1');
-
-                const nons = document.getElementById("Tab1");
-                const nonx = document.getElementById("Tab2");
-                const llon = document.getElementById("Tab3");
-                const non = document.getElementById("Tab4");
-                const tahun1 = document.getElementById("Tabs1");
-                const tahun2 = document.getElementById("Tabs2");
-                const tahun3 = document.getElementById("Tabs3");
-                const tahun4 = document.getElementById("Tabs4");
-
-
-                function resetClassList(element) {
-                    // element.classList.remove("col-lg-4");
-                    // element.classList.add("col-md-4");
-                }
-
-
-
-                nons.style.display = "";
-                nonx.style.display = "";
-                llon.style.display = "";
-                // non.style.display = "none";
-                resetClassList(non);
-
-                nons.classList.add("col-lg-4");
-                nonx.classList.add("col-lg-4");
-                llon.classList.add("col-lg-4");
-
-
-                // tahun1.style.display = "";
-                // tahun2.style.display = "";
-                // tahun3.style.display = "";
-                // // tahun4.style.display = "none";
-                // resetClassList(tahun4);
-
-                // tahun1.classList.add("col-lg-4");
-                // tahun2.classList.add("col-lg-4");
-                // tahun3.classList.add("col-lg-4");
-
-
-
+            function updateRegionalValues(regionalValue) {
+                $('#regionalPanen').val(regionalValue);
+                $('#regionalDataweek').val(regionalValue);
+                $('#regionalData').val(regionalValue);
+                $('#regDataIns').val(regionalValue);
+                $('#regFind').val(regionalValue);
             }
 
+            function configureTableHeaders(headers) {
+                headers.forEach(({
+                    id,
+                    text
+                }) => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.textContent = text;
+                        element.classList.add("text-center");
+                    }
+                });
+            }
 
+            function configureColumns(columns) {
+                columns.forEach(({
+                    id,
+                    display,
+                    className
+                }) => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.style.display = display;
+                        if (className) {
+                            element.classList.add(className);
+                        }
+                    }
+                });
+            }
 
+            if (!isTableHeaderModified) {
+                if (lokasiKerja == 'Regional II' || lokasiKerja == 'Regional 2') {
+                    updateRegionalValues('2');
 
-            isTableHeaderModified = true;
+                    configureTableHeaders([{
+                            id: 'thead1',
+                            text: 'WILAYAH IV'
+                        },
+                        {
+                            id: 'thead2',
+                            text: 'WILAYAH V'
+                        },
+                        {
+                            id: 'thead3',
+                            text: 'WILAYAH VI'
+                        },
+                        {
+                            id: 'theads1',
+                            text: 'WILAYAH IV'
+                        },
+                        {
+                            id: 'theads2',
+                            text: 'WILAYAH V'
+                        },
+                        {
+                            id: 'theads3',
+                            text: 'WILAYAH VI'
+                        }
+                    ]);
+
+                    configureColumns([{
+                            id: 'Tab1',
+                            display: '',
+                            className: 'col-lg-4'
+                        },
+                        {
+                            id: 'Tab2',
+                            display: '',
+                            className: 'col-lg-4'
+                        },
+                        {
+                            id: 'Tab3',
+                            display: '',
+                            className: 'col-lg-4'
+                        }
+                    ]);
+
+                } else if (lokasiKerja == 'Regional III' || lokasiKerja == 'Regional 3') {
+                    updateRegionalValues('3');
+
+                    configureTableHeaders([{
+                            id: 'thead1',
+                            text: 'WILAYAH VII'
+                        },
+                        {
+                            id: 'thead2',
+                            text: 'WILAYAH VIII'
+                        },
+                        {
+                            id: 'thead3',
+                            text: 'WILAYAH VIII'
+                        },
+                        {
+                            id: 'theads1',
+                            text: 'WILAYAH VII'
+                        },
+                        {
+                            id: 'theads2',
+                            text: 'WILAYAH VIII'
+                        },
+                        {
+                            id: 'theads3',
+                            text: 'WILAYAH VIII'
+                        }
+                    ]);
+
+                    configureColumns([{
+                            id: 'Tab1',
+                            display: '',
+                            className: 'col-lg-6'
+                        },
+                        {
+                            id: 'Tab2',
+                            display: '',
+                            className: 'col-lg-6'
+                        },
+                        {
+                            id: 'Tab3',
+                            display: 'none'
+                        }
+                    ]);
+
+                } else if (lokasiKerja == 'Regional IV' || lokasiKerja == 'Regional 4') {
+                    updateRegionalValues('4');
+
+                    configureTableHeaders([{
+                            id: 'thead1',
+                            text: 'WILAYAH Inti'
+                        },
+                        {
+                            id: 'thead2',
+                            text: 'WILAYAH Plasma'
+                        },
+                        {
+                            id: 'theads1',
+                            text: 'WILAYAH Inti'
+                        },
+                        {
+                            id: 'theads2',
+                            text: 'WILAYAH Plasma'
+                        }
+                    ]);
+
+                    configureColumns([{
+                            id: 'Tab1',
+                            display: '',
+                            className: 'col-lg-6'
+                        },
+                        {
+                            id: 'Tab2',
+                            display: '',
+                            className: 'col-lg-6'
+                        },
+                        {
+                            id: 'Tab3',
+                            display: 'none'
+                        },
+                        {
+                            id: 'Tabs3',
+                            display: 'none'
+                        }
+                    ]);
+
+                } else if (lokasiKerja == 'Regional I' || lokasiKerja == 'Regional 1') {
+                    updateRegionalValues('1');
+
+                    configureColumns([{
+                            id: 'Tab1',
+                            display: '',
+                            className: 'col-lg-4'
+                        },
+                        {
+                            id: 'Tab2',
+                            display: '',
+                            className: 'col-lg-4'
+                        },
+                        {
+                            id: 'Tab3',
+                            display: '',
+                            className: 'col-lg-4'
+                        }
+                    ]);
+                }
+
+                isTableHeaderModified = true;
+            }
 
             changeData();
             getFindData();
             dataDashboard();
             dashboard_tahun();
-
-
+            graphFilter();
 
             buttonimg.style.display = 'none';
         });
@@ -1442,7 +1293,7 @@
 
         let map = null;
         let layerGroup = null;
-        const waktuini = @json($datenow);
+        const waktuini = '{!! json_encode($datenow) !!}';
 
         $('#showEstMap').click(function() {
             buttonimg.style.display = 'block';
@@ -1458,34 +1309,102 @@
             getPlotBlok();
         });
 
-        // var googleSat; // Define googleSat variable
 
-        // function initializeMap() {
-        //     var map = L.map('map', {
-        //         preferCanvas: true, // Set preferCanvas to true
-        //     }).setView([-2.2745234, 111.61404248], 13);
-
-        //     googleSat = L.tileLayer('http://{s}.google.com/vt?lyrs=s&x={x}&y={y}&z={z}', {
-        //         maxZoom: 20,
-        //         subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-        //     }).addTo(map);
-
-        //     // map.addControl(new L.Control.Fullscreen());
-
-        //     return map;
-        // }
-
+        // Optimize map initialization
         function initializeMap() {
-            // Initialize the map
+            if (map) {
+                map.remove();
+            }
+
             map = L.map('map', {
-                preferCanvas: true, // Set preferCanvas to true
+                preferCanvas: true
             }).setView([-2.2745234, 111.61404248], 13);
 
             L.tileLayer('http://{s}.google.com/vt?lyrs=s&x={x}&y={y}&z={z}', {
                 maxZoom: 20,
                 subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
             }).addTo(map);
+
             layerGroup = L.layerGroup().addTo(map);
+        }
+
+        // Optimize polygon drawing
+        function drawPolygon(blok, latlnArray, fillColor) {
+            const polygon = L.polygon(latlnArray, {
+                color: 'white',
+                fillColor: fillColor,
+                fillOpacity: 0.6
+            }).addTo(layerGroup);
+
+            // Add popup
+            polygon.bindPopup(`
+                <div>
+                    <strong>Blok Sidak:</strong> ${blok.blok_asli}<br>
+                    <strong>Blok Database:</strong> ${blok.blok}<br>
+                    <strong>Afdeling:</strong> ${blok.afdeling}<br>
+                    <strong>Nilai:</strong> ${blok.nilai}<br>
+                    <strong>Kategori:</strong> ${blok.kategori}
+                </div>
+            `);
+
+            return polygon;
+        }
+
+        // Optimize map drawing
+        function drawmapsblok(blok) {
+            layerGroup.clearLayers();
+            let bounds = L.latLngBounds([]);
+            let hasValidData = false;
+
+            for (let key in blok) {
+                const latlnArray = parseLatLng(blok[key].latln);
+                if (latlnArray.length < 3) continue;
+
+                const fillColor = getFillColor(blok[key].nilai);
+                const polygon = drawPolygon(blok[key], latlnArray, fillColor);
+
+                addPolygonLabel(polygon, blok[key]);
+                bounds.extend(polygon.getBounds());
+                hasValidData = true;
+            }
+
+            if (hasValidData) {
+                map.fitBounds(bounds);
+            }
+        }
+
+        // Helper functions
+        function parseLatLng(latln) {
+            return latln
+                .slice(1, -1)
+                .split('],[')
+                .map(coord => {
+                    let [lat, lng] = coord.split(',').map(Number);
+                    return [lng, lat];
+                });
+        }
+
+        function getFillColor(nilai) {
+            if (nilai >= 95.0 && nilai <= 100.0) return '#4874c4';
+            if (nilai >= 85.0 && nilai < 95.0) return '#00ff2e';
+            if (nilai >= 75.0 && nilai < 85.0) return 'yellow';
+            if (nilai >= 65.0 && nilai < 75.0) return 'orange';
+            if (nilai == 0) return 'white';
+            return 'red';
+        }
+
+        function addPolygonLabel(polygon, blokData) {
+            const center = polygon.getBounds().getCenter();
+            L.marker([center.lat, center.lng], {
+                icon: L.divIcon({
+                    className: 'label-estate',
+                    html: `<div>
+                        <p style="color: white; display: inline;">${blokData.blok}</p>
+                        <p style="color: black; display: inline;">(${blokData.nilai})</p>
+                    </div>`,
+                    iconSize: [100, 20]
+                })
+            }).addTo(layerGroup);
         }
 
         function getPlotBlok() {
@@ -1540,105 +1459,6 @@
                     // legendVar = legend;
                 }
             });
-        }
-
-        function drawmapsblok(blok) {
-            console.log('Drawing maps block...');
-            layerGroup.clearLayers();
-
-            // Create a LatLngBounds object to store the bounds of all polygons
-            let bounds = L.latLngBounds([]);
-
-            let hasValidData = false;
-
-            for (let key in blok) {
-                // Parse the latln value
-                let latlnArray = blok[key].latln
-                    .slice(1, -1) // Remove the outer square brackets
-                    .split('],[') // Split by the coordinates
-                    .map(coord => {
-                        let [lat, lng] = coord.split(',').map(Number); // Split lat and lng, and convert to number
-                        return [lng, lat]; // Leaflet uses [lng, lat]
-                    });
-
-                // Skip invalid data
-                if (latlnArray.length < 3) continue;
-
-                var nilai = blok[key].nilai;
-
-                // Determine fill color based on nilai
-                let fillColor;
-                if (nilai >= 95.0 && nilai <= 100.0) {
-                    fillColor = '#4874c4'; // Blue
-                } else if (nilai >= 85.0 && nilai < 95.0) {
-                    fillColor = '#00ff2e'; // Green
-                } else if (nilai >= 75.0 && nilai < 85.0) {
-                    fillColor = 'yellow'; // Yellow
-                } else if (nilai >= 65.0 && nilai < 75.0) {
-                    fillColor = 'orange'; // Orange
-                } else if (nilai == 0) {
-                    fillColor = 'white'; // White
-                } else if (nilai < 65.0) {
-                    fillColor = 'red'; // Red
-                }
-
-                // Ensure the polygon is closed
-                if (latlnArray.length > 0 && !latlnArray[0].every((val, index) => val === latlnArray[latlnArray.length - 1][index])) {
-                    latlnArray.push(latlnArray[0]);
-                }
-
-                // Draw the polygon
-                const polygon = L.polygon(latlnArray, {
-                    color: 'white', // Outline color
-                    fillColor: fillColor, // Background color based on nilai
-                    fillOpacity: 0.6 // Set opacity for the fill color
-                }).addTo(layerGroup).bindPopup(`
-            <div>
-                <strong>Blok Sidak:</strong> ${blok[key].blok_asli}<br>
-                <strong>Blok Database:</strong> ${blok[key].blok}<br>
-                <strong>Afdeling:</strong> ${blok[key].afdeling}<br>
-                <strong>Nilai:</strong> ${blok[key].nilai}<br>
-                <strong>Kategori:</strong> ${blok[key].kategori}
-            </div>
-        `);
-
-                // Calculate the center of the polygon
-                let latlngs = polygon.getLatLngs()[0];
-                let latSum = 0,
-                    lngSum = 0,
-                    len = latlngs.length;
-
-                for (let i = 0; i < len; i++) {
-                    latSum += latlngs[i].lat;
-                    lngSum += latlngs[i].lng;
-                }
-
-                let centerLat = latSum / len;
-                let centerLng = lngSum / len;
-
-                // Add a label in the middle
-                L.marker([centerLat, centerLng], {
-                    icon: L.divIcon({
-                        className: 'label-estate',
-                        html: `<div>
-                   <p style="color: white; display: inline;">${blok[key].blok}</p>
-                   <p style="color: black; display: inline;">(${blok[key].nilai})</p>
-               </div>`,
-                        iconSize: [100, 20]
-                    })
-                }).addTo(layerGroup);
-
-
-                // Extend bounds to include the current polygon
-                bounds.extend(polygon.getBounds());
-
-                hasValidData = true;
-            }
-
-            // Fit bounds to the accumulated bounds only if there is valid data
-            if (hasValidData) {
-                map.fitBounds(bounds);
-            }
         }
 
         function populateFilters(blok) {
@@ -2097,45 +1917,6 @@
         var transportwil_buah = new ApexCharts(document.querySelector("#transportwil_buah"), will);
         transportwil_buah.render();
 
-        // mutu transport weekly
-        // var weekly_transBRD = new ApexCharts(document.querySelector("#weekly_transBRD"), options);
-        // weekly_transBRD.render();
-        // var weekly_transBuah = new ApexCharts(document.querySelector("#weekly_transBuah"), options);
-        // weekly_transBuah.render();
-
-        // var weekly_transBRDWIL = new ApexCharts(document.querySelector("#weekly_transBRDWIL"), will);
-        // weekly_transBRDWIL.render();
-
-
-        // var weekly_transBuahWIL = new ApexCharts(document.querySelector("#weekly_transBuahWIL"), will);
-        // weekly_transBuahWIL.render();
-
-        // mutu buah weekly
-        // var weekly_mtb_mentah = new ApexCharts(document.querySelector("#weekly_mtb_mentah"), options);
-        // weekly_mtb_mentah.render();
-        // var weekly_mtb_masak = new ApexCharts(document.querySelector("#weekly_mtb_masak"), options);
-        // weekly_mtb_masak.render();
-        // var weekly_mtb_over = new ApexCharts(document.querySelector("#weekly_mtb_over"), options);
-        // weekly_mtb_over.render();
-        // var weekly_mtb_abnormal = new ApexCharts(document.querySelector("#weekly_mtb_abnormal"), options);
-        // weekly_mtb_abnormal.render();
-        // var weekly_mtb_kosong = new ApexCharts(document.querySelector("#weekly_mtb_kosong"), options);
-        // weekly_mtb_kosong.render();
-        // var weekly_mtb_vcut = new ApexCharts(document.querySelector("#weekly_mtb_vcut"), options);
-        // weekly_mtb_vcut.render();
-
-        // var weekly_mtbwil_mentah = new ApexCharts(document.querySelector("#weekly_mtbwil_mentah"), will);
-        // weekly_mtbwil_mentah.render();
-        // var weekly_mtbwil_masak = new ApexCharts(document.querySelector("#weekly_mtbwil_masak"), will);
-        // weekly_mtbwil_masak.render();
-        // var weekly_mtbwil_over = new ApexCharts(document.querySelector("#weekly_mtbwil_over"), will);
-        // weekly_mtbwil_over.render();
-        // var weekly_mtbwil_abnormal = new ApexCharts(document.querySelector("#weekly_mtbwil_abnormal"), will);
-        // weekly_mtbwil_abnormal.render();
-        // var weekly_mtbwil_kosong = new ApexCharts(document.querySelector("#weekly_mtbwil_kosong"), will);
-        // weekly_mtbwil_kosong.render();
-        // var weekly_mtbwil_vcut = new ApexCharts(document.querySelector("#weekly_mtbwil_vcut"), will);
-        // weekly_mtbwil_vcut.render();
 
 
         document.getElementById('btnShow').onclick = function() {
@@ -2156,7 +1937,7 @@
             $('#tbody2').empty()
             $('#tbody3').empty()
 
-            $('#theadreg').empty()
+            $('#tbodySkorRHMonth').empty()
             $('#plbody').empty()
 
             var date = ''
@@ -2207,7 +1988,7 @@
                     let table1_wil = rekap_per_wil[1] ?? rekap_per_wil[4] ?? rekap_per_wil[7] ?? rekap_per_wil[10]
                     let table2_wil = rekap_per_wil[2] ?? rekap_per_wil[5] ?? rekap_per_wil[8] ?? rekap_per_wil[11]
                     let table3_wil = rekap_per_wil[3] ?? rekap_per_wil[6] ?? []
-                    let theadreg = document.getElementById('theadreg');
+
                     // console.log(table2_wil);
                     // MUTU ANCAK 
                     chartGrain.updateOptions({
@@ -2425,23 +2206,21 @@
                         },
                     })
 
+                    // console.log(rekap_per_reg);
+                    let theadreg = document.getElementById('tbodySkorRHMonth');
 
-                    if (rekap_per_reg) {
-                        TableForWilReg(rekap_per_reg, theadreg);
-                    }
-
-                    if (table2_wil) {
+                    if (table2_wil && table2_wil.length > 0) {
                         TableForWilReg(table2_wil, tbody2);
                     }
 
-                    if (table3_wil) {
+                    if (table3_wil && table3_wil.length > 0) {
                         TableForWilReg(table3_wil, tbody3);
                     }
 
-                    if (table1_wil) {
+                    if (table1_wil && table1_wil.length > 0) {
                         TableForWilReg(table1_wil, tbody1);
                     }
-
+                    TableForWilReg(rekap_per_reg, theadreg);
 
                 }
             });
@@ -2512,11 +2291,12 @@
                             estate.trans.totalSkortrans;
                     }
                     let inc = 1;
+                    // console.log(resultestate);
                     resultestate.forEach(item => {
                         let item1 = inc++;
                         let item2 = item[0];
                         let item3 = '-';
-                        let item4 = '-';
+                        let item4 = item[1].January.estate.ancak.namaGM;
                         let estate5 = item[1].January.estate;
                         let item5 = isDataKosong(estate5) ? '-' : calculateTotalScore(estate5);
                         let estate6 = item[1].February.estate;
@@ -2627,11 +2407,12 @@
                             wil.buah.TOTAL_SKORbh +
                             wil.trans.totalSkortrans;
                     }
+                    // console.log(resultwil);
                     resultwil.forEach(item => {
                         let item1 = incs++;
                         let item2 = 'Wil-' + ' ' + item[0];
                         let item3 = '-';
-                        let item4 = '-';
+                        let item4 = item[1].January.wil.ancak.namaGM;
                         let wil5 = item[1].January.wil;
                         let item5 = isDataKosongwil(wil5) ? '-' : calculateTotalScorewil(wil5);
                         let wil6 = item[1].February.wil;
@@ -2749,11 +2530,11 @@
                         // Loop through each afdeling in the estate
                         Object.keys(afdelings).forEach((afdelingKey) => {
                             let afdeling = afdelings[afdelingKey];
-
+                            // console.log(afdeling);
                             let item1 = incx++;
                             let item2 = estateName;
                             let item3 = afdelingKey;
-                            let item4 = '-';
+                            let item4 = afdeling.January.namaGM;
 
                             let wil5 = afdeling.January;
                             let item5 = isDataKosongafd(wil5) ? '-' : calculateTotalScoreafd(wil5);
@@ -2866,8 +2647,8 @@
                     var theadreg = document.getElementById('reg');
                     let item1 = '='
                     let item2 = 'RH'
-                    let item3 = '-'
-                    let item4 = '-'
+                    let item3 = resultreg[0][1].ancak.namewil
+                    let item4 = resultreg[0][1].ancak.namaGM
                     let wil5 = resultreg[0][1];
                     let item5 = isDataKosongreg(wil5) ? '-' : calculateTotalScorereg(wil5);
                     let wil6 = resultreg[1][1]
@@ -2979,8 +2760,9 @@
             },
             series: [{
                 name: "ESTATE",
-                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            }, ],
+                // Initialize with empty array instead of zeros
+                data: []
+            }],
             fill: {
                 type: "gradient",
                 gradient: {
@@ -2990,27 +2772,20 @@
                     stops: [0, 90, 100]
                 }
             },
-            yaxis: [{
+            yaxis: {
+                // Remove the Series A title and simplify yaxis config
                 axisTicks: {
                     show: true
                 },
                 axisBorder: {
-                    show: true,
-                    color: "#FF1654"
+                    show: true
                 },
                 labels: {
                     style: {
-                        colors: "#FF1654"
+                        colors: "#000000"
                     }
-                },
-                title: {
-                    text: "Series A",
-                    style: {
-                        color: "#FF1654"
-                    }
-                },
-
-            }],
+                }
+            },
             xaxis: {
                 categories: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "July", "Agustus", "Sept", "Okt", "Nov", "Dec"]
             }
@@ -3502,6 +3277,107 @@
                     location.reload();
                 }
             });
+        }
+        document.getElementById('GraphFilter').onclick = function() {
+            Swal.fire({
+                title: 'Loading',
+                html: '<span class="loading-text">Mohon Tunggu...</span>',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            graphFilter()
+        }
+
+        function graphFilter() {
+            var est = ''
+            var yearGraph = ''
+            var reg = ''
+            var wilayahGrafik = ''
+            var est = document.getElementById('estateGrafik').value
+            var wilayahGrafik = document.getElementById('wilayahGrafik').value
+
+            var yearGraph = document.getElementById('yearGraph').value
+            var reg = document.getElementById('regGrafik').value
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url: "{{ route('graphfilter') }}",
+                method: "GET",
+                data: {
+                    est,
+                    yearGraph,
+                    reg,
+                    wilayahGrafik,
+                    _token: _token
+                },
+                success: function(result) {
+                    Swal.close();
+
+                    var parseResult = JSON.parse(result);
+
+                    // Add null check before processing data
+                    if (!parseResult) {
+                        console.error('No data returned from server');
+                        return;
+                    }
+
+                    // Safely extract and process data
+                    var chart_skor = parseResult.GraphSkorTotal ? Object.entries(parseResult.GraphSkorTotal) : [];
+                    var rekap_wil = parseResult.rekap_wil ? Object.entries(parseResult.rekap_wil) : [];
+
+                    // Update chart with safe data
+                    chartScore.updateSeries([{
+                        name: est || 'Estate',
+                        data: chart_skor.map(item => item[1] || 0)
+                    }]);
+
+                    // Process wilayah data safely
+                    var seriesData = [];
+                    rekap_wil.forEach((item, index) => {
+                        if (item && item[0] && item[1]) {
+                            var data = Object.values(item[1]).map(value => value || 0);
+                            seriesData.push({
+                                name: item[0],
+                                data: data,
+                                color: getColorByNumber(index + 1)
+                            });
+                        }
+                    });
+
+                    // Update wilayah chart safely
+                    if (seriesData.length > 0) {
+                        chartScorePerwil.updateOptions({
+                            series: seriesData,
+                            stroke: {
+                                curve: 'smooth'
+                            }
+                        });
+                    }
+
+                    // ... rest of the chart updates with similar null checks
+                },
+                error: function(xhr, status, error) {
+                    Swal.close();
+                    console.error('Error fetching chart data:', error);
+                    // Show error message to user
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to load chart data. Please try again.'
+                    });
+                }
+            });
+        }
+
+        // Add helper function for consistent color assignment
+        function getColorByNumber(number) {
+            const colors = [
+                '#2E93fA', '#66DA26', '#546E7A', '#E91E63', '#FF9800',
+                '#1B998B', '#2451B7', '#FF6B6B', '#4CAF50', '#9C27B0'
+            ];
+            return colors[number % colors.length];
         }
     </script>
 

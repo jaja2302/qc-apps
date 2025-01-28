@@ -1,0 +1,69 @@
+.table-wrapper {
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 600px;
+}
+
+.my-table {
+    width: 100%;
+    font-size: 0.8rem;
+    border-collapse: collapse;
+}
+
+.my-table th,
+.my-table td {
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+.my-table thead {
+    background-color: #f2f2f2;
+}
+
+.my-table tbody tr:nth-child(even) {
+    background-color: #f8f8f8;
+}
+
+.my-table tbody tr:hover {
+    background-color: #eaeaea;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.my-table thead th.sticky {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: inherit;
+}
+
+.my-table thead th.sticky-sub {
+    position: sticky;
+    top: 30px;
+    z-index: 10;
+    background-color: inherit;
+}
+
+.my-table thead th.sticky-third-row {
+    position: sticky;
+    top: 90px;
+    z-index: 10;
+    background-color: inherit;
+}
+
+.my-table thead th.sticky-second-row {
+    position: sticky;
+    top: 60px;
+    z-index: 10;
+    background-color: inherit;
+}
+
+.my-table tbody td.sticky-cell {
+    position: sticky;
+    z-index: 5;
+    background-color: white;
+} 

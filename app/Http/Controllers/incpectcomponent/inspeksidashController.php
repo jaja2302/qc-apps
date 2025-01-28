@@ -25,6 +25,7 @@ class inspeksidashController extends Controller
         $bulan = $request->get('date');
 
         $result = rekap_qcinspeks_perbulan($regional, $bulan);
+        // dd($result);
         // dd($result['data_wilayah']);
 
         $arr = array();
@@ -70,7 +71,7 @@ class inspeksidashController extends Controller
         $result = rekap_pertahun($year, $RegData);
 
 
-        // dd($result);
+        // dd($result['resultestate']);
 
         // dd($transNewdata[2]['January'][4]);
 
@@ -1639,7 +1640,7 @@ class inspeksidashController extends Controller
 
         $arrView = array();
 
-        dd($chartBTT);
+        // dd($chartBTT);
 
         $arrView['GraphBtt'] =  $chartBTT;
         $arrView['GraphBuah'] =  $chartBuah;

@@ -144,7 +144,7 @@
                                 </p>
                             </a>
                         </li>
-                        @if (auth()->user()->id_departement == '43' || strpos(session('departemen'), 'QC') !== false)
+                        @if (user_qc())
                         <li class="nav-item">
                             <a href="{{ asset('/dashboardabsensi') }}" class="nav-link">
                                 <div class="nav-icon lottie-animation" data-animation-path="https://lottie.host/237bc051-94b1-45d6-89da-3144341616a8/i4uJsopUfQ.json"></div>

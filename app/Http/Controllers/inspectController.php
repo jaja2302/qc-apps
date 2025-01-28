@@ -704,6 +704,8 @@ class inspectController extends Controller
         // dd(auth()->user());
         // $user = type_of_user();
         // dd($user);
+        // $test = user_qc();
+        // dd($test);
 
         $bulan = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         $shortMonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];

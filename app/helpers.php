@@ -918,12 +918,14 @@ if (!function_exists('convertToRoman')) {
     {
         // Check if the input is a string and return it as is
         if (is_string($number)) {
+            // dd($number);
             return $number;
         }
-
+        // dd('oke');
         // Ensure the number is an integer
         $number = (int)$number;
 
+        // dd($number);
         $result = '';
 
         $numerals = array(
@@ -941,14 +943,13 @@ if (!function_exists('convertToRoman')) {
             'IV' => 4,
             'I'  => 1
         );
-
         foreach ($numerals as $numeral => $value) {
             while ($number >= $value) {
                 $result .= $numeral;
                 $number -= $value;
             }
         }
-
+        // dd($result);
         return $result;
     }
 }
@@ -1068,6 +1069,16 @@ if (!function_exists('can_edit')) {
             in_array($user->departemen, $allowedOldDepartments);
     }
 }
+
+if (!function_exists('user_qc')) {
+    function user_qc()
+    {
+        $userDepartments = auth()->user()->Departement->pluck('nama')->toArray();
+        $allowedDepartments = ['QC', 'Quality Control', 'QC Mill', 'QC Reguler'];
+        return !empty(array_intersect($userDepartments, $allowedDepartments));
+    }
+}
+
 if (!function_exists('can_edit_mananger_askep')) {
     function can_edit_mananger_askep()
     {
@@ -1990,7 +2001,7 @@ if (!function_exists('rekap_pertahun')) {
                             // }
                             $rekap[$key][$key1][$key2][$key3][$key4]['pokok_samplecak'] = $totalPokok;
                             $rekap[$key][$key1][$key2][$key3][$key4]['bulan'] = $key1;
-                            $rekap[$key][$key1][$key2][$key3][$key4]['namaGM'] = '-';
+                            $rekap[$key][$key1][$key2][$key3][$key4]['namaGM'] =   get_nama_asisten($key3, $key4);
                             $rekap[$key][$key1][$key2][$key3][$key4]['ha_samplecak'] = $jum_ha;
                             $rekap[$key][$key1][$key2][$key3][$key4]['jumlah_panencak'] = $totalPanen;
                             $rekap[$key][$key1][$key2][$key3][$key4]['akp_rlcak'] = $akp;
@@ -2042,7 +2053,7 @@ if (!function_exists('rekap_pertahun')) {
                             $rekap[$key][$key1][$key2][$key3][$key4]['check_datacak'] = 'kosong';
                             $rekap[$key][$key1][$key2][$key3][$key4]['bulan'] = $key1;
                             $rekap[$key][$key1][$key2][$key3][$key4]['pokok_samplecak'] = 0;
-                            $rekap[$key][$key1][$key2][$key3][$key4]['namaGM'] = '-';
+                            $rekap[$key][$key1][$key2][$key3][$key4]['namaGM'] = get_nama_asisten($key3, $key4);
                             $rekap[$key][$key1][$key2][$key3][$key4]['ha_samplecak'] = 0;
                             $rekap[$key][$key1][$key2][$key3][$key4]['jumlah_panencak'] = 0;
                             $rekap[$key][$key1][$key2][$key3][$key4]['akp_rlcak'] = 0;
@@ -2115,17 +2126,8 @@ if (!function_exists('rekap_pertahun')) {
                         // $totalSkorEst = $skor_bh + $skor_brd + $skor_ps;
 
                         $totalSkorEst =  skor_brd_ma($brdPerjjgEst) + skor_buah_Ma($sumPerBHEst) + skor_palepah_ma($perPlEst);
-                        //PENAMPILAN UNTUK PERESTATE
-                        // $namaGM = '-';
-                        // foreach ($queryAsisten as $asisten) {
-
-                        //     // dd($asisten);
-                        //     if ($asisten['est'] == $key1 && $asisten['afd'] == 'EM') {
-                        //         $namaGM = $asisten['nama'];
-                        //         break;
-                        //     }
-                        // }
-                        $namaGM =  get_nama_em($key1);
+                        $namaGM =  get_nama_em($key3);
+                        // dd($namaGM, $key1, $key2, $key3);
                         // $rekap[$key][$key1][$key2]['pokok_samplecak'] = $totalPokok;
                         $rekap[$key][$key1][$key2][$key3]['estate']['ancak'] = [
                             'bulan' => $key1,
@@ -2215,7 +2217,7 @@ if (!function_exists('rekap_pertahun')) {
                     }
                     $totalWil = skor_brd_ma($brdPerwil) + skor_buah_Ma($sumPerBHWil) + skor_palepah_ma($perPiWil);
                     // $namaGM = '-';
-                    $namewil = 'WIL-' . convertToRoman($key);
+                    // $namewil = 'WIL-' . convertToRoman($key);
                     // foreach ($queryAsisten as $asisten) {
 
                     //     // dd($asisten);
@@ -2224,12 +2226,12 @@ if (!function_exists('rekap_pertahun')) {
                     //         break;
                     //     }
                     // }
-                    $namaGM = get_nama_gm($namewil);
+                    // dd($key, $key1, $key2);
                     $rekap[$key][$key1][$key2]['wil']['ancak'] = [
                         'bulan' => $key1,
                         'data' =>  $data,
-                        'namewil' =>  $namewil,
-                        'namaGM' =>  $namaGM,
+                        'namewil' =>  'WIL-' . convertToRoman($key2),
+                        'namaGM' =>  get_nama_gm($key2),
                         'pokok_samplecak' =>  $pokok_panenWil,
                         'ha_samplecak' =>   $jum_haWil,
                         'check_datacak' =>   $check_data,
@@ -2310,7 +2312,7 @@ if (!function_exists('rekap_pertahun')) {
                 }
                 $totalWil = skor_brd_ma($brdPerwil) + skor_buah_Ma($sumPerBHWil) + skor_palepah_ma($perPiWil);
                 // $namaGM = '-';
-                $namewil = 'WIL-' . convertToRoman($key);
+                $namewil = 'REG-' . convertToRoman($key);
                 // foreach ($queryAsisten as $asisten) {
 
                 //     // dd($asisten);
@@ -2319,12 +2321,12 @@ if (!function_exists('rekap_pertahun')) {
                 //         break;
                 //     }
                 // }
-                $namaGM =    get_nama_gm($namewil);
+                // dd($key, $key1);
                 $rekap[$key][$key1]['reg']['ancak'] = [
                     'bulan' => $key1,
                     'data' =>  $data,
                     'namewil' =>  $namewil,
-                    'namaGM' =>  $namaGM,
+                    'namaGM' => get_nama_rh($key),
                     'pokok_samplecak' =>  $pokok_panenreg,
                     'ha_samplecak' =>   $jum_hareg,
                     'check_datacak' =>   $check_data,
@@ -2356,7 +2358,7 @@ if (!function_exists('rekap_pertahun')) {
             }
         }
 
-        // dd($rekap);
+        // dd($rekap[1]['January']);
 
         foreach ($defaultbuah as $key => $value) {
             foreach ($value as $key1 => $value1) {
@@ -3155,6 +3157,7 @@ if (!function_exists('rekap_pertahun')) {
         unset($resultafdeling['trans']);
         unset($resultafdeling['wil']);
 
+        // dd($resultafdeling);
         $rekaptahunan_afdeling = [];
         foreach ($resultafdeling as $key => $value) {
             foreach ($value as $key1 => $value1) {
@@ -3199,9 +3202,9 @@ if (!function_exists('rekap_pertahun')) {
                     $sum_vcutEst += $value2['total_vcutbh'];
                     $sum_krEst += $value2['jum_krbh'];
                     // mututransport 
-                    $sum_btEst += $value2['total_brdtrans'];
-                    $sum_rstEst += $value2['total_buahtrans'];
-                    $dataBLokEst += $value2['tph_sampleNew'];
+                    $sum_btEst += $value2['total_brdtrans'] ?? 0;
+                    $sum_rstEst += $value2['total_buahtrans'] ?? 0;
+                    $dataBLokEst += $value2['tph_sampleNew'] ?? 0;
                 }
 
                 $sumBHEst = $bhtsEST +  $bhtm1EST +  $bhtm2EST +  $bhtm3EST;
@@ -5344,7 +5347,7 @@ if (!function_exists('rekap_qcinspeks_perbulan')) {
             // dd($resultmua);
 
 
-            $rekap[3]['MUA']['PT.MUA'] = $resultmua;
+            $rekap[3]['MUA']['estate'] = $resultmua;
 
             foreach ($rekap as $key => $value) {
                 if ($key == 3) {
@@ -5374,56 +5377,13 @@ if (!function_exists('rekap_qcinspeks_perbulan')) {
         }
 
 
-        // dd($rekap);
-        //         array:3 [▼ // app\helpers.php:5376
-        // 1 => array:5 [▼
-        //     "KNE" => array:5 [▼
-        //     "OA" => array:65 [▶]
-        //     "OB" => array:65 [▶]
-        //     "OC" => array:65 [▶]
-        //     "OD" => array:65 [▶]
-        //     "estate" => array:65 [▶]
-        //     ]
-        //     "PLE" => array:5 [▶]
-        //     "RDE" => array:5 [▶]
-        //     "SLE" => array:5 [▶]
-        //     "wilayah" => array:1 [▼
-        //     "wil" => array:66 [▶]
-        //     ]
-        // ]
-        // 2 => array:5 [▼
-        //     "BKE" => array:7 [▼
-        //     "OA" => array:65 [▶]
-        //     "OB" => array:65 [▶]
-        //     "OC" => array:65 [▶]
-        //     "OD" => array:65 [▶]
-        //     "OE" => array:65 [▶]
-        //     "OF" => array:65 [▶]
-        //     "estate" => array:65 [▶]
-        //     ]
-        //     "KDE" => array:5 [▶]
-        //     "RGE" => array:5 [▶]
-        //     "SGE" => array:5 [▶]
-        //     "wilayah" => array:1 [▶]
-        // ]
-        // 3 => array:8 [▼
-        //     "BGE" => array:2 [▶]
-        //     "NBE" => array:5 [▶]
-        //     "SYE" => array:7 [▶]
-        //     "UPE" => array:6 [▶]
-        //     "SRE" => array:2 [▶]
-        //     "LDE" => array:2 [▶]
-        //     "MUA" => array:1 [▶]
-        //     "wilayah" => array:1 [▶]
-        // ]
-        // ]
-
-        // ... existing code ...
 
         // Memisahkan array berdasarkan wilayah, estate, dan afdeling
         $array_wilayah = [];
         $array_estate = [];
         $array_afdeling = [];
+
+
 
         foreach ($rekap as $key => $value) {
             // Array wilayah
@@ -5436,15 +5396,14 @@ if (!function_exists('rekap_qcinspeks_perbulan')) {
                 if ($estate_key !== 'wilayah') {
                     // Array estate
                     if (isset($estate_value['estate'])) {
-                        if (!isset($array_estate[$key])) {
-                            $array_estate[$key] = [];
+                        if (!in_array($estate_key, ['SRE', 'LDE'])) {
+                            $array_estate[$key][$estate_key] = ['estate' => $estate_value['estate']];
                         }
-                        $array_estate[$key][$estate_key] = ['estate' => $estate_value['estate']];
                     }
 
                     // Array afdeling
                     $afdelings = array_filter(array_keys($estate_value), function ($k) {
-                        return in_array($k, ['OA', 'OB', 'OC', 'OD', 'OE', 'OF']);
+                        return in_array($k, ['OA', 'OB', 'OC', 'OD', 'OE', 'OF', 'LDE', 'SRE', 'OG']);
                     });
 
                     if (!empty($afdelings)) {
@@ -5457,7 +5416,13 @@ if (!function_exists('rekap_qcinspeks_perbulan')) {
             }
         }
 
-        // dd($array_estate, $array_afdeling, $array_wilayah);
+        // dd($array_wilayah);
+        // dd([
+        //     'rekap' => $rekap,
+        //     'array_estate' => $array_estate,
+        //     'array_afdeling' => $array_afdeling,
+        //     'array_wilayah' => $array_wilayah
+        // ]);
 
         $dataReg = array();
 
@@ -5656,8 +5621,9 @@ if (!function_exists('rekap_qcinspeks_perbulan')) {
         $dataReg['total_buahcak'] = $totalSkorBuah;
         $dataReg['TOTAL_SKORbh'] = $totalSkorBuah;
         $dataReg['check_databh'] = 'ada';
+        $dataReg['nama_staff'] = get_nama_rh($regional);
 
-        // dd($rekap);
+        // dd($dataReg);
         return  [
             'data' => $rekap,
             'data_estate' => $array_estate,
@@ -6794,8 +6760,11 @@ if (!function_exists('get_nama_em')) {
 if (!function_exists('get_nama_gm')) {
     function get_nama_gm($wil)
     {
-        $new_will = convertToRoman($wil);
-        $new_will = 'WIL-' . $new_will;
+        $int_num = intval($wil);
+        if ($int_num == 0) {
+            return 'Nama tidak ditemukan di database';
+        }
+        $new_will = 'WIL-' . convertToRoman($int_num);
 
 
         $query = Asistenqc::with('User')
@@ -6812,13 +6781,18 @@ if (!function_exists('get_nama_gm')) {
 if (!function_exists('get_nama_rh')) {
     function get_nama_rh($rh)
     {
-        $new_will = convertToRoman($rh);
-        $new_will = 'REG-' . $new_will;
+        $int_num = intval($rh);
 
+        if ($int_num == 0) {
+            return 'Nama tidak ditemukan di database';
+        }
+        $new_will = 'REG-' . convertToRoman($int_num);
         $query = Asistenqc::with('User')
             ->where('est', $new_will)
             ->where('afd', 'RH')
             ->first();
+
+        // dd($query, $new_will);
         if ($query !== null) {
             return $query->user->nama_lengkap ?? 'Vacant';
         } else {
