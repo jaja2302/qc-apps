@@ -235,9 +235,9 @@ function TableForWilReg(data, tableBody) {
     let check_datacak = data['check_datacak'] ?? data['wilayah']['wil']['check_datacak']
     let check_datatrans = data['check_datatrans'] ?? data['wilayah']['wil']['check_datatrans']
 
-    let datatrans = data['datatrans'] ?? data['totalSkortrans'] ?? data['wilayah']['wil']['datatrans'] 
-    let datacak = data['datacak'] ?? data['skor_akhircak'] ?? data['wilayah']['wil']['datacak']
-    let databh = data['databh'] ?? data['TOTAL_SKORbh'] ?? data['wilayah']['wil']['databh']
+    let datatrans = data['datatrans'] ?? data['totalSkortrans'] ?? data['wilayah']['wil']['totalSkortrans'] 
+    let datacak = data['datacak'] ?? data['skor_akhircak'] ?? data['wilayah']['wil']['skor_akhircak']
+    let databh = data['databh'] ?? data['TOTAL_SKORbh'] ?? data['wilayah']['wil']['TOTAL_SKORbh']
 
     if (databh !== undefined) {
         if (check_databh === "kosong" && check_datacak === "kosong" && check_datatrans === "kosong") {

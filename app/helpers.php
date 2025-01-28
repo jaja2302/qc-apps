@@ -3082,14 +3082,39 @@ if (!function_exists('rekap_pertahun')) {
 
         $resultafdeling = [];
 
-        foreach ($rekap as $region => $months) {
+        // Helper function to check if key should be excluded
+        $excludedKeys = ['wil', 'estate', 'ancak', 'buah', 'trans'];
+
+        // Process nested data structure
+        foreach ($rekap as $months) {
             foreach ($months as $month => $wilayahs) {
                 foreach ($wilayahs as $wilayah => $estates) {
-                    if ($wilayah !== "wil") {
+                    if (!in_array($wilayah, $excludedKeys)) {
                         foreach ($estates as $estate => $afdelings) {
-                            if ($estate !== "estate" && is_array($afdelings)) {
+                            if (!in_array($estate, $excludedKeys) && is_array($afdelings)) {
+                                $skor_akhircak = 0;
+                                $total_skorbh = 0;
+                                $total_skortrans = 0;
                                 foreach ($afdelings as $afdeling => $afdelingDetails) {
-                                    if ($afdeling !== "estate") {
+                                    if (!in_array($afdeling, $excludedKeys)) {
+                                        // Get values with null coalescing
+                                        $skor_akhircak = $afdelingDetails['skor_akhircak'] ?? 0;
+                                        $total_skorbh = $afdelingDetails['TOTAL_SKORbh'] ?? 0;
+                                        $total_skortrans = $afdelingDetails['totalSkortrans'] ?? 0;
+                                        $check_databh = $afdelingDetails['check_databh'] ?? 'kosong';
+                                        $check_datacak = $afdelingDetails['check_datacak'] ?? 'kosong';
+                                        $check_datatrans = $afdelingDetails['check_datatrans'] ?? 'kosong';
+
+                                        // Calculate total by adding the values
+                                        $afdelingDetails['calculation_string'] = "Ancak : " . $skor_akhircak . " Buah : " . $total_skorbh . " Trans : " . $total_skortrans;
+
+                                        // Check if all data is empty
+                                        if ($check_databh == 'kosong' && $check_datacak == 'kosong' && $check_datatrans == 'kosong') {
+                                            $afdelingDetails['calculation'] = '-';
+                                        } else {
+                                            $afdelingDetails['calculation'] = $skor_akhircak + $total_skorbh + $total_skortrans;
+                                        }
+
                                         $resultafdeling[$estate][$afdeling][$month] = $afdelingDetails;
                                     }
                                 }
@@ -3100,7 +3125,7 @@ if (!function_exists('rekap_pertahun')) {
             }
         }
 
-
+        // dd($resultafdeling);
         $resultestate = [];
 
         foreach ($rekap as $region => $months) {
@@ -3148,14 +3173,6 @@ if (!function_exists('rekap_pertahun')) {
         }
 
 
-        // dd($rekap);
-
-        // dd($resultestate);
-        // Unset the unwanted keys
-        unset($resultafdeling['ancak']);
-        unset($resultafdeling['buah']);
-        unset($resultafdeling['trans']);
-        unset($resultafdeling['wil']);
 
         // dd($resultafdeling);
         $rekaptahunan_afdeling = [];
@@ -3398,7 +3415,7 @@ if (!function_exists('rekap_pertahun')) {
                 ];
             }
         }
-        // dd($rekaptahunan_afdeling);
+        // dd($resultafdeling);
         return [
             'resultreg' => $resultreg,
             'resultwil' => $resultwil,

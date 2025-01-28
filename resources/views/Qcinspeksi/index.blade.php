@@ -2208,18 +2208,14 @@
 
                     // console.log(rekap_per_reg);
                     let theadreg = document.getElementById('tbodySkorRHMonth');
-
-                    if (table2_wil && table2_wil.length > 0) {
-                        TableForWilReg(table2_wil, tbody2);
-                    }
+                    // console.log(table3_wil);
 
                     if (table3_wil && table3_wil.length > 0) {
                         TableForWilReg(table3_wil, tbody3);
                     }
+                    TableForWilReg(table2_wil, tbody2);
 
-                    if (table1_wil && table1_wil.length > 0) {
-                        TableForWilReg(table1_wil, tbody1);
-                    }
+                    TableForWilReg(table1_wil, tbody1);
                     TableForWilReg(rekap_per_reg, theadreg);
 
                 }
@@ -2243,394 +2239,123 @@
         }
 
         function dashboard_tahun() {
+            // Clear existing data
+            ['#tb_tahun', '#tablewil', '#reg', '#rekapAFD'].forEach(id => $(id).empty());
 
-            $('#tb_tahun').empty()
-            $('#tablewil').empty()
-            $('#reg').empty()
-            $('#rekapAFD').empty()
+            // Get form data
+            const formData = {
+                year: document.getElementById('yearDate').value,
+                regData: document.getElementById('regionalData').value,
+                _token: $('input[name="_token"]').val()
+            };
 
+            // Helper functions
+            const isDataEmpty = (data) => {
+                return data.ancak.check_datacak === 'kosong' &&
+                    data.buah.check_databh === 'kosong' &&
+                    data.trans.check_datatrans === 'kosong';
+            };
 
-            var _token = $('input[name="_token"]').val();
-            var year = document.getElementById('yearDate').value
-            var regData = document.getElementById('regionalData').value
+            const calculateScore = (data) => {
+                return data.ancak.skor_akhircak +
+                    data.buah.TOTAL_SKORbh +
+                    data.trans.totalSkortrans;
+            };
 
+            const createTableCell = (content, isCenter = false) => {
+                const cell = document.createElement('td');
+                cell.innerText = content;
+                if (isCenter) cell.classList.add("text-center");
+                return cell;
+            };
 
+            const createTableRow = (items) => {
+                const tr = document.createElement('tr');
+                items.forEach((item, index) => {
+                    const cell = createTableCell(item, index === 0);
+                    if (typeof item === 'number' && index > 3) {
+                        setBackgroundColor(cell, item);
+                    }
+                    tr.appendChild(cell);
+                });
+                return tr;
+            };
 
+            const processMonthlyData = (data, type) => {
+                const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'
+                ];
+
+                return months.map(month => {
+                    const monthData = data[month][type];
+                    return isDataEmpty(monthData) ? '-' : calculateScore(monthData);
+                });
+            };
+
+            // Ajax request
             $.ajax({
                 url: "{{ route('filterTahun') }}",
                 method: "GET",
-                data: {
-                    year,
-                    regData,
-                    _token: _token
-                },
+                data: formData,
                 success: function(result) {
                     Swal.close();
+                    const data = JSON.parse(result);
 
-                    var parseResult = JSON.parse(result)
-                    //list estate
+                    // Process estate data
+                    Object.entries(data.resultestate).forEach((item, index) => {
+                        const [estateName, estateData] = item;
+                        const baseData = estateData.January.estate;
+                        const monthlyScores = processMonthlyData(estateData, 'estate');
 
-                    var resultreg = Object.entries(parseResult['resultreg'])
-                    var resultwil = Object.entries(parseResult['resultwil'])
-                    var resultestate = Object.entries(parseResult['resultestate'])
-                    var resultafdeling = Object.entries(parseResult['resultafdeling'])
-                    // console.log(resultafdeling);
-                    var trekap2 = document.getElementById('tb_tahun');
-                    var trekapwil = document.getElementById('tablewil');
-                    var trekapafd = document.getElementById('rekapAFD');
+                        const rowData = [
+                            index + 1,
+                            estateName,
+                            '-',
+                            baseData.ancak.namaGM,
+                            ...monthlyScores
+                        ];
 
-                    function isDataKosong(estate) {
-                        return estate.ancak.check_datacak === 'kosong' &&
-                            estate.buah.check_databh === 'kosong' &&
-                            estate.trans.check_datatrans === 'kosong';
-                    }
-
-                    function calculateTotalScore(estate) {
-                        return estate.ancak.skor_akhircak +
-                            estate.buah.TOTAL_SKORbh +
-                            estate.trans.totalSkortrans;
-                    }
-                    let inc = 1;
-                    // console.log(resultestate);
-                    resultestate.forEach(item => {
-                        let item1 = inc++;
-                        let item2 = item[0];
-                        let item3 = '-';
-                        let item4 = item[1].January.estate.ancak.namaGM;
-                        let estate5 = item[1].January.estate;
-                        let item5 = isDataKosong(estate5) ? '-' : calculateTotalScore(estate5);
-                        let estate6 = item[1].February.estate;
-                        let item6 = isDataKosong(estate6) ? '-' : calculateTotalScore(estate6);
-                        let estate7 = item[1].March.estate;
-                        let item7 = isDataKosong(estate7) ? '-' : calculateTotalScore(estate7);
-                        let estate8 = item[1].April.estate;
-                        let item8 = isDataKosong(estate8) ? '-' : calculateTotalScore(estate8);
-                        let estate9 = item[1].May.estate;
-                        let item9 = isDataKosong(estate9) ? '-' : calculateTotalScore(estate9);
-                        let estate10 = item[1].June.estate;
-                        let item10 = isDataKosong(estate10) ? '-' : calculateTotalScore(estate10);
-                        let estate11 = item[1].July.estate;
-                        let item11 = isDataKosong(estate11) ? '-' : calculateTotalScore(estate11);
-                        let estate12 = item[1].August.estate;
-                        let item12 = isDataKosong(estate12) ? '-' : calculateTotalScore(estate12);
-                        let estate13 = item[1].September.estate;
-                        let item13 = isDataKosong(estate13) ? '-' : calculateTotalScore(estate13);
-                        let estate14 = item[1].October.estate;
-                        let item14 = isDataKosong(estate14) ? '-' : calculateTotalScore(estate14);
-                        let estate15 = item[1].November.estate;
-                        let item15 = isDataKosong(estate15) ? '-' : calculateTotalScore(estate15);
-                        let estate16 = item[1].December.estate;
-                        let item16 = isDataKosong(estate16) ? '-' : calculateTotalScore(estate16);
-
-                        // Create table row and cell for each 'key'
-                        let tr = document.createElement('tr');
-                        let itemElement1 = document.createElement('td');
-                        let itemElement2 = document.createElement('td');
-                        let itemElement3 = document.createElement('td');
-                        let itemElement4 = document.createElement('td');
-                        let itemElement5 = document.createElement('td');
-                        let itemElement6 = document.createElement('td');
-                        let itemElement7 = document.createElement('td');
-                        let itemElement8 = document.createElement('td');
-                        let itemElement9 = document.createElement('td');
-                        let itemElement10 = document.createElement('td');
-                        let itemElement11 = document.createElement('td');
-                        let itemElement12 = document.createElement('td');
-                        let itemElement13 = document.createElement('td');
-                        let itemElement14 = document.createElement('td');
-                        let itemElement15 = document.createElement('td');
-                        let itemElement16 = document.createElement('td');
-
-
-
-                        itemElement1.classList.add("text-center");
-                        itemElement1.innerText = item1
-                        itemElement2.innerText = item2
-                        itemElement3.innerText = item3
-                        itemElement4.innerText = item4
-                        itemElement5.innerText = item5
-                        itemElement6.innerText = item6
-                        itemElement7.innerText = item7
-                        itemElement8.innerText = item8
-                        itemElement9.innerText = item9
-                        itemElement10.innerText = item10
-                        itemElement11.innerText = item11
-                        itemElement12.innerText = item12
-                        itemElement13.innerText = item13
-                        itemElement14.innerText = item14
-                        itemElement15.innerText = item15
-                        itemElement16.innerText = item16
-
-
-                        setBackgroundColor(itemElement5, item5);
-                        setBackgroundColor(itemElement6, item6);
-                        setBackgroundColor(itemElement7, item7);
-                        setBackgroundColor(itemElement8, item8);
-                        setBackgroundColor(itemElement9, item9);
-                        setBackgroundColor(itemElement10, item10);
-                        setBackgroundColor(itemElement11, item11);
-                        setBackgroundColor(itemElement12, item12);
-                        setBackgroundColor(itemElement13, item13);
-                        setBackgroundColor(itemElement14, item14);
-                        setBackgroundColor(itemElement15, item15);
-                        setBackgroundColor(itemElement16, item16);
-
-                        tr.appendChild(itemElement1)
-                        tr.appendChild(itemElement2)
-                        tr.appendChild(itemElement3)
-                        tr.appendChild(itemElement4)
-                        tr.appendChild(itemElement5)
-                        tr.appendChild(itemElement6)
-                        tr.appendChild(itemElement7)
-                        tr.appendChild(itemElement8)
-                        tr.appendChild(itemElement9)
-                        tr.appendChild(itemElement10)
-                        tr.appendChild(itemElement11)
-                        tr.appendChild(itemElement12)
-                        tr.appendChild(itemElement13)
-                        tr.appendChild(itemElement14)
-                        tr.appendChild(itemElement15)
-                        tr.appendChild(itemElement16)
-                        // Append the row to the table
-                        trekap2.appendChild(tr);
+                        document.getElementById('tb_tahun').appendChild(createTableRow(rowData));
                     });
-                    let incs = 1;
 
-                    function isDataKosongwil(wil) {
-                        return wil.ancak.check_datacak === 'kosong' &&
-                            wil.buah.check_databh === 'kosong' &&
-                            wil.trans.check_datatrans === 'kosong';
-                    }
+                    // Process wilayah data
+                    Object.entries(data.resultwil).forEach((item, index) => {
+                        const [wilayahNum, wilayahData] = item;
+                        const baseData = wilayahData.January.wil;
+                        const monthlyScores = processMonthlyData(wilayahData, 'wil');
 
-                    function calculateTotalScorewil(wil) {
-                        return wil.ancak.skor_akhircak +
-                            wil.buah.TOTAL_SKORbh +
-                            wil.trans.totalSkortrans;
-                    }
-                    // console.log(resultwil);
-                    resultwil.forEach(item => {
-                        let item1 = incs++;
-                        let item2 = 'Wil-' + ' ' + item[0];
-                        let item3 = '-';
-                        let item4 = item[1].January.wil.ancak.namaGM;
-                        let wil5 = item[1].January.wil;
-                        let item5 = isDataKosongwil(wil5) ? '-' : calculateTotalScorewil(wil5);
-                        let wil6 = item[1].February.wil;
-                        let item6 = isDataKosongwil(wil6) ? '-' : calculateTotalScorewil(wil6);
-                        let wil7 = item[1].March.wil;
-                        let item7 = isDataKosongwil(wil7) ? '-' : calculateTotalScorewil(wil7);
-                        let wil8 = item[1].April.wil;
-                        let item8 = isDataKosongwil(wil8) ? '-' : calculateTotalScorewil(wil8);
-                        let wil9 = item[1].May.wil;
-                        let item9 = isDataKosongwil(wil9) ? '-' : calculateTotalScorewil(wil9);
-                        let wil10 = item[1].June.wil;
-                        let item10 = isDataKosongwil(wil10) ? '-' : calculateTotalScorewil(wil10);
-                        let wil11 = item[1].July.wil;
-                        let item11 = isDataKosongwil(wil11) ? '-' : calculateTotalScorewil(wil11);
-                        let wil12 = item[1].August.wil;
-                        let item12 = isDataKosongwil(wil12) ? '-' : calculateTotalScorewil(wil12);
-                        let wil13 = item[1].September.wil;
-                        let item13 = isDataKosongwil(wil13) ? '-' : calculateTotalScorewil(wil13);
-                        let wil14 = item[1].October.wil;
-                        let item14 = isDataKosongwil(wil14) ? '-' : calculateTotalScorewil(wil14);
-                        let wil15 = item[1].November.wil;
-                        let item15 = isDataKosongwil(wil15) ? '-' : calculateTotalScorewil(wil15);
-                        let wil16 = item[1].December.wil;
-                        let item16 = isDataKosongwil(wil16) ? '-' : calculateTotalScorewil(wil16);
+                        const rowData = [
+                            index + 1,
+                            `Wil- ${wilayahNum}`,
+                            '-',
+                            baseData.ancak.namaGM,
+                            ...monthlyScores
+                        ];
 
-                        // Create table row and cell for each 'key'
-                        let tr = document.createElement('tr');
-                        let itemElement1 = document.createElement('td');
-                        let itemElement2 = document.createElement('td');
-                        let itemElement3 = document.createElement('td');
-                        let itemElement4 = document.createElement('td');
-                        let itemElement5 = document.createElement('td');
-                        let itemElement6 = document.createElement('td');
-                        let itemElement7 = document.createElement('td');
-                        let itemElement8 = document.createElement('td');
-                        let itemElement9 = document.createElement('td');
-                        let itemElement10 = document.createElement('td');
-                        let itemElement11 = document.createElement('td');
-                        let itemElement12 = document.createElement('td');
-                        let itemElement13 = document.createElement('td');
-                        let itemElement14 = document.createElement('td');
-                        let itemElement15 = document.createElement('td');
-                        let itemElement16 = document.createElement('td');
-
-
-
-                        itemElement1.classList.add("text-center");
-                        itemElement1.innerText = item1
-                        itemElement2.innerText = item2
-                        itemElement3.innerText = item3
-                        itemElement4.innerText = item4
-                        itemElement5.innerText = item5
-                        itemElement6.innerText = item6
-                        itemElement7.innerText = item7
-                        itemElement8.innerText = item8
-                        itemElement9.innerText = item9
-                        itemElement10.innerText = item10
-                        itemElement11.innerText = item11
-                        itemElement12.innerText = item12
-                        itemElement13.innerText = item13
-                        itemElement14.innerText = item14
-                        itemElement15.innerText = item15
-                        itemElement16.innerText = item16
-
-                        setBackgroundColor(itemElement5, item5);
-                        setBackgroundColor(itemElement6, item6);
-                        setBackgroundColor(itemElement7, item7);
-                        setBackgroundColor(itemElement8, item8);
-                        setBackgroundColor(itemElement9, item9);
-                        setBackgroundColor(itemElement10, item10);
-                        setBackgroundColor(itemElement11, item11);
-                        setBackgroundColor(itemElement12, item12);
-                        setBackgroundColor(itemElement13, item13);
-                        setBackgroundColor(itemElement14, item14);
-                        setBackgroundColor(itemElement15, item15);
-                        setBackgroundColor(itemElement16, item16);
-
-
-                        tr.appendChild(itemElement1)
-                        tr.appendChild(itemElement2)
-                        tr.appendChild(itemElement3)
-                        tr.appendChild(itemElement4)
-                        tr.appendChild(itemElement5)
-                        tr.appendChild(itemElement6)
-                        tr.appendChild(itemElement7)
-                        tr.appendChild(itemElement8)
-                        tr.appendChild(itemElement9)
-                        tr.appendChild(itemElement10)
-                        tr.appendChild(itemElement11)
-                        tr.appendChild(itemElement12)
-                        tr.appendChild(itemElement13)
-                        tr.appendChild(itemElement14)
-                        tr.appendChild(itemElement15)
-                        tr.appendChild(itemElement16)
-                        // Append the row to the table
-                        trekapwil.appendChild(tr);
+                        document.getElementById('tablewil').appendChild(createTableRow(rowData));
                     });
-                    let incx = 1;
 
-                    function isDataKosongafd(afdeling) {
-                        return afdeling.check_datacak === 'kosong' &&
-                            afdeling.check_databh === 'kosong' &&
-                            afdeling.check_datatrans === 'kosong';
-                    }
+                    // Process afdeling data
+                    Object.entries(data.resultafdeling).forEach(([estateName, afdelings]) => {
+                        Object.entries(afdelings).forEach(([afdelingKey, afdeling]) => {
+                            const monthlyCalculations = Object.keys(afdeling)
+                                .filter(key => key !== 'namaGM')
+                                .map(month => afdeling[month].calculation);
 
-                    function calculateTotalScoreafd(afdeling) {
-                        return afdeling.skor_akhircak +
-                            afdeling.TOTAL_SKORbh +
-                            afdeling.totalSkortrans;
-                    }
-                    resultafdeling.forEach((estate) => {
-                        let estateName = estate[0];
-                        let afdelings = estate[1];
+                            const rowData = [
+                                document.getElementById('rekapAFD').childNodes.length + 1,
+                                estateName,
+                                afdelingKey,
+                                afdeling.January.namaGM,
+                                ...monthlyCalculations
+                            ];
 
-                        // Loop through each afdeling in the estate
-                        Object.keys(afdelings).forEach((afdelingKey) => {
-                            let afdeling = afdelings[afdelingKey];
-                            // console.log(afdeling);
-                            let item1 = incx++;
-                            let item2 = estateName;
-                            let item3 = afdelingKey;
-                            let item4 = afdeling.January.namaGM;
-
-                            let wil5 = afdeling.January;
-                            let item5 = isDataKosongafd(wil5) ? '-' : calculateTotalScoreafd(wil5);
-                            let wil6 = afdeling.February;
-                            let item6 = isDataKosongafd(wil6) ? '-' : calculateTotalScoreafd(wil6);
-                            let wil7 = afdeling.March;
-                            let item7 = isDataKosongafd(wil7) ? '-' : calculateTotalScoreafd(wil7);
-                            let wil8 = afdeling.April;
-                            let item8 = isDataKosongafd(wil8) ? '-' : calculateTotalScoreafd(wil8);
-                            let wil9 = afdeling.May;
-                            let item9 = isDataKosongafd(wil9) ? '-' : calculateTotalScoreafd(wil9);
-                            let wil10 = afdeling.June;
-                            let item10 = isDataKosongafd(wil10) ? '-' : calculateTotalScoreafd(wil10);
-                            let wil11 = afdeling.July;
-                            let item11 = isDataKosongafd(wil11) ? '-' : calculateTotalScoreafd(wil11);
-                            let wil12 = afdeling.August;
-                            let item12 = isDataKosongafd(wil12) ? '-' : calculateTotalScoreafd(wil12);
-                            let wil13 = afdeling.September;
-                            let item13 = isDataKosongafd(wil13) ? '-' : calculateTotalScoreafd(wil13);
-                            let wil14 = afdeling.October;
-                            let item14 = isDataKosongafd(wil14) ? '-' : calculateTotalScoreafd(wil14);
-                            let wil15 = afdeling.November;
-                            let item15 = isDataKosongafd(wil15) ? '-' : calculateTotalScoreafd(wil15);
-                            let wil16 = afdeling.December;
-                            let item16 = isDataKosongafd(wil16) ? '-' : calculateTotalScoreafd(wil16);
-
-                            // Create table row and cell for each 'key'
-                            let tr = document.createElement('tr');
-                            let itemElement1 = document.createElement('td');
-                            let itemElement2 = document.createElement('td');
-                            let itemElement3 = document.createElement('td');
-                            let itemElement4 = document.createElement('td');
-                            let itemElement5 = document.createElement('td');
-                            let itemElement6 = document.createElement('td');
-                            let itemElement7 = document.createElement('td');
-                            let itemElement8 = document.createElement('td');
-                            let itemElement9 = document.createElement('td');
-                            let itemElement10 = document.createElement('td');
-                            let itemElement11 = document.createElement('td');
-                            let itemElement12 = document.createElement('td');
-                            let itemElement13 = document.createElement('td');
-                            let itemElement14 = document.createElement('td');
-                            let itemElement15 = document.createElement('td');
-                            let itemElement16 = document.createElement('td');
-
-                            itemElement1.classList.add("text-center");
-                            itemElement1.innerText = item1;
-                            itemElement2.innerText = item2;
-                            itemElement3.innerText = item3;
-                            itemElement4.innerText = item4;
-                            itemElement5.innerText = item5;
-                            itemElement6.innerText = item6;
-                            itemElement7.innerText = item7;
-                            itemElement8.innerText = item8;
-                            itemElement9.innerText = item9;
-                            itemElement10.innerText = item10;
-                            itemElement11.innerText = item11;
-                            itemElement12.innerText = item12;
-                            itemElement13.innerText = item13;
-                            itemElement14.innerText = item14;
-                            itemElement15.innerText = item15;
-                            itemElement16.innerText = item16;
-
-                            setBackgroundColor(itemElement5, item5);
-                            setBackgroundColor(itemElement6, item6);
-                            setBackgroundColor(itemElement7, item7);
-                            setBackgroundColor(itemElement8, item8);
-                            setBackgroundColor(itemElement9, item9);
-                            setBackgroundColor(itemElement10, item10);
-                            setBackgroundColor(itemElement11, item11);
-                            setBackgroundColor(itemElement12, item12);
-                            setBackgroundColor(itemElement13, item13);
-                            setBackgroundColor(itemElement14, item14);
-                            setBackgroundColor(itemElement15, item15);
-                            setBackgroundColor(itemElement16, item16);
-
-                            tr.appendChild(itemElement1);
-                            tr.appendChild(itemElement2);
-                            tr.appendChild(itemElement3);
-                            tr.appendChild(itemElement4);
-                            tr.appendChild(itemElement5);
-                            tr.appendChild(itemElement6);
-                            tr.appendChild(itemElement7);
-                            tr.appendChild(itemElement8);
-                            tr.appendChild(itemElement9);
-                            tr.appendChild(itemElement10);
-                            tr.appendChild(itemElement11);
-                            tr.appendChild(itemElement12);
-                            tr.appendChild(itemElement13);
-                            tr.appendChild(itemElement14);
-                            tr.appendChild(itemElement15);
-                            tr.appendChild(itemElement16);
-
-                            trekapafd.appendChild(tr);
+                            document.getElementById('rekapAFD').appendChild(createTableRow(rowData));
                         });
                     });
+
+                    // Process regional data
+                    const regData = Object.entries(data.resultreg);
 
                     function isDataKosongreg(reg) {
                         return reg.ancak.check_datacak === 'kosong' &&
@@ -2643,110 +2368,38 @@
                             reg.buah.TOTAL_SKORbh +
                             reg.trans.totalSkortrans;
                     }
-                    // console.log(resultreg);
-                    var theadreg = document.getElementById('reg');
-                    let item1 = '='
-                    let item2 = 'RH'
-                    let item3 = resultreg[0][1].ancak.namewil
-                    let item4 = resultreg[0][1].ancak.namaGM
-                    let wil5 = resultreg[0][1];
-                    let item5 = isDataKosongreg(wil5) ? '-' : calculateTotalScorereg(wil5);
-                    let wil6 = resultreg[1][1]
-                    let item6 = isDataKosongreg(wil6) ? '-' : calculateTotalScorereg(wil6);
-                    let wil7 = resultreg[2][1]
-                    let item7 = isDataKosongreg(wil7) ? '-' : calculateTotalScorereg(wil7);
-                    let wil8 = resultreg[3][1]
-                    let item8 = isDataKosongreg(wil8) ? '-' : calculateTotalScorereg(wil8);
-                    let wil9 = resultreg[4][1]
-                    let item9 = isDataKosongreg(wil9) ? '-' : calculateTotalScorereg(wil9);
-                    let wil10 = resultreg[5][1]
-                    let item10 = isDataKosongreg(wil10) ? '-' : calculateTotalScorereg(wil10);
-                    let wil11 = resultreg[6][1]
-                    let item11 = isDataKosongreg(wil11) ? '-' : calculateTotalScorereg(wil11);
-                    let wil12 = resultreg[7][1]
-                    let item12 = isDataKosongreg(wil12) ? '-' : calculateTotalScorereg(wil12);
-                    let wil13 = resultreg[8][1]
-                    let item13 = isDataKosongreg(wil13) ? '-' : calculateTotalScorereg(wil13);
-                    let wil14 = resultreg[9][1]
-                    let item14 = isDataKosongreg(wil14) ? '-' : calculateTotalScorereg(wil14);
-                    let wil15 = resultreg[10][1]
-                    let item15 = isDataKosongreg(wil15) ? '-' : calculateTotalScorereg(wil15);
-                    let wil16 = resultreg[11][1]
-                    let item16 = isDataKosongreg(wil16) ? '-' : calculateTotalScorereg(wil16);
 
+                    const regRow = [
+                        '=',
+                        'RH',
+                        regData[0][1].ancak.namewil,
+                        regData[0][1].ancak.namaGM,
+                        ...regData.map(([_, reg]) => {
+                            return isDataKosongreg(reg) ? '-' : calculateTotalScorereg(reg);
+                        })
+                    ];
 
-                    var tr = document.createElement('tr');
-                    let itemElement1 = document.createElement('td');
-                    let itemElement2 = document.createElement('td');
-                    let itemElement3 = document.createElement('td');
-                    let itemElement4 = document.createElement('td');
-                    let itemElement5 = document.createElement('td');
-                    let itemElement6 = document.createElement('td');
-                    let itemElement7 = document.createElement('td');
-                    let itemElement8 = document.createElement('td');
-                    let itemElement9 = document.createElement('td');
-                    let itemElement10 = document.createElement('td');
-                    let itemElement11 = document.createElement('td');
-                    let itemElement12 = document.createElement('td');
-                    let itemElement13 = document.createElement('td');
-                    let itemElement14 = document.createElement('td');
-                    let itemElement15 = document.createElement('td');
-                    let itemElement16 = document.createElement('td');
+                    const tr = document.createElement('tr');
+                    regRow.forEach((item, index) => {
+                        const td = document.createElement('td');
+                        td.innerText = item;
 
+                        if (index === 0) {
+                            td.classList.add("text-center");
+                        }
 
+                        if (index >= 4) {
+                            setBackgroundColor(td, item);
+                        }
 
-                    itemElement1.classList.add("text-center");
-                    itemElement1.innerText = item1
-                    itemElement2.innerText = item2
-                    itemElement3.innerText = item3
-                    itemElement4.innerText = item4
-                    itemElement5.innerText = item5
-                    itemElement6.innerText = item6
-                    itemElement7.innerText = item7
-                    itemElement8.innerText = item8
-                    itemElement9.innerText = item9
-                    itemElement10.innerText = item10
-                    itemElement11.innerText = item11
-                    itemElement12.innerText = item12
-                    itemElement13.innerText = item13
-                    itemElement14.innerText = item14
-                    itemElement15.innerText = item15
-                    itemElement16.innerText = item16
+                        tr.appendChild(td);
+                    });
 
-                    setBackgroundColor(itemElement5, item5);
-                    setBackgroundColor(itemElement6, item6);
-                    setBackgroundColor(itemElement7, item7);
-                    setBackgroundColor(itemElement8, item8);
-                    setBackgroundColor(itemElement9, item9);
-                    setBackgroundColor(itemElement10, item10);
-                    setBackgroundColor(itemElement11, item11);
-                    setBackgroundColor(itemElement12, item12);
-                    setBackgroundColor(itemElement13, item13);
-                    setBackgroundColor(itemElement14, item14);
-                    setBackgroundColor(itemElement15, item15);
-                    setBackgroundColor(itemElement16, item16);
-
-                    tr.appendChild(itemElement1)
-                    tr.appendChild(itemElement2)
-                    tr.appendChild(itemElement3)
-                    tr.appendChild(itemElement4)
-                    tr.appendChild(itemElement5)
-                    tr.appendChild(itemElement6)
-                    tr.appendChild(itemElement7)
-                    tr.appendChild(itemElement8)
-                    tr.appendChild(itemElement9)
-                    tr.appendChild(itemElement10)
-                    tr.appendChild(itemElement11)
-                    tr.appendChild(itemElement12)
-                    tr.appendChild(itemElement13)
-                    tr.appendChild(itemElement14)
-                    tr.appendChild(itemElement15)
-                    tr.appendChild(itemElement16)
-                    theadreg.appendChild(tr);
-
+                    document.getElementById('reg').appendChild(tr);
                 }
             });
         }
+
 
 
 
