@@ -1,0 +1,134 @@
+table.dataTable thead tr th {
+    border: 1px solid black
+}
+
+.dataTables_scrollBody thead tr[role="row"] {
+    visibility: collapse !important;
+}
+
+.dataTables_scrollHeaderInner table {
+    margin-bottom: 0px !important;
+}
+
+div.scroll {
+    margin: 4px, 4px;
+    padding: 4px;
+
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.pagenumbers {
+
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagenumbers button {
+    width: 50px;
+    height: 50px;
+
+    appearance: none;
+    border-radius: 5px;
+    border: 1px solid white;
+    outline: none;
+    cursor: pointer;
+
+    background-color: white;
+
+    margin: 5px;
+    transition: 0.4s;
+
+    color: black;
+    font-size: 18px;
+    text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+}
+
+.pagenumbers button:hover {
+    background-color: #013c5e;
+    color: white
+}
+
+.pagenumbers button.active {
+    background-color: #013c5e;
+    color: white;
+    box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.2);
+}
+
+.pagenumbers button.active:hover {
+    background-color: #353e44;
+    color: white;
+    box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.2);
+}
+
+.table_wrapper {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+td:first-child,
+th:first-child {
+    position: sticky;
+    left: 0;
+    background-color: white;
+}
+
+.Good {
+    background-color: green;
+    color: white;
+}
+
+.Satisfactory {
+    background-color: yellow;
+}
+
+.Excellent {
+    background-color: lightskyblue;
+}
+
+.Fair {
+    background-color: orange;
+}
+
+.Poor {
+    background-color: red
+}
+
+td:nth-child(2),
+th:nth-child(2) {
+    position: sticky;
+    left: 4.5%;
+    background-color: white;
+}
+
+
+td:nth-child(3),
+th:nth-child(3) {
+    position: sticky;
+    left: 10%;
+    background-color: white;
+}
+
+#sortByScore {
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+    font-weight: 500;
+}
+
+#sortByScore:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#sortByScore i {
+    margin-right: 5px;
+}

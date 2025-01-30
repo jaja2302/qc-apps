@@ -1,130 +1,10 @@
 <x-layout.app>
+    <link rel="stylesheet" href="{{ asset('qc_css/gudang/gudang.css') }}">
 
-
-    <style>
-        table.dataTable thead tr th {
-            border: 1px solid black
-        }
-
-        .dataTables_scrollBody thead tr[role="row"] {
-            visibility: collapse !important;
-        }
-
-        .dataTables_scrollHeaderInner table {
-            margin-bottom: 0px !important;
-        }
-
-        div.scroll {
-            margin: 4px, 4px;
-            padding: 4px;
-
-            width: 100%;
-            overflow-x: auto;
-            overflow-y: hidden;
-            white-space: nowrap;
-        }
-
-        .pagenumbers {
-
-            margin-top: 30px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .pagenumbers button {
-            width: 50px;
-            height: 50px;
-
-            appearance: none;
-            border-radius: 5px;
-            border: 1px solid white;
-            outline: none;
-            cursor: pointer;
-
-            background-color: white;
-
-            margin: 5px;
-            transition: 0.4s;
-
-            color: black;
-            font-size: 18px;
-            text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
-            box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .pagenumbers button:hover {
-            background-color: #013c5e;
-            color: white
-        }
-
-        .pagenumbers button.active {
-            background-color: #013c5e;
-            color: white;
-            box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .pagenumbers button.active:hover {
-            background-color: #353e44;
-            color: white;
-            box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .table_wrapper {
-            display: block;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-
-        td:first-child,
-        th:first-child {
-            position: sticky;
-            left: 0;
-            background-color: white;
-        }
-
-        .Good {
-            background-color: green;
-            color: white;
-        }
-
-        .Satisfactory {
-            background-color: yellow;
-        }
-
-        .Excellent {
-            background-color: lightskyblue;
-        }
-
-        .Fair {
-            background-color: orange;
-        }
-
-        .Poor {
-            background-color: red
-        }
-
-        td:nth-child(2),
-        th:nth-child(2) {
-            position: sticky;
-            left: 4.5%;
-            background-color: white;
-        }
-
-
-        td:nth-child(3),
-        th:nth-child(3) {
-            position: sticky;
-            left: 10%;
-            background-color: white;
-        }
-    </style>
     <div class="container-fluid">
         <section class="content">
             <br>
-            <div class="row">
-
+            <div class="row align-items-center">
                 <div class="col-md-2 col-12">
                     {{csrf_field()}}
                     <select name="" class="form-control" id="regionalData">
@@ -141,10 +21,14 @@
                         @endforeach
                     </select>
                 </div>
+                <div class="col-md-2 col-12">
+                    <button id="sortByScore" class="btn btn-primary w-100">
+                        <i class="fas fa-sort-amount-down"></i> Sort by Rank
+                    </button>
+                </div>
                 <div class="col-md-3 col-12">
                     @if (can_edit())
-
-                    <a href="{{ route('listktu') }}" class="btn btn-success mr-2">List KTU</a>
+                    <a href="{{ route('listktu') }}" class="btn btn-success">List KTU</a>
                     @endif
                 </div>
             </div>
@@ -169,18 +53,14 @@
 
     <script type="module">
         var lokasiKerja = "{{ session('lok') }}";
-        // console.log(lokasiKerja);
         if (lokasiKerja == 'Regional II' || lokasiKerja == 'Regional 2') {
             $('#regionalData').val('2');
-
         } else if (lokasiKerja == 'Regional III' || lokasiKerja == 'Regional 3') {
             $('#regionalData').val('3');
-
         } else if (lokasiKerja == 'Regional IV' || lokasiKerja == 'Regional 4') {
             $('#regionalData').val('4');
-
         }
-        // Declare year and regional variables before using them
+
         var year, regional;
 
         $(document).ready(function() {
@@ -188,24 +68,57 @@
             regional = $('#regionalData option:selected').val();
 
             getData(year, regional);
+
+            $('#sortByScore').click(function() {
+                sortTableByScore();
+            });
+
+            $('#sortByMonth').click(function() {
+                sortTableByMonth();
+            });
         });
-
-
 
         $('#regionalData').change(function() {
             regional = $(this).val();
             year = $('#yearData option:selected').val();
-
-            getData(year, regional)
+            getData(year, regional);
         });
 
         $('#yearData').change(function() {
             year = $(this).val();
             regional = $('#regionalData option:selected').val();
-
-            getData(year, regional)
+            getData(year, regional);
         });
 
+        function sortTableByScore() {
+            var table = $('#tableData');
+            var tbody = table.find('tbody');
+            var rows = tbody.find('tr').toArray();
+
+            rows.sort(function(a, b) {
+                var rankA = parseInt($(a).find('td:last').text()) || 0;
+                var rankB = parseInt($(b).find('td:last').text()) || 0;
+                return rankA - rankB; // Sort by rank (low to high since rank 1 is best)
+            });
+
+            tbody.empty();
+            tbody.append(rows);
+        }
+
+        function sortTableByMonth() {
+            var table = $('#tableData');
+            var tbody = table.find('tbody');
+            var rows = tbody.find('tr').toArray();
+
+            rows.sort(function(a, b) {
+                var rankA = parseInt($(a).find('td:last').text()) || 0;
+                var rankB = parseInt($(b).find('td:last').text()) || 0;
+                return rankA - rankB; // Sort by rank (low to high)
+            });
+
+            tbody.empty();
+            tbody.append(rows);
+        }
 
         function getData(year, regional) {
 

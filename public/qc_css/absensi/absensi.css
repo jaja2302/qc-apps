@@ -1,0 +1,51 @@
+.table-container {
+    max-height: auto;
+    overflow-y: auto;
+}
+
+.large-text {
+    font-size: 15px;
+}
+
+
+td:first-child {
+    min-width: 150px;
+}
+
+td:nth-child(2) {
+    min-width: 5px;
+}
+
+.label-blok {
+    background-color: transparent;
+    /* Set the background color to transparent */
+    color: white;
+    /* Set the text color to white */
+    border: none;
+    /* Remove any border */
+    font-size: 12px;
+    /* Adjust the font size as needed */
+    text-align: center;
+    width: auto;
+    padding: 0;
+    /* Adjust padding as needed */
+}
+
+/* Sticky styles for the first th and td */
+th:first-child,
+td:first-child {
+    position: sticky;
+    left: 0;
+    background-color: #fff;
+    /* Set the background color to match the table background */
+    z-index: 1;
+    /* Give a lower stack order to keep them behind other elements */
+}
+
+/* Other th and td styles */
+th,
+td {
+    position: sticky;
+    background-color: #fff;
+}
+

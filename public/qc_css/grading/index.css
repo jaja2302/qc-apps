@@ -1,0 +1,40 @@
+.table {
+    table-layout: auto;
+    /* Allow the table to adjust based on content */
+    width: 100%;
+    /* Ensure the table takes up the full available width */
+}
+
+/* th,
+td {
+    white-space: nowrap;
+} */
+
+th,
+td {
+    word-wrap: break-word;
+    /* Breaks long text into multiple lines */
+}
+
+th {
+    text-align: center;
+    /* Center align the headers */
+}
+
+td {
+    padding: 5px;
+    /* Add some padding for better readability */
+}
+
+/* td:nth-child(3),
+th:nth-child(3) {
+    width: auto;
+    color: red;
+    min-width: 150px;
+} */
+
+td.no-polisi,
+th.no-polisi {
+    width: auto;
+    min-width: 150px;
+}

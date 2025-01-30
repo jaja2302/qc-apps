@@ -1,5 +1,5 @@
 <x-layout.app>
-  <link rel="stylesheet" href="{{ asset('qc_css/tph.css') }}">
+  <link rel="stylesheet" href="{{ asset('qc_css/tph/tph.css') }}">
   <div class="container-fluid">
 
     <section class="content"><br>
