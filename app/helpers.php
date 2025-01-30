@@ -12997,14 +12997,21 @@ if (!function_exists('getdatamildetailpertanggal')) {
 }
 
 if (!function_exists('rekap_estate_mill_perbulan_perhari')) {
-    function rekap_estate_mill_perbulan_perhari($bulan, $reg, $mill)
+    function rekap_estate_mill_perbulan_perhari($bulan, $reg, $mill, $type = null)
     {
         $calculationService = new \App\Services\CalculationGrading();
 
-        $type = 'perhari';
+        // $type = 'perbulan';
 
 
         $result = $calculationService->getGradingData($bulan, $reg, $type, $mill);
+
+        if ($type == 'perbulan') {
+            return [
+                'status' => 'success',
+                'result' => $result,
+            ];
+        }
 
         // dd($result);
         $Total_est = [];

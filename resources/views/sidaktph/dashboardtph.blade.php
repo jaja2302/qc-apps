@@ -1,16 +1,8 @@
 <x-layout.app>
-  <style>
-    th,
-    td {
-      border: 1px solid black;
-      text-align: center;
-      padding: 8px;
-    }
-  </style>
+  <link rel="stylesheet" href="{{ asset('qc_css/tph.css') }}">
   <div class="container-fluid">
 
     <section class="content"><br>
-
       <div class="card table_wrapper">
         <nav>
           <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -45,28 +37,6 @@
               </div>
               <button class="btn btn-primary mb-3 ml-3" id="btnShowMonth">Show</button>
             </div>
-
-            <style>
-              /* Add button styles */
-              button {
-                background-color: #4CAF50;
-                border: none;
-                color: white;
-                padding: 8px 16px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                font-size: 16px;
-                margin: 4px 2px;
-                cursor: pointer;
-                transition-duration: 0.4s;
-              }
-
-              /* Add hover effect */
-              button:hover {
-                background-color: #45a049;
-              }
-            </style>
             <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 ">
               <button id="sort-est-btn">sort by Afd</button>
               <button id="sort-rank-btn">Sort by Rank</button>
@@ -251,271 +221,6 @@
               </div>
             </div>
 
-            <p class="ml-3 mb-3 mr-3">
-              <button style="width: 100%" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#showByWeek" aria-expanded="false" aria-controls="showByWeek">
-                TAMPILKAN PER MINGGU
-              </button>
-            </p>
-
-            <div class="collapse" id="showByWeek">
-              <div class="d-flex justify-content-center ml-3 mr-3 border border-dark">
-                <h5><b>REKAPITULASI RANKING NILAI SIDAK PEMERIKSAAN TPH</b></h5>
-              </div>
-              <style>
-                /* Custom button height */
-                .custom-btn-height {
-                  height: calc(1.5em + .75rem + 2px);
-                  /* Adjust this value according to your desired height */
-                }
-
-                /* CSS for mobile view */
-                @media (max-width: 767.98px) {
-                  .mobile-view .form-container {
-                    margin-bottom: 10px;
-                  }
-                }
-              </style>
-
-              <div class="d-flex justify-content-end mt-3 mb-2 ml-3 mr-3" style="padding-top: 20px;">
-                <div class="row w-100 mobile-view">
-                  <div class="col-lg-2 col-md-4 col-sm-6 col-6 offset-lg-8 offset-md-4 offset-sm-0 offset-3 form-container">
-                    {{csrf_field()}}
-                    <select class="form-control" name="regionalSidak" id="regionalSidak">
-                      @foreach($option_reg as $key => $item)
-                      <option value="{{ $item['id'] }}">{{ $item['nama'] }}</option>
-                      @endforeach
-                    </select>
-                  </div>
-
-                  <div class="col-lg-2 col-md-4 col-sm-6 col-6 form-container">
-                    {{ csrf_field() }}
-                    <input class="form-control" type="week" name="dateWeek" id="dateWeek" value="{{ date('Y') . '-W' . date('W') }}">
-                  </div>
-                </div>
-                <button class="btn btn-primary mb-3 ml-3 custom-btn-height" id="btnShow">Show</button>
-                <button class="btn btn-primary mb-3 ml-3 custom-btn-height" id="btnExport"><i class="fa fa-file-pdf"></i> Download PDF</button>
-                <input class="form-control" type="hidden" id="startWeek" name="start" value="">
-                <input class="form-control" type="hidden" id="lastWeek" name="last" value="">
-                <input class="form-control" type="hidden" id="regional" name="regional" value="">
-              </div>
-
-
-
-
-              <style>
-                @media (min-width: 992px) {
-                  .d-flex.flex-row-reverse .col-2 {
-                    flex: 0 0 16.66667%;
-                    max-width: 16.66667%;
-                    float: right;
-                  }
-                }
-              </style>
-              <div class="d-flex justify-content-center mt-3 mb-2 ml-3 mr-3 ">
-                <button id="sort-afd-btnWeek">sort by Afd</button>
-                <button id="sort-est-btnWeek">Sort by Rank</button>
-              </div>
-              <div id="tablesContainer">
-                <div class="tabContainer">
-                  <div class="ml-3 mr-3">
-                    <div class="row justify-content-center">
-                      <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="classOne">
-                        <div class="table-responsive">
-                          <table class=" table table-bordered" style="font-size: 13px" id="table1">
-                            <thead>
-                              <tr bgcolor="yellow">
-                                <th colspan="5" id="thWilOne">WILAYAH I</th>
-                              </tr>
-                              <tr bgcolor="#2044a4" style="color: white">
-                                <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
-                                <th rowspan="2" style="vertical-align: middle;">AFD</th>
-                                <th rowspan="2" style="text-align:center; vertical-align: middle;">Nama</th>
-                                <th colspan="2" class="text-center">Todate</th>
-                              </tr>
-                              <tr bgcolor="#1D43A2" style="color: white">
-                                <th>Score</th>
-                                <th>Rank</th>
-                              </tr>
-                            </thead>
-                            <tbody id="tbody1">
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                      <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="classTwo">
-                        <div class="table-responsive">
-                          <table class=" table table-bordered" style="font-size: 13px" id="table1">
-                            <thead>
-                              <tr bgcolor="yellow">
-                                <th colspan="5" id="thWilTwo">WILAYAH II</th>
-                              </tr>
-                              <tr bgcolor="#2044a4" style="color: white">
-                                <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
-                                <th rowspan="2" style="vertical-align: middle;">AFD</th>
-                                <th rowspan="2" style="text-align:center; vertical-align: middle;">Nama</th>
-                                <th colspan="2" class="text-center">Todate</th>
-                              </tr>
-                              <tr bgcolor="#1D43A2" style="color: white">
-                                <th>Score</th>
-                                <th>Rank</th>
-                              </tr>
-                            </thead>
-                            <tbody id="tbody2">
-
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                      <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="classThree">
-                        <div class="table-responsive">
-                          <table class="table table-bordered" style="font-size: 13px" id="Reg3">
-                            <thead>
-                              <tr bgcolor="yellow">
-                                <th colspan="5" id="thWilThree">WILAYAH III</th>
-                              </tr>
-                              <tr bgcolor="#2044a4" style="color: white">
-                                <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
-                                <th rowspan="2" style="vertical-align: middle;">AFD</th>
-                                <th rowspan="2" style="text-align:center; vertical-align: middle;">Nama</th>
-                                <th colspan="2" class="text-center">Todate</th>
-                              </tr>
-                              <tr bgcolor="#1D43A2" style="color: white">
-                                <th>Score</th>
-                                <th>Rank</th>
-                              </tr>
-                            </thead>
-                            <tbody id="tbody3">
-
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                      <div class="col-12 col-md-6 col-lg-3" data-regional="1" id="classFour">
-                        <div class="table-responsive">
-                          <table class="table table-bordered" style="font-size: 13px" id="plasmaID">
-                            <thead>
-                              <tr bgcolor="yellow">
-                                <th colspan="5" id="thwillPlas">PLASMAa</th>
-                              </tr>
-                              <tr bgcolor="#2044a4" style="color: white">
-                                <th rowspan="2" class="text-center" style="vertical-align: middle;">KEBUN</th>
-                                <th rowspan="2" style="vertical-align: middle;">AFD</th>
-                                <th rowspan="2" style="text-align:center; vertical-align: middle;">Nama</th>
-                                <th colspan="2" class="text-center">Todate</th>
-                              </tr>
-                              <tr bgcolor="#1D43A2" style="color: white">
-                                <th>Score</th>
-                                <th>Rank</th>
-                              </tr>
-                            </thead>
-                            <tbody id="plasma">
-
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-
-              <div class="col-sm-12">
-                <table class="table table-bordered">
-                  <thead id="tbodySkorRH">
-                  </thead>
-                </table>
-              </div>
-
-
-              <div id="accordion" class="ml-3 mr-3">
-                <div class="card">
-                  <button class="btn btn-secondary text-uppercase" style="width: 100%;" data-toggle="collapse" data-target="#graphEstWeek" aria-expanded="false" aria-controls="graphEstWeek">
-                    Grafik Sidak TPH berdasarkan Estate
-                  </button>
-                  <div id="graphEstWeek" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col-sm-6">
-                          <div class="card">
-                            <div class="card-body">
-                              <p style="font-size: 15px; text-align: center;" class="text-uppercase">
-                                <b>Brondolan Tinggal</b>
-                              </p>
-                              <div id="bttinggal"></div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-sm-6">
-                          <div class="card">
-                            <div class="card-body">
-                              <p style="font-size: 15px; text-align: center;" class="text-uppercase"><b>
-                                  Buah Tinggal
-                                </b>
-                              <div id="karung"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div id="accordion" class="ml-3 mr-3">
-                <div class="card">
-                  <button class="btn btn-secondary text-uppercase" style="width: 100%;" data-toggle="collapse" data-target="#graphWilWeek" aria-expanded="false" aria-controls="graphWilWeek">
-                    Grafik Sidak TPH berdasarkan Wilayah
-                  </button>
-                  <div id="graphWilWeek" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col-sm-6">
-                          <div class="card">
-                            <div class="card-body">
-                              <p style="font-size: 15px; text-align: center;" class="text-uppercase">
-                                <b>Brondolan Tinggal (Brondol / Blok)</b>
-                              </p>
-                              <div id="btt_id"></div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-sm-6">
-                          <div class="card">
-                            <div class="card-body">
-                              <p style="font-size: 15px; text-align: center;" class="text-uppercase"><b>Karung
-                                  Berisi Brondolan (Karung / Blok)</b>
-                              <div id="karung_id"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-sm-6">
-                          <div class="card">
-                            <div class="card-body">
-                              <p style="font-size: 15px; text-align: center;" class="text-uppercase"><b>Buah
-                                  Tinggal (Janjang / Blok)</b>
-                              </p>
-                              <div id="bttTglTph_id"></div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-sm-6">
-                          <div class="card">
-                            <div class="card-body">
-                              <p style="font-size: 15px; text-align: center;" class="text-uppercase"><b>Restan
-                                  Tidak Dilaporkan (Janjang / Blok)</b>
-                              <div id="rst_none_id"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
 
           <div class="tab-pane fade" id="nav-data" role="tabpanel" aria-labelledby="nav-data-tab">
@@ -1364,34 +1069,6 @@
             <div class="d-flex justify-content-center mb-3 ml-3 mr-3 border border-dark text-uppercase">
               <h5><b>GRAFIK REKAPITULASI SIDAK PEMERIKSAAN TPH</b></h5>
             </div>
-
-            <style>
-              /* CSS for mobile view */
-              @media (max-width: 767.98px) {
-                .mobile-view {
-                  display: flex;
-                  flex-wrap: nowrap;
-                  justify-content: flex-end;
-                }
-
-                .mobile-view .form-container {
-                  flex: 1;
-                  max-width: calc(100% - 90px);
-                }
-
-                .mobile-view .form-control {
-                  width: 100%;
-                  box-sizing: border-box;
-                  margin-left: 10px;
-                }
-
-                .mobile-view .btn {
-                  width: 80px;
-                  margin-left: 10px;
-                }
-              }
-            </style>
-
             <div class="d-flex flex-row-reverse mr-2 mobile-view">
               <button class="btn btn-primary mb-3 mr-2" style="float: right" id="showGraphYear">Show</button>
               <div class="form-container mr-2">
@@ -1651,21 +1328,6 @@
         }
       };
 
-      //render chart perestate temporary/ 0 value
-      var renderChartTph = new ApexCharts(document.querySelector("#bttinggal"), options);
-      renderChartTph.render();
-
-      var renderChartKarung = new ApexCharts(document.querySelector("#karung"), options);
-      renderChartKarung.render();
-
-
-      //render chart perwilayah temporary /0 value
-      var will_btt = new ApexCharts(document.querySelector("#btt_id"), will);
-      will_btt.render();
-
-      var renderChartKarungWil = new ApexCharts(document.querySelector("#karung_id"), will);
-      renderChartKarungWil.render();
-
 
       // Render Chart Month
       var renderChartTphMonth = new ApexCharts(document.querySelector("#bttinggalMonth"), options);
@@ -1689,22 +1351,22 @@
       var lokasiKerja = "{{ session('lok') }}";
       // console.log(lokasiKerja);
       if (lokasiKerja == 'Regional II' || lokasiKerja == 'Regional 2') {
-        $('#regionalSidak').val('2');
+        // $('#regionalSidak').val('2');
         $('#regionalSidakMonth').val('2');
         $('#regionalSidakYear').val('2');
         $('#regDataTph').val('2');
       } else if (lokasiKerja == 'Regional III' || lokasiKerja == 'Regional 3') {
-        $('#regionalSidak').val('3');
+        // $('#regionalSidak').val('3');
         $('#regionalSidakMonth').val('3');
         $('#regionalSidakYear').val('3');
         $('#regDataTph').val('3');
       } else if (lokasiKerja == 'Regional IV' || lokasiKerja == 'Regional 4') {
-        $('#regionalSidak').val('4');
+        // $('#regionalSidak').val('4');
         $('#regionalSidakMonth').val('4');
         $('#regionalSidakYear').val('4');
         $('#regDataTph').val('4');
       }
-      getDataTph()
+      // getDataTph()
       getDataTphMonth()
       getDataTphYear()
       changeData()
@@ -3853,96 +3515,6 @@
 
 
 
-      function changeClass() {
-        var regSidak = document.getElementById('regionalSidak').value
-
-        const element1 = document.getElementById('classOne');
-        const element2 = document.getElementById('classTwo');
-        const element3 = document.getElementById('classThree');
-        const element4 = document.getElementById('classFour');
-        const thElement1 = document.getElementById('thWilOne');
-        const thElement2 = document.getElementById('thWilTwo');
-        const thElement3 = document.getElementById('thWilThree');
-        const thElement4 = document.getElementById('thwillPlas');
-        if (regSidak == '3') {
-          element1.style.display = "";
-          element2.style.display = "";
-          element3.style.display = "none";
-          element4.style.display = "none";
-          thElement1.textContent = 'WILAYAH VII';
-          thElement2.textContent = 'WILAYAH VIII';
-          thElement4.textContent = 'Plasma3';
-          thElement1.classList.add("text-center");
-          thElement2.classList.add("text-center");
-          thElement3.classList.add("text-center");
-          thElement4.classList.add("text-center");
-          element1.classList.remove("col-md-6", "col-lg-3", "col-lg-6");
-          element1.classList.add("col-md-6", "col-lg-6");
-          element2.classList.remove("col-md-6", "col-lg-3", "col-lg-6");
-          element2.classList.add("col-md-6", "col-lg-6");
-
-        } else if (regSidak === '1') {
-          element1.style.display = "";
-          element2.style.display = "";
-          element3.style.display = "";
-          element4.style.display = "none";
-          thElement1.textContent = 'WILAYAH I';
-          thElement2.textContent = 'WILAYAH II';
-          thElement3.textContent = 'WILAYAH III';
-
-          thElement1.classList.add("text-center");
-          thElement2.classList.add("text-center");
-          thElement3.classList.add("text-center");
-          thElement4.classList.add("text-center");
-          element1.classList.remove("col-md-6", "col-lg-4", "col-lg-6");
-          element1.classList.add("col-md-4", "col-lg-4");
-          element2.classList.remove("col-md-6", "col-lg-4", "col-lg-6");
-          element2.classList.add("col-md-4", "col-lg-4");
-          element3.classList.remove("col-md-6", "col-lg-4");
-          element3.classList.add("col-md-4", "col-lg-4");
-
-        } else if (regSidak === '2') {
-          element1.style.display = "";
-          element2.style.display = "";
-          element3.style.display = "";
-          element4.style.display = "none";
-          thElement1.textContent = 'WILAYAH IV';
-          thElement2.textContent = 'WILAYAH V';
-          thElement3.textContent = 'WILAYAH VI';
-          thElement4.textContent = 'Plasma2';
-          thElement1.classList.add("text-center");
-          thElement2.classList.add("text-center");
-          thElement3.classList.add("text-center");
-          thElement4.classList.add("text-center");
-          element1.classList.remove("col-md-6", "col-lg-4", "col-lg-6");
-          element1.classList.add("col-md-6", "col-lg-4");
-          element2.classList.remove("col-md-6", "col-lg-4", "col-lg-6");
-          element2.classList.add("col-md-6", "col-lg-4");
-          element3.classList.remove("col-md-6", "col-lg-4");
-          element3.classList.add("col-md-6", "col-lg-4");
-
-        } else if (regSidak === '4') {
-          element1.style.display = "";
-          element2.style.display = "";
-          element3.style.display = "none";
-          element4.style.display = "none";
-          thElement1.textContent = 'WILAYAH Inti';
-          thElement2.textContent = 'WILAYAH Plasma';
-          // thElement3.textContent = 'WILAYAH VI';
-          // thElement4.textContent = 'Plasma2';
-          thElement1.classList.add("text-center");
-          thElement2.classList.add("text-center");
-          // thElement3.classList.add("text-center");
-          // thElement4.classList.add("text-center");
-          element1.classList.remove("col-md-6", "col-lg-4", "col-lg-6");
-          element1.classList.add("col-md-6", "col-lg-6");
-          element2.classList.remove("col-md-6", "col-lg-4", "col-lg-6");
-          element2.classList.add("col-md-6", "col-lg-6");
-
-        }
-      }
-
-
       function changeClassMonth() {
         var regSidak = document.getElementById('regionalSidakMonth').value
         const element1 = document.getElementById('table1Month');
@@ -4116,309 +3688,6 @@
       }
 
 
-      document.getElementById('btnExport').onclick = function() {
-        var _token = $('input[name="_token"]').val();
-        var weekData = document.getElementById('dateWeek').value;
-        var regional = document.getElementById('regionalSidak').value;
-        const week = weekData.substring(6, 8);
-        const year = weekData.substring(0, 4);
-        const month = moment(document.getElementById('dateWeek').value).subtract(-6, 'days').format("M");
-        const url = 'https://mobilepro.srs-ssms.com/storage/app/public/pdf/sidak_tph/STPH-' + year + '-0' + month + '-Week' + week + '-Reg1.pdf';
-        const phpUrl = 'https://srs-ssms.com/sidak_tph/render_chart.php?regional=' + encodeURIComponent(regional);
-        const pdf = 'https://srs-ssms.com/sidak_tph/generate_pdf_sidak_tph.php?regional=' + encodeURIComponent(regional);
-
-        // AJAX request to your PHP script
-        $.ajax({
-          url: phpUrl,
-          method: "GET",
-          success: function(result) {
-            console.log(result);
-          }
-        });
-
-        // AJAX request to generate PDF
-        $.ajax({
-          url: pdf,
-          method: "GET",
-          success: function(result) {
-            console.log(result);
-
-            // Then you can make another AJAX request to download the PDF
-            $.ajax({
-              url: "{{ route('downloadPDF') }}",
-              method: "POST",
-              data: {
-                url: url,
-                _token: _token
-              },
-              success: function(result) {
-                var parseResult = JSON.parse(result);
-                if (parseResult['status'] == 200) {
-                  window.open(parseResult['url'], '_blank');
-                } else {
-                  alert('FILE PDF BELUM TERSEDIA!');
-                }
-              }
-            });
-          }
-        });
-      }
-
-
-
-      function getDataTph() {
-
-        changeClass()
-        var firstWeek = ''
-        var lastWeek = ''
-        var _token = $('input[name="_token"]').val();
-        var weekData = document.getElementById('dateWeek').value
-        var regSidak = document.getElementById('regionalSidak').value
-        const year = weekData.substring(0, 4);
-        const week = weekData.substring(6, 8);
-        const date = new Date(year, 0, 1);
-        const date2 = new Date(year, 0, 1);
-        var getDateFirst = date.setDate(date.getDate() + (week - 1) * 7);
-        var getDateLast = date.setDate(date2.getDate() + (week - 1) * 7);
-        // first week
-        var getDateFirst = new Date(getDateFirst)
-        var convertFirstWeek = getDateFirst.setDate(getDateFirst.getDate() + 2)
-        //mengubah data dari Mon Jan 16 2023 00:00:00 GMT+0700 (Western Indonesia Time) convert javascript to YYYY/MM/DD
-        //ke format Tahun/bulan/hari
-        var firstWeekCon = new Date(convertFirstWeek);
-        let firstWeekData = JSON.stringify(firstWeekCon)
-        firstWeek = firstWeekData.slice(1, 11)
-        //last week
-        var getDateLast = new Date(getDateLast)
-        var convertLastWeek = getDateLast.setDate(getDateLast.getDate() + 8)
-        //mengubah data dari Mon Jan 16 2023 00:00:00 GMT+0700 (Western Indonesia Time) convert javascript to YYYY/MM/DD
-        //ke format Tahun/bulan/hari
-        var lastWeekCon = new Date(convertLastWeek);
-        let lastWeekData = JSON.stringify(lastWeekCon)
-        lastWeek = lastWeekData.slice(1, 11)
-
-        $.ajax({
-          url: "{{ route('getBtTph') }}",
-          method: "get",
-          data: {
-            start: firstWeek,
-            finish: lastWeek,
-            reg: regSidak,
-            _token: _token
-          },
-          success: function(result) {
-            Swal.close();
-            //parsing result ke json untuk dalam estate
-            var parseResult = JSON.parse(result)
-            var rekapafd = Object.entries(parseResult['rekapafd'])
-            var rekapmua = parseResult['rekapmua']
-            let table1 = rekapafd[0]
-            let table2 = rekapafd[1]
-            let table3 = rekapafd[2]
-            var listest = parseResult['listest']
-            var brdchart = parseResult['brdchart']
-            var chartrst = parseResult['chartrst']
-            // $('#tbody1').empty()
-            // $('#tbody2').empty()
-            // $('#tbody3').empty()
-
-            renderChartTph.updateSeries([{
-              name: 'Brondolan Tinggal',
-              data: brdchart
-            }]);
-
-            // If ktg is an array, you can use it for x-axis categories
-            renderChartTph.updateOptions({
-              xaxis: {
-                categories: listest
-              }
-            });
-            renderChartKarung.updateSeries([{
-              name: 'Buah Tinggal',
-              data: chartrst
-            }]);
-
-            // If ktg is an array, you can use it for x-axis categories
-            renderChartKarung.updateOptions({
-              xaxis: {
-                categories: listest
-              }
-            });
-
-
-            var trekap1 = document.getElementById('tbody1');
-            Object.keys(table1[1]).forEach(key => {
-              Object.keys(table1[1][key]).forEach(subKey => {
-                let item1 = table1[1][key][subKey]['est'];
-                let item2 = table1[1][key][subKey]['afd'];
-                let item3 = table1[1][key][subKey]['nama']
-                let item4 = table1[1][key][subKey]['total_score'];
-                // item4 = (item4 < 0) ? 0 : item4;
-                let item5 = table1[1][key][subKey]['rank'] ?? '-';
-
-
-                // Create table row and cell for each 'total' value
-                let tr = document.createElement('tr');
-                let itemElement1 = document.createElement('td');
-                let itemElement2 = document.createElement('td');
-                let itemElement3 = document.createElement('td');
-                let itemElement4 = document.createElement('td');
-                let itemElement5 = document.createElement('td');
-
-
-
-                itemElement1.classList.add("text-center");
-                itemElement1.innerText = item1;
-                itemElement2.innerText = item2;
-                itemElement3.innerText = item3;
-                itemElement4.innerText = item4;
-                itemElement5.innerText = item5
-
-                setBackgroundColor(itemElement4, item4);
-                if (item2 === 'EM') {
-                  tr.style.backgroundColor = '#E8ECDC';
-
-                }
-
-                tr.appendChild(itemElement1)
-                tr.appendChild(itemElement2)
-                tr.appendChild(itemElement3)
-                tr.appendChild(itemElement4)
-                tr.appendChild(itemElement5)
-                trekap1.appendChild(tr);
-              });
-            });
-
-            var trekap2 = document.getElementById('tbody2');
-            Object.keys(table2[1]).forEach(key => {
-              Object.keys(table2[1][key]).forEach(subKey => {
-                let item1 = table2[1][key][subKey]['est'];
-                let item2 = table2[1][key][subKey]['afd'];
-                let item3 = table2[1][key][subKey]['nama']
-                let item4 = table2[1][key][subKey]['total_score'];
-                // item4 = (item4 < 0) ? 0 : item4;
-                let item5 = table2[1][key][subKey]['rank'] ?? '-';
-
-
-                // Create table row and cell for each 'total' value
-                let tr = document.createElement('tr');
-                let itemElement1 = document.createElement('td');
-                let itemElement2 = document.createElement('td');
-                let itemElement3 = document.createElement('td');
-                let itemElement4 = document.createElement('td');
-                let itemElement5 = document.createElement('td');
-
-
-
-                itemElement1.classList.add("text-center");
-                itemElement1.innerText = item1;
-                itemElement2.innerText = item2;
-                itemElement3.innerText = item3;
-                itemElement4.innerText = item4;
-                itemElement5.innerText = item5
-
-                setBackgroundColor(itemElement4, item4);
-                if (item2 === 'EM') {
-                  tr.style.backgroundColor = '#E8ECDC';
-
-                }
-
-                tr.appendChild(itemElement1)
-                tr.appendChild(itemElement2)
-                tr.appendChild(itemElement3)
-                tr.appendChild(itemElement4)
-                tr.appendChild(itemElement5)
-                trekap2.appendChild(tr);
-              });
-            });
-
-            var trekap3 = document.getElementById('tbody3');
-            Object.keys(table3[1]).forEach(key => {
-              Object.keys(table3[1][key]).forEach(subKey => {
-                let item1 = table3[1][key][subKey]['est'];
-                let item2 = table3[1][key][subKey]['afd'];
-                let item3 = table3[1][key][subKey]['nama']
-                let item4 = table3[1][key][subKey]['total_score'];
-                // item4 = (item4 < 0) ? 0 : item4;
-                let item5 = table3[1][key][subKey]['rank'] ?? '-';
-
-
-                // Create table row and cell for each 'total' value
-                let tr = document.createElement('tr');
-                let itemElement1 = document.createElement('td');
-                let itemElement2 = document.createElement('td');
-                let itemElement3 = document.createElement('td');
-                let itemElement4 = document.createElement('td');
-                let itemElement5 = document.createElement('td');
-
-
-
-                itemElement1.classList.add("text-center");
-                itemElement1.innerText = item1;
-                itemElement2.innerText = item2;
-                itemElement3.innerText = item3;
-                itemElement4.innerText = item4;
-                itemElement5.innerText = item5
-
-                setBackgroundColor(itemElement4, item4);
-                if (item2 === 'EM') {
-                  tr.style.backgroundColor = '#E8ECDC';
-
-                }
-
-                tr.appendChild(itemElement1)
-                tr.appendChild(itemElement2)
-                tr.appendChild(itemElement3)
-                tr.appendChild(itemElement4)
-                tr.appendChild(itemElement5)
-                trekap3.appendChild(tr);
-              });
-            });
-            Object.entries(rekapmua).forEach(([key, value]) => {
-              let tr = document.createElement('tr');
-
-              let itemElement1 = document.createElement('td');
-              let itemElement2 = document.createElement('td');
-              let itemElement3 = document.createElement('td');
-              let itemElement4 = document.createElement('td');
-              let itemElement5 = document.createElement('td');
-              itemElement1.classList.add("text-center")
-              itemElement2.classList.add("text-center")
-              itemElement3.classList.add("text-center")
-              itemElement4.classList.add("text-center")
-              itemElement5.classList.add("text-center")
-              itemElement1.innerText = key;
-              itemElement2.innerText = key;
-              itemElement3.innerText = value['asisten'];
-              itemElement4.innerText = value['score_estate'];
-              itemElement5.innerText = '-'
-
-              setBackgroundColor(itemElement4, value['score_estate']);
-              if (key === 'PT.MUA') {
-                tr.style.backgroundColor = '#E8ECDC';
-
-              }
-              tr.appendChild(itemElement1);
-              tr.appendChild(itemElement2);
-              tr.appendChild(itemElement3);
-              tr.appendChild(itemElement4);
-              tr.appendChild(itemElement5);
-
-              trekap3.appendChild(tr);
-            });
-
-          },
-          error: function(xhr, status, error) {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Error Mengambil Data.',
-            });
-            console.error(xhr.responseText);
-          }
-        })
-      }
-
       function getDataTphMonth() {
         changeClassMonth()
         var _token = $('input[name="_token"]').val();
@@ -4461,11 +3730,6 @@
             let table1_wil = rekap_per_wil[1] ?? rekap_per_wil[4] ?? rekap_per_wil[7] ?? rekap_per_wil[10]
             let table2_wil = rekap_per_wil[2] ?? rekap_per_wil[5] ?? rekap_per_wil[8] ?? rekap_per_wil[11]
             let table3_wil = rekap_per_wil[3] ?? rekap_per_wil[6] ?? []
-            TableForWilReg(table1_wil, tbody1);
-            TableForWilReg(table2_wil, tbody2);
-            TableForWilReg(table3_wil, tbody3);
-            let theadreg = document.getElementById('tbodySkorRHMonth');
-            TableForWilReg(rekap_per_reg, theadreg);
 
             // charto anone 
             let list_estate = [];
@@ -4545,6 +3809,26 @@
                 categories: list_wil
               }
             });
+
+
+
+
+
+            if (table1_wil && table1_wil.length > 0) {
+              TableForWilReg(table1_wil, tbody1);
+            }
+
+            if (table2_wil && table2_wil.length > 0) {
+              TableForWilReg(table2_wil, tbody2);
+            }
+            if (table3_wil && table3_wil.length > 0) {
+              TableForWilReg(table3_wil, tbody3);
+            }
+            let theadreg = document.getElementById('tbodySkorRHMonth');
+            if (rekap_per_reg && rekap_per_reg.length > 0) {
+              TableForWilReg(rekap_per_reg, theadreg);
+            }
+
 
           },
           error: function(xhr, status, error) {
@@ -4951,7 +4235,7 @@
 
 
     document.addEventListener('DOMContentLoaded', function() {
-      const estBtn = document.getElementById('sort-est-btn');
+      // const estBtn = document.getElementById('sort-est-btn');
       const rankBtn = document.getElementById('sort-rank-btn');
       const showBtn = document.getElementById('btnShowMonth');
       const regionalSelect = document.getElementById('regionalSidakMonth');
@@ -4960,21 +4244,21 @@
 
       let firstClick = true; // Add a flag to indicate the first click
 
-      estBtn.addEventListener('click', () => {
-        if (firstClick) {
-          showBtn.click();
-          firstClick = false; // Set the flag to false after the first click
-        }
-        handleSort('est');
-      });
-      rankBtn.addEventListener('click', () => {
-        if (firstClick) {
-          showBtn.click();
-          firstClick = false; // Set the flag to false after the first click
-        }
-        handleSort('rank');
-      });
-      showBtn.addEventListener('click', handleShow);
+      // estBtn.addEventListener('click', () => {
+      //   if (firstClick) {
+      //     showBtn.click();
+      //     firstClick = false; // Set the flag to false after the first click
+      //   }
+      //   handleSort('est');
+      // });
+      // rankBtn.addEventListener('click', () => {
+      //   if (firstClick) {
+      //     showBtn.click();
+      //     firstClick = false; // Set the flag to false after the first click
+      //   }
+      //   handleSort('rank');
+      // });
+      // showBtn.addEventListener('click', handleShow);
 
       // Define the new handleShow function
       function handleShow() {
@@ -5017,30 +4301,30 @@
     });
 
     document.addEventListener('DOMContentLoaded', function() {
-      const estBtn = document.getElementById('sort-afd-btnWeek');
+      // const estBtn = document.getElementById('sort-afd-btnWeek');
       const rankBtn = document.getElementById('sort-est-btnWeek');
       const showBtn = document.getElementById('btnShow');
-      const regionalSelect = document.getElementById('regionalSidak');
+      const regionalSelect = document.getElementById('regionalSidakMonth');
 
       let currentRegion = regionalSelect.value;
 
       let firstClick = true; // Add a flag to indicate the first click
 
-      estBtn.addEventListener('click', () => {
-        if (firstClick) {
-          showBtn.click();
-          firstClick = false; // Set the flag to false after the first click
-        }
-        handleSort('est');
-      });
-      rankBtn.addEventListener('click', () => {
-        if (firstClick) {
-          showBtn.click();
-          firstClick = false; // Set the flag to false after the first click
-        }
-        handleSort('rank');
-      });
-      showBtn.addEventListener('click', handleShow);
+      // estBtn.addEventListener('click', () => {
+      //   if (firstClick) {
+      //     showBtn.click();
+      //     firstClick = false; // Set the flag to false after the first click
+      //   }
+      //   handleSort('est');
+      // });
+      // rankBtn.addEventListener('click', () => {
+      //   if (firstClick) {
+      //     showBtn.click();
+      //     firstClick = false; // Set the flag to false after the first click
+      //   }
+      //   handleSort('rank');
+      // });
+      // showBtn.addEventListener('click', handleShow);
 
       // Define the new handleShow function
       function handleShow() {

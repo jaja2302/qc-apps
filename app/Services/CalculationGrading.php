@@ -93,12 +93,17 @@ class CalculationGrading
         // dd($mill);
         $query = $this->getBaseQuery($regional, $bulan, $mill, $estate, $afdeling);
 
+        // dd($query->get());
+
         return $this->CalculationGrading($query, $bulan, $regional, $type, $mill, $estate, $afdeling);
     }
 
     private function CalculationGrading($query, $bulan, $regional, $type, $mill, $estate, $afdeling)
     {
         $data = collect($query->get());
+
+        // dd($data, $type);
+        // dd($data[0]);
         switch ($type) {
             case 'perbulan':
                 $data = $data->groupBy(['estate']);
@@ -123,7 +128,7 @@ class CalculationGrading
                     $data = $data->groupBy(['estate', 'afdeling']);
                     $data = json_decode($data, true);
                 }
-
+                // dd($data);
                 return $this->processGradingData($data, $type, $estate, $afdeling);
         }
         return $data;
@@ -154,7 +159,6 @@ class CalculationGrading
     {
         $result = [];
         foreach ($data as $keys => $values) {
-
             if ($type !== 'perbulan') {
                 $data_2 = [];
 
@@ -162,6 +166,7 @@ class CalculationGrading
                     $data_level_1 = $this->getValueData($values, $estate, $afdeling);
                     $data_arr_level_1 = $this->formula_grading($data_level_1);
                     $result[$keys] = $this->formatResult($data_arr_level_1);
+                    // dd('test1');
                 } else {
                     // dd($result, '2');
                     foreach ($values as $key => $value) {
@@ -188,7 +193,9 @@ class CalculationGrading
                     $data_arr_level_2['unit'] = $total_units;
                     $result[$keys]['Total'] = $this->formatResult($data_arr_level_2);
                 }
+                // dd('test2');
             } else {
+                // dd('test3');
                 $data_level_3 = $this->getValueData($values);
                 $data_arr_level_3 = $this->formula_grading($data_level_3);
                 $result[$keys]['data'] = $this->formatResult($data_arr_level_3);

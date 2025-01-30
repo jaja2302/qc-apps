@@ -1,0 +1,49 @@
+th,
+td {
+  border: 1px solid black;
+  text-align: center;
+  padding: 8px;
+}
+              /* Add button styles */
+              button {
+                background-color: #4CAF50;
+                border: none;
+                color: white;
+                padding: 8px 16px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+                transition-duration: 0.4s;
+              }
+
+              /* Add hover effect */
+              button:hover {
+                background-color: #45a049;
+              }
+  /* CSS for mobile view */
+  @media (max-width: 767.98px) {
+    .mobile-view {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+    }
+
+    .mobile-view .form-container {
+      flex: 1;
+      max-width: calc(100% - 90px);
+    }
+
+    .mobile-view .form-control {
+      width: 100%;
+      box-sizing: border-box;
+      margin-left: 10px;
+    }
+
+    .mobile-view .btn {
+      width: 80px;
+      margin-left: 10px;
+    }
+  }

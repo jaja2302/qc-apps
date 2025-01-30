@@ -68,7 +68,7 @@ class Gradingmill extends Component
         // dd($reg, $mill);
 
         // Your logic to show results
-        $result = rekap_estate_mill_perbulan_perhari($bulan, $reg, $mill);
+        $result = rekap_estate_mill_perbulan_perhari($bulan, $reg, $mill, 'perhari');
         // dd($result['result']);
         $this->resultdata = $result['result'];
         $this->resultdate = $result['final'];
