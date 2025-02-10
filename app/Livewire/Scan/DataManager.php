@@ -35,7 +35,7 @@ class DataManager extends Component
 
     public function scanDuplicates()
     {
-        $this->isScanning = true;
+        $this->dispatch('showLoading');
         $this->duplicateData = [];
         $this->indicationData = [];
 
@@ -66,7 +66,7 @@ class DataManager extends Component
             $qcgudangData = QcGudang::whereBetween('tanggal', $dateRange)->get();
             $this->findDuplicates($qcgudangData, 'QC Gudang');
 
-            $this->isScanning = false;
+            $this->dispatch('hideLoading');
 
             if (empty($this->duplicateData) && empty($this->indicationData)) {
                 session()->flash('message', 'Pemindaian selesai! Tidak ditemukan data duplikat.');
@@ -76,7 +76,7 @@ class DataManager extends Component
                 session()->flash('type', 'warning');
             }
         } catch (\Exception $e) {
-            $this->isScanning = false;
+            $this->dispatch('hideLoading');
             session()->flash('message', 'Gagal melakukan pemindaian: ' . $e->getMessage());
             session()->flash('type', 'error');
         }
@@ -150,16 +150,12 @@ class DataManager extends Component
     {
         if (can_edit()) {
             try {
+                $this->dispatch('showLoading');
+
                 $model = $this->getModelByType($type);
-
-                // Ambil semua data
                 $allData = $model::whereIn('id', $ids)->get();
-
-                // Simpan satu data (data pertama) dan hapus sisanya
-                // $keepData = $allData->first();
                 $dataToDelete = $allData->slice(1);
 
-                // Simpan ke history_delete untuk data yang akan dihapus
                 foreach ($dataToDelete as $data) {
                     HistoryDelete::create([
                         'tabel' => $type,
@@ -169,17 +165,21 @@ class DataManager extends Component
                     ]);
                 }
 
-                // Hapus data duplikat (kecuali data pertama)
                 $model::whereIn('id', $dataToDelete->pluck('id'))->delete();
 
-                session()->flash('message', count($dataToDelete) . ' data duplikat berhasil dihapus dari ' . $type . ', menyisakan 1 data asli!');
-                session()->flash('type', 'success');
+                $this->dispatch('hideLoading');
+                $this->dispatch('showAlert', [
+                    'type' => 'success',
+                    'message' => count($dataToDelete) . ' data duplikat berhasil dihapus dari ' . $type . ', menyisakan 1 data asli!'
+                ]);
 
-                // Refresh scan
                 $this->scanDuplicates();
             } catch (\Exception $e) {
-                session()->flash('message', 'Gagal menghapus data: ' . $e->getMessage());
-                session()->flash('type', 'error');
+                $this->dispatch('hideLoading');
+                $this->dispatch('showAlert', [
+                    'type' => 'error',
+                    'message' => 'Gagal menghapus data: ' . $e->getMessage()
+                ]);
             }
         }
     }
@@ -188,11 +188,11 @@ class DataManager extends Component
     {
         if (can_edit()) {
             try {
+                $this->dispatch('showLoading');
+
                 $model = $this->getModelByType($type);
-                // Ambil data sebelum dihapus
                 $dataToDelete = $model::find($id)->toArray();
 
-                // Simpan ke history_delete
                 HistoryDelete::create([
                     'tabel' => $type,
                     'data' => json_encode($dataToDelete),
@@ -200,40 +200,41 @@ class DataManager extends Component
                     'delete_date' => now()
                 ]);
 
-                // Hapus data
                 $model::find($id)->delete();
 
-                session()->flash('message', '1 data dari ' . $type . ' berhasil dihapus dan disimpan ke history!');
-                session()->flash('type', 'success');
+                $this->dispatch('hideLoading');
+                $this->dispatch('showAlert', [
+                    'type' => 'success',
+                    'message' => '1 data dari ' . $type . ' berhasil dihapus dan disimpan ke history!'
+                ]);
 
-                // Refresh scan
                 $this->scanDuplicates();
             } catch (\Exception $e) {
-                session()->flash('message', 'Gagal menghapus data: ' . $e->getMessage());
-                session()->flash('type', 'error');
+                $this->dispatch('hideLoading');
+                $this->dispatch('showAlert', [
+                    'type' => 'error',
+                    'message' => 'Gagal menghapus data: ' . $e->getMessage()
+                ]);
             }
         }
     }
 
-    public function showDetail($type, $id)
-    {
-        $model = $this->getModelByType($type);
-        $this->detailRecord = $model::find($id)->toArray();
-    }
-
     public function showGroupDetail($type, $ids)
     {
-        // Tambahkan delay kecil agar loading terlihat
-        // sleep(1);
+        $this->dispatch('showLoading');
 
         $model = $this->getModelByType($type);
         $this->detailRecords = $model::whereIn('id', $ids)->get()->toArray();
+
+        $this->dispatch('hideLoading');
     }
 
     public function closeDetail()
     {
+        $this->dispatch('showLoading');
         $this->detailRecord = null;
         $this->detailRecords = null;
+        $this->dispatch('hideLoading');
     }
 
     public function render()

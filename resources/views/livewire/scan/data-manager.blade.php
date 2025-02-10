@@ -1,4 +1,27 @@
-<div class="container">
+<div>
+
+    <style>
+        .loading-spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
     <div class="row justify-content-center">
         <div class="col-md-12">
             <!-- Notifikasi -->
@@ -43,9 +66,12 @@
 
                     <button wire:click="scanDuplicates" class="btn btn-primary mb-4" wire:loading.attr="disabled">
                         <span wire:loading wire:target="scanDuplicates">
-                            <i class="bi bi-arrow-repeat spinner-border spinner-border-sm"></i>
+                            <span class="loading-spinner"></span>
+                            Memindai...
                         </span>
-                        Mulai Pemindaian
+                        <span wire:loading.remove wire:target="scanDuplicates">
+                            Mulai Pemindaian
+                        </span>
                     </button>
 
                     @if(!empty($duplicateData))
@@ -72,7 +98,7 @@
                                                                 wire:click="showGroupDetail('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})"
                                                                 wire:loading.attr="disabled">
                                                                 <span wire:loading wire:target="showGroupDetail('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})">
-                                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                    <span class="loading-spinner"></span>
                                                                     Loading...
                                                                 </span>
                                                                 <span wire:loading.remove wire:target="showGroupDetail('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})">
@@ -82,8 +108,15 @@
                                                             @if(can_edit())
                                                             <button wire:click="deleteAllDuplicates('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})"
                                                                 class="btn btn-danger btn-sm"
+                                                                wire:loading.attr="disabled"
                                                                 onclick="return confirm('Yakin ingin menghapus semua data duplikat ini?')">
-                                                                Hapus
+                                                                <span wire:loading wire:target="deleteAllDuplicates('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})">
+                                                                    <span class="loading-spinner"></span>
+                                                                    Menghapus...
+                                                                </span>
+                                                                <span wire:loading.remove wire:target="deleteAllDuplicates('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})">
+                                                                    Hapus
+                                                                </span>
                                                             </button>
                                                             @endif
                                                         </div>
@@ -141,8 +174,15 @@
                                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                                         <h6 class="mb-0">Grup {{ $loop->iteration }} - {{ count($duplicate) }} data serupa</h6>
                                                         <button type="button" class="btn btn-info btn-sm"
-                                                            wire:click="showGroupDetail('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})">
-                                                            Detail
+                                                            wire:click="showGroupDetail('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})"
+                                                            wire:loading.attr="disabled">
+                                                            <span wire:loading wire:target="showGroupDetail('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})">
+                                                                <span class="loading-spinner"></span>
+                                                                Loading...
+                                                            </span>
+                                                            <span wire:loading.remove wire:target="showGroupDetail('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})">
+                                                                <i class="bi bi-search"></i> Detail
+                                                            </span>
                                                         </button>
                                                     </div>
                                                     <div class="table-responsive" style="max-height: 150px; overflow-y: auto;">
@@ -266,38 +306,6 @@
         </div>
     </div>
     @endif
+
+
 </div>
-
-@push('scripts')
-<div wire:ignore>
-    <script>
-        window.addEventListener('showAlert', event => {
-            const data = event.detail;
-            let icon = 'success';
-
-            if (data.type === 'error') {
-                icon = 'error';
-            } else if (data.type === 'warning') {
-                icon = 'warning';
-            }
-
-            Swal.fire({
-                title: data.type === 'success' ? 'Berhasil!' : 'Perhatian!',
-                text: data.message,
-                icon: icon,
-                timer: 3000,
-                timerProgressBar: true,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-end',
-                showClass: {
-                    popup: 'animate__animated animate__fadeInRight'
-                },
-                hideClass: {
-                    popup: 'animate__animated animate__fadeOutRight'
-                }
-            });
-        });
-    </script>
-</div>
-@endpush
