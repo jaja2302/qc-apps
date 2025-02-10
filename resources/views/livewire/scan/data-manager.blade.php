@@ -105,20 +105,18 @@
                                                                     <i class="bi bi-search"></i> Detail
                                                                 </span>
                                                             </button>
-                                                            @if(can_edit())
-                                                            <button wire:click="deleteAllDuplicates('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})"
+                                                            <button x-data
+                                                                @click.prevent="if (confirm('Yakin ingin menghapus semua data duplikat ini?')) { $wire.deleteAllDuplicates('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }}) }"
                                                                 class="btn btn-danger btn-sm"
-                                                                wire:loading.attr="disabled"
-                                                                onclick="return confirm('Yakin ingin menghapus semua data duplikat ini?')">
+                                                                wire:loading.attr="disabled">
                                                                 <span wire:loading wire:target="deleteAllDuplicates('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})">
                                                                     <span class="loading-spinner"></span>
                                                                     Menghapus...
                                                                 </span>
                                                                 <span wire:loading.remove wire:target="deleteAllDuplicates('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})">
-                                                                    Hapus
+                                                                    <i class="bi bi-trash"></i> Hapus
                                                                 </span>
                                                             </button>
-                                                            @endif
                                                         </div>
                                                     </div>
                                                     <div class="table-responsive" style="max-height: 150px; overflow-y: auto;">
@@ -201,15 +199,20 @@
                                                                     <td>{{ $record['datetime'] }}</td>
                                                                     <td>{{ $record['est'] ?? $record['estate'] ?? $record['unit'] }}</td>
                                                                     <td>{{ $record['afdeling']  ?? $record['afd'] ?? '-' }}</td>
-                                                                    @if(can_edit())
                                                                     <td>
-                                                                        <button wire:click="deleteSingleRecord('{{ $type }}', {{ $record['id'] }})"
+                                                                        <button x-data
+                                                                            @click.prevent="if (confirm('Yakin ingin menghapus data ini?')) { $wire.deleteSingleRecord('{{ $type }}', {{ $record['id'] }}) }"
                                                                             class="btn btn-danger btn-sm"
-                                                                            onclick="return confirm('Yakin ingin menghapus data ini?')">
-                                                                            Hapus
+                                                                            wire:loading.attr="disabled">
+                                                                            <span wire:loading wire:target="deleteSingleRecord('{{ $type }}', {{ $record['id'] }})">
+                                                                                <span class="loading-spinner"></span>
+                                                                                Menghapus...
+                                                                            </span>
+                                                                            <span wire:loading.remove wire:target="deleteSingleRecord('{{ $type }}', {{ $record['id'] }})">
+                                                                                <i class="bi bi-trash"></i> Hapus
+                                                                            </span>
                                                                         </button>
                                                                     </td>
-                                                                    @endif
                                                                 </tr>
                                                                 @endforeach
                                                             </tbody>

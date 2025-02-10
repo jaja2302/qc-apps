@@ -148,74 +148,98 @@ class DataManager extends Component
 
     public function deleteAllDuplicates($type, $ids)
     {
-        if (can_edit()) {
-            try {
-                $this->dispatch('showLoading');
+        if (!can_edit()) {
+            return;
+        }
 
-                $model = $this->getModelByType($type);
-                $allData = $model::whereIn('id', $ids)->get();
-                $dataToDelete = $allData->slice(1);
+        try {
+            $this->dispatch('showLoading');
 
-                foreach ($dataToDelete as $data) {
-                    HistoryDelete::create([
-                        'tabel' => $type,
-                        'data' => json_encode($data->toArray()),
-                        'delete_by' => auth()->id(),
-                        'delete_date' => now()
-                    ]);
-                }
+            $model = $this->getModelByType($type);
+            $allData = $model::whereIn('id', $ids)->get();
+            $dataToDelete = $allData->slice(1);
 
-                $model::whereIn('id', $dataToDelete->pluck('id'))->delete();
-
+            // Jika tidak ada data untuk dihapus, return
+            if ($dataToDelete->isEmpty()) {
                 $this->dispatch('hideLoading');
                 $this->dispatch('showAlert', [
-                    'type' => 'success',
-                    'message' => count($dataToDelete) . ' data duplikat berhasil dihapus dari ' . $type . ', menyisakan 1 data asli!'
+                    'type' => 'warning',
+                    'message' => 'Tidak ada data yang perlu dihapus!'
                 ]);
+                return;
+            }
 
-                $this->scanDuplicates();
-            } catch (\Exception $e) {
-                $this->dispatch('hideLoading');
-                $this->dispatch('showAlert', [
-                    'type' => 'error',
-                    'message' => 'Gagal menghapus data: ' . $e->getMessage()
+            foreach ($dataToDelete as $data) {
+                HistoryDelete::create([
+                    'tabel' => $type,
+                    'data' => json_encode($data->toArray()),
+                    'delete_by' => auth()->id(),
+                    'delete_date' => now()
                 ]);
             }
+
+            $model::whereIn('id', $dataToDelete->pluck('id'))->delete();
+
+            $this->dispatch('hideLoading');
+            $this->dispatch('showAlert', [
+                'type' => 'success',
+                'message' => count($dataToDelete) . ' data duplikat berhasil dihapus dari ' . $type . ', menyisakan 1 data asli!'
+            ]);
+
+            $this->scanDuplicates();
+        } catch (\Exception $e) {
+            $this->dispatch('hideLoading');
+            $this->dispatch('showAlert', [
+                'type' => 'error',
+                'message' => 'Gagal menghapus data: ' . $e->getMessage()
+            ]);
         }
     }
 
     public function deleteSingleRecord($type, $id)
     {
-        if (can_edit()) {
-            try {
-                $this->dispatch('showLoading');
+        if (!can_edit()) {
+            return;
+        }
 
-                $model = $this->getModelByType($type);
-                $dataToDelete = $model::find($id)->toArray();
+        try {
+            $this->dispatch('showLoading');
 
-                HistoryDelete::create([
-                    'tabel' => $type,
-                    'data' => json_encode($dataToDelete),
-                    'delete_by' => auth()->id(),
-                    'delete_date' => now()
-                ]);
+            $model = $this->getModelByType($type);
+            $record = $model::find($id);
 
-                $model::find($id)->delete();
-
+            // Jika record tidak ditemukan, return
+            if (!$record) {
                 $this->dispatch('hideLoading');
                 $this->dispatch('showAlert', [
-                    'type' => 'success',
-                    'message' => '1 data dari ' . $type . ' berhasil dihapus dan disimpan ke history!'
+                    'type' => 'warning',
+                    'message' => 'Data tidak ditemukan!'
                 ]);
-
-                $this->scanDuplicates();
-            } catch (\Exception $e) {
-                $this->dispatch('hideLoading');
-                $this->dispatch('showAlert', [
-                    'type' => 'error',
-                    'message' => 'Gagal menghapus data: ' . $e->getMessage()
-                ]);
+                return;
             }
+
+            HistoryDelete::create([
+                'tabel' => $type,
+                'data' => json_encode($record->toArray()),
+                'delete_by' => auth()->id(),
+                'delete_date' => now()
+            ]);
+
+            $record->delete();
+
+            $this->dispatch('hideLoading');
+            $this->dispatch('showAlert', [
+                'type' => 'success',
+                'message' => '1 data dari ' . $type . ' berhasil dihapus dan disimpan ke history!'
+            ]);
+
+            $this->scanDuplicates();
+        } catch (\Exception $e) {
+            $this->dispatch('hideLoading');
+            $this->dispatch('showAlert', [
+                'type' => 'error',
+                'message' => 'Gagal menghapus data: ' . $e->getMessage()
+            ]);
         }
     }
 
