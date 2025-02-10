@@ -23,6 +23,7 @@ use App\Http\Controllers\RekapController;
 use App\Http\Controllers\GradingController;
 use App\Http\Controllers\Matchingblok;
 use Illuminate\Support\Facades\Artisan;
+use App\Livewire\Scan\DataManager;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -258,3 +259,5 @@ Route::get('/memory-limit', function () {
     $memoryLimit = ini_get('memory_limit');
     return response()->json(['memory_limit' => $memoryLimit]);
 });
+
+Route::get('/data-manager', DataManager::class)->name('data-manager');

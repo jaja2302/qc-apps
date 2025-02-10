@@ -29,6 +29,8 @@
     @livewireStyles
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
 </head>
 
 
@@ -201,6 +203,20 @@
                 {{$slot}}
             </div>
         </div>
+
+        <!-- Add floating button here, before footer -->
+        @if(!Request::is('data-manager'))
+        <div class="position-fixed" style="bottom: 70px; right: 20px; z-index: 1000;">
+            <a href="{{ route('data-manager') }}"
+                class="btn btn-warning rounded-circle p-3 shadow-lg d-flex align-items-center justify-content-center"
+                style="width: 60px; height: 60px;"
+                data-bs-toggle="tooltip"
+                data-bs-placement="left"
+                title="Scan Duplicate Data">
+                <i class="bi bi-database-check" style="font-size: 1.5rem;"></i>
+            </a>
+        </div>
+        @endif
 
         <footer class="main-footer">
             <strong>Copyright © 2021-2026 <a href="https://srs-ssms.com">SRS-SSMS.COM</a>.</strong>
