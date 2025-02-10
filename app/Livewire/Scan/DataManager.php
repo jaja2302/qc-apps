@@ -156,7 +156,7 @@ class DataManager extends Component
                 $allData = $model::whereIn('id', $ids)->get();
 
                 // Simpan satu data (data pertama) dan hapus sisanya
-                $keepData = $allData->first();
+                // $keepData = $allData->first();
                 $dataToDelete = $allData->slice(1);
 
                 // Simpan ke history_delete untuk data yang akan dihapus
@@ -223,6 +223,9 @@ class DataManager extends Component
 
     public function showGroupDetail($type, $ids)
     {
+        // Tambahkan delay kecil agar loading terlihat
+        // sleep(1);
+
         $model = $this->getModelByType($type);
         $this->detailRecords = $model::whereIn('id', $ids)->get()->toArray();
     }

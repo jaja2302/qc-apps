@@ -69,8 +69,15 @@
                                                         <h6 class="mb-0">Grup {{ $loop->iteration }} - {{ count($duplicate) }} data identik</h6>
                                                         <div>
                                                             <button type="button" class="btn btn-info btn-sm me-2"
-                                                                wire:click="showGroupDetail('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})">
-                                                                Detail
+                                                                wire:click="showGroupDetail('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})"
+                                                                wire:loading.attr="disabled">
+                                                                <span wire:loading wire:target="showGroupDetail('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})">
+                                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                    Loading...
+                                                                </span>
+                                                                <span wire:loading.remove wire:target="showGroupDetail('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})">
+                                                                    <i class="bi bi-search"></i> Detail
+                                                                </span>
                                                             </button>
                                                             @if(can_edit())
                                                             <button wire:click="deleteAllDuplicates('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})"
@@ -205,32 +212,55 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Detail Grup Data</h5>
-                    <button type="button" class="btn-close" wire:click="closeDetail"></button>
+                    <button type="button" class="btn-close" wire:click="closeDetail" wire:loading.attr="disabled"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-sm">
-                            <thead>
-                                <tr>
-                                    @foreach(array_keys(array_diff_key($detailRecords[0], array_flip(['id', 'created_at', 'updated_at']))) as $header)
-                                    <th>{{ ucwords(str_replace('_', ' ', $header)) }}</th>
+                    <!-- Loading indicator yang lebih baik -->
+                    <div wire:loading wire:target="showGroupDetail" class="text-center py-4">
+                        <div class="d-flex justify-content-center align-items-center gap-2">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Mohon Tunggu...</span>
+                            </div>
+                            <span class="h6 mb-0">Memuat data...</span>
+                        </div>
+                    </div>
+
+                    <!-- Content -->
+                    <div wire:loading.remove wire:target="showGroupDetail">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-sm">
+                                <thead class="table-light">
+                                    <tr>
+                                        @foreach(array_keys(array_diff_key($detailRecords[0], array_flip(['id', 'created_at', 'updated_at']))) as $header)
+                                        <th>{{ ucwords(str_replace('_', ' ', $header)) }}</th>
+                                        @endforeach
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($detailRecords as $record)
+                                    <tr>
+                                        @foreach(array_diff_key($record, array_flip(['id', 'created_at', 'updated_at'])) as $value)
+                                        <td>{{ $value }}</td>
+                                        @endforeach
+                                    </tr>
                                     @endforeach
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($detailRecords as $record)
-                                <tr>
-                                    @foreach(array_diff_key($record, array_flip(['id', 'created_at', 'updated_at'])) as $value)
-                                    <td>{{ $value }}</td>
-                                    @endforeach
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" wire:click="closeDetail">Tutup</button>
+                    <button type="button" class="btn btn-secondary"
+                        wire:click="closeDetail"
+                        wire:loading.attr="disabled">
+                        <span wire:loading wire:target="closeDetail">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading...
+                        </span>
+                        <span wire:loading.remove wire:target="closeDetail">
+                            <i class="bi bi-x-lg"></i> Tutup
+                        </span>
+                    </button>
                 </div>
             </div>
         </div>
