@@ -1,6 +1,14 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
+            <!-- Notifikasi -->
+            @if (session()->has('message'))
+            <div class="alert alert-{{ session('type') }} alert-dismissible fade show mb-3" role="alert">
+                {{ session('message') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @endif
+
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Pemindai Data Duplikat</h3>
@@ -64,11 +72,13 @@
                                                                 wire:click="showGroupDetail('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})">
                                                                 Detail
                                                             </button>
+                                                            @if(can_edit())
                                                             <button wire:click="deleteAllDuplicates('{{ $type }}', {{ json_encode(collect($duplicate)->pluck('id')) }})"
                                                                 class="btn btn-danger btn-sm"
                                                                 onclick="return confirm('Yakin ingin menghapus semua data duplikat ini?')">
                                                                 Hapus
                                                             </button>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                     <div class="table-responsive" style="max-height: 150px; overflow-y: auto;">
@@ -144,6 +154,7 @@
                                                                     <td>{{ $record['datetime'] }}</td>
                                                                     <td>{{ $record['est'] ?? $record['estate'] ?? $record['unit'] }}</td>
                                                                     <td>{{ $record['afdeling']  ?? $record['afd'] ?? '-' }}</td>
+                                                                    @if(can_edit())
                                                                     <td>
                                                                         <button wire:click="deleteSingleRecord('{{ $type }}', {{ $record['id'] }})"
                                                                             class="btn btn-danger btn-sm"
@@ -151,6 +162,7 @@
                                                                             Hapus
                                                                         </button>
                                                                     </td>
+                                                                    @endif
                                                                 </tr>
                                                                 @endforeach
                                                             </tbody>
@@ -225,3 +237,37 @@
     </div>
     @endif
 </div>
+
+@push('scripts')
+<div wire:ignore>
+    <script>
+        window.addEventListener('showAlert', event => {
+            const data = event.detail;
+            let icon = 'success';
+
+            if (data.type === 'error') {
+                icon = 'error';
+            } else if (data.type === 'warning') {
+                icon = 'warning';
+            }
+
+            Swal.fire({
+                title: data.type === 'success' ? 'Berhasil!' : 'Perhatian!',
+                text: data.message,
+                icon: icon,
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-end',
+                showClass: {
+                    popup: 'animate__animated animate__fadeInRight'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutRight'
+                }
+            });
+        });
+    </script>
+</div>
+@endpush

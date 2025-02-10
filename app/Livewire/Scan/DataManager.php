@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Scan;
 
+use App\Models\HistoryDelete;
 use Livewire\Component;
 use App\Models\mutu_ancak;
 use App\Models\mutu_buah;
@@ -24,6 +25,10 @@ class DataManager extends Component
 
     public function mount()
     {
+        if (!user_qc()) {
+            return redirect()->intended(route('dashboard_inspeksi'));
+        }
+
         $this->startDate = Carbon::now()->format('Y-m-d');
         $this->endDate = Carbon::now()->format('Y-m-d');
     }
@@ -34,39 +39,46 @@ class DataManager extends Component
         $this->duplicateData = [];
         $this->indicationData = [];
 
-        // Get date range based on scan type
-        $dateRange = $this->getDateRange();
+        try {
+            // Get date range based on scan type
+            $dateRange = $this->getDateRange();
 
-        // Scan Mutu Ancak
-        $ancakData = mutu_ancak::whereBetween('datetime', $dateRange)->get();
-        $this->findDuplicates($ancakData, 'Mutu Ancak');
+            // Scan Mutu Ancak
+            $ancakData = mutu_ancak::whereBetween('datetime', $dateRange)->get();
+            $this->findDuplicates($ancakData, 'Mutu Ancak');
 
-        // dd($ancakData);
-        // Scan Mutu Buah
-        $buahData = mutu_buah::whereBetween('datetime', $dateRange)->get();
-        $this->findDuplicates($buahData, 'Mutu Buah');
+            // dd($ancakData);
+            // Scan Mutu Buah
+            $buahData = mutu_buah::whereBetween('datetime', $dateRange)->get();
+            $this->findDuplicates($buahData, 'Mutu Buah');
 
-        // Scan Mutu Transport
-        $transportData = mutu_transport::whereBetween('datetime', $dateRange)->get();
-        $this->findDuplicates($transportData, 'Mutu Transport');
+            // Scan Mutu Transport
+            $transportData = mutu_transport::whereBetween('datetime', $dateRange)->get();
+            $this->findDuplicates($transportData, 'Mutu Transport');
 
-        // Scan Sidak TPH
-        $sidaktphData = SidakTph::whereBetween('datetime', $dateRange)->get();
-        $this->findDuplicates($sidaktphData, 'Sidak TPH');
-        // Scan Sidak mutu buah
-        $sidakmutubuahData = SidakMutuBuah::whereBetween('datetime', $dateRange)->get();
-        $this->findDuplicates($sidakmutubuahData, 'Sidak Mutubuah');
-        // Scan Sidak mutu buah
-        $qcgudangData = QcGudang::whereBetween('tanggal', $dateRange)->get();
-        $this->findDuplicates($qcgudangData, 'QC Gudang');
+            // Scan Sidak TPH
+            $sidaktphData = SidakTph::whereBetween('datetime', $dateRange)->get();
+            $this->findDuplicates($sidaktphData, 'Sidak TPH');
+            // Scan Sidak mutu buah
+            $sidakmutubuahData = SidakMutuBuah::whereBetween('datetime', $dateRange)->get();
+            $this->findDuplicates($sidakmutubuahData, 'Sidak Mutubuah');
+            // Scan Sidak mutu buah
+            $qcgudangData = QcGudang::whereBetween('tanggal', $dateRange)->get();
+            $this->findDuplicates($qcgudangData, 'QC Gudang');
 
-        $this->isScanning = false;
+            $this->isScanning = false;
 
-        if (empty($this->duplicateData) && empty($this->indicationData)) {
-            $this->dispatch('showAlert', [
-                'type' => 'success',
-                'message' => 'Scan completed! No duplicate data found.'
-            ]);
+            if (empty($this->duplicateData) && empty($this->indicationData)) {
+                session()->flash('message', 'Pemindaian selesai! Tidak ditemukan data duplikat.');
+                session()->flash('type', 'success');
+            } else {
+                session()->flash('message', 'Ditemukan beberapa data duplikat! Silakan periksa hasilnya.');
+                session()->flash('type', 'warning');
+            }
+        } catch (\Exception $e) {
+            $this->isScanning = false;
+            session()->flash('message', 'Gagal melakukan pemindaian: ' . $e->getMessage());
+            session()->flash('type', 'error');
         }
     }
 
@@ -136,47 +148,72 @@ class DataManager extends Component
 
     public function deleteAllDuplicates($type, $ids)
     {
-        try {
-            $model = $this->getModelByType($type);
-            $model::whereIn('id', $ids)->delete();
+        if (can_edit()) {
+            try {
+                $model = $this->getModelByType($type);
 
-            $this->dispatch('showAlert', [
-                'type' => 'success',
-                'message' => 'Data duplikat berhasil dihapus!'
-            ]);
+                // Ambil semua data
+                $allData = $model::whereIn('id', $ids)->get();
 
-            // Refresh scan
-            $this->scanDuplicates();
-        } catch (\Exception $e) {
-            $this->dispatch('showAlert', [
-                'type' => 'error',
-                'message' => 'Gagal menghapus data: ' . $e->getMessage()
-            ]);
+                // Simpan satu data (data pertama) dan hapus sisanya
+                $keepData = $allData->first();
+                $dataToDelete = $allData->slice(1);
+
+                // Simpan ke history_delete untuk data yang akan dihapus
+                foreach ($dataToDelete as $data) {
+                    HistoryDelete::create([
+                        'tabel' => $type,
+                        'data' => json_encode($data->toArray()),
+                        'delete_by' => auth()->id(),
+                        'delete_date' => now()
+                    ]);
+                }
+
+                // Hapus data duplikat (kecuali data pertama)
+                $model::whereIn('id', $dataToDelete->pluck('id'))->delete();
+
+                session()->flash('message', count($dataToDelete) . ' data duplikat berhasil dihapus dari ' . $type . ', menyisakan 1 data asli!');
+                session()->flash('type', 'success');
+
+                // Refresh scan
+                $this->scanDuplicates();
+            } catch (\Exception $e) {
+                session()->flash('message', 'Gagal menghapus data: ' . $e->getMessage());
+                session()->flash('type', 'error');
+            }
         }
     }
 
     public function deleteSingleRecord($type, $id)
     {
-        try {
-            $model = $this->getModelByType($type);
-            $model::find($id)->delete();
+        if (can_edit()) {
+            try {
+                $model = $this->getModelByType($type);
+                // Ambil data sebelum dihapus
+                $dataToDelete = $model::find($id)->toArray();
 
-            $this->dispatch('showAlert', [
-                'type' => 'success',
-                'message' => 'Data berhasil dihapus!'
-            ]);
+                // Simpan ke history_delete
+                HistoryDelete::create([
+                    'tabel' => $type,
+                    'data' => json_encode($dataToDelete),
+                    'delete_by' => auth()->id(),
+                    'delete_date' => now()
+                ]);
 
-            // Refresh scan
-            $this->scanDuplicates();
-        } catch (\Exception $e) {
-            $this->dispatch('showAlert', [
-                'type' => 'error',
-                'message' => 'Gagal menghapus data: ' . $e->getMessage()
-            ]);
+                // Hapus data
+                $model::find($id)->delete();
+
+                session()->flash('message', '1 data dari ' . $type . ' berhasil dihapus dan disimpan ke history!');
+                session()->flash('type', 'success');
+
+                // Refresh scan
+                $this->scanDuplicates();
+            } catch (\Exception $e) {
+                session()->flash('message', 'Gagal menghapus data: ' . $e->getMessage());
+                session()->flash('type', 'error');
+            }
         }
     }
-
-
 
     public function showDetail($type, $id)
     {

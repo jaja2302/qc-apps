@@ -205,6 +205,7 @@
         </div>
 
         <!-- Add floating button here, before footer -->
+        @if(user_qc())
         @if(!Request::is('data-manager'))
         <div class="position-fixed" style="bottom: 70px; right: 20px; z-index: 1000;">
             <a href="{{ route('data-manager') }}"
@@ -216,6 +217,7 @@
                 <i class="bi bi-database-check" style="font-size: 1.5rem;"></i>
             </a>
         </div>
+        @endif
         @endif
 
         <footer class="main-footer">
