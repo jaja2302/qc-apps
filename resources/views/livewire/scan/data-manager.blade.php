@@ -113,7 +113,7 @@
                             </h2>
                             <div id="indicationCollapse" class="accordion-collapse collapse show" data-bs-parent="#indicationAccordion">
                                 <div class="accordion-body">
-                                    <p class="small text-muted">(Data sama tetapi berbeda waktu/lokasi)</p>
+                                    <p class="small text-muted">(Data sama tetapi berbeda waktu/lokasi), Harap Cek dahulu sebelum menghapus, data dihapus tidak dapat dikembalikan!!</p>
                                     @foreach($indicationData as $type => $duplicates)
                                     <h6 class="mt-2">{{ $type }}</h6>
                                     <div class="card-container" style="max-height: 400px; overflow-y: auto;">
