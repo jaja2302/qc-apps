@@ -75,11 +75,39 @@
                     </button>
 
                     @if(!empty($duplicateData))
+                    <div class="alert alert-info" role="alert">
+                        <h5 class="alert-heading"><i class="bi bi-info-circle"></i> Panduan Pemindaian Data</h5>
+                        <hr>
+                        <div class="bg-danger text-white p-2 rounded mb-3">
+                            <p class="mb-1"><strong><i class="bi bi-exclamation-triangle"></i> Data Duplikat</strong></p>
+                            <ul class="mb-0">
+                                <li>Data yang <strong>100% identik</strong> di semua kolom</li>
+                                <li>Sangat direkomendasikan untuk dihapus karena merupakan data ganda</li>
+                                <li>Gunakan tombol "Hapus" untuk menghapus seluruh data dalam satu grup</li>
+                                <li>Gunakan tombol "Detail" untuk memeriksa seluruh kolom sebelum menghapus</li>
+                            </ul>
+                            <small class="d-block mt-1">Data ini terdeteksi sebagai duplikat karena semua kolom memiliki nilai yang sama.
+                                Harap hapus untuk menghindari perbedaan nilai dalam sistem.</small>
+                        </div>
+
+                        <div class="bg-warning p-2 rounded">
+                            <p class="mb-1"><strong><i class="bi bi-exclamation-circle"></i> Data Terindikasi Duplikat</strong></p>
+                            <ul class="mb-0">
+                                <li>Data yang memiliki kesamaan di sebagian besar kolom, namun berbeda di waktu atau lokasi</li>
+                                <li>Perlu diperiksa secara manual sebelum dihapus</li>
+                                <li>Gunakan tombol "Detail" untuk membandingkan data secara menyeluruh</li>
+                                <li>Hapus hanya jika Anda yakin data tersebut adalah duplikat yang tidak valid</li>
+                                <li>Jika ragu, lebih baik membiarkan data tetap ada</li>
+                            </ul>
+                            <small class="d-block mt-1">Data yang sama hanya berbeda di waktu dan lokasi(lat, long).
+                                Harap periksa terlebih dahulu sebelum menghapus. Jika sesuai bukan indikasi duplikat, biarkan saja tanpa dihapus.</small>
+                        </div>
+                    </div>
                     <div class="accordion mb-3" id="duplicateAccordion">
                         <div class="accordion-item">
                             <h2 class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#duplicateCollapse">
-                                    <i class="bi bi-exclamation-triangle text-danger me-2"></i> Data Duplikat Ditemukan!
+                                <button class="accordion-button bg-danger text-white" type="button" data-bs-toggle="collapse" data-bs-target="#duplicateCollapse">
+                                    <i class="bi bi-exclamation-triangle me-2"></i> Data Duplikat Ditemukan!
                                 </button>
                             </h2>
                             <div id="duplicateCollapse" class="accordion-collapse collapse show" data-bs-parent="#duplicateAccordion">
@@ -155,13 +183,12 @@
                     <div class="accordion" id="indicationAccordion">
                         <div class="accordion-item">
                             <h2 class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#indicationCollapse">
-                                    <i class="bi bi-exclamation-circle text-warning me-2"></i> Data Terindikasi Duplikat!
+                                <button class="accordion-button bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#indicationCollapse">
+                                    <i class="bi bi-exclamation-circle me-2"></i> Data Terindikasi Duplikat!
                                 </button>
                             </h2>
                             <div id="indicationCollapse" class="accordion-collapse collapse show" data-bs-parent="#indicationAccordion">
                                 <div class="accordion-body">
-                                    <p class="small text-muted">(Data sama tetapi berbeda waktu/lokasi), Harap Cek dahulu sebelum menghapus, data dihapus tidak dapat dikembalikan!!</p>
                                     @foreach($indicationData as $type => $duplicates)
                                     <h6 class="mt-2">{{ $type }}</h6>
                                     <div class="card-container" style="max-height: 400px; overflow-y: auto;">

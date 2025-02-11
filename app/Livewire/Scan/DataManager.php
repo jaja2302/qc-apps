@@ -35,7 +35,6 @@ class DataManager extends Component
 
     public function scanDuplicates()
     {
-        $this->dispatch('showLoading');
         $this->duplicateData = [];
         $this->indicationData = [];
 
@@ -66,8 +65,6 @@ class DataManager extends Component
             $qcgudangData = QcGudang::whereBetween('tanggal', $dateRange)->get();
             $this->findDuplicates($qcgudangData, 'QC Gudang');
 
-            $this->dispatch('hideLoading');
-
             if (empty($this->duplicateData) && empty($this->indicationData)) {
                 session()->flash('message', 'Pemindaian selesai! Tidak ditemukan data duplikat.');
                 session()->flash('type', 'success');
@@ -76,7 +73,6 @@ class DataManager extends Component
                 session()->flash('type', 'warning');
             }
         } catch (\Exception $e) {
-            $this->dispatch('hideLoading');
             session()->flash('message', 'Gagal melakukan pemindaian: ' . $e->getMessage());
             session()->flash('type', 'error');
         }
@@ -153,46 +149,56 @@ class DataManager extends Component
         }
 
         try {
-            $this->dispatch('showLoading');
-
             $model = $this->getModelByType($type);
-            $allData = $model::whereIn('id', $ids)->get();
-            $dataToDelete = $allData->slice(1);
+            // Cek dulu apakah semua data masih ada
+            $existingIds = $model::whereIn('id', $ids)->pluck('id')->toArray();
+            $missingIds = array_diff($ids, $existingIds);
 
-            // Jika tidak ada data untuk dihapus, return
-            if ($dataToDelete->isEmpty()) {
-                $this->dispatch('hideLoading');
-                $this->dispatch('showAlert', [
-                    'type' => 'warning',
-                    'message' => 'Tidak ada data yang perlu dihapus!'
-                ]);
+            if (!empty($missingIds)) {
+                session()->flash('message', 'Beberapa data sudah terhapus oleh pengguna lain. Halaman akan diperbarui.');
+                session()->flash('type', 'warning');
+                $this->scanDuplicates(); // Refresh data
                 return;
             }
 
-            foreach ($dataToDelete as $data) {
-                HistoryDelete::create([
-                    'tabel' => $type,
-                    'data' => json_encode($data->toArray()),
-                    'delete_by' => auth()->id(),
-                    'delete_date' => now()
-                ]);
+            $allData = $model::whereIn('id', $ids)->select('id')->get();
+            $dataToDelete = $allData->slice(1);
+
+            if ($dataToDelete->isEmpty()) {
+                session()->flash('message', 'Tidak ada data yang perlu dihapus!');
+                session()->flash('type', 'warning');
+                return;
             }
 
-            $model::whereIn('id', $dataToDelete->pluck('id'))->delete();
+            // Batch insert untuk history delete
+            $historyData = [];
+            foreach ($dataToDelete as $data) {
+                $historyData[] = [
+                    'tabel' => $type,
+                    'data' => json_encode(['id' => $data->id]),
+                    'delete_by' => auth()->id(),
+                    'delete_date' => now()
+                ];
+            }
+            HistoryDelete::insert($historyData);
 
-            $this->dispatch('hideLoading');
-            $this->dispatch('showAlert', [
-                'type' => 'success',
-                'message' => count($dataToDelete) . ' data duplikat berhasil dihapus dari ' . $type . ', menyisakan 1 data asli!'
-            ]);
+            // Hapus data dalam satu query dengan pengecekan ulang
+            $deletedCount = $model::whereIn('id', $dataToDelete->pluck('id'))->delete();
 
-            $this->scanDuplicates();
+            if ($deletedCount < count($dataToDelete)) {
+                session()->flash('message', 'Beberapa data tidak dapat dihapus karena sudah diubah. Halaman akan diperbarui.');
+                session()->flash('type', 'warning');
+                $this->scanDuplicates();
+                return;
+            }
+
+            session()->flash('message', $deletedCount . ' data duplikat berhasil dihapus dari ' . $type . ', menyisakan 1 data asli!');
+            session()->flash('type', 'success');
+
+            $this->updateDuplicateData($type, $ids);
         } catch (\Exception $e) {
-            $this->dispatch('hideLoading');
-            $this->dispatch('showAlert', [
-                'type' => 'error',
-                'message' => 'Gagal menghapus data: ' . $e->getMessage()
-            ]);
+            session()->flash('message', 'Gagal menghapus data: ' . $e->getMessage());
+            session()->flash('type', 'error');
         }
     }
 
@@ -203,62 +209,101 @@ class DataManager extends Component
         }
 
         try {
-            $this->dispatch('showLoading');
-
             $model = $this->getModelByType($type);
-            $record = $model::find($id);
 
-            // Jika record tidak ditemukan, return
+            // Cek apakah data masih ada dengan lock
+            $record = $model::select('id')->where('id', $id)->lockForUpdate()->first();
+
             if (!$record) {
-                $this->dispatch('hideLoading');
-                $this->dispatch('showAlert', [
-                    'type' => 'warning',
-                    'message' => 'Data tidak ditemukan!'
-                ]);
+                session()->flash('message', 'Data sudah terhapus oleh pengguna lain!');
+                session()->flash('type', 'warning');
+                $this->updateDuplicateData($type, [$id]);
                 return;
             }
 
             HistoryDelete::create([
                 'tabel' => $type,
-                'data' => json_encode($record->toArray()),
+                'data' => json_encode(['id' => $record->id]),
                 'delete_by' => auth()->id(),
                 'delete_date' => now()
             ]);
 
-            $record->delete();
+            // Coba hapus dengan pengecekan ulang
+            $deleted = $model::where('id', $id)->delete();
 
-            $this->dispatch('hideLoading');
-            $this->dispatch('showAlert', [
-                'type' => 'success',
-                'message' => '1 data dari ' . $type . ' berhasil dihapus dan disimpan ke history!'
-            ]);
+            if (!$deleted) {
+                session()->flash('message', 'Data tidak dapat dihapus karena sudah diubah oleh pengguna lain!');
+                session()->flash('type', 'warning');
+                $this->scanDuplicates();
+                return;
+            }
 
-            $this->scanDuplicates();
+            session()->flash('message', '1 data dari ' . $type . ' berhasil dihapus dan disimpan ke history!');
+            session()->flash('type', 'success');
+
+            $this->updateDuplicateData($type, [$id]);
         } catch (\Exception $e) {
-            $this->dispatch('hideLoading');
-            $this->dispatch('showAlert', [
-                'type' => 'error',
-                'message' => 'Gagal menghapus data: ' . $e->getMessage()
-            ]);
+            session()->flash('message', 'Gagal menghapus data: ' . $e->getMessage());
+            session()->flash('type', 'error');
+        }
+    }
+
+    // Tambahkan method baru untuk update data secara lokal
+    private function updateDuplicateData($type, $deletedIds)
+    {
+        // Update duplicateData
+        if (isset($this->duplicateData[$type])) {
+            foreach ($this->duplicateData[$type] as $groupIndex => $group) {
+                // Filter out deleted records
+                $updatedGroup = array_filter($group, function ($record) use ($deletedIds) {
+                    return !in_array($record['id'], $deletedIds);
+                });
+
+                if (count($updatedGroup) <= 1) {
+                    // Remove group if only 1 or no records left
+                    unset($this->duplicateData[$type][$groupIndex]);
+                } else {
+                    $this->duplicateData[$type][$groupIndex] = array_values($updatedGroup);
+                }
+            }
+
+            if (empty($this->duplicateData[$type])) {
+                unset($this->duplicateData[$type]);
+            }
+        }
+
+        // Update indicationData
+        if (isset($this->indicationData[$type])) {
+            foreach ($this->indicationData[$type] as $groupIndex => $group) {
+                // Filter out deleted records
+                $updatedGroup = array_filter($group, function ($record) use ($deletedIds) {
+                    return !in_array($record['id'], $deletedIds);
+                });
+
+                if (count($updatedGroup) <= 1) {
+                    // Remove group if only 1 or no records left
+                    unset($this->indicationData[$type][$groupIndex]);
+                } else {
+                    $this->indicationData[$type][$groupIndex] = array_values($updatedGroup);
+                }
+            }
+
+            if (empty($this->indicationData[$type])) {
+                unset($this->indicationData[$type]);
+            }
         }
     }
 
     public function showGroupDetail($type, $ids)
     {
-        $this->dispatch('showLoading');
-
         $model = $this->getModelByType($type);
         $this->detailRecords = $model::whereIn('id', $ids)->get()->toArray();
-
-        $this->dispatch('hideLoading');
     }
 
     public function closeDetail()
     {
-        $this->dispatch('showLoading');
         $this->detailRecord = null;
         $this->detailRecords = null;
-        $this->dispatch('hideLoading');
     }
 
     public function render()
