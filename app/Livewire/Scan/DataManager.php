@@ -10,6 +10,7 @@ use App\Models\mutu_transport;
 use App\Models\QcGudang;
 use App\Models\SidakMutuBuah;
 use App\Models\SidakTph;
+use App\Models\Gradingmill;
 use Carbon\Carbon;
 
 class DataManager extends Component
@@ -65,6 +66,10 @@ class DataManager extends Component
             $qcgudangData = QcGudang::whereBetween('tanggal', $dateRange)->get();
             $this->findDuplicates($qcgudangData, 'QC Gudang');
 
+            // Scan Grading mill
+            $gradingData = Gradingmill::whereBetween('datetime', $dateRange)->get();
+            $this->findDuplicates($gradingData, 'Grading Mill');
+
             if (empty($this->duplicateData) && empty($this->indicationData)) {
                 session()->flash('message', 'Pemindaian selesai! Tidak ditemukan data duplikat.');
                 session()->flash('type', 'success');
@@ -87,6 +92,7 @@ class DataManager extends Component
             'Sidak TPH' => SidakTph::class,
             'Sidak Mutubuah' => SidakMutuBuah::class,
             'QC Gudang' => QcGudang::class,
+            'Grading Mill' => Gradingmill::class,
             default => throw new \Exception('Tipe data tidak valid'),
         };
     }
@@ -120,7 +126,7 @@ class DataManager extends Component
         $indicationDuplicates = $data->groupBy(function ($item) {
             $values = $item->toArray();
             // Daftar kolom yang akan dihapus jika ada
-            $columnsToUnset = ['id', 'datetime', 'lat', 'lon'];
+            $columnsToUnset = ['id', 'datetime', 'lat', 'lon', 'no_pemanen', 'unripe_tanpa_brondol', 'unripe_kurang_brondol', 'foto_temuan'];
 
             // Hapus kolom hanya jika mereka ada
             foreach ($columnsToUnset as $column) {
