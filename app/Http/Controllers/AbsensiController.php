@@ -23,17 +23,19 @@ class AbsensiController extends Controller
         $lok = $request->session()->get('lok');
 
         // dd($lok);
-        $userabsen = DB::table('pengguna')
-            ->select('pengguna.*')
-            ->where('departemen', 'QC')
-            ->orWhere('id_departement', 43)
-            ->where('lokasi_kerja', $lok)
-            ->where('email', 'like', '%mandor%')
-            ->get();
+        // $userabsen = DB::table('pengguna')
+        //     ->select('pengguna.*')
+        //     ->where('departemen', 'QC')
+        //     ->orWhere('id_departement', 43)
+        //     ->where('lokasi_kerja', $lok)
+        //     ->where('email', 'like', '%mandor%')
+        //     ->get();
+        // $userabsen = getUserAbsensQC($lok);
+        // dd($userabsen);
 
-        // You can remove the unnecessary conversion to JSON
-        // $userabsen = $userabsen->groupBy('nama_lengkap');
-        $userabsen = json_decode($userabsen, true);
+        // // You can remove the unnecessary conversion to JSON
+        // // $userabsen = $userabsen->groupBy('nama_lengkap');
+        // $userabsen = json_decode($userabsen, true);
 
 
 
@@ -47,15 +49,12 @@ class AbsensiController extends Controller
 
         // // You can remove the unnecessary conversion to JSON
         // // $user_Data = $user_Data->groupBy('nama_lengkap');
-        // $user_Data = json_decode($user_Data, true);
+        // $user_Data = getUserAbsensQC($lok);
+        // dd($user_Data);
 
-        $user_Data = Pengguna::whereIn('id_jabatan', [1, 8])
-            ->with('Jabatan', 'Departement')
-            ->where('lokasi_kerja', $lok)
-            ->whereHas('Departement', function ($query) {
-                $query->where('departement.id', 43);  // Specify the table name
-            })
-            ->get();
+        $user_Data = getUserAbsensQC($lok);
+
+        // dd($user_Data);
         // $user_Data = $user_Data->groupBy('user_id');
         $user_Data = json_decode($user_Data, true);
         // dd($user_Data);
@@ -81,6 +80,8 @@ class AbsensiController extends Controller
 
         return view('Absensi.index', ['header_month' => $header_month, 'dates' => $JumlahBulan, 'useroption' => $user_Data, 'listkerja' => $listkerja]);
     }
+
+
     public function data(Request $request)
     {
         $regional = $request->input('regional');
@@ -144,13 +145,8 @@ class AbsensiController extends Controller
         // $user_Data = $user_Data->groupBy('user_id');
         // $user_Data = json_decode($user_Data, true);
 
-        $user_Data = Pengguna::whereIn('id_jabatan', [1, 8])
-            ->with('Jabatan', 'Departement')
-            ->where('lokasi_kerja', $regs)
-            // ->whereHas('Departement', function ($query) {
-            //     $query->where('departement.id', 43);  // Specify the table name
-            // })
-            ->get();
+        $user_Data = getUserAbsensQC($regs);
+        // dd($user_Data);
         $user_Data = $user_Data->groupBy('user_id');
         $user_Data = json_decode($user_Data, true);
         // dd($user_Data);
@@ -628,13 +624,7 @@ class AbsensiController extends Controller
         }
 
         // dd($result);
-        $user_Data = Pengguna::whereIn('id_jabatan', [1, 8])
-            ->with('Jabatan', 'Departement')
-            ->where('lokasi_kerja', $regs)
-            ->whereHas('Departement', function ($query) {
-                $query->where('departement.id', 43);  // Specify the table name
-            })
-            ->get();
+        $user_Data =  $user_Data = getUserAbsensQC($regs);
         $user_Data = $user_Data->groupBy('user_id');
         $user_Data = json_decode($user_Data, true);
 
@@ -1031,13 +1021,8 @@ class AbsensiController extends Controller
 
 
         // $user_Data = json_decode($user_Data, true);
-        $user_Data = Pengguna::whereIn('id_jabatan', [1, 8])
-            ->with('Jabatan', 'Departement')
-            ->where('lokasi_kerja', $lok)
-            ->whereHas('Departement', function ($query) {
-                $query->where('departement.id', 43);  // Specify the table name
-            })
-            ->pluck('user_id');
+        $user_Data =  $user_Data = getUserAbsensQC($lok);
+        $user_Data =  $user_Data->pluck('user_id');
         // $user_Data = $user_Data->groupBy('user_id');
         $user_Data = json_decode($user_Data, true);
 

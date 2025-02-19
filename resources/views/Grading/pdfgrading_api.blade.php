@@ -198,9 +198,9 @@
                 <th>%</th>
                 <th>JJG</th>
                 <th>%</th>
-                <th>JJG</th>
+                <th>KG</th>
                 <th>%</th>
-                <th>JJG</th>
+                <th>KG</th>
                 <th>%</th>
             </tr>
         </thead>

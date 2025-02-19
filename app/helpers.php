@@ -4,6 +4,7 @@
 use App\Models\Asistenqc;
 use App\Models\BlokMatch;
 use App\Models\Departement;
+use App\Models\DepartementUser;
 use App\Models\Gradingmill;
 use App\Models\Listmill;
 use App\Models\mutu_ancak;
@@ -13673,5 +13674,36 @@ if (!function_exists('collectDepartmentIds')) {
             }
         }
         return $ids;
+    }
+}
+
+
+
+if (!function_exists('getUserAbsensQC')) {
+    function getUserAbsensQC($lokasi)
+    {
+        $deparetementFamily = GetDepartementFamily(43);
+        // dd($deparetementFamily);
+
+        $depart = DepartementUser::whereIn('department_id', $deparetementFamily)
+            ->with('users', 'departement')
+            ->get();
+
+        // dd($depart->pluck('user_id'));
+
+        if ($depart->isEmpty()) {
+
+            return [];
+        }
+
+        $users = $depart->flatMap(function ($item) use ($lokasi) {
+            return $item->users->whereIn('id_jabatan', [1, 8])->whereIn('lokasi_kerja', $lokasi);
+            // return $item->users->whereIn('id_jabatan', [1, 8])
+            //     ->where('lokasi_kerja', $lokasi);
+        });
+        // dd($users, $lokasi);
+        // dd($users, $lokasi, $depart);
+        return collect($users);
+        // dd($users);
     }
 }
